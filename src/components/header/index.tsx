@@ -4,7 +4,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "../ui/button";
 
 export const Header = () => {
-  const { loginWithRedirect, isAuthenticated, logout } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, logout,  } = useAuth0();
   return (
     <header className="shadow-md h-16">
       <div className="max-w-screen-lg mx-auto h-full flex items-center justify-between px-8">
