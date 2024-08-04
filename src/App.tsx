@@ -4,11 +4,34 @@ import { cn } from "./lib/utils";
 import { Button } from "./components/ui/button";
 import { LogOut, PlusCircle } from "lucide-react";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
+import axios from "axios";
 
 function App() {
-  const { user, logout } =useAuth0();
+  const { user, logout, getAccessTokenSilently } =useAuth0();
   const daysInMonth = getDaysInMonth(new Date());
   const currentDay = getDate(new Date());
+
+  const sendRequest = async () => {
+    try {
+     const token = await getAccessTokenSilently({
+       authorizationParams: {
+         audience: "https://api.victusjournal.com/auth0",
+         scope: "read:user"
+       }
+     });
+   
+    const response = await axios.get("http://localhost:3000/habits", {
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    });
+
+    console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <main className="max-w-screen-xl mx-auto border-x h-screen">
@@ -29,7 +52,7 @@ function App() {
       <div className="flex items-center justify-between">
         <h1 className="font-sans text-xl font-medium">Olá {user?.name}, aqui está seu jornal!</h1>
 
-        <Button className="flex gap-2 bg-black rounded-xl text-white">
+        <Button className="flex gap-2 bg-black rounded-xl text-white" onClick={sendRequest}>
           Adicionar
           <PlusCircle size={16} />
         </Button>
