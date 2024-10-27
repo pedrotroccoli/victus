@@ -2,6 +2,7 @@
 
 import { useAuth0 } from "@auth0/auth0-react";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 export const Header = () => {
   const { loginWithRedirect, isAuthenticated, logout,  } = useAuth0();
@@ -11,9 +12,11 @@ export const Header = () => {
         <div></div>
 
           <div className='flex gap-4 items-center'>
+            <Link href="/sign-in"> 
             <Button className='w-32 h-8' variant='outline'>
               Crie sua conta
             </Button>
+ </Link>
 
             <Button className='w-32 h-8 font-xs' onClick={() => loginWithRedirect()}>
               Acessar
