@@ -2,6 +2,9 @@
 module.exports = {
   darkMode: ["class"],
   content: [
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
   prefix: "",
@@ -15,13 +18,15 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["Open Sans", "sans-serif"],
+        title: ['Sofia Sans', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
+        "focus-background": "hsl(var(--focus-background))",
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
