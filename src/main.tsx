@@ -19,6 +19,8 @@ declare module '@tanstack/react-router' {
 
 const queryClient = new QueryClient();
 
+console.log('v1.0.1');
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
