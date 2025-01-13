@@ -243,13 +243,19 @@ export const Home = () => {
                   </div>
 
                   <div className="flex flex-wrap">
-                    {daysInMonth.map((item, index) => (
-                      <button className={cn("w-7 h-7 flex items-end justify-center border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed enabled:hover:border-black", index === currentDay ? "border border-black" : "",
-                      )}
-                        disabled={index > currentDay || index < currentDay}
-                      >
-                      </button>
-                    ))}
+                    {daysInMonth.map((item, index) => {
+                      const realDay = index + 1;
+
+                      return (
+                        <button className={cn("w-7 h-7 flex items-end justify-center border border-neutral-300 disabled:border-neutral-300/30 disabled:cursor-not-allowed enabled:hover:border-black data-[is-current-day=true]:border-neutral-400",
+                        )}
+                          data-is-current-day={realDay === currentDay}
+                          disabled={realDay > currentDay || realDay < currentDay}
+                        >
+                        </button>
+                      )
+
+                    })}
                   </div>
                 </div>
               ))}
