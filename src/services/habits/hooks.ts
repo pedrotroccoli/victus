@@ -1,6 +1,6 @@
 import { UndefinedInitialDataInfiniteOptions, useMutation, UseMutationOptions, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateHabitRequest, CreateHabitResponse } from ".";
-import { createHabit, getHabits } from "./services";
+import { checkHabit, createHabit, getHabits } from "./services";
+import { CheckHabitRequest, CheckHabitResponse, CreateHabitRequest, CreateHabitResponse } from "./types";
 
 type UseGetHabitsProps = UndefinedInitialDataInfiniteOptions<any, Error, any, string[]>;
 
@@ -22,6 +22,22 @@ export const useCreateHabit = (options?: Partial<UseMutationOptions<CreateHabitR
       const response = await createHabit(params);
 
       queryClient.setQueryData(['habits'], [...cache, response]);
+
+      return response;
+    }
+  })
+}
+export const useCheckHabit = (options?: Partial<UseMutationOptions<CheckHabitResponse, Error, CheckHabitRequest>>) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    ...options,
+    mutationFn: async (params) => {
+      // const cache = queryClient.getQueryData(['habits']) as CreateHabitResponse[] || [];
+
+      const response = await checkHabit(params);
+
+      //queryClient.setQueryData(['habits'], [...cache, response]);
 
       return response;
     }

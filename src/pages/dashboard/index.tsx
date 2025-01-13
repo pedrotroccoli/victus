@@ -11,7 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { cn } from "@/lib/utils";
 import { useMe } from "@/services/auth";
 import { getToken } from "@/services/auth/services";
-import { useCreateHabit, useGetHabits } from "@/services/habits/hooks";
+import { useCheckHabit, useCreateHabit, useGetHabits } from "@/services/habits/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -41,8 +41,11 @@ export const Home = () => {
   const { data: habits, isLoading: isLoadingHabits } = useGetHabits({
     enabled: !!me
   });
+  const { mutateAsync: checkHabit } = useCheckHabit();
 
   // console.log(habits);
+
+  console.log(habits);
 
 
   const firstDayOfMonth = startOfMonth(new Date());
@@ -112,13 +115,20 @@ export const Home = () => {
       infinite: params.infinite
     });
 
-    // console.log(params);
+    console.log(data);
+
     setCreateHabitOpen(false);
   }
 
   const handleError = (error: any) => {
     console.log(error);
+  }
 
+  const handleCheckHabit = (habit: Habit) => () => {
+    console.log(habit);
+    checkHabit({
+      habit_id: habit._id,
+    });
   }
 
   if (isLoadingMe) {
@@ -237,20 +247,24 @@ export const Home = () => {
 
 
               {habits?.map((item) => (
-                <div className="flex flex-wrap">
+                <div className="flex flex-wrap" key={item._id}>
                   <div className="flex items-center gap-4 w-16">
                     <p className="text-xs font-bold">{item.name}</p>
                   </div>
 
                   <div className="flex flex-wrap">
-                    {daysInMonth.map((item, index) => {
+                    {daysInMonth.map((monthDay, index) => {
                       const realDay = index + 1;
 
                       return (
-                        <button className={cn("w-7 h-7 flex items-end justify-center border border-neutral-300 disabled:border-neutral-300/30 disabled:cursor-not-allowed enabled:hover:border-black data-[is-current-day=true]:border-neutral-400",
-                        )}
+                        <button
+                          key={`${item._id}-${realDay}`}
+                          className={
+                            cn("w-7 h-7 flex items-end justify-center border border-neutral-300 disabled:border-neutral-300/30 disabled:cursor-not-allowed enabled:hover:border-black data-[is-current-day=true]:border-neutral-400",
+                            )}
                           data-is-current-day={realDay === currentDay}
                           disabled={realDay > currentDay || realDay < currentDay}
+                          onClick={handleCheckHabit(item)}
                         >
                         </button>
                       )
