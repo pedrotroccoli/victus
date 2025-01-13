@@ -13,14 +13,32 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as publicSignUpIndexImport } from './routes/(public)/sign-up/index'
+import { Route as PrivateImport } from './routes/_private'
+import { Route as publicAuthImport } from './routes/(public)/_auth'
+import { Route as PrivateDashboardIndexImport } from './routes/_private/dashboard/index'
 
 // Create Virtual Routes
 
+const publicImport = createFileRoute('/(public)')()
 const IndexLazyImport = createFileRoute('/')()
-const publicSignInIndexLazyImport = createFileRoute('/(public)/sign-in/')()
+const publicAuthSignUpIndexLazyImport = createFileRoute(
+  '/(public)/_auth/sign-up/',
+)()
+const publicAuthSignInIndexLazyImport = createFileRoute(
+  '/(public)/_auth/sign-in/',
+)()
 
 // Create/Update Routes
+
+const publicRoute = publicImport.update({
+  id: '/(public)',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PrivateRoute = PrivateImport.update({
+  id: '/_private',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   id: '/',
@@ -28,21 +46,36 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const publicSignInIndexLazyRoute = publicSignInIndexLazyImport
+const publicAuthRoute = publicAuthImport.update({
+  id: '/_auth',
+  getParentRoute: () => publicRoute,
+} as any)
+
+const PrivateDashboardIndexRoute = PrivateDashboardIndexImport.update({
+  id: '/dashboard/',
+  path: '/dashboard/',
+  getParentRoute: () => PrivateRoute,
+} as any)
+
+const publicAuthSignUpIndexLazyRoute = publicAuthSignUpIndexLazyImport
   .update({
-    id: '/(public)/sign-in/',
-    path: '/sign-in/',
-    getParentRoute: () => rootRoute,
+    id: '/sign-up/',
+    path: '/sign-up/',
+    getParentRoute: () => publicAuthRoute,
   } as any)
   .lazy(() =>
-    import('./routes/(public)/sign-in/index.lazy').then((d) => d.Route),
+    import('./routes/(public)/_auth/sign-up/index.lazy').then((d) => d.Route),
   )
 
-const publicSignUpIndexRoute = publicSignUpIndexImport.update({
-  id: '/(public)/sign-up/',
-  path: '/sign-up/',
-  getParentRoute: () => rootRoute,
-} as any)
+const publicAuthSignInIndexLazyRoute = publicAuthSignInIndexLazyImport
+  .update({
+    id: '/sign-in/',
+    path: '/sign-in/',
+    getParentRoute: () => publicAuthRoute,
+  } as any)
+  .lazy(() =>
+    import('./routes/(public)/_auth/sign-in/index.lazy').then((d) => d.Route),
+  )
 
 // Populate the FileRoutesByPath interface
 
@@ -55,63 +88,143 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/(public)/sign-up/': {
-      id: '/(public)/sign-up/'
-      path: '/sign-up'
-      fullPath: '/sign-up'
-      preLoaderRoute: typeof publicSignUpIndexImport
+    '/_private': {
+      id: '/_private'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof PrivateImport
       parentRoute: typeof rootRoute
     }
-    '/(public)/sign-in/': {
-      id: '/(public)/sign-in/'
+    '/(public)': {
+      id: '/(public)'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof publicImport
+      parentRoute: typeof rootRoute
+    }
+    '/(public)/_auth': {
+      id: '/(public)/_auth'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof publicAuthImport
+      parentRoute: typeof publicRoute
+    }
+    '/_private/dashboard/': {
+      id: '/_private/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof PrivateDashboardIndexImport
+      parentRoute: typeof PrivateImport
+    }
+    '/(public)/_auth/sign-in/': {
+      id: '/(public)/_auth/sign-in/'
       path: '/sign-in'
       fullPath: '/sign-in'
-      preLoaderRoute: typeof publicSignInIndexLazyImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof publicAuthSignInIndexLazyImport
+      parentRoute: typeof publicAuthImport
+    }
+    '/(public)/_auth/sign-up/': {
+      id: '/(public)/_auth/sign-up/'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof publicAuthSignUpIndexLazyImport
+      parentRoute: typeof publicAuthImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface PrivateRouteChildren {
+  PrivateDashboardIndexRoute: typeof PrivateDashboardIndexRoute
+}
+
+const PrivateRouteChildren: PrivateRouteChildren = {
+  PrivateDashboardIndexRoute: PrivateDashboardIndexRoute,
+}
+
+const PrivateRouteWithChildren =
+  PrivateRoute._addFileChildren(PrivateRouteChildren)
+
+interface publicAuthRouteChildren {
+  publicAuthSignInIndexLazyRoute: typeof publicAuthSignInIndexLazyRoute
+  publicAuthSignUpIndexLazyRoute: typeof publicAuthSignUpIndexLazyRoute
+}
+
+const publicAuthRouteChildren: publicAuthRouteChildren = {
+  publicAuthSignInIndexLazyRoute: publicAuthSignInIndexLazyRoute,
+  publicAuthSignUpIndexLazyRoute: publicAuthSignUpIndexLazyRoute,
+}
+
+const publicAuthRouteWithChildren = publicAuthRoute._addFileChildren(
+  publicAuthRouteChildren,
+)
+
+interface publicRouteChildren {
+  publicAuthRoute: typeof publicAuthRouteWithChildren
+}
+
+const publicRouteChildren: publicRouteChildren = {
+  publicAuthRoute: publicAuthRouteWithChildren,
+}
+
+const publicRouteWithChildren =
+  publicRoute._addFileChildren(publicRouteChildren)
+
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
-  '/sign-up': typeof publicSignUpIndexRoute
-  '/sign-in': typeof publicSignInIndexLazyRoute
+  '/': typeof publicAuthRouteWithChildren
+  '': typeof PrivateRouteWithChildren
+  '/dashboard': typeof PrivateDashboardIndexRoute
+  '/sign-in': typeof publicAuthSignInIndexLazyRoute
+  '/sign-up': typeof publicAuthSignUpIndexLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
-  '/sign-up': typeof publicSignUpIndexRoute
-  '/sign-in': typeof publicSignInIndexLazyRoute
+  '/': typeof publicAuthRouteWithChildren
+  '': typeof PrivateRouteWithChildren
+  '/dashboard': typeof PrivateDashboardIndexRoute
+  '/sign-in': typeof publicAuthSignInIndexLazyRoute
+  '/sign-up': typeof publicAuthSignUpIndexLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexLazyRoute
-  '/(public)/sign-up/': typeof publicSignUpIndexRoute
-  '/(public)/sign-in/': typeof publicSignInIndexLazyRoute
+  '/_private': typeof PrivateRouteWithChildren
+  '/(public)': typeof publicRouteWithChildren
+  '/(public)/_auth': typeof publicAuthRouteWithChildren
+  '/_private/dashboard/': typeof PrivateDashboardIndexRoute
+  '/(public)/_auth/sign-in/': typeof publicAuthSignInIndexLazyRoute
+  '/(public)/_auth/sign-up/': typeof publicAuthSignUpIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/sign-up' | '/sign-in'
+  fullPaths: '/' | '' | '/dashboard' | '/sign-in' | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/sign-up' | '/sign-in'
-  id: '__root__' | '/' | '/(public)/sign-up/' | '/(public)/sign-in/'
+  to: '/' | '' | '/dashboard' | '/sign-in' | '/sign-up'
+  id:
+    | '__root__'
+    | '/'
+    | '/_private'
+    | '/(public)'
+    | '/(public)/_auth'
+    | '/_private/dashboard/'
+    | '/(public)/_auth/sign-in/'
+    | '/(public)/_auth/sign-up/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
-  publicSignUpIndexRoute: typeof publicSignUpIndexRoute
-  publicSignInIndexLazyRoute: typeof publicSignInIndexLazyRoute
+  PrivateRoute: typeof PrivateRouteWithChildren
+  publicRoute: typeof publicRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
-  publicSignUpIndexRoute: publicSignUpIndexRoute,
-  publicSignInIndexLazyRoute: publicSignInIndexLazyRoute,
+  PrivateRoute: PrivateRouteWithChildren,
+  publicRoute: publicRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -125,18 +238,44 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/(public)/sign-up/",
-        "/(public)/sign-in/"
+        "/_private",
+        "/(public)"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/(public)/sign-up/": {
-      "filePath": "(public)/sign-up/index.tsx"
+    "/_private": {
+      "filePath": "_private.tsx",
+      "children": [
+        "/_private/dashboard/"
+      ]
     },
-    "/(public)/sign-in/": {
-      "filePath": "(public)/sign-in/index.lazy.tsx"
+    "/(public)": {
+      "filePath": "(public)",
+      "children": [
+        "/(public)/_auth"
+      ]
+    },
+    "/(public)/_auth": {
+      "filePath": "(public)/_auth.tsx",
+      "parent": "/(public)",
+      "children": [
+        "/(public)/_auth/sign-in/",
+        "/(public)/_auth/sign-up/"
+      ]
+    },
+    "/_private/dashboard/": {
+      "filePath": "_private/dashboard/index.tsx",
+      "parent": "/_private"
+    },
+    "/(public)/_auth/sign-in/": {
+      "filePath": "(public)/_auth/sign-in/index.lazy.tsx",
+      "parent": "/(public)/_auth"
+    },
+    "/(public)/_auth/sign-up/": {
+      "filePath": "(public)/_auth/sign-up/index.lazy.tsx",
+      "parent": "/(public)/_auth"
     }
   }
 }

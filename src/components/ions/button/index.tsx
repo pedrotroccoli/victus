@@ -7,9 +7,9 @@ interface ButtonProps extends ButtonPropsUI {
   loading?: boolean;
 }
 
-export const Button = ({ children, iconLeft: LeftIcon, iconRight: RightIcon, loading, ...props }: ButtonProps) => {
+export const Button = ({ children, iconLeft: LeftIcon, iconRight: RightIcon, loading, disabled, ...props }: ButtonProps) => {
   return (
-    <ButtonUI {...props} disabled={loading}>
+    <ButtonUI {...props} disabled={loading || disabled}>
       {!loading && LeftIcon && <LeftIcon size={16} strokeWidth={1.5} className='' />}
       {children}
       {!loading && RightIcon && <RightIcon size={16} strokeWidth={1.5} className='' />}

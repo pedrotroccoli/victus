@@ -1,13 +1,20 @@
-export { };
-/*
-import axios from "axios";
-import { eachDayOfInterval, endOfMonth, formatDate, getDate, getYear, isAfter, isBefore, startOfMonth } from "date-fns";
-import { PlusCircle } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { eachDayOfInterval, endOfMonth, formatDate, getDate, getYear, isAfter, isBefore, startOfMonth, sub } from "date-fns";
+import { LoaderCircle, PlusCircle } from "lucide-react";
+import { useCallback, useState } from "react";
 
+
+import { TextField } from "@/components/molecules/form";
+import { CheckboxField } from "@/components/molecules/form/CheckboxField";
+import { DatePickerField } from "@/components/molecules/form/DatePickerField";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { useForm } from "react-hook-form";
+import { useMe } from "@/services/auth";
+import { getToken } from "@/services/auth/services";
+import { useCreateHabit, useGetHabits } from "@/services/habits/hooks";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FormProvider, useForm } from "react-hook-form";
+import { z } from "zod";
 
 interface Habit {
   id: string;
@@ -22,8 +29,22 @@ interface HabitItem {
   dates: Record<string, Habit | null>;
 }
 
+const createHabitValidation = z.object({
+  name: z.string().min(3),
+  start_date: z.date(),
+  end_date: z.date(),
+  infinite: z.boolean().optional(),
+})
 
 export const Home = () => {
+  const { data: me, isLoading: isLoadingMe } = useMe();
+  const { data: habits, isLoading: isLoadingHabits } = useGetHabits({
+    enabled: !!me
+  });
+
+  // console.log(habits);
+
+
   const firstDayOfMonth = startOfMonth(new Date());
   const lastDayOfMonth = endOfMonth(new Date());
 
@@ -31,8 +52,12 @@ export const Home = () => {
   const currentDay = getDate(new Date());
   const daysInMonth = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth });
 
-  const form = useForm();
-  const endDate = form.watch("endDate");
+  const { mutateAsync: createHabit } = useCreateHabit();
+
+  const form = useForm({
+    resolver: zodResolver(createHabitValidation)
+  });
+  const endDate = form.watch("end_date");
 
   const [habitItens, setHabitItens] = useState<HabitItem[]>([]);
   const [token, setToken] = useState<string>("");
@@ -47,12 +72,7 @@ export const Home = () => {
 
       setToken(token);
 
-      const { data } = await axios.get("http://localhost:3000/habits", {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        }
-      });
+      const data = [];
 
       const datesInsideRange = data.filter(item => isAfter(item.start_date, firstDayOfMonth));
 
@@ -83,141 +103,160 @@ export const Home = () => {
     }
   }, [firstDayOfMonth, daysInMonth]);
 
-  useEffect(() => {
-    getHabits();
-  }, [getHabits])
 
   const handleSubmit = async (params: any) => {
-    const { data } = await axios.post("http://localhost:3000/habits", {
-      habit: params
-    }, {
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
-      }
+    const { data } = await createHabit({
+      name: params.name,
+      start_date: params.start_date,
+      end_date: params.end_date,
+      infinite: params.infinite
     });
 
-    console.log(data);
+    // console.log(params);
     setCreateHabitOpen(false);
   }
 
-  const handleError = (error: any) => { }
+  const handleError = (error: any) => {
+    console.log(error);
+
+  }
+
+  if (isLoadingMe) {
+    return (
+      <main>
+        <div className="h-screen flex items-center justify-center">
+          <LoaderCircle size={32} className="animate-spin" strokeWidth={1.75} />
+        </div>
+      </main>
+    )
+  }
 
   return (
     <>
-      {/** 
-      <Dialog open={createHabitOpen}>
-        <DialogTrigger>Open</DialogTrigger>
-        <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded">
-          <DialogHeader className="p-4 border-b">
-            <DialogTitle>Criar hábito</DialogTitle>
-            <DialogDescription className="text-black/70">
-              Defina a data de início e fim do hábito
-            </DialogDescription>
-          </DialogHeader>
-          <FormProvider {...form}>
-            <div className="space-y-4 py-4 px-6 pb-8">
-              <div>
-                <InputField
-                  name="name"
-                  label="Nome do hábito"
-                  placeholder="Ex: Beber água"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <DatePickerField name="startDate" label="Data de início"
-                    disabled={(date) => {
-                      if (isBefore(date, sub(new Date(), { days: 1 }))) {
-                        return true;
-                      }
 
-                      if (endDate && isBefore(date, endDate)) {
-                        return false;
-                      }
+      <main className="max-w-screen-xl mx-auto border-x h-screen">
+        <header className="border-b py-4 px-8">
+          <div className="flex items-center justify-between">
+            <div />
 
-                      return false;
-                    }} />
-                </div>
-                <div>
-                  <DatePickerField name="endDate" label="Data de fim" />
-                  {/* 
-              <div className="flex items-center gap-2 mt-2">
-                <CheckboxField className="rounded" name="infinite" />
-                <p className="text-sm font-medium">Infinito</p>
-              </div>
-                </div>
-              </div>
+            <div className="">
+              {/* <Button variant="outline" className="flex gap-2 rounded-xl h-8" onClick={() => logout()}> */}
+              {/* Sair */}
+              {/* <LogOut size={16} /> */}
+              {/* </Button> */}
             </div>
-            <div className="flex justify-end p-4 border-t">
-              <Button variant="default" className="bg-black text-white rounded text-sm font-bold hover:bg-black/80"
-                onClick={form.handleSubmit(handleSubmit, handleError)}
-              >
-                Criar
-              </Button>
-            </div>
-          </FormProvider>
-        </DialogContent>
-      </Dialog>
-
-<main className="max-w-screen-xl mx-auto border-x h-screen">
-  <header className="border-b py-4 px-8">
-    <div className="flex items-center justify-between">
-      <div />
-
-      <div className="">
-        {/* <Button variant="outline" className="flex gap-2 rounded-xl h-8" onClick={() => logout()}>
-                Sair
-                <LogOut size={16} />
-              </Button>
-      </div>
-    </div>
-  </header>
-
-  <div className="max-w-screen-lg mx-auto pt-16">
-    <div className="flex items-center justify-between">
-      <h1 className="font-sans text-xl font-medium">Olá {'a'}, aqui está seu jornal!</h1>
-
-      <Button className="flex gap-2 bg-black rounded-xl text-white" onClick={() => setCreateHabitOpen(true)}>
-        Adicionar
-        <PlusCircle size={16} />
-      </Button>
-    </div>
-
-    <div className="mt-8">
-      <div className="flex flex-wrap mb-2">
-        <div className="w-16" />
-
-        {daysInMonth.map((_, index) => (
-          <div className="w-7 h-7 flex items-end justify-center text-xs font-bold">
-            {index + 1}
           </div>
-        ))}
-      </div>
-      <div>
+        </header>
 
+        <div className="max-w-screen-lg mx-auto px-6 pt-16 ">
+          <div className="flex items-center justify-between">
+            <h1 className="font-sans text-xl font-medium">Olá {'a'}, aqui está seu jornal!</h1>
 
-        {habitItens.map(habitItem => (
-          <div className="flex flex-wrap">
-            <div className="flex items-center gap-4 w-16">
-              <p className="text-xs font-bold">{habitItem.habit.name}</p>
+            <Dialog open={createHabitOpen}>
+              <DialogTrigger>
+
+                <Button className="flex gap-2 bg-black rounded-xl text-white" onClick={() => setCreateHabitOpen(true)}>
+                  Adicionar
+                  <PlusCircle size={16} />
+                </Button>
+
+              </DialogTrigger>
+              <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded">
+                <DialogHeader className="p-4 border-b">
+                  <DialogTitle>Criar hábito</DialogTitle>
+                  <DialogDescription className="text-black/70">
+                    Defina a data de início e fim do hábito
+                  </DialogDescription>
+                </DialogHeader>
+                <FormProvider {...form}>
+                  <div className="space-y-4 py-4 px-6 pb-8">
+                    <div>
+                      <TextField
+                        name="name"
+                        label="Nome do hábito"
+                        placeholder="Ex: Beber água"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <DatePickerField name="start_date" label="Data de início"
+                          disabled={(date) => {
+                            if (isBefore(date, sub(new Date(), { days: 1 }))) {
+                              return true;
+                            }
+
+                            if (endDate && isBefore(date, endDate)) {
+                              return false;
+                            }
+
+                            return false;
+                          }} />
+                      </div>
+                      <div>
+                        <DatePickerField name="end_date" label="Data de fim" disabled={(date) => {
+                          if (isBefore(date, sub(new Date(), { days: 0 }))) {
+                            return true;
+                          }
+
+                          if (isBefore(date, form.getValues('startDate'))) {
+                            return true;
+                          }
+
+                          return false;
+                        }} />
+                        <div className="flex items-center gap-2 mt-2">
+                          <CheckboxField className="rounded" name="infinite" />
+                          <p className="text-sm font-medium">Infinito</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-end p-4 border-t">
+                    <Button variant="default" className="bg-black text-white rounded text-sm font-bold hover:bg-black/80"
+                      onClick={form.handleSubmit(handleSubmit, handleError)}
+                    >
+                      Criar
+                    </Button>
+                  </div>
+                </FormProvider>
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          <div className="mt-8">
+            <div className="flex flex-wrap mb-2">
+              <div className="w-16" />
+
+              {daysInMonth.map((_, index) => (
+                <div className="w-7 h-7 flex items-end justify-center text-xs font-bold">
+                  {index + 1}
+                </div>
+              ))}
             </div>
+            <div>
 
-            <div className="flex flex-wrap">
-              {daysInMonth.map((item, index) => (
-                <button className={cn("w-7 h-7 flex items-end justify-center border hover:border-black", index === currentDay ? "border-black" : "",
-                  `${habitItem.dates[formatDate(item, "dd/MM/yyyy")] ? "" : "bg-neutral-300 border-neutral-300 opacity-50 cursor-not-allowed"}`
-                )}>
-                </button>
+
+              {habits?.map((item) => (
+                <div className="flex flex-wrap">
+                  <div className="flex items-center gap-4 w-16">
+                    <p className="text-xs font-bold">{item.name}</p>
+                  </div>
+
+                  <div className="flex flex-wrap">
+                    {daysInMonth.map((item, index) => (
+                      <button className={cn("w-7 h-7 flex items-end justify-center border border-neutral-300 disabled:opacity-50 disabled:cursor-not-allowed enabled:hover:border-black", index === currentDay ? "border border-black" : "",
+                      )}
+                        disabled={index > currentDay || index < currentDay}
+                      >
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
           </div>
-        ))}
-      </div>
-    </div>
-  </div>
-</main>
+        </div>
+      </main>
     </>
   )
 }
-*/

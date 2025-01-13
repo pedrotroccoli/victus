@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { BookMarked, CircleArrowRight, KeyRound, Mail } from 'lucide-react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -8,15 +8,17 @@ import { Button } from '@/components/ions/button';
 import { PasswordField } from '@/components/molecules/form/PasswordField';
 import { TextField } from '@/components/molecules/form/TextField';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { useSignIn } from '@/services/auth';
+import { AxiosError } from 'axios';
+import { toast } from 'sonner';
 
 const signInSchema = z.object({
   email: z.string({
     required_error: 'Um email por favor',
-  }).email('O email com certeza não é válido'),
+  }).trim().email('O email com certeza não é válido'),
   password: z.string({
     required_error: 'Uma senha por favor',
-  }).min(3, 'Deve ter pelo menos alguns caracteres a mais né?'),
+  }).trim().min(3, 'Deve ter pelo menos alguns caracteres a mais né?'),
 });
 
 type SignInFormData = z.infer<typeof signInSchema>;
@@ -25,20 +27,40 @@ export const SignInPage = () => {
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
   });
-  const [isLoading, setIsLoading] = useState(false);
+
+  const { mutateAsync: signIn, isPending: isLoading } = useSignIn();
+  const navigate = useNavigate();
 
   const onFormSubmit: SubmitHandler<SignInFormData> = async (data) => {
-    setIsLoading(true);
-    console.log(data, 'data');
+    try {
+      await signIn({
+        email: data.email,
+        password: data.password,
+      });
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+      toast.success('Login realizado com sucesso', {
+        dismissible: true,
+      });
 
-    setIsLoading(false);
+      navigate({ to: '/dashboard' });
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.status === 401) {
+        toast.error('Email ou senha inválidos', {
+          dismissible: true,
+        });
+      } else {
+        toast.error('Ocorreu um erro ao realizar o login', {
+          dismissible: true,
+        });
+      }
+    }
   }
 
   const onFormError: SubmitErrorHandler<SignInFormData> = (error) => {
     console.log(error, 'error');
   }
+
+  console.log(form.formState.isValid);
 
   return (
     <main className="w-full h-screen bg-[url('/sign-in-bg.webp')] flex items-center justify-center">
@@ -68,7 +90,7 @@ export const SignInPage = () => {
               <PasswordField name="password" iconLeft={<KeyRound size={16} />} label='Senha' placeholder='••••••••••' />
             </div>
 
-            <Button type="submit" iconRight={CircleArrowRight} className='flex justify-between mt-4' loading={isLoading}>
+            <Button type="submit" iconRight={CircleArrowRight} className='flex justify-between mt-4' loading={isLoading} disabled={!form.formState.isValid}>
               Acessar
             </Button>
           </form>

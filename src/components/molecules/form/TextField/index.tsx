@@ -4,10 +4,19 @@ import { Controller, useFormContext } from "react-hook-form";
 
 interface InputFieldProps extends InputProps {
   name: string;
+  parser?: (value: string) => string;
 }
 
-export const TextField = ({ name, label, className, ...props }: InputFieldProps) => {
+export const TextField = ({ name, label, className, parser, ...props }: InputFieldProps) => {
   const { control } = useFormContext();
+
+  const customOnChange = (onChange: (e: React.ChangeEvent<HTMLInputElement>) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (parser) {
+      e.target.value = parser(e.target.value);
+    }
+
+    return onChange(e);
+  }
 
   return (
     <Controller
@@ -16,7 +25,7 @@ export const TextField = ({ name, label, className, ...props }: InputFieldProps)
       render={({ field: { onChange, onBlur, value }, fieldState }) => (
         <Input
           label={label}
-          onChange={onChange}
+          onChange={customOnChange(onChange)}
           onBlur={onBlur}
           value={value}
           className={cn(className, fieldState.error?.message && "border-red-500")}
