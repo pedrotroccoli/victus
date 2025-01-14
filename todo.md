@@ -4,7 +4,9 @@
 - [ X ] List habits
 
 - [ X ] Show the right date in habits list
-- [ ] Complete an habit
+- [ X ] Complete an habit
+
+- [ ] Show Habits Check in List
 
 - [ ] Delete habit
 - [ ] Edit habit
