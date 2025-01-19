@@ -22,7 +22,6 @@ export const DatePickerField = ({ name, label, className, ...props }: DatePicker
         name={name}
         render={({ field: { onChange, onBlur, value } }) => (
           <DatePicker
-            // @ts-expect-error blabla
             onSelect={onChange}
             onDayBlur={onBlur}
             selected={value}
