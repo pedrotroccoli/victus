@@ -17,6 +17,15 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage: {
+        'checked-box-01': `repeating-linear-gradient(
+          45deg,
+          black,
+          black 2px,
+          transparent 2px,
+          transparent 4px
+        )`
+      },
       fontFamily: {
         title: ['Sofia Sans', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
