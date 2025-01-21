@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getToken, removeToken } from "./auth/services";
 
 export const baseApi = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
@@ -10,26 +11,29 @@ export const baseApi = axios.create({
 let tries = 0;
 
 baseApi.interceptors.request.use(async (config) => {
-  // if (tries === 2) {
-  //   tries = 0;
-  //   config.headers.Authorization = undefined;
-  //   removeToken();
-  //   window.location.href = '/sign-in';
+  console.log('tries', tries, config);
 
-  //   return config;
-  // }
+  if (tries === 2) {
+    removeToken();
+    config.headers.Authorization = undefined;
+    window.location.href = '/sign-in';
 
-  // if (config.headers.Authorization) {
-  //   const token = String(config.headers.Authorization || '').split(' ')[1];
+    tries = 0;
 
-  //   if (token) return config;
+    return config;
+  }
 
-  //   config.headers.Authorization = undefined;
-  // }
+  if (config.headers.Authorization) {
+    const token = String(config.headers.Authorization || '').split(' ')[1];
 
-  // const token = await getToken();
+    if (token) return config;
 
-  // config.headers.Authorization = `Bearer ${token}`;
+    config.headers.Authorization = undefined;
+  }
+
+  const token = await getToken();
+
+  config.headers.Authorization = `Bearer ${token}`;
 
   return config;
 });
@@ -38,7 +42,7 @@ baseApi.interceptors.request.use(async (config) => {
 baseApi.interceptors.response.use(async (config) => {
   return config;
 }, (error) => {
-  if (error.response.status === 401) {
+  if (error.response.status === 401 && error.config.url !== '/auth/sign-in') {
     tries++;
   }
 })

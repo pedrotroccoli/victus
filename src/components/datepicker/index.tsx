@@ -15,7 +15,6 @@ import { cn } from "@/lib/utils"
 
 export type DatePickerProps = {
   disabledMessage?: string;
-
 } & CalendarProps;
 
 export function DatePicker({ className, selected, disabledMessage, ...props }: DatePickerProps) {

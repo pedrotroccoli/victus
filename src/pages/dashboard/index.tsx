@@ -1,4 +1,4 @@
-import { eachDayOfInterval, endOfMonth, format, formatDate, getDate, getYear, isAfter, isBefore, isEqual, startOfDay, startOfMonth, sub, subDays } from "date-fns";
+import { eachDayOfInterval, endOfMonth, format, formatDate, getDate, getYear, isAfter, isBefore, isEqual, startOfDay, startOfMonth, subDays } from "date-fns";
 import { CircleArrowDown, LoaderCircle, PlusCircle } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 
@@ -7,16 +7,14 @@ import { useMe } from "@/services/auth";
 import { getToken, signOut } from "@/services/auth/services";
 import { useCheckHabit, useCreateHabit, useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProvider, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { TextField } from "@/components/molecules/form";
-import { CheckboxField } from "@/components/molecules/form/CheckboxField";
-import { DatePickerField } from "@/components/molecules/form/DatePickerField";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { CreateHabitModal } from "@/features/habits/templates/create-habit-modal";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
 
@@ -221,68 +219,10 @@ export const Home = () => {
                   <PlusCircle size={16} />
                 </Button>
 
+
+
               </DialogTrigger>
-              <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded">
-                <DialogHeader className="p-4 border-b">
-                  <DialogTitle>Criar hábito</DialogTitle>
-                  <DialogDescription className="text-black/70">
-                    Defina a data de início e fim do hábito
-                  </DialogDescription>
-                </DialogHeader>
-                <FormProvider {...form}>
-                  <div className="space-y-4 py-4 px-6 pb-8">
-                    <div>
-                      <TextField
-                        name="name"
-                        label="Nome do hábito"
-                        placeholder="Ex: Beber água"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <DatePickerField name="start_date" label="Data de início"
-                          disabled={(date) => {
-                            if (isBefore(date, sub(new Date(), { days: 1 }))) {
-                              return true;
-                            }
-
-                            if (endDate && isBefore(date, endDate)) {
-                              return false;
-                            }
-
-                            return false;
-                          }} />
-                      </div>
-                      <div>
-                        <DatePickerField name="end_date" label="Data de fim" disabled={(date) => {
-                          if (isBefore(date, sub(new Date(), { days: 0 }))) {
-                            return true;
-                          }
-
-                          if (isBefore(date, form.getValues('startDate'))) {
-                            return true;
-                          }
-
-                          return false;
-                        }}
-                          disabledMessage={form.watch('infinite') ? 'Sem fim' : undefined}
-                        />
-                        <div className="flex items-center gap-2 mt-2">
-                          <CheckboxField className="rounded" name="infinite" />
-                          <p className="text-sm font-medium">Infinito</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex justify-end p-4 border-t">
-                    <Button variant="default" className="bg-black text-white rounded text-sm font-bold hover:bg-black/80"
-                      onClick={form.handleSubmit(handleSubmit, handleError)}
-                    >
-                      Criar
-                    </Button>
-                  </div>
-                </FormProvider>
-              </DialogContent>
+              <CreateHabitModal />
             </Dialog>
           </div>
 
