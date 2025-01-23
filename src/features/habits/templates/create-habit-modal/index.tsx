@@ -1,19 +1,40 @@
+import { z } from 'zod';
+
 import { CheckboxField } from '@/components/molecules/form/CheckboxField';
 import { DatePickerField } from '@/components/molecules/form/DatePickerField';
 import { TextField } from '@/components/molecules/form/TextField';
 import { Button } from '@/components/ui/button';
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { isBefore, sub } from 'date-fns';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+
+
+const createHabitValidation = z.object({
+  name: z.string().min(3),
+  start_date: z.date(),
+  end_date: z.date(),
+  infinite: z.boolean().optional(),
+})
+
+type CreateHabitValidation = z.infer<typeof createHabitValidation>;
 
 export const CreateHabitModal = () => {
-  const form = useForm();
+  const form = useForm<z.infer<typeof createHabitValidation>>({
+    resolver: zodResolver(createHabitValidation),
+    defaultValues: {
+      name: '',
+      start_date: new Date(),
+      end_date: new Date(),
+      infinite: false,
+    },
+  });
 
-  const handleSubmit = (data: any) => {
+  const handleSubmit: SubmitHandler<CreateHabitValidation> = (data) => {
     console.log(data);
   }
 
-  const handleError = (errors: any) => {
+  const handleError: SubmitErrorHandler<CreateHabitValidation> = (errors) => {
     console.log(errors);
   }
 
@@ -57,7 +78,7 @@ export const CreateHabitModal = () => {
                   return true;
                 }
 
-                if (isBefore(date, form.getValues('startDate'))) {
+                if (isBefore(date, form.getValues('start_date'))) {
                   return true;
                 }
 

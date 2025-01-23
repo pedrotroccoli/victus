@@ -1,14 +1,11 @@
-import { eachDayOfInterval, endOfMonth, format, formatDate, getDate, getYear, isAfter, isBefore, isEqual, startOfDay, startOfMonth, subDays } from "date-fns";
+import { eachDayOfInterval, endOfMonth, format, getDate, isBefore, isEqual, startOfDay, startOfMonth, subDays } from "date-fns";
 import { CircleArrowDown, LoaderCircle, PlusCircle } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 
 import { useMe } from "@/services/auth";
-import { getToken, signOut } from "@/services/auth/services";
-import { useCheckHabit, useCreateHabit, useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { signOut } from "@/services/auth/services";
+import { useCheckHabit, useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks";
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button";
@@ -18,30 +15,10 @@ import { CreateHabitModal } from "@/features/habits/templates/create-habit-modal
 import { cn } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
 
-interface Habit {
-  id: string;
-  name: string;
-  createdAt: string;
-  startDate: string;
-  endDate: string;
-}
-
-interface HabitItem {
-  habit: Habit;
-  dates: Record<string, Habit | null>;
-}
-
-const createHabitValidation = z.object({
-  name: z.string().min(3),
-  start_date: z.date(),
-  end_date: z.date(),
-  infinite: z.boolean().optional(),
-})
-
 export const Home = () => {
   const navigate = useNavigate();
   const { data: me, isLoading: isLoadingMe } = useMe();
-  const { data: habits, isLoading: isLoadingHabits } = useGetHabits({
+  const { data: habits } = useGetHabits({
     enabled: !!me
   });
   const { data: habitsCheck } = useGetHabitsCheck({
@@ -52,7 +29,9 @@ export const Home = () => {
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
 
-    return habitsCheck.reduce((previous, current) => {
+    return habitsCheck.reduce((previous: Record<string, Record<string, HabitCheck>>, current: HabitCheck) => {
+
+      if (!current.finished_at) return previous;
 
       return ({
         ...previous,
@@ -67,7 +46,7 @@ export const Home = () => {
   const formattedShortname = useMemo(() => {
     if (!me) return 'X';
 
-    const divided = me.name.split(' ').slice(0, 2).map(item => String(item[0]).toUpperCase()).join('');
+    const divided = me.name.split(' ').slice(0, 2).map((item: string) => String(item[0]).toUpperCase()).join('');
 
     return divided;
   }, [me])
@@ -77,74 +56,24 @@ export const Home = () => {
   const firstDayOfMonth = startOfMonth(new Date());
   const lastDayOfMonth = endOfMonth(new Date());
 
-  const currentYear = getYear(new Date());
   const currentDay = getDate(new Date());
   const daysInMonth = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth });
 
-  const { mutateAsync: createHabit } = useCreateHabit();
-
-  const form = useForm({
-    resolver: zodResolver(createHabitValidation)
-  });
-  const endDate = form.watch("end_date");
-
-  const [habitItens, setHabitItens] = useState<HabitItem[]>([]);
-  const [token, setToken] = useState<string>("");
-
   const [createHabitOpen, setCreateHabitOpen] = useState(false);
 
-  const getHabits = useCallback(async () => {
-    try {
-      const token = await getToken();
 
-      setToken(token);
+  // const handleSubmit = async (params: any) => {
+  //   const { data } = await createHabit({
+  //     name: params.name,
+  //     start_date: params.start_date,
+  //     end_date: params.end_date,
+  //     infinite: params.infinite
+  //   });
 
-      const data = [];
+  //   console.log(data);
 
-      const datesInsideRange = data.filter(item => isAfter(item.start_date, firstDayOfMonth));
-
-      const habitsWithDates = datesInsideRange.map(habit => ({
-        habit,
-        dates: daysInMonth.reduce((previous, current) => {
-          const currentDay = formatDate(current, "dd/MM/yyyy");
-
-          if (isAfter(current, habit.start_date) && isBefore(current, habit.end_date)) {
-            return {
-              ...previous,
-              [currentDay]: habit
-            }
-          } else {
-            return {
-              ...previous,
-              [currentDay]: null
-            }
-          }
-        }, {})
-      }));
-
-      setHabitItens(habitsWithDates);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [firstDayOfMonth, daysInMonth]);
-
-
-  const handleSubmit = async (params: any) => {
-    const { data } = await createHabit({
-      name: params.name,
-      start_date: params.start_date,
-      end_date: params.end_date,
-      infinite: params.infinite
-    });
-
-    console.log(data);
-
-    setCreateHabitOpen(false);
-  }
-
-  const handleError = (error: any) => {
-    console.log(error);
-  }
+  //   setCreateHabitOpen(false);
+  // }
 
   const getHabitCheck = (habit: Habit, formattedDay: string) => {
     return habitsCheckedHash?.[habit._id]?.[formattedDay];
@@ -162,7 +91,9 @@ export const Home = () => {
   const handleSignOut = async () => {
     await signOut();
 
-    navigate('/');
+    navigate({
+      to: '/',
+    });
   }
 
   if (isLoadingMe) {
@@ -174,8 +105,6 @@ export const Home = () => {
       </main>
     )
   }
-
-
 
   return (
     <>
@@ -228,7 +157,7 @@ export const Home = () => {
 
           <div className="mt-8 overflow-auto">
             <div className="w-full">
-              {habits?.map((item, habitIndex) => (
+              {habits?.map((item: Habit, habitIndex: number) => (
                 <div className="flex items-end" key={item._id}>
                   <div>
 

@@ -19,7 +19,7 @@ export const createHabit = async ({ infinite, ...params }: CreateHabitRequest): 
 
   return data;
 }
-export const checkHabit = async (habit: CheckHabitRequest): Promise<CheckHabitResponse[]> => {
+export const checkHabit = async (habit: CheckHabitRequest): Promise<CheckHabitResponse> => {
   if (habit.check_id) {
     const { data } = await baseApi.put(`/habits-check/${habit.habit_id}/${habit.check_id}`);
 
