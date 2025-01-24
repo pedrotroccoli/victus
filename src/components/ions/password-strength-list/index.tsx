@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import { passwordLengthValidator, passwordLowerCaseValidator, passwordNumberValidator, passwordSpecialCharacterValidator, passwordUpperCaseValidator } from "@/utils/validators/password"
+import { passwordLowerCaseValidator, passwordNumberValidator, passwordSpecialCharacterValidator, passwordUpperCaseValidator } from "@/utils/validators/password"
 import { Check, X } from "lucide-react"
 
 type PasswordStrengthListProps = {
@@ -11,11 +11,7 @@ export function PasswordStrengthList({ password, passwordConfirmation, className
   const list = (password: string) => [
     {
       text: 'As senhas são iguais',
-      condition: password === passwordConfirmation,
-    },
-    {
-      text: 'Possui pelo menos 8 caracteres',
-      condition: passwordLengthValidator(password),
+      condition: password !== '' && (password || '') === passwordConfirmation || '',
     },
     {
       text: 'Possui pelo menos 1 número',

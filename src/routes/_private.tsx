@@ -11,6 +11,8 @@ export const Route = createFileRoute('/_private')({
       throw redirect({ to: '/sign-in' });
     }
 
+    // Session Management
+
     if (!baseApi.defaults.headers.common.Authorization) {
       baseApi.defaults.headers.common.Authorization = `Bearer ${token}`;
     }

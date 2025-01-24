@@ -115,7 +115,7 @@ export const SignUpPage = () => {
 
               <PasswordStrengthBars passwordStrength={passwordStrength} className='mt-2' />
 
-              <PasswordStrengthList password={form.watch('password')} passwordConfirmation={form.watch('password_confirmation')} className='mt-4' />
+              <PasswordStrengthList password={form.watch('password') || ''} passwordConfirmation={form.watch('password_confirmation') || ''} className='mt-4' />
 
               <span className='text-sm text-black/50 mt-4 block'>*A senha precisa ser "Forte"</span>
             </div>

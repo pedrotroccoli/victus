@@ -13,9 +13,11 @@ import {
 import { cn } from "@/lib/utils"
 
 
-export type DatePickerProps = CalendarProps;
+export type DatePickerProps = {
+  disabledMessage?: string;
+} & CalendarProps;
 
-export function DatePicker({ className, selected, ...props }: DatePickerProps) {
+export function DatePicker({ className, selected, disabledMessage, ...props }: DatePickerProps) {
   const date = selected;
 
   return (
@@ -28,10 +30,20 @@ export function DatePicker({ className, selected, ...props }: DatePickerProps) {
             !date && "text-muted-foreground",
             className
           )}
+          disabled={!!disabledMessage}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {/* @ts-expect-error blabla */}
-          {date ? format(date, "PPP") : <span>Escolha uma data</span>}
+          {disabledMessage && (
+            <span>{disabledMessage}</span>
+          )}
+
+          {!disabledMessage && (
+            <>
+
+              {/* @ts-expect-error blabla */}
+              {date ? format(date, "PPP") : <span>Escolha uma data</span>}
+            </>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0 bg-white">
