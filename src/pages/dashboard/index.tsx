@@ -210,7 +210,9 @@ export const Home = () => {
                           const habitEndDate = endOfDay(item.end_date);
                           const sameDay = isSameDay(monthDay, habitStartDate);
 
-                          const isInTheHabitRange = sameDay || (isAfter(monthDay, habitStartDate) && isBefore(monthDay, habitEndDate));
+                          const isInfinite = item.recurrence_type === 'infinite';
+
+                          const isInTheHabitRange = sameDay || (isAfter(monthDay, habitStartDate) && isInfinite ? true : isBefore(monthDay, habitEndDate));
                           const day = format(monthDay, 'dd');
 
                           return (
