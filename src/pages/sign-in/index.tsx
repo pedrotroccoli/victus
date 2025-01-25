@@ -60,8 +60,6 @@ export const SignInPage = () => {
     console.log(error, 'error');
   }
 
-  console.log(form.formState.isValid);
-
   return (
     <main className="w-full h-screen bg-[url('/sign-in-bg.webp')] flex items-center justify-center">
       <div className="bg-white/5 backdrop-blur-sm w-full h-full absolute"></div>

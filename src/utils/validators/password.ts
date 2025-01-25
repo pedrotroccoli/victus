@@ -1,5 +1,4 @@
 export const passwordLengthValidator = (password: string) => {
-  console.log(password);
   if (!password) return false;
 
   return password && password.length >= 8
