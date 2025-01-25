@@ -6,7 +6,9 @@ import { TextField } from '@/components/molecules/form/TextField';
 import { Button } from '@/components/ui/button';
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { isBefore, sub } from 'date-fns';
+import { addDays, isBefore, sub } from 'date-fns';
+import { Loader2 } from 'lucide-react';
+import { useState } from 'react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 
 
@@ -17,24 +19,42 @@ const createHabitValidation = z.object({
   infinite: z.boolean().optional(),
 })
 
-type CreateHabitValidation = z.infer<typeof createHabitValidation>;
+export type CreateHabitForm = z.infer<typeof createHabitValidation>;
 
-export const CreateHabitModal = () => {
-  const form = useForm<z.infer<typeof createHabitValidation>>({
-    resolver: zodResolver(createHabitValidation),
-    defaultValues: {
-      name: '',
-      start_date: new Date(),
-      end_date: new Date(),
-      infinite: false,
-    },
-  });
+interface CreateHabitModalProps {
+  onSave?: (data: CreateHabitForm) => void;
+}
 
-  const handleSubmit: SubmitHandler<CreateHabitValidation> = (data) => {
-    console.log(data);
+export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
+  const [loading, setLoading] = useState(false);
+
+  const defaultValues = {
+    name: '',
+    start_date: new Date(),
+    end_date: addDays(new Date(), 1),
+    infinite: false,
   }
 
-  const handleError: SubmitErrorHandler<CreateHabitValidation> = (errors) => {
+  const form = useForm<z.infer<typeof createHabitValidation>>({
+    resolver: zodResolver(createHabitValidation),
+    defaultValues,
+  });
+
+  const handleSubmit: SubmitHandler<CreateHabitForm> = async (data) => {
+    try {
+      setLoading(true);
+      await onSave?.(data);
+      form.reset(defaultValues);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('CreateHabitModal error:', error);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  const handleError: SubmitErrorHandler<CreateHabitForm> = (errors) => {
     console.log(errors);
   }
 
@@ -93,11 +113,12 @@ export const CreateHabitModal = () => {
             </div>
           </div>
         </div>
-        <div className="flex justify-end p-4 border-t">
-          <Button variant="default" className="bg-black text-white rounded text-sm font-bold hover:bg-black/80"
+        <div className="flex justify-end p-2 px-6 border-t border-neutral-300">
+          <Button variant="default" className="bg-black text-white rounded text-sm font-bold hover:bg-black/80 min-w-24 h-8"
             onClick={form.handleSubmit(handleSubmit, handleError)}
+            disabled={loading}
           >
-            Criar
+            {loading ? <Loader2 size={16} className="animate-spin" /> : 'Criar'}
           </Button>
         </div>
       </FormProvider>

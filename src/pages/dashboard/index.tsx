@@ -5,7 +5,7 @@ import { useMemo, useState } from "react";
 
 import { useMe } from "@/services/auth";
 import { signOut } from "@/services/auth/services";
-import { useCheckHabit, useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks";
+import { useCheckHabit, useCreateHabit, useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks";
 
 import { Logo } from '@/assets/logo';
 
@@ -13,9 +13,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { CreateHabitModal } from "@/features/habits/templates/create-habit-modal";
+import { CreateHabitForm, CreateHabitModal } from "@/features/habits/templates/create-habit-modal";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 export const Home = () => {
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ export const Home = () => {
   }, [me])
 
   const { mutateAsync: checkHabit } = useCheckHabit();
+  const { mutateAsync: createHabit } = useCreateHabit();
 
   const firstDayOfMonth = startOfMonth(new Date());
   const lastDayOfMonth = endOfMonth(new Date());
@@ -63,19 +65,22 @@ export const Home = () => {
 
   const [createHabitOpen, setCreateHabitOpen] = useState(false);
 
+  const onCreateHabit = async (params: CreateHabitForm) => {
+    try {
+      await createHabit({
+        name: params.name,
+        start_date: params.start_date,
+        end_date: params.end_date,
+        infinite: !!params.infinite
+      });
 
-  // const handleSubmit = async (params: any) => {
-  //   const { data } = await createHabit({
-  //     name: params.name,
-  //     start_date: params.start_date,
-  //     end_date: params.end_date,
-  //     infinite: params.infinite
-  //   });
+      toast.success('Hábito criado com sucesso!');
 
-  //   console.log(data);
-
-  //   setCreateHabitOpen(false);
-  // }
+      setCreateHabitOpen(false);
+    } catch (error) {
+      toast.error('Erro ao criar hábito!');
+    }
+  }
 
   const getHabitCheck = (habit: Habit, formattedDay: string) => {
     return habitsCheckedHash?.[habit._id]?.[formattedDay];
@@ -152,7 +157,7 @@ export const Home = () => {
                 </Button>
               </DialogTrigger>
 
-              <CreateHabitModal />
+              <CreateHabitModal onSave={onCreateHabit} />
             </Dialog>
           </div>
 
