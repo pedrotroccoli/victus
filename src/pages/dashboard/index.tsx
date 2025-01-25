@@ -222,7 +222,7 @@ export const Home = () => {
 
                           const isInfinite = item.recurrence_type === 'infinite';
 
-                          const isInTheHabitRange = sameDay || (isAfter(monthDay, habitStartDate) && isInfinite ? true : isBefore(monthDay, habitEndDate));
+                          const isInTheHabitRange = sameDay || (isAfter(monthDay, habitStartDate) && (isInfinite ? true : isBefore(monthDay, habitEndDate)));
                           const day = format(monthDay, 'dd');
 
                           return (
@@ -259,7 +259,7 @@ export const Home = () => {
                                     "disabled:border-neutral-300/30 disabled:cursor-not-allowed",
                                     "data-[is-checked=true]:bg-checked-box-01",
                                     "data-[is-out-of-range=true]:bg-neutral-200",
-                                    habitIndex % 2 === 0 && "rotate-90"
+                                    // habitIndex % 2 === 0 && "rotate-90"
                                   )}
                                 data-is-current-day={realDay === currentDay}
                                 data-is-checked={isChecked}
@@ -271,6 +271,26 @@ export const Home = () => {
                                   <div className="w-1 h-1 border border-black rounded-full">
                                   </div>
                                 )}
+
+                                {process.env.NODE_ENV === 'development' && false && (
+                                  <TooltipProvider>
+                                    <Tooltip delayDuration={0}>
+                                      <TooltipTrigger>
+                                        <div className="bg-red-500 w-1 h-1 rounded-full"></div>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        <p>Está no range: {String(isInTheHabitRange)}</p>
+                                        <p>Mesmo dia: {String(sameDay)}</p>
+                                        <p>É depois do inicio: {String(isAfter(monthDay, habitStartDate))}</p>
+                                        <p>É antes do fim: {String(isBefore(monthDay, habitEndDate))}</p>
+                                        <p>É infinito: {String(isInfinite)}</p>
+                                        <p>Lógica: {String(isAfter(monthDay, habitStartDate) && isInfinite ? true : isBefore(monthDay, habitEndDate))}</p>
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+                                )}
+
+
                               </button>
                             </div>
                           )
