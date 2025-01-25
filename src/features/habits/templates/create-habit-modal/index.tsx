@@ -13,7 +13,7 @@ import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-
 
 
 const createHabitValidation = z.object({
-  name: z.string().min(3),
+  name: z.string().min(2),
   start_date: z.date(),
   end_date: z.date(),
   infinite: z.boolean().optional(),
