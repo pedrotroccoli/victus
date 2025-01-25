@@ -224,6 +224,8 @@ export const Home = () => {
 
                           const today = format(currentDay, 'dd/MM/yyyy') === format(monthDay, 'dd/MM/yyyy');
 
+                          const isBeforeHabitCreation = isBefore(monthDay, item.start_date) && !sameDay;
+
                           const isInTheHabitRange = sameDay || (isAfter(monthDay, habitStartDate) && (isInfinite ? true : isBefore(monthDay, habitEndDate)));
                           const day = format(monthDay, 'dd');
 
@@ -258,7 +260,7 @@ export const Home = () => {
                                     habitIndex === habits.length - 1 && today && "border-b-neutral-500",
                                     "data-[is-current-day=true]:border-x-neutral-500",
                                     "enabled:hover:border-black",
-                                    "disabled:border-neutral-300/30 disabled:cursor-not-allowed",
+                                    "disabled:cursor-not-allowed",
                                     "data-[is-checked=true]:bg-checked-box-01",
                                     "data-[is-out-of-range=true]:bg-neutral-200",
                                     // habitIndex % 2 === 0 && "rotate-90"
@@ -266,7 +268,8 @@ export const Home = () => {
                                 data-is-current-day={today}
                                 data-is-checked={isChecked}
                                 data-is-out-of-range={!isInTheHabitRange}
-                                disabled={!isInTheHabitRange}
+                                data-is-today={today}
+                                disabled={!isInTheHabitRange || !today}
                                 onClick={handleCheckHabit(item, formattedDay)}
                               >
                                 {!isChecked && isAPastDay && isInTheHabitRange && (
@@ -281,11 +284,7 @@ export const Home = () => {
                                         <div className="bg-red-500 w-1 h-1 rounded-full"></div>
                                       </TooltipTrigger>
                                       <TooltipContent>
-                                        <p>Data: {format(monthDay, 'dd/MM/yyyy')}</p>
-                                        <p>Hoje: {format(currentDay, 'dd/MM/yyyy')}</p>
-                                        <p>Teste: {String(format(currentDay, 'dd/MM/yyyy') === format(monthDay, 'dd/MM/yyyy'))}</p>
-                                        <p>Hoje é igual: {isEqual(format(currentDay, 'dd/MM/yyyy'), format(monthDay, 'dd/MM/yyyy'))}</p>
-
+                                        <p>Range: {String(isInTheHabitRange)}</p>
                                       </TooltipContent>
                                     </Tooltip>
                                   </TooltipProvider>
