@@ -1,5 +1,5 @@
 import { eachDayOfInterval, endOfMonth, format, getDate, isBefore, isEqual, startOfDay, startOfMonth, subDays } from "date-fns";
-import { CircleArrowDown, LoaderCircle, PlusCircle } from "lucide-react";
+import { Box, CircleArrowDown, LoaderCircle, PlusCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 
 
@@ -142,22 +142,32 @@ export const Home = () => {
 
             <Dialog open={createHabitOpen} onOpenChange={setCreateHabitOpen}>
               <DialogTrigger>
-
-                <Button className="flex gap-2 bg-black rounded-xl text-white" onClick={() => setCreateHabitOpen(true)}>
-                  Adicionar
+                <Button className="flex gap-4 bg-black rounded-md text-white" onClick={() => setCreateHabitOpen(true)}>
                   <PlusCircle size={16} />
+                  Adicionar
                 </Button>
-
-
-
               </DialogTrigger>
+
               <CreateHabitModal />
             </Dialog>
           </div>
 
-          <div className="mt-8 overflow-auto">
-            <div className="w-full">
-              {habits?.map((item: Habit, habitIndex: number) => (
+          <div className="mt-8 overflow-auto min-h-20">
+            <div className="w-full ">
+              {habits && habits.length === 0 && (
+                <div className="flex items-center justify-center h-full flex-col gap-4 border-black border-2 rounded-md p-8">
+                  <Box size={32} />
+
+                  <p className="text-sm text-black/75 font-medium">Nenhum hábito cadastrado</p>
+
+                  <Button className="flex gap-4 bg-black rounded-md text-white" onClick={() => setCreateHabitOpen(true)}>
+                    <PlusCircle size={16} />
+                    Criar meu primeiro hábito
+                  </Button>
+
+                </div>
+              )}
+              {habits && habits?.map((item: Habit, habitIndex: number) => (
                 <div className="flex items-end" key={item._id}>
                   <div>
 
