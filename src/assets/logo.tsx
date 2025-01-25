@@ -2,11 +2,12 @@
 interface LogoProps {
   width: number;
   height: number;
+  className?: string;
 }
 
-export const Logo = ({ width = 48, height = 48 }: LogoProps) => {
+export const Logo = ({ width = 48, height = 48, className }: LogoProps) => {
   return (
-    <svg width={width} height={height} viewBox="0 0 104 104" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg width={width} height={height} viewBox="0 0 104 104" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" className={className}>
       <rect x="0.75" y="0.75" width="46.5" height="46.5" rx="3.25" stroke="black" stroke-width="1.5" />
       <g clip-path="url(#clip0_277_141)">
         <rect width="29.9494" height="32" transform="translate(9 8)" fill="white" />
