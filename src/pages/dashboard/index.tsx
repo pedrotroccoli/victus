@@ -1,4 +1,4 @@
-import { eachDayOfInterval, endOfDay, endOfMonth, format, getDate, isAfter, isBefore, isEqual, isSameDay, startOfDay, startOfMonth, subDays } from "date-fns";
+import { addDays, eachDayOfInterval, endOfDay, format, getDate, isAfter, isBefore, isEqual, isSameDay, startOfDay, subDays } from "date-fns";
 import { Box, CircleArrowDown, LoaderCircle, PlusCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 
@@ -58,11 +58,11 @@ export const Home = () => {
   const { mutateAsync: checkHabit } = useCheckHabit();
   const { mutateAsync: createHabit } = useCreateHabit();
 
-  const firstDayOfMonth = startOfMonth(new Date());
-  const lastDayOfMonth = endOfMonth(new Date());
+  const startRange = subDays(new Date(), 13);
+  const endRange = addDays(new Date(), 13);
 
   const currentDay = getDate(new Date());
-  const daysInMonth = eachDayOfInterval({ start: firstDayOfMonth, end: lastDayOfMonth });
+  const daysInMonth = eachDayOfInterval({ start: startRange, end: endRange });
 
   const [createHabitOpen, setCreateHabitOpen] = useState(false);
 
@@ -190,13 +190,23 @@ export const Home = () => {
                         habitIndex === 0 && "items-end",
                       )
                     } key={item._id}>
-                      <div className="flex items-center gap-4 w-16 min-w-12 h-auto">
-                        <p className={
-                          cn(
-                            "text-xs font-bold whitespace-nowrap",
-                            habitIndex === 0 && "pb-1"
-                          )
-                        }>{item.name}</p>
+                      <div className="flex items-center gap-4 w-16 min-w-12  flex-1 h-auto">
+                        <TooltipProvider>
+                          <Tooltip delayDuration={0}>
+                            <TooltipTrigger asChild>
+                              <p className={
+                                cn(
+                                  "text-xs font-bold whitespace-nowrap truncate mr-2",
+                                  habitIndex === 0 && "pb-1"
+                                )
+                              }>{item.name}</p>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{item.name}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+
                       </div>
 
                       <div className="flex">
