@@ -1,6 +1,6 @@
 import { addDays, eachDayOfInterval, endOfDay, format, isAfter, isBefore, isEqual, isSameDay, startOfDay, subDays } from "date-fns";
 import { Box, CircleArrowDown, LoaderCircle, PlusCircle } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 
 import { useMe } from "@/services/auth";
@@ -28,6 +28,8 @@ export const Home = () => {
   const { data: habitsCheck } = useGetHabitsCheck({
     enabled: !!me
   });
+
+  const [isHovering, setIsHovering] = useState<string | null>(null);
 
 
   const habitsCheckedHash = useMemo(() => {
@@ -115,6 +117,10 @@ export const Home = () => {
     )
   }
 
+  useEffect(() => {
+    console.log(isHovering)
+  }, [isHovering])
+
   return (
     <>
 
@@ -196,8 +202,9 @@ export const Home = () => {
                             <TooltipTrigger asChild>
                               <p className={
                                 cn(
-                                  "text-xs font-bold whitespace-nowrap truncate mr-2",
-                                  habitIndex === 0 && "pb-1"
+                                  "text-xs font-bold whitespace-nowrap truncate mr-2 border-2 border-transparent p-1 rounded-md",
+                                  habitIndex === 0 && "pb-1",
+                                  isHovering === item._id && "border-black"
                                 )
                               }>{item.name}</p>
                             </TooltipTrigger>
@@ -224,8 +231,6 @@ export const Home = () => {
 
                           const today = format(currentDay, 'dd/MM/yyyy') === format(monthDay, 'dd/MM/yyyy');
 
-                          const isBeforeHabitCreation = isBefore(monthDay, item.start_date) && !sameDay;
-
                           const isInTheHabitRange = sameDay || (isAfter(monthDay, habitStartDate) && (isInfinite ? true : isBefore(monthDay, habitEndDate)));
                           const day = format(monthDay, 'dd');
 
@@ -240,7 +245,9 @@ export const Home = () => {
                                     <TooltipProvider>
                                       <Tooltip delayDuration={0}>
                                         <TooltipTrigger>
-                                          <p className="text-xs mb-2 font-medium text-black rounded-sm">{day}</p>
+                                          <p className={cn(
+                                            "text-xs mb-2 font-medium text-black rounded-sm",
+                                          )}>{day}</p>
                                         </TooltipTrigger>
                                         <TooltipContent>
                                           <p>{format(monthDay, 'dd/MM/yyyy')}</p>
@@ -253,13 +260,15 @@ export const Home = () => {
 
                               <button
                                 key={`${item._id} - ${realDay}`}
+                                onMouseEnter={() => setIsHovering(item._id)}
+                                onMouseLeave={() => setIsHovering(null)}
                                 className={
                                   cn(
                                     "w-7 h-7 flex items-center justify-center border border-neutral-300",
                                     habitIndex === 0 && today && "border-t-neutral-500",
                                     habitIndex === habits.length - 1 && today && "border-b-neutral-500",
                                     "data-[is-current-day=true]:border-x-neutral-500",
-                                    "enabled:hover:border-black",
+                                    "enabled:hover:border-black enabled:hover:border-2 ",
                                     "disabled:cursor-not-allowed",
                                     "data-[is-checked=true]:bg-checked-box-01",
                                     "data-[is-out-of-range=true]:bg-neutral-200",
