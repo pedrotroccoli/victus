@@ -90,6 +90,7 @@ export const Home = () => {
   const handleCheckHabit = (habit: Habit, formattedDay: string) => () => {
     const habitCheck = getHabitCheck(habit, formattedDay);
 
+
     checkHabit({
       habit_id: habit._id,
       check_id: habitCheck?._id

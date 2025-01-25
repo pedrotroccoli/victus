@@ -7,7 +7,7 @@ interface LogoProps {
 
 export const Logo = ({ width = 48, height = 48, className }: LogoProps) => {
   return (
-    <svg width={width} height={height} viewBox="0 0 104 104" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" className={className}>
+    <svg width={width} height={height} viewBox="0 0 104 104" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" className={className}>
       <rect x="0.75" y="0.75" width="46.5" height="46.5" rx="3.25" stroke="black" stroke-width="1.5" />
       <g clip-path="url(#clip0_277_141)">
         <rect width="29.9494" height="32" transform="translate(9 8)" fill="white" />
@@ -22,12 +22,12 @@ export const Logo = ({ width = 48, height = 48, className }: LogoProps) => {
       <rect x="56.75" y="56.75" width="46.5" height="46.5" rx="3.25" stroke="black" stroke-width="1.5" />
       <defs>
         <pattern id="pattern0_277_141" patternContentUnits="objectBoundingBox" width="0.25" height="0.25">
-          <use xlink:href="#image0_277_141" transform="scale(0.0208333)" />
+          <use xlinkHref="#image0_277_141" transform="scale(0.0208333)" />
         </pattern>
         <clipPath id="clip0_277_141">
           <rect width="29.9494" height="32" fill="white" transform="translate(9 8)" />
         </clipPath>
-        <image id="image0_277_141" width="12" height="12" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAtSURBVHgB7czBDQAABENRYnBGsxm1gd4cNPm3l5rs5iiRbnGheHwHC4nnnMLVyXcXLmXXjQMAAAAASUVORK5CYII=" />
+        <image id="image0_277_141" width="12" height="12" xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAtSURBVHgB7czBDQAABENRYnBGsxm1gd4cNPm3l5rs5iiRbnGheHwHC4nnnMLVyXcXLmXXjQMAAAAASUVORK5CYII=" />
       </defs>
     </svg>
 
