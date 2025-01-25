@@ -11,8 +11,6 @@ export const baseApi = axios.create({
 let tries = 0;
 
 baseApi.interceptors.request.use(async (config) => {
-  console.log('tries', tries, config);
-
   if (tries === 2) {
     removeToken();
     config.headers.Authorization = undefined;
