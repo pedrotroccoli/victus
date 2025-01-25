@@ -179,94 +179,99 @@ export const Home = () => {
                 </div>
               )}
 
-              <div className="border-2 border-neutral-400 rounded-md p-4">
+              {habits && habits.length > 0 && (
 
-                {habits && habits?.map((item: Habit, habitIndex: number) => (
-                  <div className={
-                    cn(
-                      "flex justify-between items-center",
-                      habitIndex === 0 && "items-end",
-                    )
-                  } key={item._id}>
-                    <div className="flex items-center gap-4 w-16 min-w-12 h-auto">
-                      <p className={
-                        cn(
-                          "text-xs font-bold whitespace-nowrap",
-                          habitIndex === 0 && "pb-1"
-                        )
-                      }>{item.name}</p>
-                    </div>
+                <div className="border-2 border-neutral-400 rounded-md p-4">
 
-                    <div className="flex">
-                      {daysInMonth.map((monthDay, index) => {
-                        const realDay = index + 1;
-                        const formattedDay = format(monthDay, 'MM/dd/yyyy');
-                        const isChecked = !!getHabitCheck(item, formattedDay)?.checked;
-                        const isAPastDay = isBefore(monthDay, subDays(new Date(), 1));
+                  {habits && habits?.map((item: Habit, habitIndex: number) => (
+                    <div className={
+                      cn(
+                        "flex justify-between items-center",
+                        habitIndex === 0 && "items-end",
+                      )
+                    } key={item._id}>
+                      <div className="flex items-center gap-4 w-16 min-w-12 h-auto">
+                        <p className={
+                          cn(
+                            "text-xs font-bold whitespace-nowrap",
+                            habitIndex === 0 && "pb-1"
+                          )
+                        }>{item.name}</p>
+                      </div>
 
-                        const habitStartDate = startOfDay(item.start_date);
-                        const habitEndDate = endOfDay(item.end_date);
-                        const sameDay = isSameDay(monthDay, habitStartDate);
+                      <div className="flex">
+                        {daysInMonth.map((monthDay, index) => {
+                          const realDay = index + 1;
+                          const formattedDay = format(monthDay, 'MM/dd/yyyy');
+                          const isChecked = !!getHabitCheck(item, formattedDay)?.checked;
+                          const isAPastDay = isBefore(monthDay, subDays(new Date(), 1));
 
-                        const isInTheHabitRange = sameDay || (isAfter(monthDay, habitStartDate) && isBefore(monthDay, habitEndDate));
-                        const day = format(monthDay, 'dd');
+                          const habitStartDate = startOfDay(item.start_date);
+                          const habitEndDate = endOfDay(item.end_date);
+                          const sameDay = isSameDay(monthDay, habitStartDate);
 
-                        return (
-                          <div className="flex flex-col items-center justify-end">
-                            <div className="hover:">
-                              {habitIndex === 0 && (
-                                <>
-                                  {isEqual(monthDay, startOfDay(new Date())) && (
-                                    <CircleArrowDown size={14} className="mb-4" />
-                                  )}
-                                  <TooltipProvider>
-                                    <Tooltip delayDuration={0}>
-                                      <TooltipTrigger>
-                                        <p className="text-xs mb-2 font-medium text-black rounded-sm">{day}</p>
-                                      </TooltipTrigger>
-                                      <TooltipContent>
-                                        <p>{format(monthDay, 'dd/MM/yyyy')}</p>
-                                      </TooltipContent>
-                                    </Tooltip>
-                                  </TooltipProvider>
-                                </>
-                              )}
-                            </div>
+                          const isInTheHabitRange = sameDay || (isAfter(monthDay, habitStartDate) && isBefore(monthDay, habitEndDate));
+                          const day = format(monthDay, 'dd');
 
-                            <button
-                              key={`${item._id} - ${realDay}`}
-                              className={
-                                cn(
-                                  "w-7 h-7 flex items-center justify-center border border-neutral-300",
-                                  habitIndex === 0 && "border-t-neutral-500",
-                                  habitIndex === habits.length - 1 && "border-b-neutral-500",
-                                  "enabled:hover:border-black",
-                                  "data-[is-current-day=true]:border-x-neutral-500",
-                                  "disabled:border-neutral-300/30 disabled:cursor-not-allowed",
-                                  "data-[is-checked=true]:bg-checked-box-01",
-                                  "data-[is-out-of-range=true]:bg-neutral-200",
-                                  habitIndex % 2 === 0 && "rotate-90"
+                          return (
+                            <div className="flex flex-col items-center justify-end">
+                              <div className="hover:">
+                                {habitIndex === 0 && (
+                                  <>
+                                    {isEqual(monthDay, startOfDay(new Date())) && (
+                                      <CircleArrowDown size={14} className="mb-4" />
+                                    )}
+                                    <TooltipProvider>
+                                      <Tooltip delayDuration={0}>
+                                        <TooltipTrigger>
+                                          <p className="text-xs mb-2 font-medium text-black rounded-sm">{day}</p>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          <p>{format(monthDay, 'dd/MM/yyyy')}</p>
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
+                                  </>
                                 )}
-                              data-is-current-day={realDay === currentDay}
-                              data-is-checked={isChecked}
-                              data-is-out-of-range={!isInTheHabitRange}
-                              disabled={realDay > currentDay || realDay < currentDay}
-                              onClick={handleCheckHabit(item, formattedDay)}
-                            >
-                              {!isChecked && isAPastDay && isInTheHabitRange && (
-                                <div className="w-1 h-1 border border-black rounded-full">
-                                </div>
-                              )}
-                            </button>
-                          </div>
-                        )
+                              </div>
 
-                      })}
+                              <button
+                                key={`${item._id} - ${realDay}`}
+                                className={
+                                  cn(
+                                    "w-7 h-7 flex items-center justify-center border border-neutral-300",
+                                    habitIndex === 0 && "border-t-neutral-500",
+                                    habitIndex === habits.length - 1 && "border-b-neutral-500",
+                                    "enabled:hover:border-black",
+                                    "data-[is-current-day=true]:border-x-neutral-500",
+                                    "disabled:border-neutral-300/30 disabled:cursor-not-allowed",
+                                    "data-[is-checked=true]:bg-checked-box-01",
+                                    "data-[is-out-of-range=true]:bg-neutral-200",
+                                    habitIndex % 2 === 0 && "rotate-90"
+                                  )}
+                                data-is-current-day={realDay === currentDay}
+                                data-is-checked={isChecked}
+                                data-is-out-of-range={!isInTheHabitRange}
+                                disabled={realDay > currentDay || realDay < currentDay}
+                                onClick={handleCheckHabit(item, formattedDay)}
+                              >
+                                {!isChecked && isAPastDay && isInTheHabitRange && (
+                                  <div className="w-1 h-1 border border-black rounded-full">
+                                  </div>
+                                )}
+                              </button>
+                            </div>
+                          )
+
+                        })}
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+
+              )}
             </div>
+
           </div>
         </div>
       </main>
