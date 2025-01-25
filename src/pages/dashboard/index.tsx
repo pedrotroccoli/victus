@@ -1,6 +1,6 @@
 import { addDays, eachDayOfInterval, endOfDay, format, isAfter, isBefore, isEqual, isSameDay, startOfDay, subDays } from "date-fns";
 import { Box, CircleArrowDown, LoaderCircle, PlusCircle } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 
 import { useMe } from "@/services/auth";
@@ -116,10 +116,6 @@ export const Home = () => {
       </main>
     )
   }
-
-  useEffect(() => {
-    console.log(isHovering)
-  }, [isHovering])
 
   return (
     <>
