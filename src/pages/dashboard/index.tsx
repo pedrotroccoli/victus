@@ -7,8 +7,8 @@ import { useMe } from "@/services/auth";
 import { signOut } from "@/services/auth/services";
 import { useCheckHabit, useCreateHabit, useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks";
 
-import { Logo } from '@/assets/logo';
 
+import { LogoWithText } from "@/assets/logo-with-text";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -121,7 +121,7 @@ export const Home = () => {
         <header className="w-full border-neutral-300 border-b py-4 px-8">
           <div className="flex items-center justify-between max-w-screen-lg mx-auto px-6">
             <div className="flex items-center">
-              <Logo width={40} height={40} className="border border-neutral-300 rounded-full" />
+              <LogoWithText className="max-w-20" />
             </div>
 
             <div className="">
@@ -178,7 +178,7 @@ export const Home = () => {
                 </div>
               )}
 
-              <div className="border border-neutral-300 rounded-md p-4">
+              <div className="border-2 border-neutral-400 rounded-md p-4">
 
                 {habits && habits?.map((item: Habit, habitIndex: number) => (
                   <div className={
@@ -221,7 +221,7 @@ export const Home = () => {
                                   <TooltipProvider>
                                     <Tooltip delayDuration={0}>
                                       <TooltipTrigger>
-                                        <p className="text-xs mb-2 font-medium text-black px-1 rounded-sm">{day}</p>
+                                        <p className="text-xs mb-2 font-medium text-black rounded-sm">{day}</p>
                                       </TooltipTrigger>
                                       <TooltipContent>
                                         <p>{format(monthDay, 'dd/MM/yyyy')}</p>
@@ -242,8 +242,9 @@ export const Home = () => {
                                   "enabled:hover:border-black",
                                   "data-[is-current-day=true]:border-x-neutral-500",
                                   "disabled:border-neutral-300/30 disabled:cursor-not-allowed",
-                                  "data-[is-checked=true]:bg-checked-box-01 data-[is-checked=true]:bg-red-500",
-                                  "data-[is-out-of-range=true]:bg-neutral-200"
+                                  "data-[is-checked=true]:bg-checked-box-01",
+                                  "data-[is-out-of-range=true]:bg-neutral-200",
+                                  habitIndex % 2 === 0 && "rotate-90"
                                 )}
                               data-is-current-day={realDay === currentDay}
                               data-is-checked={isChecked}
