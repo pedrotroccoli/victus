@@ -28,7 +28,6 @@ export const useCreateHabit = (options?: Partial<UseMutationOptions<CreateHabitR
       const response = await createHabit(params);
 
       queryClient.setQueryData(['habits'], [...cache, response]);
-      console.log(response, 'gasdfg');
 
       return response;
     }
