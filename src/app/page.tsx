@@ -2,7 +2,6 @@ import { Header } from "@/components/header";
 import { Button } from "@/components/ui/button";
 import { Indie_Flower } from "next/font/google";
 import Image from "next/image";
-import Link from "next/link";
 import { LuChevronRight } from "react-icons/lu";
 
 // https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529
@@ -34,8 +33,7 @@ export default function Home() {
               e prática.
             </p>
 
-            <Link href="/sign-in">
-              {" "}
+            <a href="https://app.victusjournal.com/sign-up" target="_blank" rel="noopener noreferrer">
               <Button
                 className="mt-16 w-60 h-12 flex items-center justify-between"
                 variant="outline"
@@ -43,7 +41,7 @@ export default function Home() {
                 Crie sua conta
                 <LuChevronRight />
               </Button>
-            </Link>
+            </a>
           </div>
 
           <div>
