@@ -1,5 +1,5 @@
 import { addDays, eachDayOfInterval, endOfDay, format, isAfter, isBefore, isEqual, isSameDay, startOfDay, subDays } from "date-fns";
-import { Box, CircleArrowDown, LoaderCircle, PlusCircle } from "lucide-react";
+import { Box, CircleArrowDown, Eye, EyeOff, LoaderCircle, PlusCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 
 
@@ -30,6 +30,7 @@ export const Home = () => {
   });
 
   const [isHovering, setIsHovering] = useState<string | null>(null);
+  const [hideHabits, setHideHabits] = useState(false);
 
 
   const habitsCheckedHash = useMemo(() => {
@@ -120,8 +121,8 @@ export const Home = () => {
   return (
     <>
 
-      <main className="max-w-screen-xl mx-auto border-x border-neutral-300 h-screen">
-        <header className="w-full border-neutral-300 border-b py-4 px-8">
+      <main className="max-w-screen-xl mx-auto border-x border-neutral-300 h-screen bg-[url('/dashboard-bg.png')]">
+        <header className="w-full border-neutral-300 border-b py-4 px-8 bg-white">
           <div className="flex items-center justify-between max-w-screen-lg mx-auto px-6">
             <div className="flex items-center">
               <LogoWithText className="max-w-20" />
@@ -149,7 +150,7 @@ export const Home = () => {
           </div>
         </header>
 
-        <div className="max-w-screen-lg mx-auto px-6 pt-16 ">
+        <div className="max-w-screen-lg mx-auto px-6 pt-16 bg-sign">
           <div className="flex items-end justify-between">
             <h1 className="font-sans text-xl font-medium">Olá {String(me.name).split(' ')[0]}, aqui está seu jornal!</h1>
 
@@ -165,7 +166,7 @@ export const Home = () => {
             </Dialog>
           </div>
 
-          <div className="mt-8 overflow-auto">
+          <div className="mt-8 overflow-auto bg-white">
             <div className="w-full">
               {habits && habits.length === 0 && (
                 <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8">
@@ -192,24 +193,45 @@ export const Home = () => {
                         habitIndex === 0 && "items-end",
                       )
                     } key={item._id}>
-                      <div className="flex items-center gap-4 w-16 min-w-12  flex-1 h-auto">
-                        <TooltipProvider>
-                          <Tooltip delayDuration={0}>
-                            <TooltipTrigger asChild>
-                              <p className={
-                                cn(
-                                  "text-xs font-bold whitespace-nowrap truncate mr-2 border-2 border-transparent p-1 rounded-md",
-                                  habitIndex === 0 && "pb-1",
-                                  isHovering === item._id && "border-black"
-                                )
-                              }>{item.name}</p>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{item.name}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                      <div className="w-full min-w-12 flex-1" >
+                        {habitIndex === 0 && (
+                          <TooltipProvider>
+                            <Tooltip delayDuration={200}>
+                              <TooltipTrigger>
+                                <button
+                                  className="w-6 h-6 flex items-center justify-center border border-black rounded-full mb-2 hover:bg-black hover:text-white duration-200 transition-colors"
+                                  onClick={() => setHideHabits(!hideHabits)}
+                                >
+                                  {hideHabits ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{hideHabits ? 'Mostrar' : 'Esconder'} hábitos</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        )}
 
+                        <div className="flex items-center gap-4 min-w-12">
+                          <TooltipProvider>
+                            <Tooltip delayDuration={0}>
+                              <TooltipTrigger asChild>
+                                <p className={
+                                  cn(
+                                    "text-xs font-bold whitespace-nowrap truncate mr-2 border-2 border-transparent p-1 rounded-md",
+                                    habitIndex === 0 && "pb-1",
+                                    isHovering === item._id && "border-black",
+                                    hideHabits && "blur-sm"
+                                  )
+                                }>{item.name}</p>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>{item.name}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+
+                        </div>
                       </div>
 
                       <div className="flex">
