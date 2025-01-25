@@ -7,6 +7,8 @@ import { useMe } from "@/services/auth";
 import { signOut } from "@/services/auth/services";
 import { useCheckHabit, useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks";
 
+import { Logo } from '@/assets/logo';
+
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -110,9 +112,11 @@ export const Home = () => {
     <>
 
       <main className="max-w-screen-xl mx-auto border-x h-screen">
-        <header className="border-b py-4 px-8">
-          <div className="flex items-center justify-between">
-            <div />
+        <header className="w-full border-neutral-300 border-b py-4 px-8">
+          <div className="flex items-center justify-between max-w-screen-lg mx-auto px-6">
+            <div className="flex items-center">
+              <Logo width={32} height={32} />
+            </div>
 
             <div className="">
               <DropdownMenu>
@@ -137,7 +141,7 @@ export const Home = () => {
         </header>
 
         <div className="max-w-screen-lg mx-auto px-6 pt-16 ">
-          <div className="flex items-center justify-between">
+          <div className="flex items-end justify-between">
             <h1 className="font-sans text-xl font-medium">Olá {String(me.name).split(' ')[0]}, aqui está seu jornal!</h1>
 
             <Dialog open={createHabitOpen} onOpenChange={setCreateHabitOpen}>
@@ -155,10 +159,10 @@ export const Home = () => {
           <div className="mt-8 overflow-auto min-h-20">
             <div className="w-full ">
               {habits && habits.length === 0 && (
-                <div className="flex items-center justify-center h-full flex-col gap-4 border-black border-2 rounded-md p-8">
+                <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8">
                   <Box size={32} />
 
-                  <p className="text-sm text-black/75 font-medium">Nenhum hábito cadastrado</p>
+                  <p className="text-lg text-black/75 font-medium mt-4 mb-8">Nenhum hábito cadastrado</p>
 
                   <Button className="flex gap-4 bg-black rounded-md text-white" onClick={() => setCreateHabitOpen(true)}>
                     <PlusCircle size={16} />
