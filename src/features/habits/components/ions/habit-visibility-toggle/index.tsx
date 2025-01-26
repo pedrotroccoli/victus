@@ -17,10 +17,10 @@ export const HabitVisibilityToggle = ({ hideHabits, setHideHabits }: HabitVisibi
       <Tooltip delayDuration={200}>
         <TooltipTrigger>
           <button
-            className="w-6 h-6 flex items-center justify-center border border-black rounded-full mb-2 hover:bg-black hover:text-white duration-200 transition-colors"
+            className="w-5 h-5 flex items-center justify-center border border-black rounded-full mb-2 hover:bg-black hover:text-white duration-200 transition-colors"
             onClick={() => setHideHabits(!hideHabits)}
           >
-            {hideHabits ? <EyeOff size={16} /> : <Eye size={16} />}
+            {hideHabits ? <EyeOff size={14} /> : <Eye size={14} />}
           </button>
         </TooltipTrigger>
         <TooltipContent>
