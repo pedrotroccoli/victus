@@ -2,11 +2,9 @@ import { addDays, eachDayOfInterval, format, subDays } from "date-fns";
 import { Box, LoaderCircle, PlusCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 
-
 import { useMe } from "@/services/auth";
 import { signOut } from "@/services/auth/services";
 import { useCheckHabit, useCreateHabit, useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks";
-
 
 import { LogoWithText } from "@/assets/logo-with-text";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -21,11 +19,11 @@ import { toast } from "sonner";
 export const Home = () => {
   const navigate = useNavigate();
   const { data: me, isLoading: isLoadingMe } = useMe();
-  const { data: habits } = useGetHabits({
+  const { data: habits, isLoading: isLoadingHabits } = useGetHabits({
     enabled: !!me
   });
-  const { data: habitsCheck } = useGetHabitsCheck({
-    enabled: !!me
+  const { data: habitsCheck, isLoading: isLoadingHabitsCheck } = useGetHabitsCheck({
+    enabled: !!me && habits?.length > 0
   });
 
   const [hideHabits, setHideHabits] = useState(false);
@@ -165,7 +163,7 @@ export const Home = () => {
           <div className="mt-8 overflow-auto bg-white">
             <div className="w-full">
               {habits && habits.length === 0 && (
-                <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8">
+                <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
                   <Box size={32} />
 
                   <p className="text-lg text-black/75 font-medium mt-4 mb-8">Nenhum hábito cadastrado</p>
@@ -174,11 +172,16 @@ export const Home = () => {
                     <PlusCircle size={16} />
                     Criar meu primeiro hábito
                   </Button>
-
                 </div>
               )}
 
-              {habits && habits.length > 0 && (
+              {isLoadingHabits || isLoadingHabitsCheck && (
+                <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
+                  <LoaderCircle size={32} className="animate-spin" strokeWidth={1.75} />
+                </div>
+              )}
+
+              {habits && habits.length > 0 && !isLoadingHabits && !isLoadingHabitsCheck && (
                 <div className="border-2 border-neutral-400 rounded-md p-4">
                   {habits && habits?.map((item: Habit, habitIndex: number) => (
                     <HabitLineCheckboxes
