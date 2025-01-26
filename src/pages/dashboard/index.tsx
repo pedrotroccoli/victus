@@ -29,7 +29,7 @@ export const Home = () => {
   });
 
   const [hideHabits, setHideHabits] = useState(false);
-  const [hideExplanation, setHideExplanation] = useState(false);
+  const [hideExplanation, setHideExplanation] = useState(true);
 
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
