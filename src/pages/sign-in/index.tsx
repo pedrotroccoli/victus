@@ -9,7 +9,9 @@ import { PasswordField } from '@/components/molecules/form/PasswordField';
 import { TextField } from '@/components/molecules/form/TextField';
 import { cn } from '@/lib/utils';
 import { useSignIn } from '@/services/auth';
+import { getToken } from '@/services/auth/services';
 import { AxiosError } from 'axios';
+import { useEffect } from 'react';
 import { toast } from 'sonner';
 
 const signInSchema = z.object({
@@ -59,6 +61,14 @@ export const SignInPage = () => {
   const onFormError: SubmitErrorHandler<SignInFormData> = (error) => {
     console.log(error, 'error');
   }
+
+  useEffect(() => {
+    const token = getToken();
+
+    if (token) {
+      navigate({ to: '/dashboard' });
+    }
+  }, [navigate]);
 
   return (
     <main className="w-full h-screen bg-[url('/sign-in-bg.webp')] flex items-center justify-center">
