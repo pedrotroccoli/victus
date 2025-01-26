@@ -7,6 +7,7 @@ declare global {
     end_date: string;
     name: string;
     start_date: string;
+    order: number;
     updated_at: string;
     recurrence_type?: 'infinite' | 'daily' | 'weekly' | 'monthly' | 'yearly';
     recurrence_details?: Record<string, string>;

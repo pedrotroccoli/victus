@@ -1,5 +1,5 @@
 import { addDays, eachDayOfInterval, format, subDays } from "date-fns";
-import { Box, ChevronDown, ChevronUp, LoaderCircle, PlusCircle } from "lucide-react";
+import { Box, BringToFront, ChevronDown, ChevronUp, LoaderCircle, PlusCircle, SendToBack } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { useMe } from "@/services/auth";
@@ -26,10 +26,12 @@ export const Home = () => {
   });
   const { data: habitsCheck, isLoading: isLoadingHabitsCheck } = useGetHabitsCheck({
     enabled: !!me && habits?.length > 0
+
   });
 
   const [hideHabits, setHideHabits] = useState(false);
   const [hideExplanation, setHideExplanation] = useState(true);
+  const [orderEnabled, setOrderEnabled] = useState(false);
 
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
@@ -192,20 +194,37 @@ export const Home = () => {
                       hideExplanation && "border-b-0 p-0"
                     )
                   }>
-                    <button className={
-                      cn(
-                        "h-5 w-5 flex items-center justify-center absolute top-0 right-0 border-l border-b border-black rounded-bl-md",
-                        "hover:bg-black hover:text-white duration-200 transition-colors"
-                      )
-                    }
-                      onClick={() => setHideExplanation(!hideExplanation)}
-                    >
-                      {hideExplanation ? (
-                        <ChevronUp size={12} className="-translate-y-px translate-x-px" />
-                      ) : (
-                        <ChevronDown size={12} className="-translate-y-px translate-x-px" />
-                      )}
-                    </button>
+                    <div className="absolute top-0 right-0 border-l border-b border-black rounded-bl-md flex items-center divide-x divide-black">
+                      <button className={
+                        cn(
+                          "h-5 w-5 flex items-center justify-center",
+                          "hover:bg-black hover:text-white duration-200 transition-colors"
+                        )
+                      }
+                        onClick={() => setOrderEnabled(!orderEnabled)}
+                      >
+                        {orderEnabled ? (
+                          <BringToFront size={12} className="-translate-y-px translate-x-px" />
+                        ) : (
+                          <SendToBack size={14} className="-translate-y-px translate-x-px" />
+                        )}
+                      </button>
+
+                      <button className={
+                        cn(
+                          "h-5 w-5 flex items-center justify-center",
+                          "hover:bg-black hover:text-white duration-200 transition-colors"
+                        )
+                      }
+                        onClick={() => setHideExplanation(!hideExplanation)}
+                      >
+                        {hideExplanation ? (
+                          <ChevronUp size={14} className="-translate-y-px translate-x-px" />
+                        ) : (
+                          <ChevronDown size={14} className="-translate-y-px translate-x-px" />
+                        )}
+                      </button>
+                    </div>
 
                     {!hideExplanation && (
                       <>
@@ -234,9 +253,10 @@ export const Home = () => {
                   </div>
 
                   <div className="p-4">
-                    {habits && habits?.map((item: Habit, habitIndex: number) => (
+                    {habits && habits?.sort((a: Habit, b: Habit) => (a.order || 0) - (b.order || 0)).map((item: Habit, habitIndex: number) => (
                       <HabitLineCheckboxes
                         key={item._id}
+                        enableOrder={orderEnabled}
                         item={item}
                         hideHabits={hideHabits}
                         setHideHabits={setHideHabits}

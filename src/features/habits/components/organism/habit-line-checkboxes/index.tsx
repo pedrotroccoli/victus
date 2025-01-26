@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { endOfDay, format, isAfter, isBefore, isSameDay, startOfDay } from "date-fns";
+import { GripVertical } from "lucide-react";
 import { useCallback, useState } from "react";
 import { HabitDay } from "../../atoms/habit-day";
 import { HabitVisibilityToggle } from "../../ions/habit-visibility-toggle";
@@ -16,9 +17,10 @@ interface HabitLineCheckboxesProps {
   onCheckHabit: (habit: Habit, day: string) => void;
   isFirst: boolean;
   isLast: boolean;
+  enableOrder: boolean;
 }
 
-export function HabitLineCheckboxes({ item, hideHabits, setHideHabits, daysInMonth, getHabitCheck, currentDay, onCheckHabit, isFirst, isLast }: HabitLineCheckboxesProps) {
+export function HabitLineCheckboxes({ item, hideHabits, setHideHabits, daysInMonth, getHabitCheck, currentDay, onCheckHabit, isFirst, isLast, enableOrder }: HabitLineCheckboxesProps) {
   const [isHovering, setIsHovering] = useState<boolean>(false);
 
   const handleCheckHabit = useCallback((habit: Habit, day: string) => () => {
@@ -31,7 +33,19 @@ export function HabitLineCheckboxes({ item, hideHabits, setHideHabits, daysInMon
         "flex justify-between items-center",
         isFirst && "items-end",
       )
-    } key={item._id}>
+    } >
+      {enableOrder && (
+        <button className={
+          cn(
+            "w-3 h-5 text-neutral-400 rounded-full flex items-center justify-center border-neutral-500 transition-colors duration-200",
+            "hover:border hover:text-black",
+            isFirst && "mb-1"
+          )
+        }>
+          <GripVertical size={12} />
+        </button>
+      )}
+
       <div className="w-full min-w-12 flex-1" >
         {isFirst && (
           <HabitVisibilityToggle hideHabits={hideHabits} setHideHabits={setHideHabits} />
