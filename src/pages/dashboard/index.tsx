@@ -1,5 +1,5 @@
-import { addDays, eachDayOfInterval, endOfDay, format, isAfter, isBefore, isEqual, isSameDay, startOfDay, subDays } from "date-fns";
-import { Box, CircleArrowDown, Eye, EyeOff, LoaderCircle, PlusCircle } from "lucide-react";
+import { addDays, eachDayOfInterval, format, subDays } from "date-fns";
+import { Box, LoaderCircle, PlusCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 
 
@@ -13,9 +13,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { CreateHabitForm, CreateHabitModal } from "@/features/habits/templates/create-habit-modal";
-import { cn } from "@/lib/utils";
+import { HabitLineCheckboxes } from "@/features/habits/components/organism/habit-line-checkboxes";
+import { CreateHabitForm, CreateHabitModal } from "@/features/habits/components/templates/create-habit-modal";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 
@@ -29,9 +28,7 @@ export const Home = () => {
     enabled: !!me
   });
 
-  const [isHovering, setIsHovering] = useState<string | null>(null);
   const [hideHabits, setHideHabits] = useState(false);
-
 
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
@@ -90,9 +87,8 @@ export const Home = () => {
     return habitsCheckedHash?.[habit._id]?.[formattedDay];
   }
 
-  const handleCheckHabit = (habit: Habit, formattedDay: string) => () => {
+  const handleCheckHabit = (habit: Habit, formattedDay: string) => {
     const habitCheck = getHabitCheck(habit, formattedDay);
-
 
     checkHabit({
       habit_id: habit._id,
@@ -183,151 +179,22 @@ export const Home = () => {
               )}
 
               {habits && habits.length > 0 && (
-
                 <div className="border-2 border-neutral-400 rounded-md p-4">
-
                   {habits && habits?.map((item: Habit, habitIndex: number) => (
-                    <div className={
-                      cn(
-                        "flex justify-between items-center",
-                        habitIndex === 0 && "items-end",
-                      )
-                    } key={item._id}>
-                      <div className="w-full min-w-12 flex-1" >
-                        {habitIndex === 0 && (
-                          <TooltipProvider>
-                            <Tooltip delayDuration={200}>
-                              <TooltipTrigger>
-                                <button
-                                  className="w-6 h-6 flex items-center justify-center border border-black rounded-full mb-2 hover:bg-black hover:text-white duration-200 transition-colors"
-                                  onClick={() => setHideHabits(!hideHabits)}
-                                >
-                                  {hideHabits ? <EyeOff size={16} /> : <Eye size={16} />}
-                                </button>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>{hideHabits ? 'Mostrar' : 'Esconder'} hábitos</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
-
-                        <div className="flex items-center gap-4 min-w-12">
-                          <TooltipProvider>
-                            <Tooltip delayDuration={0}>
-                              <TooltipTrigger asChild>
-                                <p className={
-                                  cn(
-                                    "text-xs font-bold whitespace-nowrap truncate mr-2 border-2 border-transparent p-1 rounded-md",
-                                    habitIndex === 0 && "pb-1",
-                                    isHovering === item._id && "border-black",
-                                    hideHabits && "blur-sm"
-                                  )
-                                }>{item.name}</p>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>{item.name}</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-
-                        </div>
-                      </div>
-
-                      <div className="flex">
-                        {daysInMonth.map((monthDay, index) => {
-                          const realDay = index + 1;
-                          const formattedDay = format(monthDay, 'MM/dd/yyyy');
-                          const isChecked = !!getHabitCheck(item, formattedDay)?.checked;
-                          const isAPastDay = isBefore(monthDay, subDays(new Date(), 1));
-
-                          const habitStartDate = startOfDay(item.start_date);
-                          const habitEndDate = endOfDay(item.end_date);
-                          const sameDay = isSameDay(monthDay, habitStartDate);
-
-                          const isInfinite = item.recurrence_type === 'infinite';
-
-                          const today = format(currentDay, 'dd/MM/yyyy') === format(monthDay, 'dd/MM/yyyy');
-
-                          const isInTheHabitRange = sameDay || (isAfter(monthDay, habitStartDate) && (isInfinite ? true : isBefore(monthDay, habitEndDate)));
-                          const day = format(monthDay, 'dd');
-
-                          return (
-                            <div className="flex flex-col items-center justify-end">
-                              <div className="hover:">
-                                {habitIndex === 0 && (
-                                  <>
-                                    {isEqual(monthDay, startOfDay(new Date())) && (
-                                      <CircleArrowDown size={14} className="mb-4" />
-                                    )}
-                                    <TooltipProvider>
-                                      <Tooltip delayDuration={0}>
-                                        <TooltipTrigger>
-                                          <p className={cn(
-                                            "text-xs mb-2 font-medium text-black rounded-sm",
-                                          )}>{day}</p>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                          <p>{format(monthDay, 'dd/MM/yyyy')}</p>
-                                        </TooltipContent>
-                                      </Tooltip>
-                                    </TooltipProvider>
-                                  </>
-                                )}
-                              </div>
-
-                              <button
-                                key={`${item._id} - ${realDay}`}
-                                onMouseEnter={() => setIsHovering(item._id)}
-                                onMouseLeave={() => setIsHovering(null)}
-                                className={
-                                  cn(
-                                    "w-7 h-7 flex items-center justify-center border border-neutral-300",
-                                    habitIndex === 0 && today && "border-t-neutral-500",
-                                    habitIndex === habits.length - 1 && today && "border-b-neutral-500",
-                                    "data-[is-current-day=true]:border-x-neutral-500",
-                                    "enabled:hover:border-black enabled:hover:border-2 ",
-                                    "disabled:cursor-not-allowed",
-                                    "data-[is-checked=true]:bg-checked-box-01",
-                                    "data-[is-out-of-range=true]:bg-neutral-200",
-                                    // habitIndex % 2 === 0 && "rotate-90"
-                                  )}
-                                data-is-current-day={today}
-                                data-is-checked={isChecked}
-                                data-is-out-of-range={!isInTheHabitRange}
-                                data-is-today={today}
-                                disabled={!isInTheHabitRange || !today}
-                                onClick={handleCheckHabit(item, formattedDay)}
-                              >
-                                {!isChecked && isAPastDay && isInTheHabitRange && (
-                                  <div className="w-1 h-1 border border-black rounded-full">
-                                  </div>
-                                )}
-
-                                {process.env.NODE_ENV === 'development' && false && (
-                                  <TooltipProvider>
-                                    <Tooltip delayDuration={0}>
-                                      <TooltipTrigger>
-                                        <div className="bg-red-500 w-1 h-1 rounded-full"></div>
-                                      </TooltipTrigger>
-                                      <TooltipContent>
-                                        <p>Range: {String(isInTheHabitRange)}</p>
-                                      </TooltipContent>
-                                    </Tooltip>
-                                  </TooltipProvider>
-                                )}
-
-
-                              </button>
-                            </div>
-                          )
-
-                        })}
-                      </div>
-                    </div>
+                    <HabitLineCheckboxes
+                      key={item._id}
+                      item={item}
+                      hideHabits={hideHabits}
+                      setHideHabits={setHideHabits}
+                      daysInMonth={daysInMonth}
+                      getHabitCheck={getHabitCheck}
+                      currentDay={currentDay}
+                      onCheckHabit={handleCheckHabit}
+                      isFirst={habitIndex === 0}
+                      isLast={habitIndex === habits.length - 1}
+                    />
                   ))}
                 </div>
-
               )}
             </div>
 
