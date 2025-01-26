@@ -1,5 +1,5 @@
 import { addDays, eachDayOfInterval, format, subDays } from "date-fns";
-import { Box, LoaderCircle, PlusCircle } from "lucide-react";
+import { Box, ChevronDown, ChevronUp, LoaderCircle, PlusCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { useMe } from "@/services/auth";
@@ -11,8 +11,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { HabitBox } from "@/features/habits/components/ions/habit-box";
 import { HabitLineCheckboxes } from "@/features/habits/components/organism/habit-line-checkboxes";
 import { CreateHabitForm, CreateHabitModal } from "@/features/habits/components/templates/create-habit-modal";
+import { cn } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 
@@ -27,6 +29,7 @@ export const Home = () => {
   });
 
   const [hideHabits, setHideHabits] = useState(false);
+  const [hideExplanation, setHideExplanation] = useState(false);
 
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
@@ -182,21 +185,70 @@ export const Home = () => {
               )}
 
               {habits && habits.length > 0 && !isLoadingHabits && !isLoadingHabitsCheck && (
-                <div className="border-2 border-neutral-400 rounded-md p-4">
-                  {habits && habits?.map((item: Habit, habitIndex: number) => (
-                    <HabitLineCheckboxes
-                      key={item._id}
-                      item={item}
-                      hideHabits={hideHabits}
-                      setHideHabits={setHideHabits}
-                      daysInMonth={daysInMonth}
-                      getHabitCheck={getHabitCheck}
-                      currentDay={currentDay}
-                      onCheckHabit={handleCheckHabit}
-                      isFirst={habitIndex === 0}
-                      isLast={habitIndex === habits.length - 1}
-                    />
-                  ))}
+                <div className="border-2 border-neutral-400 rounded-md">
+                  <div className={
+                    cn(
+                      "flex items-center justify-between border-b border-black p-4 relative",
+                      hideExplanation && "border-b-0 p-0"
+                    )
+                  }>
+                    <button className={
+                      cn(
+                        "h-5 w-5 flex items-center justify-center absolute top-0 right-0 border-l border-b border-black rounded-bl-md",
+                        "hover:bg-black hover:text-white duration-200 transition-colors"
+                      )
+                    }
+                      onClick={() => setHideExplanation(!hideExplanation)}
+                    >
+                      {hideExplanation ? (
+                        <ChevronUp size={12} className="-translate-y-px translate-x-px" />
+                      ) : (
+                        <ChevronDown size={12} className="-translate-y-px translate-x-px" />
+                      )}
+                    </button>
+
+                    {!hideExplanation && (
+                      <>
+                        <h1 className="font-sans text-base font-medium">Hábitos</h1>
+
+                        <ul className="flex items-center gap-4 mr-4">
+                          <li className="flex items-center gap-2">
+                            <HabitBox type="checked" className="w-6 h-6" />
+                            <p className="text-xs text-neutral-500">Completado</p>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <HabitBox type="out-of-range" className="w-6 h-6" />
+                            <p className="text-xs text-neutral-500">Fora de data</p>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <HabitBox type="empty" className="w-6 h-6" />
+                            <p className="text-xs text-neutral-500">Não completado</p>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <HabitBox type="none" className="w-6 h-6" />
+                            <p className="text-xs text-neutral-500">Habilitado</p>
+                          </li>
+                        </ul>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="p-4">
+                    {habits && habits?.map((item: Habit, habitIndex: number) => (
+                      <HabitLineCheckboxes
+                        key={item._id}
+                        item={item}
+                        hideHabits={hideHabits}
+                        setHideHabits={setHideHabits}
+                        daysInMonth={daysInMonth}
+                        getHabitCheck={getHabitCheck}
+                        currentDay={currentDay}
+                        onCheckHabit={handleCheckHabit}
+                        isFirst={habitIndex === 0}
+                        isLast={habitIndex === habits.length - 1}
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
