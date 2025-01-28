@@ -24,6 +24,13 @@ module.exports = {
           black 2px,
           transparent 2px,
           transparent 4px
+        )`,
+        'checked-box-02': `repeating-linear-gradient(
+          135deg,
+          black,
+          black 2px,
+          transparent 2px,
+          transparent 4px
         )`
       },
       fontFamily: {
