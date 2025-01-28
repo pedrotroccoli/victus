@@ -6,7 +6,8 @@ import { Tooltip } from "@/components/ui/tooltip";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, useMemo, useState } from "react";
+import { HabitBox } from "../../ions/habit-box";
 
 interface HabitCheckboxProps extends HTMLAttributes<HTMLButtonElement> {
   item: Habit;
@@ -20,44 +21,52 @@ interface HabitCheckboxProps extends HTMLAttributes<HTMLButtonElement> {
   isAPastDay: boolean;
   isFirst: boolean;
   isLast: boolean;
+  invertPattern?: boolean;
 
 }
 
-export const HabitCheckbox = ({ today, isChecked, onCheck, isInTheHabitRange, setIsHovering, isAPastDay, isFirst, isLast, ...rest }: HabitCheckboxProps) => {
+export const HabitCheckbox = ({ today, isChecked, onCheck, isInTheHabitRange, setIsHovering, isAPastDay, isFirst, isLast, invertPattern = false, ...rest }: HabitCheckboxProps) => {
+  const [checked, setChecked] = useState(isChecked);
 
-  const handleCheckHabit = () => {
-    onCheck();
+  const handleCheckHabit = async () => {
+    try {
+      setChecked(prev => !prev);
+      await onCheck();
+    } catch (error) {
+      setChecked(prev => !prev);
+    }
   }
 
+  const type = useMemo(() => {
+    if (!isInTheHabitRange) return 'out-of-range';
+
+    if (checked) return 'checked';
+
+    if (isAPastDay) return 'empty';
+
+    return 'none';
+  }, [isInTheHabitRange, checked, isAPastDay]);
+
   return (
-    <button
+    <HabitBox
+      type={type}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
       className={
         cn(
-          "w-7 h-7 flex items-center justify-center border border-neutral-300",
           isFirst && today && "border-t-neutral-500",
           isLast && today && "border-b-neutral-500",
           "data-[is-current-day=true]:border-x-neutral-500",
-          "enabled:hover:border-black enabled:hover:border-2 ",
           "disabled:cursor-not-allowed",
-          "data-[is-checked=true]:bg-checked-box-01",
-          "data-[is-out-of-range=true]:bg-neutral-200",
-          // habitIndex % 2 === 0 && "rotate-90"
         )}
+      checkedPattern={invertPattern ? '02' : '01'}
       data-is-current-day={today}
-      data-is-checked={isChecked}
-      data-is-out-of-range={!isInTheHabitRange}
       data-is-today={today}
       disabled={!isInTheHabitRange || !today}
       onClick={handleCheckHabit}
+
       {...rest}
     >
-      {!isChecked && isAPastDay && isInTheHabitRange && (
-        <div className="w-1 h-1 border border-black rounded-full">
-        </div>
-      )}
-
       {process.env.NODE_ENV === 'development' && false && (
         <TooltipProvider>
           <Tooltip delayDuration={0}>
@@ -71,6 +80,6 @@ export const HabitCheckbox = ({ today, isChecked, onCheck, isInTheHabitRange, se
           </Tooltip>
         </TooltipProvider>
       )}
-    </button>
+    </HabitBox>
   )
 }
