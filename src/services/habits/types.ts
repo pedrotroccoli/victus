@@ -13,7 +13,9 @@ export interface CreateHabitRequest {
   end_date: Date;
   infinite: boolean;
   recurrence_type?: string;
-  recurrence_details?: Record<string, string>;
+  recurrence_details?: {
+    rule: string;
+  };
 }
 
 export type CreateHabitResponse = Habit;

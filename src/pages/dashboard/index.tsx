@@ -14,7 +14,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { BoxesExplanation } from "@/features/habits/components/atoms/boxes-explanation";
 import { HabitLineCheckboxes } from "@/features/habits/components/organism/habit-line-checkboxes";
-import { CreateHabitForm, CreateHabitModal } from "@/features/habits/components/templates/create-habit-modal";
+import { CreateHabitModal, CreateHabitModalOnSaveProps } from "@/features/habits/components/templates/create-habit-modal";
 import { cn } from "@/lib/utils";
 import { DateFormat } from "@/services/habits/types";
 import { useNavigate } from "@tanstack/react-router";
@@ -80,13 +80,16 @@ export const Home = () => {
 
   const [createHabitOpen, setCreateHabitOpen] = useState(false);
 
-  const onCreateHabit = async (params: CreateHabitForm) => {
+  const onCreateHabit = async (params: CreateHabitModalOnSaveProps) => {
     try {
       await createHabit({
         name: params.name,
         start_date: params.start_date,
         end_date: params.end_date,
-        infinite: !!params.infinite
+        infinite: !!params.infinite,
+        recurrence_details: {
+          rule: params.rrule
+        }
       });
 
       toast.success('Hábito criado com sucesso!');

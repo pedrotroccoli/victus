@@ -1,3 +1,4 @@
+import { RRule } from 'rrule';
 import { z } from 'zod';
 
 import { CheckboxField } from '@/components/molecules/form/CheckboxField';
@@ -19,11 +20,16 @@ const createHabitValidation = z.object({
   infinite: z.boolean().optional(),
 })
 
-export type CreateHabitForm = z.infer<typeof createHabitValidation>;
+type CreateHabitForm = z.infer<typeof createHabitValidation>;
 
-interface CreateHabitModalProps {
-  onSave?: (data: CreateHabitForm) => void;
+export type CreateHabitModalOnSaveProps = CreateHabitForm & {
+  rrule: string;
 }
+
+export interface CreateHabitModalProps {
+  onSave?: (data: CreateHabitModalOnSaveProps) => void;
+}
+
 
 export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
   const [loading, setLoading] = useState(false);
@@ -40,10 +46,29 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
     defaultValues,
   });
 
+  const generateRrule = (data: CreateHabitForm) => {
+    const { start_date, end_date, infinite } = data;
+
+    const rrule = new RRule({
+      freq: RRule.DAILY,
+      dtstart: start_date,
+      until: !infinite ? end_date : undefined,
+    });
+
+    return rrule.toString();
+  }
+
   const handleSubmit: SubmitHandler<CreateHabitForm> = async (data) => {
     try {
       setLoading(true);
-      await onSave?.(data);
+
+      const rrule = generateRrule(data);
+
+      await onSave?.({
+        ...data,
+        rrule,
+      });
+
       form.reset(defaultValues);
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
