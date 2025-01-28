@@ -36,7 +36,7 @@ export const SignUpPage = () => {
         email: data.email,
         password: data.password,
         phone: data.phone,
-        confirmPassword: data.password_confirmation,
+        password_confirmation: data.password_confirmation,
       });
 
       await setToken(token);
