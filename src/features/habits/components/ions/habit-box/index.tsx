@@ -1,10 +1,14 @@
 import { cn } from "@/lib/utils";
 
+type HabitBoxType = 'none' | 'empty' | 'checked' | 'out-of-range';
+
 interface HabitBoxProps extends React.HTMLAttributes<HTMLButtonElement> {
-  type: 'none' | 'empty' | 'checked' | 'out-of-range';
+  type: HabitBoxType;
+  disabled?: boolean;
+  checkedPattern?: '01' | '02';
 }
 
-export function HabitBox({ type = 'none', className, children, ...rest }: HabitBoxProps) {
+export function HabitBox({ type = 'none', className, children, checkedPattern = '01', ...rest }: HabitBoxProps) {
   return (
     <button
       className={
@@ -12,7 +16,8 @@ export function HabitBox({ type = 'none', className, children, ...rest }: HabitB
           "w-7 h-7 flex items-center justify-center border border-neutral-300",
           "enabled:hover:border-black enabled:hover:border-2 ",
           "disabled:cursor-not-allowed",
-          "data-[is-checked=true]:bg-checked-box-01",
+          checkedPattern === '01' && `data-[is-checked=true]:bg-checked-box-01`,
+          checkedPattern === '02' && `data-[is-checked=true]:bg-checked-box-02`,
           "data-[is-out-of-range=true]:bg-neutral-200",
           className
         )}
