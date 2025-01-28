@@ -57,7 +57,7 @@ export function HabitLineCheckboxes({ item, hideHabits, setHideHabits, daysInMon
       </div>
 
       <div className="flex">
-        {daysInMonth.map((monthDay) => {
+        {daysInMonth.map((monthDay, index) => {
           const formattedDay = format(monthDay, 'MM/dd/yyyy');
           const isChecked = !!getHabitCheck(item, formattedDay)?.checked;
 
@@ -80,8 +80,8 @@ export function HabitLineCheckboxes({ item, hideHabits, setHideHabits, daysInMon
                 <HabitDay monthDay={monthDay} day={day} currentDay={today} shouldShowArrow={isFirst} />
               )}
 
-
               <HabitCheckbox
+                invertPattern={index % 2 === 0}
                 onCheck={handleCheckHabit(item, formattedDay)}
                 item={item}
                 realDay={monthDay}
