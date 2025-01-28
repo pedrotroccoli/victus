@@ -1,19 +1,21 @@
 import { QueryClient, UndefinedInitialDataInfiniteOptions, useMutation, UseMutationOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { checkHabit, createHabit, getAllHabitsCheck, getHabits } from "./services";
-import { CheckHabitRequest, CheckHabitResponse, CreateHabitRequest, CreateHabitResponse } from "./types";
+import { CheckHabitRequest, CheckHabitResponse, CreateHabitRequest, CreateHabitResponse, GetAllHabitsCheckRequest, GetAllHabitsCheckResponse, GetHabitsRequest, GetHabitsResponse } from "./types";
 
-type UseGetHabitsProps = UndefinedInitialDataInfiniteOptions<any, Error, any, string[]>;
+type UseGetHabitsProps = UndefinedInitialDataInfiniteOptions<any, Error, GetHabitsResponse, string[]>;
 
-export const useGetHabits = (options: Partial<UseGetHabitsProps>) => useQuery({
+export const useGetHabits = (params: GetHabitsRequest, options: Partial<UseGetHabitsProps>) => useQuery({
   ...options,
   queryKey: ['habits'],
-  queryFn: getHabits
+  queryFn: () => getHabits(params)
 })
 
-export const useGetHabitsCheck = (options: Partial<UseGetHabitsProps>) => useQuery({
+type UseGetHabitsCheckProps = UndefinedInitialDataInfiniteOptions<any, Error, GetAllHabitsCheckResponse, string[]>;
+
+export const useGetHabitsCheck = (params: GetAllHabitsCheckRequest, options: Partial<UseGetHabitsCheckProps>) => useQuery({
   ...options,
   queryKey: ['habits-check'],
-  queryFn: getAllHabitsCheck
+  queryFn: () => getAllHabitsCheck(params)
 })
 
 

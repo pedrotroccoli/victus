@@ -1,6 +1,6 @@
-import { addDays, eachDayOfInterval, format, subDays } from "date-fns";
-import { Box, BringToFront, ChevronDown, ChevronUp, LoaderCircle, PlusCircle, SendToBack } from "lucide-react";
-import { useMemo, useState } from "react";
+import { addDays, eachDayOfInterval, format, isAfter, isBefore, subDays } from "date-fns";
+import { Book, BookOpen, Box, BringToFront, LoaderCircle, PlusCircle, SendToBack } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
 
 import { useMe } from "@/services/auth";
 import { signOut } from "@/services/auth/services";
@@ -11,21 +11,31 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { HabitBox } from "@/features/habits/components/ions/habit-box";
+import { BoxesExplanation } from "@/features/habits/components/atoms/boxes-explanation";
 import { HabitLineCheckboxes } from "@/features/habits/components/organism/habit-line-checkboxes";
 import { CreateHabitForm, CreateHabitModal } from "@/features/habits/components/templates/create-habit-modal";
 import { cn } from "@/lib/utils";
+import { DateFormat } from "@/services/habits/types";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 
 export const Home = () => {
+  const startRange = subDays(new Date(), 12);
+  const endRange = addDays(new Date(), 12);
+
   const navigate = useNavigate();
   const { data: me, isLoading: isLoadingMe } = useMe();
   const { data: habits, isLoading: isLoadingHabits } = useGetHabits({
+    start_date: format(startRange, 'yyyy-MM-dd') as DateFormat,
+    end_date: format(endRange, 'yyyy-MM-dd') as DateFormat
+  }, {
     enabled: !!me
   });
   const { data: habitsCheck, isLoading: isLoadingHabitsCheck } = useGetHabitsCheck({
-    enabled: !!me && habits?.length > 0
+    start_date: format(startRange, 'yyyy-MM-dd') as DateFormat,
+    end_date: format(endRange, 'yyyy-MM-dd') as DateFormat,
+  }, {
+    enabled: !!me && habits && habits.length > 0
 
   });
 
@@ -61,8 +71,6 @@ export const Home = () => {
   const { mutateAsync: checkHabit } = useCheckHabit();
   const { mutateAsync: createHabit } = useCreateHabit();
 
-  const startRange = subDays(new Date(), 13);
-  const endRange = addDays(new Date(), 13);
   const currentDay = new Date();
 
   const daysInMonth = eachDayOfInterval({ start: startRange, end: endRange });
@@ -107,6 +115,41 @@ export const Home = () => {
     });
   }
 
+  const getAnalyticsFromDate = useCallback((date: Date) => {
+    const dayHabits = habits?.filter((item: Habit) => {
+      if (isBefore(item.start_date, date)) return true;
+
+      if (item.recurrence_type === 'infinite') return true;
+
+      if (item?.end_date && isAfter(item.end_date, date)) return true;
+
+      return false;
+    });
+
+    const dayFormatted = format(date, 'MM/dd/yyyy');
+
+    const alreadyChecked = dayHabits?.filter(item => habitsCheckedHash?.[item._id]?.[dayFormatted]?.checked || false);
+
+    return ({
+      total: dayHabits?.length,
+      alreadyChecked: alreadyChecked?.length,
+      percentage: Number((((alreadyChecked?.length || 0) / (dayHabits?.length || 1)) * 100).toFixed(0))
+    })
+  }, [habits, habitsCheckedHash])
+
+  const smallAnalytics = useMemo(() => {
+    const yesterday = subDays(currentDay, 1);
+    const yesterdayAnalytics = getAnalyticsFromDate(yesterday);
+
+    const todayAnalytics = getAnalyticsFromDate(currentDay);
+
+    return ({
+      yesterday: yesterdayAnalytics,
+      today: todayAnalytics,
+      compare: todayAnalytics.percentage - yesterdayAnalytics.percentage,
+    })
+  }, [getAnalyticsFromDate, currentDay])
+
   if (isLoadingMe) {
     return (
       <main>
@@ -119,7 +162,6 @@ export const Home = () => {
 
   return (
     <>
-
       <main className="max-w-screen-xl mx-auto border-x border-neutral-300 h-screen bg-[url('/dashboard-bg.png')]">
         <header className="w-full border-neutral-300 border-b py-4 px-8 bg-white">
           <div className="flex items-center justify-between max-w-screen-lg mx-auto px-6">
@@ -165,6 +207,30 @@ export const Home = () => {
             </Dialog>
           </div>
 
+          <div className="mt-8 flex gap-4">
+            <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
+              <h6 className="font-[Recursive] text-lg font-medium">Hoje você completou</h6>
+              <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
+                <strong>{smallAnalytics.today.alreadyChecked}</strong> de <strong>{smallAnalytics.today.total}</strong> hábitos
+              </p>
+
+            </div>
+
+            <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
+              <h6 className="font-[Recursive] text-lg font-medium">Hoje você está em</h6>
+              <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
+                <strong>{smallAnalytics.today.percentage}%</strong> de aproveitamento
+              </p>
+            </div>
+
+            <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
+              <h6 className="font-[Recursive] text-lg font-medium">Comparando com ontem</h6>
+              <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
+                <strong>{smallAnalytics.compare > 0 ? 'Aumentou' : 'Diminuiu'} em {smallAnalytics.compare}%</strong>
+              </p>
+            </div>
+          </div>
+
           <div className="mt-8 overflow-auto bg-white">
             <div className="w-full">
               {habits && habits.length === 0 && (
@@ -190,8 +256,8 @@ export const Home = () => {
                 <div className="border-2 border-neutral-400 rounded-md">
                   <div className={
                     cn(
-                      "flex items-center justify-between border-b border-black p-4 relative",
-                      hideExplanation && "border-b-0 p-0"
+                      "flex items-center justify-between border-b border-black p-4 pr-8 relative",
+                      hideExplanation && "border-b-0 p-0 pr-0"
                     )
                   }>
                     <div className="absolute top-0 right-0 border-l border-b border-black rounded-bl-md flex items-center divide-x divide-black">
@@ -219,37 +285,20 @@ export const Home = () => {
                         onClick={() => setHideExplanation(!hideExplanation)}
                       >
                         {hideExplanation ? (
-                          <ChevronUp size={14} className="-translate-y-px translate-x-px" />
+                          <Book size={14} className="-translate-y-px translate-x-px" />
                         ) : (
-                          <ChevronDown size={14} className="-translate-y-px translate-x-px" />
+                          <BookOpen size={14} className="-translate-y-px translate-x-px" />
                         )}
                       </button>
                     </div>
 
                     {!hideExplanation && (
-                      <>
-                        <h1 className="font-sans text-base font-medium">Hábitos</h1>
-
-                        <ul className="flex items-center gap-4 mr-4">
-                          <li className="flex items-center gap-2">
-                            <HabitBox type="checked" className="w-6 h-6" />
-                            <p className="text-xs text-neutral-500">Completado</p>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <HabitBox type="out-of-range" className="w-6 h-6" />
-                            <p className="text-xs text-neutral-500">Fora de data</p>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <HabitBox type="empty" className="w-6 h-6" />
-                            <p className="text-xs text-neutral-500">Não completado</p>
-                          </li>
-                          <li className="flex items-center gap-2">
-                            <HabitBox type="none" className="w-6 h-6" />
-                            <p className="text-xs text-neutral-500">Habilitado</p>
-                          </li>
-                        </ul>
-                      </>
+                      <BoxesExplanation />
                     )}
+                  </div>
+
+                  <div className="px-4 pt-4">
+                    <h3 className="text-lg font-[Recursive] font-medium">Hábitos</h3>
                   </div>
 
                   <div className="p-4">

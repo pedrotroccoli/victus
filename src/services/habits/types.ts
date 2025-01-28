@@ -1,3 +1,11 @@
+export type DateFormat = `${number}-${number}-${number}`;
+
+export interface GetHabitsRequest {
+  start_date?: DateFormat;
+  end_date?: DateFormat;
+}
+
+export type GetHabitsResponse = Habit[];
 
 export interface CreateHabitRequest {
   name: string;
@@ -16,3 +24,10 @@ export interface CheckHabitRequest {
 }
 
 export type CheckHabitResponse = HabitCheck;
+
+export interface GetAllHabitsCheckRequest {
+  start_date?: DateFormat;
+  end_date?: DateFormat;
+}
+
+export type GetAllHabitsCheckResponse = HabitCheck[];

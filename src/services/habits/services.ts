@@ -1,11 +1,17 @@
 import { baseApi } from "../api";
 import {
   CheckHabitRequest, CheckHabitResponse,
-  CreateHabitRequest, CreateHabitResponse
+  CreateHabitRequest, CreateHabitResponse,
+  GetAllHabitsCheckRequest,
+  GetAllHabitsCheckResponse,
+  GetHabitsRequest,
+  GetHabitsResponse
 } from "./types";
 
-export const getHabits = async () => {
-  const { data } = await baseApi.get('/habits');
+export const getHabits = async (params: GetHabitsRequest): Promise<GetHabitsResponse> => {
+  const { data } = await baseApi.get('/habits', {
+    params
+  });
 
   return data;
 }
@@ -31,8 +37,10 @@ export const checkHabit = async (habit: CheckHabitRequest): Promise<CheckHabitRe
   return data;
 }
 
-export const getAllHabitsCheck = async () => {
-  const { data } = await baseApi.get('/habits-check');
+export const getAllHabitsCheck = async (params: GetAllHabitsCheckRequest): Promise<GetAllHabitsCheckResponse> => {
+  const { data } = await baseApi.get('/habits-check', {
+    params
+  });
 
   return data;
 }
