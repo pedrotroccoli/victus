@@ -40,6 +40,8 @@ export const Home = () => {
 
   });
 
+  const generalLoading = useMemo(() => isLoadingMe || isLoadingHabits || isLoadingHabitsCheck, [isLoadingMe, isLoadingHabits, isLoadingHabitsCheck]);
+
   const [hideHabits, setHideHabits] = useState(false);
   const [hideExplanation, setHideExplanation] = useState(true);
   const [orderEnabled, setOrderEnabled] = useState(false);
@@ -72,7 +74,7 @@ export const Home = () => {
   const { mutateAsync: checkHabit } = useCheckHabit();
   const { mutateAsync: createHabit } = useCreateHabit();
 
-  const currentDay = new Date();
+  const currentDay = useMemo(() => new Date(), []);
 
   const daysInMonth = eachDayOfInterval({ start: startRange, end: endRange });
 
@@ -216,7 +218,8 @@ export const Home = () => {
             <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
               <h6 className="font-[Recursive] text-lg font-medium">Hoje você completou</h6>
               <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
-                <strong>{smallAnalytics.today.alreadyChecked}</strong> de <strong>{smallAnalytics.today.total}</strong> hábitos
+                <strong>{generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.today.alreadyChecked}
+                </strong> de <strong>{generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.today.total}</strong> hábitos
               </p>
 
             </div>
@@ -224,14 +227,14 @@ export const Home = () => {
             <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
               <h6 className="font-[Recursive] text-lg font-medium">Hoje você está em</h6>
               <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
-                <strong>{smallAnalytics.today.percentage}%</strong> de aproveitamento
+                <strong>{generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.today.percentage}%</strong> de aproveitamento
               </p>
             </div>
 
             <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
               <h6 className="font-[Recursive] text-lg font-medium">Comparando com ontem</h6>
               <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
-                <strong>{smallAnalytics.compare > 0 ? 'Aumentou' : 'Diminuiu'} em {smallAnalytics.compare}%</strong>
+                <strong>{smallAnalytics.compare > 0 ? 'Aumentou' : 'Diminuiu'} em {generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.compare}%</strong>
               </p>
             </div>
           </div>
@@ -251,13 +254,13 @@ export const Home = () => {
                 </div>
               )}
 
-              {isLoadingHabits || isLoadingHabitsCheck && (
+              {generalLoading && (
                 <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
                   <LoaderCircle size={32} className="animate-spin" strokeWidth={1.75} />
                 </div>
               )}
 
-              {habits && habits.length > 0 && !isLoadingHabits && !isLoadingHabitsCheck && (
+              {habits && habits.length > 0 && !generalLoading && (
                 <div className="border-2 border-neutral-400 rounded-md">
                   <div className={
                     cn(
