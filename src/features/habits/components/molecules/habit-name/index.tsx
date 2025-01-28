@@ -25,7 +25,7 @@ export const HabitName = ({ item, isHovering, hide, showHideButton }: HabitNameP
           }>{item.name}</p>
         </TooltipTrigger>
         <TooltipContent>
-          <p>{item.name}</p>
+          <p>{item.name} {process.env.NODE_ENV === 'development' && <span className="text-xs text-neutral-500">({item._id})</span>}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
