@@ -1,6 +1,7 @@
 import { addDays, eachDayOfInterval, format, isAfter, isBefore, subDays } from "date-fns";
 import { Book, BookOpen, Box, BringToFront, LoaderCircle, PlusCircle, SendToBack } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
+import { Helmet } from "react-helmet";
 
 import { useMe } from "@/services/auth";
 import { signOut } from "@/services/auth/services";
@@ -162,6 +163,10 @@ export const Home = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Victus Journal | Dashboard</title>
+      </Helmet>
+
       <main className="max-w-screen-xl mx-auto border-x border-neutral-300 h-screen bg-[url('/dashboard-bg.png')]">
         <header className="w-full border-neutral-300 border-b py-4 px-8 bg-white">
           <div className="flex items-center justify-between max-w-screen-lg mx-auto px-6">
