@@ -47,11 +47,10 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
   });
 
   const generateRrule = (data: CreateHabitForm) => {
-    const { start_date, end_date, infinite } = data;
+    const { end_date, infinite } = data;
 
     const rrule = new RRule({
       freq: RRule.DAILY,
-      dtstart: start_date,
       until: !infinite ? end_date : undefined,
     });
 
