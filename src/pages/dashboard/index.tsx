@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { BoxesExplanation } from "@/features/habits/components/atoms/boxes-explanation";
 import { HabitLineCheckboxes } from "@/features/habits/components/organism/habit-line-checkboxes";
 import { CreateHabitModal, CreateHabitModalOnSaveProps } from "@/features/habits/components/templates/create-habit-modal";
@@ -173,7 +174,7 @@ export const Home = () => {
       </Helmet>
 
       <main className="max-w-screen-xl mx-auto border-x border-neutral-300 h-screen bg-[url('/dashboard-bg.png')]">
-        <header className="w-full border-neutral-300 border-b py-4 px-8 bg-white">
+        <header className="w-full border-neutral-300 border-b py-4 px-8 bg-white h-20">
           <div className="flex items-center justify-between max-w-screen-lg mx-auto px-6">
             <div className="flex items-center">
               <LogoWithText className="max-w-20" />
@@ -201,139 +202,145 @@ export const Home = () => {
           </div>
         </header>
 
-        <div className="max-w-screen-lg mx-auto px-6 pt-16 bg-sign">
-          <div className="flex items-end justify-between">
-            <h1 className="font-sans text-xl font-medium">Olá {String(me.name).split(' ')[0]}, aqui está seu jornal!</h1>
+        <div className=" mx-auto bg-sign">
+          <ScrollArea className="w-full h-[calc(100vh-80px)] ">
+            <ScrollBar orientation="vertical" />
+            <div className="max-w-screen-lg mx-auto px-6 pt-16">
 
-            <Dialog open={createHabitOpen} onOpenChange={setCreateHabitOpen}>
-              <DialogTrigger>
-                <Button className="flex gap-4 bg-black rounded-md text-white" onClick={() => setCreateHabitOpen(true)}>
-                  <PlusCircle size={16} />
-                  Adicionar
-                </Button>
-              </DialogTrigger>
+              <div className="flex items-end justify-between">
+                <h1 className="font-sans text-xl font-medium">Olá {String(me.name).split(' ')[0]}, aqui está seu jornal!</h1>
 
-              <CreateHabitModal onSave={onCreateHabit} />
-            </Dialog>
-          </div>
+                <Dialog open={createHabitOpen} onOpenChange={setCreateHabitOpen}>
+                  <DialogTrigger>
+                    <Button className="flex gap-4 bg-black rounded-md text-white" onClick={() => setCreateHabitOpen(true)}>
+                      <PlusCircle size={16} />
+                      Adicionar
+                    </Button>
+                  </DialogTrigger>
 
-          <div className="mt-8 flex gap-4">
-            <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
-              <h6 className="font-[Recursive] text-lg font-medium">Hoje você completou</h6>
-              <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
-                <strong>{generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.today.alreadyChecked}
-                </strong> de <strong>{generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.today.total}</strong> hábitos
-              </p>
+                  <CreateHabitModal onSave={onCreateHabit} />
+                </Dialog>
+              </div>
 
-            </div>
+              <div className="mt-8 flex gap-4">
+                <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
+                  <h6 className="font-[Recursive] text-lg font-medium">Hoje você completou</h6>
+                  <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
+                    <strong>{generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.today.alreadyChecked}
+                    </strong> de <strong>{generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.today.total}</strong> hábitos
+                  </p>
 
-            <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
-              <h6 className="font-[Recursive] text-lg font-medium">Hoje você está em</h6>
-              <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
-                <strong>{generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.today.percentage}%</strong> de aproveitamento
-              </p>
-            </div>
-
-            <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
-              <h6 className="font-[Recursive] text-lg font-medium">Comparando com ontem</h6>
-              <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
-                <strong>{smallAnalytics.compare > 0 ? 'Aumentou' : 'Diminuiu'} em {generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.compare}%</strong>
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-8 overflow-auto bg-white">
-            <div className="w-full">
-              {habits && habits.length === 0 && (
-                <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
-                  <Box size={32} />
-
-                  <p className="text-lg text-black/75 font-medium mt-4 mb-8">Nenhum hábito cadastrado</p>
-
-                  <Button className="flex gap-4 bg-black rounded-md text-white" onClick={() => setCreateHabitOpen(true)}>
-                    <PlusCircle size={16} />
-                    Criar meu primeiro hábito
-                  </Button>
                 </div>
-              )}
 
-              {generalLoading && (
-                <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
-                  <LoaderCircle size={32} className="animate-spin" strokeWidth={1.75} />
+                <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
+                  <h6 className="font-[Recursive] text-lg font-medium">Hoje você está em</h6>
+                  <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
+                    <strong>{generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.today.percentage}%</strong> de aproveitamento
+                  </p>
                 </div>
-              )}
 
-              {habits && habits.length > 0 && !generalLoading && (
-                <div className="border-2 border-neutral-400 rounded-md">
-                  <div className={
-                    cn(
-                      "flex items-center justify-between border-b border-black p-4 pr-8 relative",
-                      hideExplanation && "border-b-0 p-0 pr-0"
-                    )
-                  }>
-                    <div className="absolute top-0 right-0 border-l border-b border-black rounded-bl-md flex items-center divide-x divide-black">
-                      <button className={
-                        cn(
-                          "h-5 w-5 flex items-center justify-center",
-                          "hover:bg-black hover:text-white duration-200 transition-colors"
-                        )
-                      }
-                        onClick={() => setOrderEnabled(!orderEnabled)}
-                      >
-                        {orderEnabled ? (
-                          <BringToFront size={12} className="-translate-y-px translate-x-px" />
-                        ) : (
-                          <SendToBack size={14} className="-translate-y-px translate-x-px" />
-                        )}
-                      </button>
+                <div className=" bg-white border-2 border-neutral-400 p-4 rounded-md">
+                  <h6 className="font-[Recursive] text-lg font-medium">Comparando com ontem</h6>
+                  <p className="font-[Recursive] text-sm text-black/70 font-medium mt-2">
+                    <strong>{smallAnalytics.compare > 0 ? 'Aumentou' : 'Diminuiu'} em {generalLoading ? <span className="bg-stone-200 rounded-md h-px px-2 animate-pulse border border-stone-400 mr-1"></span> : smallAnalytics.compare}%</strong>
+                  </p>
+                </div>
+              </div>
 
-                      <button className={
-                        cn(
-                          "h-5 w-5 flex items-center justify-center",
-                          "hover:bg-black hover:text-white duration-200 transition-colors"
-                        )
-                      }
-                        onClick={() => setHideExplanation(!hideExplanation)}
-                      >
-                        {hideExplanation ? (
-                          <Book size={14} className="-translate-y-px translate-x-px" />
-                        ) : (
-                          <BookOpen size={14} className="-translate-y-px translate-x-px" />
-                        )}
-                      </button>
+              <div className="mt-8 overflow-auto bg-white">
+                <div className="w-full">
+                  {habits && habits.length === 0 && (
+                    <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
+                      <Box size={32} />
+
+                      <p className="text-lg text-black/75 font-medium mt-4 mb-8">Nenhum hábito cadastrado</p>
+
+                      <Button className="flex gap-4 bg-black rounded-md text-white" onClick={() => setCreateHabitOpen(true)}>
+                        <PlusCircle size={16} />
+                        Criar meu primeiro hábito
+                      </Button>
                     </div>
+                  )}
 
-                    {!hideExplanation && (
-                      <BoxesExplanation />
-                    )}
-                  </div>
+                  {generalLoading && (
+                    <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
+                      <LoaderCircle size={32} className="animate-spin" strokeWidth={1.75} />
+                    </div>
+                  )}
 
-                  <div className="px-4 pt-4">
-                    <h3 className="text-lg font-[Recursive] font-medium">Hábitos</h3>
-                  </div>
+                  {habits && habits.length > 0 && !generalLoading && (
+                    <div className="border-2 border-neutral-400 rounded-md">
+                      <div className={
+                        cn(
+                          "flex items-center justify-between border-b border-black p-4 pr-8 relative",
+                          hideExplanation && "border-b-0 p-0 pr-0"
+                        )
+                      }>
+                        <div className="absolute top-0 right-0 border-l border-b border-black rounded-bl-md flex items-center divide-x divide-black">
+                          <button className={
+                            cn(
+                              "h-5 w-5 flex items-center justify-center",
+                              "hover:bg-black hover:text-white duration-200 transition-colors"
+                            )
+                          }
+                            onClick={() => setOrderEnabled(!orderEnabled)}
+                          >
+                            {orderEnabled ? (
+                              <BringToFront size={12} className="-translate-y-px translate-x-px" />
+                            ) : (
+                              <SendToBack size={14} className="-translate-y-px translate-x-px" />
+                            )}
+                          </button>
 
-                  <div className="p-4">
-                    {habits && habits?.sort((a: Habit, b: Habit) => (a.order || 0) - (b.order || 0)).map((item: Habit, habitIndex: number) => (
-                      <HabitLineCheckboxes
-                        key={item._id}
-                        enableOrder={orderEnabled}
-                        item={item}
-                        hideHabits={hideHabits}
-                        setHideHabits={setHideHabits}
-                        daysInMonth={daysInMonth}
-                        getHabitCheck={getHabitCheck}
-                        currentDay={currentDay}
-                        onCheckHabit={handleCheckHabit}
-                        isFirst={habitIndex === 0}
-                        isLast={habitIndex === habits.length - 1}
-                      />
-                    ))}
-                  </div>
+                          <button className={
+                            cn(
+                              "h-5 w-5 flex items-center justify-center",
+                              "hover:bg-black hover:text-white duration-200 transition-colors"
+                            )
+                          }
+                            onClick={() => setHideExplanation(!hideExplanation)}
+                          >
+                            {hideExplanation ? (
+                              <Book size={14} className="-translate-y-px translate-x-px" />
+                            ) : (
+                              <BookOpen size={14} className="-translate-y-px translate-x-px" />
+                            )}
+                          </button>
+                        </div>
+
+                        {!hideExplanation && (
+                          <BoxesExplanation />
+                        )}
+                      </div>
+
+                      <div className="px-4 pt-4">
+                        <h3 className="text-lg font-[Recursive] font-medium">Hábitos</h3>
+                      </div>
+
+                      <div className="p-4">
+                        {habits && habits?.sort((a: Habit, b: Habit) => (a.order || 0) - (b.order || 0)).map((item: Habit, habitIndex: number) => (
+                          <HabitLineCheckboxes
+                            key={item._id}
+                            enableOrder={orderEnabled}
+                            item={item}
+                            hideHabits={hideHabits}
+                            setHideHabits={setHideHabits}
+                            daysInMonth={daysInMonth}
+                            getHabitCheck={getHabitCheck}
+                            currentDay={currentDay}
+                            onCheckHabit={handleCheckHabit}
+                            isFirst={habitIndex === 0}
+                            isLast={habitIndex === habits.length - 1}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-          </div>
+              </div>
+            </div>
+          </ScrollArea>
         </div>
       </main>
     </>
