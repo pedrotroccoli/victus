@@ -16,16 +16,17 @@ interface HabitCheckboxProps extends HTMLAttributes<HTMLButtonElement> {
   isChecked: boolean;
   onCheck: () => void;
   isInTheHabitRange: boolean;
-  setIsHovering: (isHovering: boolean) => void;
   range: Date[];
   isAPastDay: boolean;
   isFirst: boolean;
   isLast: boolean;
   invertPattern?: boolean;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 
 }
 
-export const HabitCheckbox = ({ today, isChecked, onCheck, isInTheHabitRange, setIsHovering, isAPastDay, isFirst, isLast, invertPattern = false, ...rest }: HabitCheckboxProps) => {
+export const HabitCheckbox = ({ today, isChecked, onCheck, isInTheHabitRange, isAPastDay, isFirst, isLast, invertPattern = false, ...rest }: HabitCheckboxProps) => {
   const [checked, setChecked] = useState(isChecked);
 
   const handleCheckHabit = async () => {
@@ -50,8 +51,6 @@ export const HabitCheckbox = ({ today, isChecked, onCheck, isInTheHabitRange, se
   return (
     <HabitBox
       type={type}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
       className={
         cn(
           isFirst && today && "border-t-neutral-500",

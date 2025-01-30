@@ -8,21 +8,24 @@ interface HabitNameProps {
   item: Habit;
   isHovering: boolean;
   hide: boolean;
-  showHideButton: boolean;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
-export const HabitName = ({ item, isHovering, hide, showHideButton }: HabitNameProps) => {
+export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }: HabitNameProps) => {
   return (
     <TooltipProvider>
-      <Tooltip delayDuration={0}>
+      <Tooltip delayDuration={500}>
         <TooltipTrigger asChild>
           <p className={cn(
-            "text-xs font-bold whitespace-nowrap truncate mr-2 border-2 border-transparent p-1 rounded-md",
-            showHideButton && "pb-1",
+            "text-xs font-bold whitespace-nowrap truncate border-2 border-transparent rounded-md",
             isHovering && "border-black",
             hide && "blur-sm"
           )
-          }>{item.name}</p>
+          }
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+          >{item.name}</p>
         </TooltipTrigger>
         <TooltipContent>
           <p>{item.name} {process.env.NODE_ENV === 'development' && <span className="text-xs text-neutral-500">({item._id})</span>}</p>

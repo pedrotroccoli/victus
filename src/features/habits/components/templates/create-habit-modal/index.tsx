@@ -85,8 +85,8 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
   const endDate = form.watch('infinite') ? undefined : form.watch('end_date');
 
   return (
-    <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded">
-      <DialogHeader className="p-4 border-b">
+    <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded w-[calc(100vw-2rem)] rounded-lg">
+      <DialogHeader className="p-4 border-b text-left">
         <DialogTitle>Criar hábito</DialogTitle>
         <DialogDescription className="text-black/70">
           Defina a data de início e fim do hábito
@@ -101,7 +101,7 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
               placeholder="Ex: Beber água"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <DatePickerField name="start_date" label="Data de início"
                 disabled={(date) => {
