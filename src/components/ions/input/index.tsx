@@ -20,7 +20,7 @@ export const Input = ({ iconLeft, iconRight, className, label, message, messageC
             {iconLeft}
           </div>
         )}
-        <UiInput {...props} className={cn(iconLeft ? "pl-10" : "", iconRight ? "pr-10" : "", className)} />
+        <UiInput {...props} className={cn('hover:bg-neutral-100', iconLeft ? "pl-10" : "", iconRight ? "pr-10" : "", className)} />
 
         {iconRight && (
           <div className="absolute right-4 top-1/2 -translate-y-1/2">
