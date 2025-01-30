@@ -7,3 +7,5 @@ declare global {
     updatedAt: string;
   }
 }
+
+export { };

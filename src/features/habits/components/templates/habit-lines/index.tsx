@@ -18,7 +18,7 @@ interface HabitLinesProps {
   onCheckHabit: (habit: Habit, day: string) => void;
 }
 
-export const HabitLines = ({ habits, orderEnabled, hideHabits, setHideHabits, daysInMonth, getHabitCheck, currentDay, onCheckHabit }: HabitLinesProps) => {
+export const HabitLines = ({ habits, orderEnabled, hideHabits, daysInMonth, getHabitCheck, currentDay, onCheckHabit }: HabitLinesProps) => {
   const [itemHovering, setItemHovering] = useState<string | null>(null);
   const [rowHovering, setRowHovering] = useState<string | null>(null);
 
