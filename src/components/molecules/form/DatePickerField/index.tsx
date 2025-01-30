@@ -1,4 +1,4 @@
-import { DatePicker, DatePickerProps } from "@/components/datepicker";
+import { DatePicker, DatePickerProps } from "@/components/atoms/datepicker";
 import { cn } from "@/lib/utils";
 import { Controller, useFormContext } from "react-hook-form";
 

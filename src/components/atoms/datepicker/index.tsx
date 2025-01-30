@@ -1,6 +1,7 @@
 "use client"
 
 import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 import { Calendar as CalendarIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -26,7 +27,7 @@ export function DatePicker({ className, selected, disabledMessage, ...props }: D
         <Button
           variant={"outline"}
           className={cn(
-            "w-full justify-start text-left font-normal",
+            "w-full justify-start text-left font-normal hover:border-black hover:bg-neutral-100",
             !date && "text-muted-foreground",
             className
           )}
@@ -41,7 +42,7 @@ export function DatePicker({ className, selected, disabledMessage, ...props }: D
             <>
 
               {/* @ts-expect-error blabla */}
-              {date ? format(date, "PPP") : <span>Escolha uma data</span>}
+              {date ? format(date, "PPP", { locale: ptBR }) : <span>Escolha uma data</span>}
             </>
           )}
         </Button>
@@ -49,6 +50,7 @@ export function DatePicker({ className, selected, disabledMessage, ...props }: D
       <PopoverContent className="w-auto p-0 bg-white">
         <Calendar
           mode="single"
+          locale={ptBR}
           {...props}
         />
       </PopoverContent>
