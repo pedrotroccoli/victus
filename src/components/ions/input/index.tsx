@@ -12,7 +12,7 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 export const Input = ({ iconLeft, iconRight, className, label, message, messageClassName, ...props }: InputProps) => {
   return (
     <label className="flex flex-col gap-2">
-      {label && <span className="text-sm text-black font-base font-title font-semibold">{label}</span>}
+      {label && <span className="text-sm text-black font-medium">{label}</span>}
 
       <div className="relative">
         {iconLeft && (
