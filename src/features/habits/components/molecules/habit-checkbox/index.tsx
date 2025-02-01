@@ -7,27 +7,23 @@ import { Tooltip } from "@/components/ui/tooltip";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { HTMLAttributes, useMemo, useState } from "react";
-import { HabitBox } from "../../ions/habit-box";
+import { HabitBox, HabitBoxType } from "../../ions/habit-box";
 
 interface HabitCheckboxProps extends HTMLAttributes<HTMLButtonElement> {
   item: Habit;
-  realDay: Date;
   today: boolean;
-  isChecked: boolean;
   onCheck: () => void;
-  isInTheHabitRange: boolean;
-  range: Date[];
-  isAPastDay: boolean;
   isFirst: boolean;
   isLast: boolean;
   invertPattern?: boolean;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
-
+  disabled?: boolean;
+  type: HabitBoxType;
 }
 
-export const HabitCheckbox = ({ today, isChecked, onCheck, isInTheHabitRange, isAPastDay, isFirst, isLast, invertPattern = false, ...rest }: HabitCheckboxProps) => {
-  const [checked, setChecked] = useState(isChecked);
+export const HabitCheckbox = ({ today, onCheck, isFirst, isLast, invertPattern = false, disabled, type, ...rest }: HabitCheckboxProps) => {
+  const [checked, setChecked] = useState(type === 'checked');
 
   const handleCheckHabit = async () => {
     try {
@@ -38,19 +34,15 @@ export const HabitCheckbox = ({ today, isChecked, onCheck, isInTheHabitRange, is
     }
   }
 
-  const type = useMemo(() => {
-    if (!isInTheHabitRange) return 'out-of-range';
-
+  const internalType = useMemo(() => {
     if (checked) return 'checked';
 
-    if (isAPastDay) return 'empty';
-
-    return 'none';
-  }, [isInTheHabitRange, checked, isAPastDay]);
+    return type;
+  }, [checked, type]);
 
   return (
     <HabitBox
-      type={type}
+      type={internalType}
       className={
         cn(
           isFirst && today && "border-t-neutral-500",
@@ -59,12 +51,10 @@ export const HabitCheckbox = ({ today, isChecked, onCheck, isInTheHabitRange, is
           "disabled:cursor-not-allowed",
         )}
       checkedPattern={invertPattern ? '02' : '01'}
-      data-is-current-day={today}
+      data-is-current-day={!!today}
       data-is-today={today}
-      disabled={!isInTheHabitRange || !today}
+      disabled={disabled}
       onClick={handleCheckHabit}
-
-      {...rest}
     >
       {process.env.NODE_ENV === 'development' && false && (
         <TooltipProvider>

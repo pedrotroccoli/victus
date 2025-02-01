@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { format } from "date-fns";
 
 interface HabitNameProps {
   item: Habit;
@@ -29,6 +30,7 @@ export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }
         </TooltipTrigger>
         <TooltipContent>
           <p>{item.name} {process.env.NODE_ENV === 'development' && <span className="text-xs text-neutral-500">({item._id})</span>}</p>
+          <p>{format(item.start_date, 'dd/MM/yyyy')} - {item.end_date && format(item.end_date, 'dd/MM/yyyy')}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
