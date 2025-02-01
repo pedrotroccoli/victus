@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-type HabitBoxType = 'none' | 'empty' | 'checked' | 'out-of-range';
+export type HabitBoxType = 'none' | 'empty' | 'checked' | 'blocked';
 
 interface HabitBoxProps extends React.HTMLAttributes<HTMLButtonElement> {
   type: HabitBoxType;
@@ -18,11 +18,11 @@ export function HabitBox({ type = 'none', className, children, checkedPattern = 
           "disabled:cursor-not-allowed",
           checkedPattern === '01' && `data-[is-checked=true]:bg-checked-box-01`,
           checkedPattern === '02' && `data-[is-checked=true]:bg-checked-box-02`,
-          "data-[is-out-of-range=true]:bg-neutral-200",
+          "data-[is-blocked=true]:bg-neutral-200",
           className
         )}
       data-is-checked={type === 'checked'}
-      data-is-out-of-range={type === 'out-of-range'}
+      data-is-blocked={type === 'blocked'}
       {...rest}
     >
       {type === 'empty' && (
