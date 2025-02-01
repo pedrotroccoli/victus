@@ -10,7 +10,9 @@ declare global {
     order: number;
     updated_at: string;
     recurrence_type?: 'infinite' | 'daily' | 'weekly' | 'monthly' | 'yearly';
-    recurrence_details?: Record<string, string>;
+    recurrence_details?: {
+      rule: string;
+    };
   }
 
   interface HabitCheck {
