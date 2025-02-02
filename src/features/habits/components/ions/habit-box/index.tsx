@@ -13,7 +13,7 @@ export function HabitBox({ type = 'none', className, children, checkedPattern = 
     <button
       className={
         cn(
-          "w-7 h-7 flex items-center justify-center border border-neutral-300",
+          "w-7 h-7 flex items-center justify-center border border-neutral-300 bg-white",
           "enabled:hover:border-black enabled:hover:border-2 ",
           "disabled:cursor-not-allowed",
           checkedPattern === '01' && `data-[is-checked=true]:bg-checked-box-01`,
