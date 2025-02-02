@@ -16,6 +16,7 @@ import { CreateHabitModal, CreateHabitModalOnSaveProps } from "@/features/habits
 import { HabitLines } from "@/features/habits/components/templates/habit-lines";
 import { cn } from "@/lib/utils";
 import { DateFormat } from "@/services/habits/types";
+import { isAcceptedByRRule } from "@/utils/habits";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 
@@ -115,9 +116,11 @@ export const Home = () => {
 
   const getAnalyticsFromDate = useCallback((date: Date) => {
     const dayHabits = habits?.filter((item: Habit) => {
-      if (isBefore(item.start_date, date)) return true;
+      const isAccepted = isAcceptedByRRule(item, format(date, 'MM/dd/yyyy'));
 
-      if (item.recurrence_type === 'infinite') return true;
+      if (!isAccepted) return false;
+
+      if (isBefore(item.start_date, date)) return true;
 
       if (item?.end_date && isAfter(item.end_date, date)) return true;
 
