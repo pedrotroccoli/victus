@@ -19,7 +19,7 @@ export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }
       <Tooltip delayDuration={500}>
         <TooltipTrigger asChild>
           <p className={cn(
-            "text-xs font-bold whitespace-nowrap truncate border-2 border-transparent rounded-md",
+            "text-xs font-bold whitespace-nowrap truncate border-2 border-transparent rounded-md hover:border-black",
             isHovering && "border-black",
             hide && "blur-sm"
           )
