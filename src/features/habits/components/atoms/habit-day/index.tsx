@@ -3,16 +3,27 @@ import { Tooltip, TooltipProvider, TooltipTrigger } from "@/components/ui/toolti
 import { TooltipContent } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { CircleArrowDown } from "lucide-react";
+import { useMemo } from "react";
 
 interface HabitDayProps {
   monthDay: Date;
-  day: string;
   currentDay: boolean;
   shouldShowArrow: boolean;
 }
 
-export const HabitDay = ({ monthDay, day, currentDay, shouldShowArrow }: HabitDayProps) => {
+export const HabitDay = ({ monthDay, currentDay, shouldShowArrow }: HabitDayProps) => {
+  const monthDayFormatted = format(monthDay, 'dd');
+  const day = format(monthDay, 'dd/MM/yyyy');
+  const weekDayName = useMemo(() => {
+    const weekday = format(monthDay, 'EEEE', {
+      locale: ptBR,
+    });
+
+    return weekday[0].toLocaleUpperCase() + weekday.slice(1);
+  }, [monthDay]);
+
   return (
     <div>
       {shouldShowArrow && currentDay && (
@@ -21,12 +32,16 @@ export const HabitDay = ({ monthDay, day, currentDay, shouldShowArrow }: HabitDa
       <TooltipProvider>
         <Tooltip delayDuration={0}>
           <TooltipTrigger>
+            <p className="text-[0.5rem] mb-px font-bold text-black rounded-sm">
+              {weekDayName[0].toLocaleUpperCase()}
+            </p>
             <p className={cn(
               "text-xs mb-2 font-medium text-black rounded-sm",
-            )}>{day}</p>
+            )}>{monthDayFormatted}</p>
           </TooltipTrigger>
-          <TooltipContent>
-            <p>{format(monthDay, 'dd/MM/yyyy')}</p>
+          <TooltipContent className="text-center">
+            <p className="text-xs font-bold font-[Recursive]">{weekDayName}</p>
+            <p className="text-xs mt-1">{day}</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
