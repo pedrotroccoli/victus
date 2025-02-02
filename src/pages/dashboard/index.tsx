@@ -42,7 +42,6 @@ export const Home = () => {
 
   const generalLoading = useMemo(() => isLoadingMe || isLoadingHabits || isLoadingHabitsCheck, [isLoadingMe, isLoadingHabits, isLoadingHabitsCheck]);
 
-  const [hideHabits, setHideHabits] = useState(false);
   const [hideExplanation, setHideExplanation] = useState(true);
   const [orderEnabled, setOrderEnabled] = useState(false);
 
@@ -284,8 +283,6 @@ export const Home = () => {
                         <HabitLines
                           habits={habits}
                           orderEnabled={orderEnabled}
-                          hideHabits={hideHabits}
-                          setHideHabits={setHideHabits}
                           daysInMonth={daysInMonth}
                           getHabitCheck={getHabitCheck}
                           currentDay={currentDay}
