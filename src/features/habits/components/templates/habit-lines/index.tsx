@@ -63,12 +63,11 @@ export const HabitLines = ({ habits, orderEnabled, hideHabits, daysInMonth, getH
             before={habitIndex === 0 && (
               <div className="flex items-end justify-end">
                 {daysInMonth.map(monthDay => {
-                  const day = format(monthDay, 'dd');
                   const today = format(currentDay, 'dd/MM/yyyy') === format(monthDay, 'dd/MM/yyyy');
 
                   return (
                     <div className="w-7 min-h-7 border border-transparent flex items-center justify-center">
-                      <HabitDay monthDay={monthDay} day={day} currentDay={today} shouldShowArrow />
+                      <HabitDay monthDay={monthDay} currentDay={today} shouldShowArrow />
                     </div>
                   )
                 })}
