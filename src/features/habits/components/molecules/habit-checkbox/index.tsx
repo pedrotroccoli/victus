@@ -13,16 +13,19 @@ interface HabitCheckboxProps extends HTMLAttributes<HTMLButtonElement> {
   item: Habit;
   today: boolean;
   onCheck: () => void;
-  isFirst: boolean;
-  isLast: boolean;
+  isFirstRow: boolean;
+  isLastRow: boolean;
+  isFirstColumn: boolean;
+  isLastColumn: boolean;
   invertPattern?: boolean;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   disabled?: boolean;
   type: HabitBoxType;
+  isHovering?: boolean;
 }
 
-export const HabitCheckbox = ({ today, onCheck, isFirst, isLast, invertPattern = false, disabled, type }: HabitCheckboxProps) => {
+export const HabitCheckbox = ({ today, onCheck, isFirstRow, isLastRow, isFirstColumn, isLastColumn, invertPattern = false, disabled, type, isHovering, ...rest }: HabitCheckboxProps) => {
   const [checked, setChecked] = useState(type === 'checked');
 
   const handleCheckHabit = async () => {
@@ -45,16 +48,21 @@ export const HabitCheckbox = ({ today, onCheck, isFirst, isLast, invertPattern =
       type={internalType}
       className={
         cn(
-          isFirst && today && "border-t-neutral-500",
-          isLast && today && "border-b-neutral-500",
+          isFirstRow && today && "border-t-neutral-500",
+          isLastRow && today && "border-b-neutral-500",
           "data-[is-current-day=true]:border-x-neutral-500",
           "disabled:cursor-not-allowed",
+          isHovering && "border-t-black border-b-black",
+          isHovering && today && "border-x-black",
+          isFirstColumn && today && "border-l-black",
+          isLastColumn && today && "border-r-black",
         )}
       checkedPattern={invertPattern ? '02' : '01'}
       data-is-current-day={!!today}
       data-is-today={today}
       disabled={disabled}
       onClick={handleCheckHabit}
+      {...rest}
     >
       {process.env.NODE_ENV === 'development' && false && (
         <TooltipProvider>
@@ -63,8 +71,8 @@ export const HabitCheckbox = ({ today, onCheck, isFirst, isLast, invertPattern =
               <div className="bg-red-500 w-full h-full rounded-full"></div>
             </TooltipTrigger>
             <TooltipContent>
-              <p>isFirst: {String(isFirst)}</p>
-              <p>isLast: {String(isLast)}</p>
+              <p>isFirst: {String(isFirstRow)}</p>
+              <p>isLast: {String(isLastRow)}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
