@@ -22,7 +22,7 @@ interface HabitCheckboxProps extends HTMLAttributes<HTMLButtonElement> {
   type: HabitBoxType;
 }
 
-export const HabitCheckbox = ({ today, onCheck, isFirst, isLast, invertPattern = false, disabled, type, ...rest }: HabitCheckboxProps) => {
+export const HabitCheckbox = ({ today, onCheck, isFirst, isLast, invertPattern = false, disabled, type }: HabitCheckboxProps) => {
   const [checked, setChecked] = useState(type === 'checked');
 
   const handleCheckHabit = async () => {

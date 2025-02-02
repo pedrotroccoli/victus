@@ -11,8 +11,12 @@ export const BoxesExplanation = () => {
           <p className="text-xs text-neutral-500">Completado</p>
         </li>
         <li className="flex items-center gap-2">
-          <HabitBox type="out-of-range" className="w-6 h-6" />
+          <HabitBox type="blocked" className="w-6 h-6" />
           <p className="text-xs text-neutral-500">Fora de data</p>
+        </li>
+        <li className="flex items-center gap-2">
+          <HabitBox type="blocked-dark" className="w-6 h-6" />
+          <p className="text-xs text-neutral-500">Fora da data de início ou fim</p>
         </li>
         <li className="flex items-center gap-2">
           <HabitBox type="empty" className="w-6 h-6" />

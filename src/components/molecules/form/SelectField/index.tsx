@@ -12,8 +12,8 @@ export const SelectField = ({ name, ...props }: SelectFieldProps) => {
     <Controller
       control={control}
       name={name}
-      render={({ field: { onChange, onBlur, value } }) => (
-        <Select onValueChange={onChange} onBlur={onBlur} value={value} {...props} />
+      render={({ field: { onChange, value } }) => (
+        <Select onValueChange={onChange} value={value} {...props} />
       )}
     />
   )
