@@ -170,132 +170,141 @@ export const Home = () => {
       <main className="max-w-screen-xl mx-auto border-x border-neutral-300 h-screen bg-[url('/dashboard-bg.png')]">
         <Header account={me} handleSignOut={handleSignOut} />
 
-        <section className="max-w-screen-lg w-full mx-auto bg-sign">
-          <div className="px-4 sm:px-8 pt-16">
-            <div className="flex flex-col items-start justify-between gap-6 sm:flex-row">
-              <h1 className="font-[Recursive] text-xl font-semibold">Olá {String(me.name).split(' ')[0]}, aqui está seu Jornal!</h1>
+        <div className="w-full overflow-y-auto  h-[calc(100vh-5rem)]">
+          <section className="max-w-screen-lg w-full mx-auto bg-sign ">
 
-              <Dialog open={createHabitOpen} onOpenChange={setCreateHabitOpen}>
-                <DialogTrigger asChild>
-                  <Button className="w-full flex gap-4 bg-black rounded-md text-white sm:max-w-40" onClick={() => setCreateHabitOpen(true)}>
-                    <PlusCircle size={16} />
-                    Adicionar
-                  </Button>
-                </DialogTrigger>
+            <div className="px-4 sm:px-8 pt-8 sm:pt-16">
+              <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-6">
+                <h1 className="font-[Recursive] text-xl font-semibold">Olá {String(me.name).split(' ')[0]}, aqui está seu Jornal!</h1>
 
-                <CreateHabitModal onSave={onCreateHabit} />
-              </Dialog>
-            </div>
-
-            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <AnalyticsBox
-                title="Hoje você completou"
-                value={`${smallAnalytics.today.alreadyChecked} de ${smallAnalytics.today.total} hábitos`}
-                loading={generalLoading}
-              />
-
-              <AnalyticsBox
-                title="Hoje você está em"
-                value={`${smallAnalytics.today.percentage}% de aproveitamento`}
-                loading={generalLoading}
-              />
-
-              <AnalyticsBox
-                title="Comparando com ontem"
-                value={`${smallAnalytics.compare > 0 ? 'Aumentou' : 'Diminuiu'} em ${smallAnalytics.compare}%`}
-                loading={generalLoading}
-              />
-            </div>
-
-            <div className="mt-8 bg-white w-full">
-
-              <div className="w-full">
-                {habits && habits.length === 0 && (
-                  <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
-                    <Box size={32} />
-
-                    <p className="text-lg text-black/75 font-medium mt-4 mb-8">Nenhum hábito cadastrado</p>
-
-                    <Button className="flex gap-4 bg-black rounded-md text-white" onClick={() => setCreateHabitOpen(true)}>
+                <Dialog open={createHabitOpen} onOpenChange={setCreateHabitOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="w-full flex gap-4 bg-black rounded-md text-white sm:max-w-40" onClick={() => setCreateHabitOpen(true)}>
                       <PlusCircle size={16} />
-                      Criar meu primeiro hábito
+                      Adicionar
                     </Button>
-                  </div>
-                )}
+                  </DialogTrigger>
 
-                {generalLoading && (
-                  <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
-                    <LoaderCircle size={32} className="animate-spin" strokeWidth={1.75} />
-                  </div>
-                )}
+                  <CreateHabitModal onSave={onCreateHabit} />
+                </Dialog>
+              </div>
 
-                {habits && habits.length > 0 && !generalLoading && (
-                  <div className="border-2 border-neutral-400 rounded-md">
-                    <div className={
-                      cn(
-                        "flex items-center justify-between border-b border-black p-4 pr-8 relative",
-                        hideExplanation && "border-b-0 p-0 pr-0"
-                      )
-                    }>
-                      <div className="absolute top-0 right-0 border-l border-b border-black rounded-bl-md flex items-center divide-x divide-black">
-                        <button className={
-                          cn(
-                            "h-5 w-5 flex items-center justify-center",
-                            "hover:bg-black hover:text-white duration-200 transition-colors"
-                          )
-                        }
-                          onClick={() => setOrderEnabled(!orderEnabled)}
-                        >
-                          {orderEnabled ? (
-                            <BringToFront size={12} className="-translate-y-px translate-x-px" />
-                          ) : (
-                            <SendToBack size={14} className="-translate-y-px translate-x-px" />
-                          )}
-                        </button>
+              <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4 sm:mt-8 lg:grid-cols-3">
+                <AnalyticsBox
+                  title="Hoje você completou"
+                  value={`${smallAnalytics.today.alreadyChecked} de ${smallAnalytics.today.total} hábitos`}
+                  loading={generalLoading}
+                />
 
-                        <button className={
-                          cn(
-                            "h-5 w-5 flex items-center justify-center",
-                            "hover:bg-black hover:text-white duration-200 transition-colors"
-                          )
-                        }
-                          onClick={() => setHideExplanation(!hideExplanation)}
-                        >
-                          {hideExplanation ? (
-                            <Book size={14} className="-translate-y-px translate-x-px" />
-                          ) : (
-                            <BookOpen size={14} className="-translate-y-px translate-x-px" />
-                          )}
-                        </button>
+                <AnalyticsBox
+                  title="Hoje você está em"
+                  value={`${smallAnalytics.today.percentage}% de aproveitamento`}
+                  loading={generalLoading}
+                />
+
+                <AnalyticsBox
+                  title="Comparando com ontem"
+                  value={`${smallAnalytics.compare > 0 ? 'Aumentou' : 'Diminuiu'} em ${smallAnalytics.compare}%`}
+                  loading={generalLoading}
+                />
+              </div>
+
+              <div className="mt-6 sm:mt-8 bg-white w-full">
+
+                <div className="w-full">
+                  {habits && habits.length === 0 && (
+                    <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
+                      <Box size={32} />
+
+                      <p className="text-lg text-black/75 font-medium mt-4 mb-8">Nenhum hábito cadastrado</p>
+
+                      <Button className="flex gap-4 bg-black rounded-md text-white" onClick={() => setCreateHabitOpen(true)}>
+                        <PlusCircle size={16} />
+                        Criar meu primeiro hábito
+                      </Button>
+                    </div>
+                  )}
+
+                  {generalLoading && (
+                    <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
+                      <LoaderCircle size={32} className="animate-spin" strokeWidth={1.75} />
+                    </div>
+                  )}
+
+                  {habits && habits.length > 0 && !generalLoading && (
+                    <div className="border-2 border-neutral-400 rounded-md">
+                      <div className={
+                        cn(
+                          "flex items-center justify-between border-b border-black p-4 pr-8 relative",
+                          hideExplanation && "border-b-0 p-0 pr-0"
+                        )
+                      }>
+                        <div className="absolute top-0 right-0 border-l border-b border-black rounded-bl-md flex items-center divide-x divide-black">
+                          <button className={
+                            cn(
+                              "h-5 w-5 flex items-center justify-center",
+                              "hover:bg-black hover:text-white duration-200 transition-colors"
+                            )
+                          }
+                            onClick={() => setOrderEnabled(!orderEnabled)}
+                          >
+                            {orderEnabled ? (
+                              <BringToFront size={12} className="-translate-y-px translate-x-px" />
+                            ) : (
+                              <SendToBack size={14} className="-translate-y-px translate-x-px" />
+                            )}
+                          </button>
+
+                          <button className={
+                            cn(
+                              "h-5 w-5 flex items-center justify-center",
+                              "hover:bg-black hover:text-white duration-200 transition-colors"
+                            )
+                          }
+                            onClick={() => setHideExplanation(!hideExplanation)}
+                          >
+                            {hideExplanation ? (
+                              <Book size={14} className="-translate-y-px translate-x-px" />
+                            ) : (
+                              <BookOpen size={14} className="-translate-y-px translate-x-px" />
+                            )}
+                          </button>
+                        </div>
+
+                        {!hideExplanation && (
+                          <BoxesExplanation />
+                        )}
                       </div>
 
-                      {!hideExplanation && (
-                        <BoxesExplanation />
-                      )}
-                    </div>
+                      <div className="px-4 pt-4">
+                        <h3 className="text-lg font-[Recursive] font-medium">Hábitos</h3>
+                      </div>
 
-                    <div className="px-4 pt-4">
-                      <h3 className="text-lg font-[Recursive] font-medium">Hábitos</h3>
-                    </div>
+                      <div className="p-4" >
+                        <HabitLines
+                          habits={habits}
+                          orderEnabled={orderEnabled}
+                          hideHabits={hideHabits}
+                          setHideHabits={setHideHabits}
+                          daysInMonth={daysInMonth}
+                          getHabitCheck={getHabitCheck}
+                          currentDay={currentDay}
+                          onCheckHabit={handleCheckHabit}
+                        />
 
-                    <div className="p-4" >
-                      <HabitLines
-                        habits={habits}
-                        orderEnabled={orderEnabled}
-                        hideHabits={hideHabits}
-                        setHideHabits={setHideHabits}
-                        daysInMonth={daysInMonth}
-                        getHabitCheck={getHabitCheck}
-                        currentDay={currentDay}
-                        onCheckHabit={handleCheckHabit}
-                      />
+
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+
+            <div className="w-full h-20 "></div>
+          </section>
+
+        </div>
       </main>
     </>
   )
