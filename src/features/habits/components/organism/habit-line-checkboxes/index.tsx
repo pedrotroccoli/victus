@@ -1,22 +1,22 @@
 import { cn } from "@/lib/utils";
 import { isAcceptedByRRule } from "@/utils/habits";
 import { format, isAfter, isBefore, subDays } from "date-fns";
-import React, { useCallback } from "react";
+import { Eye, EyeOff, GripVertical } from "lucide-react";
+import React, { useCallback, useState } from "react";
+import { HabitDay } from "../../atoms/habit-day";
 import { HabitCheckbox } from "../../molecules/habit-checkbox";
+import { HabitName } from "../../molecules/habit-name";
 
 export interface HabitLineCheckboxesProps {
   item: Habit;
-  hideHabits: boolean;
   getHabitCheck: (habit: Habit, day: string) => HabitCheck;
   daysInMonth: Date[];
   currentDay: Date;
   onCheckHabit: (habit: Habit, day: string) => void;
-  isFirst: boolean;
-  isLast: boolean;
+  isFirstRow: boolean;
+  isLastRow: boolean;
   enableOrder: boolean;
-  before?: React.ReactNode;
-  setIsHovering: (isHovering: boolean) => void;
-  rowHovering: boolean;
+  onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
 }
 
 interface HabitRange {
@@ -28,7 +28,18 @@ interface HabitRange {
 }
 
 
-export function HabitLineCheckboxes({ item, daysInMonth, getHabitCheck, currentDay, onCheckHabit, isFirst, isLast, before, setIsHovering, rowHovering }: HabitLineCheckboxesProps) {
+export function HabitLineCheckboxes({
+  item,
+  daysInMonth,
+  getHabitCheck,
+  currentDay,
+  onCheckHabit,
+  isFirstRow, isLastRow, onScroll, enableOrder,
+}: HabitLineCheckboxesProps) {
+  const [hideHabits, setHideHabits] = useState(false);
+  const [nameHovering, setNameHovering] = useState(false);
+  const [checkboxHovering, setCheckboxHovering] = useState(false);
+
   const handleCheckHabit = useCallback((habit: Habit, day: string) => () => {
     onCheckHabit(habit, day);
   }, [onCheckHabit]);
@@ -66,26 +77,70 @@ export function HabitLineCheckboxes({ item, daysInMonth, getHabitCheck, currentD
 
   return (
     <>
-      <div className={
-        cn(
-          "flex justify-between items-center",
-          isFirst && "items-end",
-        )
-      } >
+      <div
+        id={`line-${item._id}`}
+        className={
+          cn(
+            "flex justify-between items-center ",
+            isFirstRow && "items-end",
+          )
+        } >
 
-        <div className="">
-          {before}
 
-          <div className={cn("flex")}>
-            {daysInMonth.map((monthDay, index) => {
-              const formattedDay = format(monthDay, 'MM/dd/yyyy');
-              const isToday = format(currentDay, 'MM/dd/yyyy') === formattedDay;
+        <div>
+          {isFirstRow && (
+            <button className="w-6 h-6 rounded-full flex items-center justify-center border border-neutral-500 mb-3" onClick={() => setHideHabits(!hideHabits)}>
+              {hideHabits ? <EyeOff size={14} /> : <Eye size={14} />}
+            </button>
+          )}
 
-              const habitRange = getHabitRange(item, formattedDay);
-              const type = getType(item, formattedDay, habitRange);
+          <div className="flex items-center gap-1 w-32">
 
-              return (
+            {enableOrder && (
+              <button className={
+                cn(
+                  "w-3 h-5 text-neutral-400 rounded-full flex items-center justify-center border-neutral-500 transition-colors duration-200",
+                  "hover:border hover:text-black ",
+                )
+              }>
+                <GripVertical size={12} />
+              </button>
+            )}
+
+            <div className="flex items-center gap-4 min-w-12 w-ful h-7">
+              <HabitName
+                item={item}
+                isHovering={checkboxHovering}
+                hide={hideHabits}
+                onMouseEnter={() => setNameHovering(true)}
+                onMouseLeave={() => setNameHovering(false)}
+              />
+            </div>
+          </div>
+
+        </div>
+
+        <div className={cn("flex justify-end flex-1 overflow-x-auto md:max-w-full no-scrollbar")} onScroll={onScroll}
+          data-scroll-line
+          data-scroll-line-id={item._id}
+        >
+          {daysInMonth.map((monthDay, index) => {
+            const formattedDay = format(monthDay, 'MM/dd/yyyy');
+            const isToday = format(currentDay, 'MM/dd/yyyy') === formattedDay;
+
+            const habitRange = getHabitRange(item, formattedDay);
+            const type = getType(item, formattedDay, habitRange);
+
+            return (
+              <div className="flex flex-col justify-end">
+                {isFirstRow && (
+                  <div className="w-7 min-h-7 border border-transparent flex items-center justify-center">
+                    <HabitDay monthDay={monthDay} currentDay={isToday} shouldShowArrow />
+                  </div>
+                )}
+
                 <HabitCheckbox
+                  isHovering={nameHovering}
                   key={`${item._id}-${formattedDay}`}
                   disabled={!habitRange.isToday}
                   invertPattern={index % 2 === 0}
@@ -93,15 +148,16 @@ export function HabitLineCheckboxes({ item, daysInMonth, getHabitCheck, currentD
                   onCheck={handleCheckHabit(item, formattedDay)}
                   item={item}
                   today={isToday}
-                  onMouseEnter={() => setIsHovering(true)}
-                  onMouseLeave={() => setIsHovering(false)}
-                  isFirst={isFirst}
-                  isLast={isLast}
-                  className={cn(rowHovering && "border-y-black", rowHovering && index === 0 && "border-l-black", rowHovering && index === daysInMonth.length - 1 && "border-r-black")}
+                  onMouseEnter={() => setCheckboxHovering(true)}
+                  onMouseLeave={() => setCheckboxHovering(false)}
+                  isFirstColumn={index === 0}
+                  isLastColumn={index === daysInMonth.length - 1}
+                  isFirstRow={isFirstRow}
+                  isLastRow={isLastRow}
                 />
-              )
-            })}
-          </div>
+              </div>
+            )
+          })}
         </div>
       </div>
     </>
