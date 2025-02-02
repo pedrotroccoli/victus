@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export type HabitBoxType = 'none' | 'empty' | 'checked' | 'blocked';
+export type HabitBoxType = 'none' | 'empty' | 'checked' | 'blocked' | 'blocked-dark';
 
 interface HabitBoxProps extends React.HTMLAttributes<HTMLButtonElement> {
   type: HabitBoxType;
@@ -19,10 +19,15 @@ export function HabitBox({ type = 'none', className, children, checkedPattern = 
           checkedPattern === '01' && `data-[is-checked=true]:bg-checked-box-01`,
           checkedPattern === '02' && `data-[is-checked=true]:bg-checked-box-02`,
           "data-[is-blocked=true]:bg-neutral-200",
+          "data-[is-blocked-dark=true]:bg-neutral-300 data-[is-blocked-dark=true]:border-neutral-300",
+          "data-[is-blocked-dark=true]:hover:border-neutral-300 data-[is-blocked-dark=true]:hover:border-px",
+          "data-[is-blocked-dark=true]:hover:cursor-not-allowed",
+
           className
         )}
       data-is-checked={type === 'checked'}
       data-is-blocked={type === 'blocked'}
+      data-is-blocked-dark={type === 'blocked-dark'}
       {...rest}
     >
       {type === 'empty' && (
