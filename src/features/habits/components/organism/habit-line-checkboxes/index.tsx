@@ -23,7 +23,7 @@ interface HabitRange {
   isBefore: boolean;
   isAfter: boolean;
   isValid: boolean;
-  isAfterToday: boolean;
+  isAfterCurrentDay: boolean;
   isToday: boolean;
 }
 
@@ -49,14 +49,13 @@ export function HabitLineCheckboxes({
     const isBeforeHabit = isBefore(day, subDays(habit.start_date, 1));
     const isAfterHabit = habit.end_date ? isAfter(day, habit.end_date) : false;
     const isAValidHabitDay = isAcceptedByRRule(habit, day);
-    const isAfterToday = isAfter(day, subDays(currentDay, 1));
     const isToday = format(currentDay, 'MM/dd/yyyy') === day;
 
     return {
       isBefore: isBeforeHabit,
       isAfter: isAfterHabit,
       isValid: isAValidHabitDay,
-      isAfterToday,
+      isAfterCurrentDay: isAfter(day, currentDay),
       isToday,
     };
   }
@@ -66,11 +65,11 @@ export function HabitLineCheckboxes({
 
     if (!habitRange.isValid) return 'blocked';
 
-    if (habitRange.isAfterToday) return 'none';
-
     const isChecked = getHabitCheck(item, day)?.checked;
 
     if (isChecked) return 'checked';
+
+    if (habitRange.isAfterCurrentDay || habitRange.isToday) return 'none';
 
     return 'empty';
   }

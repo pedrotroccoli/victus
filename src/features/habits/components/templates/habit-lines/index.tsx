@@ -65,8 +65,6 @@ export const HabitLines = ({ habits, orderEnabled, daysInMonth, getHabitCheck, c
 
   }, [habits]);
 
-  console.log(habitsByCategory);
-
   return (
     <div className="flex justify-between flex-col gap-4" >
       {Object.entries(habitsByCategory).map(([_, categorizedHabits]) => (
