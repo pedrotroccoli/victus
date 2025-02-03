@@ -1,4 +1,4 @@
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import { HabitLineCheckboxes } from "../../organism/habit-line-checkboxes";
 
 interface HabitLinesProps {
@@ -11,6 +11,7 @@ interface HabitLinesProps {
 }
 
 export const HabitLines = ({ habits, orderEnabled, daysInMonth, getHabitCheck, currentDay, onCheckHabit }: HabitLinesProps) => {
+  const [hideHabits, setHideHabits] = useState(false);
   const currentLineId = useRef<string | undefined>('');
   const timeOut = useRef<NodeJS.Timeout | null>(null);
 
@@ -82,6 +83,8 @@ export const HabitLines = ({ habits, orderEnabled, daysInMonth, getHabitCheck, c
               onCheckHabit={onCheckHabit}
               isFirstRow={habitIndex === 0}
               isLastRow={habitIndex === habits.length - 1}
+              hideHabits={hideHabits}
+              setHideHabits={setHideHabits}
             />
           ))}
         </div>

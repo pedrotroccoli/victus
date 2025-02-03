@@ -17,6 +17,8 @@ export interface HabitLineCheckboxesProps {
   isLastRow: boolean;
   enableOrder: boolean;
   onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
+  hideHabits: boolean;
+  setHideHabits: (hide: boolean) => void;
 }
 
 interface HabitRange {
@@ -35,8 +37,9 @@ export function HabitLineCheckboxes({
   currentDay,
   onCheckHabit,
   isFirstRow, isLastRow, onScroll, enableOrder,
+  hideHabits,
+  setHideHabits,
 }: HabitLineCheckboxesProps) {
-  const [hideHabits, setHideHabits] = useState(false);
   const [nameHovering, setNameHovering] = useState(false);
   const [checkboxHovering, setCheckboxHovering] = useState(false);
 
