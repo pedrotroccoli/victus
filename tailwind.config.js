@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      screens: {
+        'before-lg': '930px'
+      },
       backgroundImage: {
         'checked-box-01': `repeating-linear-gradient(
           45deg,
