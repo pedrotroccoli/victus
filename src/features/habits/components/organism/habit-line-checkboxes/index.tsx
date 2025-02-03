@@ -9,6 +9,10 @@ import { HabitName } from "../../molecules/habit-name";
 
 export interface HabitLineCheckboxesProps {
   item: Habit;
+  category: {
+    id: string;
+    name: string;
+  };
   getHabitCheck: (habit: Habit, day: string) => HabitCheck;
   daysInMonth: Date[];
   currentDay: Date;
@@ -18,7 +22,7 @@ export interface HabitLineCheckboxesProps {
   enableOrder: boolean;
   onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
   hideHabits: boolean;
-  setHideHabits: (hide: boolean) => void;
+  onHideHabit: () => void;
 }
 
 interface HabitRange {
@@ -38,7 +42,8 @@ export function HabitLineCheckboxes({
   onCheckHabit,
   isFirstRow, isLastRow, onScroll, enableOrder,
   hideHabits,
-  setHideHabits,
+  onHideHabit,
+  category
 }: HabitLineCheckboxesProps) {
   const [nameHovering, setNameHovering] = useState(false);
   const [checkboxHovering, setCheckboxHovering] = useState(false);
@@ -77,8 +82,38 @@ export function HabitLineCheckboxes({
     return 'empty';
   }
 
+  const habitsContainerClassname = cn("flex justify-end flex-1 overflow-x-auto md:max-w-full ");
+
   return (
-    <>
+    <div >
+      {isFirstRow && (
+
+        <div className="flex items-end justify-between ">
+          <div className="min-w-32 h-7 flex items-center gap-2 mb-3 group">
+            <div className="w-[2px] rounded-md h-full bg-black"></div>
+            <h6 className="text-sm font-medium font-[Recursive]">{category.name}</h6>
+
+            <button className="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-5 h-5 rounded-full flex items-center justify-center border border-neutral-500" onClick={onHideHabit}>
+              {hideHabits ? <EyeOff size={12} /> : <Eye size={14} />}
+            </button>
+          </div>
+
+          <div className={cn(habitsContainerClassname, 'items-end')}>
+
+            {isFirstRow && daysInMonth.map((day) => {
+              const formattedDay = format(day, 'MM/dd/yyyy');
+              const isToday = format(currentDay, 'MM/dd/yyyy') === formattedDay;
+
+              return (
+                <div className="w-7 min-h-7 border border-transparent flex items-center justify-center">
+                  <HabitDay monthDay={day} currentDay={isToday} shouldShowArrow />
+                </div>
+
+              )
+            })}
+          </div>
+        </div>
+      )}
       <div
         id={`line-${item._id}`}
         className={
@@ -90,11 +125,6 @@ export function HabitLineCheckboxes({
 
 
         <div>
-          {isFirstRow && (
-            <button className="w-6 h-6 rounded-full flex items-center justify-center border border-neutral-500 mb-3" onClick={() => setHideHabits(!hideHabits)}>
-              {hideHabits ? <EyeOff size={14} /> : <Eye size={14} />}
-            </button>
-          )}
 
           <div className="flex items-center gap-1 w-32">
 
@@ -122,7 +152,7 @@ export function HabitLineCheckboxes({
 
         </div>
 
-        <div className={cn("flex justify-end flex-1 overflow-x-auto md:max-w-full no-scrollbar")} onScroll={onScroll}
+        <div className={habitsContainerClassname} onScroll={onScroll}
           data-scroll-line
           data-scroll-line-id={item._id}
         >
@@ -135,12 +165,6 @@ export function HabitLineCheckboxes({
 
             return (
               <div className="flex flex-col justify-end">
-                {isFirstRow && (
-                  <div className="w-7 min-h-7 border border-transparent flex items-center justify-center">
-                    <HabitDay monthDay={monthDay} currentDay={isToday} shouldShowArrow />
-                  </div>
-                )}
-
                 <HabitCheckbox
                   isHovering={nameHovering}
                   key={`${item._id}-${formattedDay}`}
@@ -162,6 +186,6 @@ export function HabitLineCheckboxes({
           })}
         </div>
       </div>
-    </>
+    </div>
   )
 }

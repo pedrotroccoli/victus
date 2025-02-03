@@ -11,7 +11,7 @@ interface HabitLinesProps {
 }
 
 export const HabitLines = ({ habits, orderEnabled, daysInMonth, getHabitCheck, currentDay, onCheckHabit }: HabitLinesProps) => {
-  const [hideHabits, setHideHabits] = useState(false);
+  const [hideHabits, setHideHabits] = useState<Record<string, boolean>>({});
   const currentLineId = useRef<string | undefined>('');
   const timeOut = useRef<NodeJS.Timeout | null>(null);
 
@@ -66,13 +66,20 @@ export const HabitLines = ({ habits, orderEnabled, daysInMonth, getHabitCheck, c
 
   }, [habits]);
 
+  const handleHideHabits = (id: string) => () => {
+    setHideHabits((prev) => ({ ...prev, [id]: !prev[id] }));
+  }
+
   return (
     <div className="flex justify-between flex-col gap-4" >
-      {Object.entries(habitsByCategory).map(([_, categorizedHabits]) => (
+      {Object.entries(habitsByCategory).map(([id, categorizedHabits]) => (
         <div>
-          <div className="text-sm font-medium border-b border-neutral-300 pb-4 mb-4">{categorizedHabits.name}</div>
           {categorizedHabits && categorizedHabits?.list?.sort((a: Habit, b: Habit) => (a.order || 0) - (b.order || 0)).map((item: Habit, habitIndex: number) => (
             <HabitLineCheckboxes
+              category={{
+                id,
+                name: categorizedHabits.name
+              }}
               key={item._id}
               onScroll={handleScroll}
               enableOrder={orderEnabled}
@@ -83,8 +90,8 @@ export const HabitLines = ({ habits, orderEnabled, daysInMonth, getHabitCheck, c
               onCheckHabit={onCheckHabit}
               isFirstRow={habitIndex === 0}
               isLastRow={habitIndex === habits.length - 1}
-              hideHabits={hideHabits}
-              setHideHabits={setHideHabits}
+              hideHabits={hideHabits[id]}
+              onHideHabit={handleHideHabits(id)}
             />
           ))}
         </div>
