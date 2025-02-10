@@ -1,8 +1,8 @@
-import { QueryClient, UndefinedInitialDataInfiniteOptions, useMutation, UseMutationOptions, useQuery, useQueryClient } from "@tanstack/react-query";
-import { checkHabit, createHabit, getAllHabitsCheck, getHabits } from "./services";
-import { CheckHabitRequest, CheckHabitResponse, CreateHabitRequest, CreateHabitResponse, GetAllHabitsCheckRequest, GetAllHabitsCheckResponse, GetHabitsRequest, GetHabitsResponse } from "./types";
+import { QueryClient, useMutation, UseMutationOptions, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
+import { checkHabit, createHabit, getAllHabitsCheck, getHabits, updateHabit } from "./services";
+import { CheckHabitRequest, CheckHabitResponse, CreateHabitRequest, CreateHabitResponse, GetAllHabitsCheckRequest, GetAllHabitsCheckResponse, GetHabitsRequest, GetHabitsResponse, UpdateHabitRequest } from "./types";
 
-type UseGetHabitsProps = UndefinedInitialDataInfiniteOptions<any, Error, GetHabitsResponse, string[]>;
+type UseGetHabitsProps = Partial<UseQueryOptions<GetHabitsResponse, Error, GetHabitsResponse, string[]>>;
 
 export const useGetHabits = (params: GetHabitsRequest, options: Partial<UseGetHabitsProps>) => useQuery({
   ...options,
@@ -10,7 +10,7 @@ export const useGetHabits = (params: GetHabitsRequest, options: Partial<UseGetHa
   queryFn: () => getHabits(params)
 })
 
-type UseGetHabitsCheckProps = UndefinedInitialDataInfiniteOptions<any, Error, GetAllHabitsCheckResponse, string[]>;
+type UseGetHabitsCheckProps = Partial<UseQueryOptions<GetAllHabitsCheckResponse, Error, GetAllHabitsCheckResponse, string[]>>;
 
 export const useGetHabitsCheck = (params: GetAllHabitsCheckRequest, options: Partial<UseGetHabitsCheckProps>) => useQuery({
   ...options,
@@ -67,6 +67,21 @@ export const useCheckHabit = (options?: Partial<UseMutationOptions<CheckHabitRes
       const response = await checkHabit(params);
 
       applyCacheToCheckHabit(queryClient, params, response);
+
+      return response;
+    }
+  })
+}
+
+export const useUpdateHabit = (options?: Partial<UseMutationOptions<Habit, Error, UpdateHabitRequest>>) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    ...options,
+    mutationFn: async (params) => {
+      const response = await updateHabit(params);
+
+      queryClient.setQueryData(['habits'], (prev: Habit[]) => prev.map(habit => habit._id === params._id ? response : habit));
 
       return response;
     }

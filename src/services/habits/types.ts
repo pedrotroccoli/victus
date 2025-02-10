@@ -18,6 +18,12 @@ export interface CreateHabitRequest {
   };
 }
 
+export interface UpdateHabitRequest {
+  _id: string;
+  name?: string;
+  order?: number;
+}
+
 export type CreateHabitResponse = Habit;
 
 export interface CheckHabitRequest {

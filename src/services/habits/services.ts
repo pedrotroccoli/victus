@@ -5,7 +5,8 @@ import {
   GetAllHabitsCheckRequest,
   GetAllHabitsCheckResponse,
   GetHabitsRequest,
-  GetHabitsResponse
+  GetHabitsResponse,
+  UpdateHabitRequest
 } from "./types";
 
 export const getHabits = async (params: GetHabitsRequest): Promise<GetHabitsResponse> => {
@@ -21,6 +22,14 @@ export const createHabit = async ({ infinite, ...params }: CreateHabitRequest): 
     ...params,
     recurrence_type: infinite ? 'infinite' : 'daily',
     end_date: infinite ? undefined : params.end_date
+  });
+
+  return data;
+}
+
+export const updateHabit = async (params: UpdateHabitRequest): Promise<Habit> => {
+  const { data } = await baseApi.put(`/habits/${params._id}`, {
+    ...params,
   });
 
   return data;
