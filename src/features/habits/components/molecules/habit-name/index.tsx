@@ -19,14 +19,17 @@ export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }
       <Tooltip delayDuration={500}>
         <TooltipTrigger asChild>
           <p className={cn(
-            "text-xs font-bold whitespace-nowrap truncate border-2 border-transparent rounded-md hover:border-black",
+            "text-xs font-bold whitespace-nowrap truncate border-2 border-transparent rounded-md hover:border-black max-w-full ",
             isHovering && "border-black",
             hide && "blur-sm"
           )
           }
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
-          >{item.name}</p>
+          >
+            {item.name}
+            {process.env.NODE_ENV === 'development' && <span className="text-[10px]">- {item.order}</span>}
+          </p>
         </TooltipTrigger>
         <TooltipContent>
           <p>{item.name} {process.env.NODE_ENV === 'development' && <span className="text-xs text-neutral-500">({item._id})</span>}</p>
