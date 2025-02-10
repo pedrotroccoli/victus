@@ -61,7 +61,7 @@ export const HabitCheckbox = ({ today, onCheck, isFirstRow, isLastRow, isFirstCo
       data-is-current-day={!!today}
       data-is-today={today}
       disabled={disabled}
-      onClick={handleCheckHabit}
+      onClick={disabled ? undefined : handleCheckHabit}
       {...rest}
     >
       {process.env.NODE_ENV === 'development' && false && (
