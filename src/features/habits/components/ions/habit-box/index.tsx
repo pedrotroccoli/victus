@@ -20,8 +20,8 @@ export function HabitBox({ type = 'none', className, children, checkedPattern = 
           checkedPattern === '02' && `data-[is-checked=true]:bg-checked-box-02`,
           "data-[is-blocked=true]:bg-neutral-200",
           "data-[is-blocked-dark=true]:bg-neutral-300 data-[is-blocked-dark=true]:border-neutral-300",
-          "data-[is-blocked-dark=true]:hover:border-neutral-300 data-[is-blocked-dark=true]:hover:border-px",
-          "data-[is-blocked-dark=true]:hover:cursor-not-allowed",
+          "enabled:data-[is-blocked-dark=true]:hover:border-neutral-300 enabled:data-[is-blocked-dark=true]:hover:border-px",
+          "enabled:data-[is-blocked-dark=true]:hover:cursor-not-allowed",
 
           className
         )}
