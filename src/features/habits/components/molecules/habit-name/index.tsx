@@ -13,10 +13,18 @@ interface HabitNameProps {
   onMouseLeave?: () => void;
 }
 
+const typeToName = {
+  infinite: 'Sem término',
+  daily: 'Diário',
+  weekly: 'Semanal',
+  monthly: 'Mensal',
+  yearly: 'Anual',
+}
+
 export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }: HabitNameProps) => {
   return (
     <TooltipProvider>
-      <Tooltip delayDuration={500}>
+      <Tooltip delayDuration={250}>
         <TooltipTrigger asChild>
           <p className={cn(
             "text-xs font-bold whitespace-nowrap truncate border-2 border-transparent rounded-md hover:border-black max-w-full ",
@@ -28,12 +36,16 @@ export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }
             onMouseLeave={onMouseLeave}
           >
             {item.name}
-            {process.env.NODE_ENV === 'development' && <span className="text-[10px]">- {item.order}</span>}
+            {/* {process.env.NODE_ENV === 'development' && <span className="text-[10px]">- {item.order}</span>} */}
           </p>
         </TooltipTrigger>
-        <TooltipContent>
-          <p>{item.name} {process.env.NODE_ENV === 'development' && <span className="text-xs text-neutral-500">({item._id})</span>}</p>
-          <p>{format(item.start_date, 'dd/MM/yyyy')} - {item.end_date && format(item.end_date, 'dd/MM/yyyy')}</p>
+        <TooltipContent className="p-2">
+          <div className="flex flex-col gap-1">
+            <p className="text-sm text-bold text-black">Informações:</p>
+            <span className="text-xs text-black/75 font-medium">Tipo: {typeToName[item.recurrence_type as keyof typeof typeToName] || 'Sem definição'}</span>
+            <span className="text-xs text-black/75 font-medium">Iniciou em: {format(item.created_at, 'dd/MM/yyyy')}</span>
+            {item.end_date && <span className="text-xs text-black/75 font-medium">Termina em: {format(item.end_date, 'dd/MM/yyyy')}</span>}
+          </div>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
