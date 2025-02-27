@@ -1,28 +1,30 @@
 import { cn } from "@/lib/utils";
 import { isAcceptedByRRule } from "@/utils/habits";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from '@dnd-kit/utilities';
 import { format, isAfter, isBefore, subDays } from "date-fns";
-import { Eye, EyeOff, GripVertical } from "lucide-react";
+import { GripVertical } from "lucide-react";
 import React, { useCallback, useState } from "react";
-import { HabitDay } from "../../atoms/habit-day";
 import { HabitCheckbox } from "../../molecules/habit-checkbox";
 import { HabitName } from "../../molecules/habit-name";
 
 export interface HabitLineCheckboxesProps {
-  item: Habit;
-  category: {
+  habit: Habit;
+  category?: {
     id: string;
     name: string;
   };
-  getHabitCheck: (habit: Habit, day: string) => HabitCheck;
+  getHabitCheck?: (habit: Habit, day: string) => HabitCheck;
   daysInMonth: Date[];
   currentDay: Date;
-  onCheckHabit: (habit: Habit, day: string) => void;
+  onCheckHabit?: (habit: Habit, day: string) => void;
   isFirstRow: boolean;
   isLastRow: boolean;
   enableOrder: boolean;
   onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
   hideHabits: boolean;
-  onHideHabit: () => void;
+  onHideHabit?: () => void;
+  editEnabled: boolean;
 }
 
 interface HabitRange {
@@ -35,23 +37,20 @@ interface HabitRange {
 
 
 export function HabitLineCheckboxes({
-  item,
+  habit,
   daysInMonth,
   getHabitCheck,
   currentDay,
   onCheckHabit,
   isFirstRow, isLastRow, onScroll, enableOrder,
   hideHabits,
-  onHideHabit,
-  category
 }: HabitLineCheckboxesProps) {
   const [nameHovering, setNameHovering] = useState(false);
   const [checkboxHovering, setCheckboxHovering] = useState(false);
 
   const handleCheckHabit = useCallback((habit: Habit, day: string) => () => {
-    onCheckHabit(habit, day);
+    onCheckHabit?.(habit, day);
   }, [onCheckHabit]);
-
 
   function getHabitRange(habit: Habit, day: string): HabitRange {
     const isBeforeHabit = isBefore(day, subDays(habit.start_date, 1));
@@ -73,7 +72,7 @@ export function HabitLineCheckboxes({
 
     if (!habitRange.isValid) return 'blocked';
 
-    const isChecked = getHabitCheck(item, day)?.checked;
+    const isChecked = getHabitCheck?.(item, day)?.checked;
 
     if (isChecked) return 'checked';
 
@@ -82,97 +81,91 @@ export function HabitLineCheckboxes({
     return 'empty';
   }
 
-  const habitsContainerClassname = cn("flex justify-end flex-1 overflow-x-auto md:max-w-full ");
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+    isOver
+  } = useSortable({ id: habit._id, data: { type: 'habit', habit: habit } });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
+
 
   return (
-    <div >
-      {isFirstRow && (
+    <div ref={setNodeRef} style={style} {...attributes} className={cn(isDragging && "opacity-0")}>
 
-        <div className="flex items-end justify-between ">
-          <div className="min-w-32 h-7 flex items-center gap-2 mb-3 group">
-            <div className="w-[2px] rounded-md h-full bg-black"></div>
-            <h6 className="text-sm font-medium font-[Recursive]">{category.name}</h6>
-
-            <button className="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-5 h-5 rounded-full flex items-center justify-center border border-neutral-500" onClick={onHideHabit}>
-              {hideHabits ? <EyeOff size={12} /> : <Eye size={14} />}
-            </button>
-          </div>
-
-          <div className={cn(habitsContainerClassname, 'items-end')}>
-
-            {isFirstRow && daysInMonth.map((day) => {
-              const formattedDay = format(day, 'MM/dd/yyyy');
-              const isToday = format(currentDay, 'MM/dd/yyyy') === formattedDay;
-
-              return (
-                <div className="w-7 min-h-7 border border-transparent flex items-center justify-center">
-                  <HabitDay monthDay={day} currentDay={isToday} shouldShowArrow />
-                </div>
-
-              )
-            })}
-          </div>
-        </div>
-      )}
       <div
-        id={`line-${item._id}`}
+        id={`line-${habit._id}`}
         className={
           cn(
-            "flex justify-between items-center ",
-            isFirstRow && "items-end",
+            "flex justify-between items-center w-full max-w-full",
+            isDragging && "shadow-lg z-50"
           )
         } >
-
-
-        <div>
-
-          <div className="flex items-center gap-1 w-32">
+        <div className="max-w-full overflow-hidden w-48">
+          <div className="flex items-center gap-1 ">
 
             {enableOrder && (
-              <button className={
-                cn(
-                  "w-3 h-5 text-neutral-400 rounded-full flex items-center justify-center border-neutral-500 transition-colors duration-200",
-                  "hover:border hover:text-black ",
-                )
-              }>
+              <button
+                {...listeners}
+                ref={setActivatorNodeRef}
+                className={
+                  cn(
+                    "w-3 h-5 text-neutral-400 rounded-full flex items-center justify-center border-neutral-500 transition-colors duration-200",
+                    "hover:border hover:text-black ",
+                  )
+                }>
                 <GripVertical size={12} />
               </button>
             )}
 
-            <div className="flex items-center gap-4 min-w-12 w-ful h-7">
+            <div className="flex items-center gap-4 min-w-12 w-full h-7 ">
               <HabitName
-                item={item}
+                item={habit}
                 isHovering={checkboxHovering}
                 hide={hideHabits}
                 onMouseEnter={() => setNameHovering(true)}
                 onMouseLeave={() => setNameHovering(false)}
               />
+              {isOver && (
+                <div className="w-4 h-4 bg-red-500"></div>
+              )}
+              {/* {editEnabled && (
+                <Edit size={14} />
+              )} */}
             </div>
           </div>
-
         </div>
 
-        <div className={habitsContainerClassname} onScroll={onScroll}
+        <div className="flex justify-end overflow-x-auto md:max-w-full" onScroll={onScroll}
           data-scroll-line
-          data-scroll-line-id={item._id}
+          data-scroll-line-id={habit._id}
         >
           {daysInMonth.map((monthDay, index) => {
             const formattedDay = format(monthDay, 'MM/dd/yyyy');
             const isToday = format(currentDay, 'MM/dd/yyyy') === formattedDay;
 
-            const habitRange = getHabitRange(item, formattedDay);
-            const type = getType(item, formattedDay, habitRange);
+            const habitRange = getHabitRange(habit, formattedDay);
+            const type = getType(habit, formattedDay, habitRange);
 
             return (
               <div className="flex flex-col justify-end">
                 <HabitCheckbox
                   isHovering={nameHovering}
-                  key={`${item._id}-${formattedDay}`}
-                  disabled={!habitRange.isToday}
+                  key={`${habit._id}-${formattedDay}`}
+                  disabled={!habitRange.isToday || type !== 'none'}
                   invertPattern={index % 2 === 0}
                   type={type}
-                  onCheck={handleCheckHabit(item, formattedDay)}
-                  item={item}
+                  onCheck={handleCheckHabit(habit, formattedDay)}
+                  item={habit}
                   today={isToday}
                   onMouseEnter={() => setCheckboxHovering(true)}
                   onMouseLeave={() => setCheckboxHovering(false)}
