@@ -1,20 +1,22 @@
 import { addDays, eachDayOfInterval, format, isAfter, isBefore, subDays } from "date-fns";
-import { Book, BookOpen, Box, BringToFront, LoaderCircle, PlusCircle, SendToBack } from "lucide-react";
+import { Book, BookOpen, Box, CirclePlus, LoaderCircle, PencilOff, PencilRuler, PlusCircle } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { Helmet } from "react-helmet";
 
 import { useMe } from "@/services/auth";
 import { signOut } from "@/services/auth/services";
-import { useCheckHabit, useCreateHabit, useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks";
+import { useCheckHabit, useCreateHabit, useGetHabits, useGetHabitsCheck, useUpdateHabit } from "@/services/habits/hooks";
 
 import { Header } from "@/components/organisms/header";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { AnalyticsBox } from "@/features/analytics/components/atoms/analytics-box";
 import { BoxesExplanation } from "@/features/habits/components/atoms/boxes-explanation";
+import { CreateCategoryForm, CreateCategoryModal } from "@/features/habits/components/templates/create-category-modal";
 import { CreateHabitModal, CreateHabitModalOnSaveProps } from "@/features/habits/components/templates/create-habit-modal";
 import { HabitLines } from "@/features/habits/components/templates/habit-lines";
 import { cn } from "@/lib/utils";
+import { useCreateHabitCategory, useHabitCategories } from "@/services/habit-category/hooks";
 import { DateFormat } from "@/services/habits/types";
 import { isAcceptedByRRule } from "@/utils/habits";
 import { useNavigate } from "@tanstack/react-router";
@@ -37,13 +39,17 @@ export const Home = () => {
     end_date: format(endRange, 'yyyy-MM-dd') as DateFormat,
   }, {
     enabled: !!me && habits && habits.length > 0
-
   });
+  const { mutateAsync: updateHabit } = useUpdateHabit();
 
-  const generalLoading = useMemo(() => isLoadingMe || isLoadingHabits || isLoadingHabitsCheck, [isLoadingMe, isLoadingHabits, isLoadingHabitsCheck]);
+  const { data: habitCategories, isLoading: isLoadingHabitCategories } = useHabitCategories();
+  const { mutateAsync: createHabitCategory } = useCreateHabitCategory();
+
+  const generalLoading = useMemo(() => isLoadingMe || isLoadingHabits || isLoadingHabitsCheck || isLoadingHabitCategories, [isLoadingMe, isLoadingHabits, isLoadingHabitsCheck, isLoadingHabitCategories]);
 
   const [hideExplanation, setHideExplanation] = useState(true);
-  const [orderEnabled, setOrderEnabled] = useState(false);
+  const [editEnabled, setEditEnabled] = useState(false);
+  const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
 
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
@@ -92,6 +98,10 @@ export const Home = () => {
     }
   }
 
+  const onClickCreateHabit = () => {
+    setCreateHabitOpen(true);
+  }
+
   const getHabitCheck = (habit: Habit, formattedDay: string) => {
     return habitsCheckedHash?.[habit._id]?.[formattedDay];
   }
@@ -111,6 +121,24 @@ export const Home = () => {
     navigate({
       to: '/',
     });
+  }
+
+  const handleCreateCategory = async (data: CreateCategoryForm) => {
+    try {
+      let highestOrder = Number(habitCategories?.sort((a, b) => a.order - b.order).pop()?.order) || 1000;
+
+      highestOrder += 1000;
+      highestOrder = Number(highestOrder.toFixed(0));
+
+      await createHabitCategory({
+        name: data.name,
+        order: highestOrder
+      });
+
+      setCreateCategoryOpen(false);
+    } catch (error) {
+      toast.error('Erro ao criar categoria!');
+    }
   }
 
   const getAnalyticsFromDate = useCallback((date: Date) => {
@@ -149,6 +177,13 @@ export const Home = () => {
       compare: todayAnalytics.percentage - yesterdayAnalytics.percentage,
     })
   }, [getAnalyticsFromDate, currentDay])
+
+  const handleOrderChange = (habit: Habit, newOrder: number) => {
+    updateHabit({
+      _id: habit._id,
+      order: newOrder
+    });
+  }
 
   if (isLoadingMe) {
     return (
@@ -231,7 +266,7 @@ export const Home = () => {
                   )}
 
                   {habits && habits.length > 0 && !generalLoading && (
-                    <div className="border-2 border-neutral-400 rounded-md">
+                    <div className="border border-black rounded-md">
                       <div className={
                         cn(
                           "flex items-center justify-between border-b border-black p-4 pr-8 relative",
@@ -239,24 +274,11 @@ export const Home = () => {
                         )
                       }>
                         <div className="absolute top-0 right-0 border-l border-b border-black rounded-bl-md flex items-center divide-x divide-black">
-                          <button className={
-                            cn(
-                              "h-5 w-5 flex items-center justify-center",
-                              "hover:bg-black hover:text-white duration-200 transition-colors"
-                            )
-                          }
-                            onClick={() => setOrderEnabled(!orderEnabled)}
-                          >
-                            {orderEnabled ? (
-                              <BringToFront size={12} className="-translate-y-px translate-x-px" />
-                            ) : (
-                              <SendToBack size={14} className="-translate-y-px translate-x-px" />
-                            )}
-                          </button>
+
 
                           <button className={
                             cn(
-                              "h-5 w-5 flex items-center justify-center",
+                              "h-6 w-5 flex items-center justify-center",
                               "hover:bg-black hover:text-white duration-200 transition-colors"
                             )
                           }
@@ -268,6 +290,44 @@ export const Home = () => {
                               <BookOpen size={14} className="-translate-y-px translate-x-px" />
                             )}
                           </button>
+
+                          <button className={
+                            cn(
+                              "h-6 w-6 flex items-center justify-center",
+                              "hover:bg-black hover:text-white duration-200 transition-colors"
+                            )
+                          }
+                            onClick={() => setEditEnabled(!editEnabled)}
+                          >
+                            {editEnabled ? (
+                              <PencilOff size={12} className="-translate-y-px translate-x-px" />
+                            ) : (
+                              <PencilRuler size={14} className="-translate-y-px translate-x-px" />
+                            )}
+                          </button>
+
+                          {/* <button className={
+                            cn(
+                              "h-6 w-6 flex items-center justify-center",
+                              "hover:bg-black hover:text-white duration-200 transition-colors"
+                            )
+                          }
+                            onClick={() => setCreateCategoryOpen(true)}
+                          >
+                            <PackagePlus size={14} className="-translate-y-px translate-x-px" />
+                          </button> */}
+
+                          <button className={
+                            cn(
+                              "h-6 w-6 flex items-center justify-center",
+                              "hover:bg-black hover:text-white duration-200 transition-colors"
+                            )
+                          }
+                            onClick={onClickCreateHabit}
+                          >
+                            <CirclePlus size={14} className="-translate-y-px translate-x-px" />
+                          </button>
+
                         </div>
 
                         {!hideExplanation && (
@@ -281,15 +341,16 @@ export const Home = () => {
 
                       <div className="p-4" >
                         <HabitLines
+                          categories={habitCategories || []}
                           habits={habits}
-                          orderEnabled={orderEnabled}
+                          orderEnabled={editEnabled}
                           daysInMonth={daysInMonth}
                           getHabitCheck={getHabitCheck}
                           currentDay={currentDay}
                           onCheckHabit={handleCheckHabit}
+                          editEnabled={editEnabled}
+                          onOrderChange={handleOrderChange}
                         />
-
-
                       </div>
                     </div>
                   )}
@@ -302,6 +363,10 @@ export const Home = () => {
           </section>
 
         </div>
+
+        <Dialog open={createCategoryOpen} onOpenChange={setCreateCategoryOpen}>
+          <CreateCategoryModal onSave={handleCreateCategory} />
+        </Dialog>
       </main>
     </>
   )
