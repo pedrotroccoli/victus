@@ -123,7 +123,7 @@ export function HabitLineCheckboxes({
               </button>
             )}
 
-            <div className="flex items-center gap-4 min-w-12 w-full h-7 ">
+            <div className="flex items-center gap-4 min-w-12 w-full h-7 pl-1">
               <HabitName
                 item={habit}
                 isHovering={checkboxHovering}

@@ -261,6 +261,10 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
     }
   }
 
+  const onHideHabit = (categoryId: string) => () => {
+    setHideHabits((prev) => ({ ...prev, [categoryId]: !prev[categoryId] }));
+  }
+
   return (
     <div className="flex justify-between flex-col gap-4" >
       <DndContext
@@ -278,7 +282,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
                 <h6 className="text-sm font-medium font-[Recursive] truncate">{categorizedHabits.category?.name}</h6>
 
                 <button className="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-5 h-5 rounded-full flex items-center justify-center border border-neutral-500"
-                // onClick={onHideHabit}
+                  onClick={onHideHabit(id)}
                 >
                   {hideHabits ? <EyeOff size={12} /> : <Eye size={14} />}
                 </button>
