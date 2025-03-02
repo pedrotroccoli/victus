@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import {
   closestCenter,
   DndContext,
@@ -279,7 +280,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
         {Object.entries(habits).map(([id, categorizedHabits], index) => (
           <div>
             <div className="flex items-end justify-between relative">
-              <div className="min-w-24 md:min-w-48 h-7 flex items-center gap-2 mb-3 group">
+              <div className={cn("w-full h-7 flex items-center gap-2 mb-3 group", index === 0 && "min-w-24 md:min-w-48 w-auto")}>
                 <div className="w-[2px] rounded-md h-full bg-black"></div>
                 <h6 className="text-sm font-medium font-[Recursive] truncate">{categorizedHabits.category?.name}</h6>
 
