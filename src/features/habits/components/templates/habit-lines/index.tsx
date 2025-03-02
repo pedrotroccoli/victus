@@ -93,7 +93,6 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
     return Number((Number(order) + 0.0001).toFixed(4));
   }
 
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
@@ -275,11 +274,12 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
         onDragStart={handleDragStart}
+        autoScroll={true}
       >
         {Object.entries(habits).map(([id, categorizedHabits], index) => (
           <div>
-            <div className="flex items-end justify-between">
-              <div className="w-48 h-7 flex items-center gap-2 mb-3 group">
+            <div className="flex items-end justify-between relative">
+              <div className="min-w-24 md:min-w-48 h-7 flex items-center gap-2 mb-3 group">
                 <div className="w-[2px] rounded-md h-full bg-black"></div>
                 <h6 className="text-sm font-medium font-[Recursive] truncate">{categorizedHabits.category?.name}</h6>
 
@@ -291,10 +291,8 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
               </div>
 
               {index === 0 && (
-
-                <div className={"flex-1 overflow-x-auto md:max-w-full"}>
-                  <div className='flex items-end justify-end w-full'>
-
+                <div className="w-full overflow-x-auto flex-1" onScroll={handleScroll} data-scroll-line-id={id}>
+                  <div className='flex items-end w-full'>
                     {daysInMonth.map((day) => {
                       const formattedDay = format(day, 'MM/dd/yyyy');
                       const isToday = format(currentDay, 'MM/dd/yyyy') === formattedDay;
@@ -303,7 +301,6 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
                         <div className="min-w-7 min-h-7 border border-transparent flex items-center justify-center">
                           <HabitDay monthDay={day} currentDay={isToday} shouldShowArrow />
                         </div>
-
                       )
                     })}
                   </div>

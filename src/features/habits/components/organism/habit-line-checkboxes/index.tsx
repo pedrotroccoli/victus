@@ -106,7 +106,7 @@ export function HabitLineCheckboxes({
             isDragging && "shadow-lg z-50"
           )
         } >
-        <div className="max-w-full overflow-hidden w-48">
+        <div className="max-w-full overflow-hidden min-w-24 md:min-w-48">
           <div className="flex items-center gap-1 ">
 
             {enableOrder && (
@@ -123,7 +123,7 @@ export function HabitLineCheckboxes({
               </button>
             )}
 
-            <div className="flex items-center gap-4 min-w-12 w-full h-7 pl-1">
+            <div className="flex items-center gap-4 min-w-24 md:min-w-24 w-full h-7 pl-1">
               <HabitName
                 item={habit}
                 isHovering={checkboxHovering}
@@ -141,38 +141,42 @@ export function HabitLineCheckboxes({
           </div>
         </div>
 
-        <div className="flex justify-end overflow-x-auto md:max-w-full" onScroll={onScroll}
+        <div className="flex justify-end overflow-x-auto md:max-w-full max-w-full flex-1 no-scrollbar" onScroll={onScroll}
           data-scroll-line
           data-scroll-line-id={habit._id}
         >
-          {daysInMonth.map((monthDay, index) => {
-            const formattedDay = format(monthDay, 'MM/dd/yyyy');
-            const isToday = format(currentDay, 'MM/dd/yyyy') === formattedDay;
+          <div className="flex items-center w-full">
 
-            const habitRange = getHabitRange(habit, formattedDay);
-            const type = getType(habit, formattedDay, habitRange);
+            {daysInMonth.map((monthDay, index) => {
+              const formattedDay = format(monthDay, 'MM/dd/yyyy');
+              const isToday = format(currentDay, 'MM/dd/yyyy') === formattedDay;
 
-            return (
-              <div className="flex flex-col justify-end">
-                <HabitCheckbox
-                  isHovering={nameHovering}
-                  key={`${habit._id}-${formattedDay}`}
-                  disabled={!habitRange.isToday || type !== 'none'}
-                  invertPattern={index % 2 === 0}
-                  type={type}
-                  onCheck={handleCheckHabit(habit, formattedDay)}
-                  item={habit}
-                  today={isToday}
-                  onMouseEnter={() => setCheckboxHovering(true)}
-                  onMouseLeave={() => setCheckboxHovering(false)}
-                  isFirstColumn={index === 0}
-                  isLastColumn={index === daysInMonth.length - 1}
-                  isFirstRow={isFirstRow}
-                  isLastRow={isLastRow}
-                />
-              </div>
-            )
-          })}
+              const habitRange = getHabitRange(habit, formattedDay);
+              const type = getType(habit, formattedDay, habitRange);
+
+              return (
+                <div className="flex flex-col justify-end">
+                  <HabitCheckbox
+                    isHovering={nameHovering}
+                    key={`${habit._id}-${formattedDay}`}
+                    disabled={!habitRange.isToday || type !== 'none'}
+                    invertPattern={index % 2 === 0}
+                    type={type}
+                    onCheck={handleCheckHabit(habit, formattedDay)}
+                    item={habit}
+                    today={isToday}
+                    onMouseEnter={() => setCheckboxHovering(true)}
+                    onMouseLeave={() => setCheckboxHovering(false)}
+                    isFirstColumn={index === 0}
+                    isLastColumn={index === daysInMonth.length - 1}
+                    isFirstRow={isFirstRow}
+                    isLastRow={isLastRow}
+                  />
+                </div>
+              )
+            })}
+
+          </div>
         </div>
       </div>
     </div>
