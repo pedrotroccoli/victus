@@ -188,7 +188,7 @@ export const Home = () => {
       updateHabit({
         _id: habitChange.habit._id,
         order: habitChange.habit.order,
-        habit_category_id: habitChange.habit.habit_category_id || undefined
+        habit_category_id: habitChange.habit.habit_category_id
       });
     }
   }

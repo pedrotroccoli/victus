@@ -98,8 +98,10 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
     const { active, over } = event;
 
     if (active.id === over?.id) {
+
       if (active.data.current?.habit.changed_category) {
-        const categoryId = active.data.current?.habit.habit_category_id;
+        const categoryId = active.data.current?.habit.habit_category_id || 'general';
+
         setHabits((prev) => {
           const newHabits = {
             ...prev,
@@ -157,7 +159,6 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
 
       return;
     }
-
 
     const categoryId = active.data.current?.habit.habit_category_id || 'general';
 
@@ -236,6 +237,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
       const newHabit = {
         ...activeHabit,
         habit_category_id: newCategoryId,
+        habit_category: over?.data.current?.habit.habit_category || undefined,
         order: addOrder(over?.data.current?.habit.order || 0),
         changed_category: true,
       };
