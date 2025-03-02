@@ -388,7 +388,7 @@ export const Home = () => {
                                     <button className="flex items-center gap-4" onClick={() => handleCheckHabit(habit, format(currentDay, 'MM/dd/yyyy'))}>
                                       <label className="flex items-center gap-4">
                                         <Checkbox className="w-5 h-5" checked={checked} />
-                                        <p className={cn("font-medium", checked && "text-black/50 line-through")}>{habit.name}</p>
+                                        <p className={cn("font-medium text-left truncate text-ellipsis", checked && "text-black/50 line-through")}>{habit.name}</p>
                                       </label>
                                     </button>
                                   </li>
