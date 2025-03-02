@@ -18,6 +18,7 @@ import {
   verticalListSortingStrategy
 } from '@dnd-kit/sortable';
 import { format } from 'date-fns';
+import { omit } from 'lodash';
 import { Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from "react";
 import { HabitDay } from '../../atoms/habit-day';
@@ -96,7 +97,29 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (over && active.id === over.id) return;
+    if (active.id === over?.id) {
+      if (active.data.current?.habit.changed_category) {
+        const categoryId = active.data.current?.habit.habit_category_id;
+        setHabits((prev) => {
+          const newHabits = {
+            ...prev,
+            [categoryId]: {
+              ...prev[categoryId],
+              list: prev[categoryId].list.map((habit) => omit(habit, 'changed_category'))
+            }
+          }
+
+          return newHabits;
+        })
+      }
+
+      onHabitChange?.({
+        type: ['order', 'category'],
+        habit: active.data.current?.habit,
+      });
+
+      return;
+    }
 
     if (over?.data.current?.type === 'empty-box') {
       const newCategoryId = over?.data.current?.category?._id;
@@ -135,6 +158,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
       return;
     }
 
+
     const categoryId = active.data.current?.habit.habit_category_id || 'general';
 
     setHabits((prev) => {
@@ -165,8 +189,10 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
 
       newItems[newIndex].order = newOrder;
 
+      console.log('newItems[newIndex]', newItems[newIndex]);
+
       onHabitChange({
-        type: ['order'],
+        type: ['order', 'category'],
         habit: newItems[newIndex],
       });
 
@@ -210,7 +236,8 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
       const newHabit = {
         ...activeHabit,
         habit_category_id: newCategoryId,
-        order: addOrder(over?.data.current?.habit.order || 0)
+        order: addOrder(over?.data.current?.habit.order || 0),
+        changed_category: true,
       };
 
 
