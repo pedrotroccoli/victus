@@ -22,6 +22,7 @@ export interface UpdateHabitRequest {
   _id: string;
   name?: string;
   order?: number;
+  habit_category_id?: string;
 }
 
 export type CreateHabitResponse = Habit;
