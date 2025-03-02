@@ -9,7 +9,9 @@ import { useCheckHabit, useCreateHabit, useGetHabits, useGetHabitsCheck, useUpda
 
 import { Header } from "@/components/organisms/header";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AnalyticsBox } from "@/features/analytics/components/atoms/analytics-box";
 import { BoxesExplanation } from "@/features/habits/components/atoms/boxes-explanation";
 import { CreateCategoryForm, CreateCategoryModal } from "@/features/habits/components/templates/create-category-modal";
@@ -347,17 +349,56 @@ export const Home = () => {
                         <h3 className="text-lg font-[Recursive] font-medium">Hábitos</h3>
                       </div>
 
-                      <div className="p-4" >
-                        <HabitLines
-                          categories={habitCategories || []}
-                          habits={habits}
-                          orderEnabled={editEnabled}
-                          daysInMonth={daysInMonth}
-                          getHabitCheck={getHabitCheck}
-                          currentDay={currentDay}
-                          onHabitChange={onHabitChange}
-                          editEnabled={editEnabled}
-                        />
+                      <div className="p-4">
+
+                        <Tabs defaultValue="account" className="w-full">
+                          <TabsList className="border border-black p-0 h-auto">
+                            <TabsTrigger value="account" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Visão Geral</TabsTrigger>
+                            <TabsTrigger value="password" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Modo Foco</TabsTrigger>
+                          </TabsList>
+                          <TabsContent value="account" className="w-full">
+                            <div className="border-t border border-neutral-200 mt-4 mb-2" ></div>
+                            <HabitLines
+                              categories={habitCategories || []}
+                              habits={habits}
+                              orderEnabled={editEnabled}
+                              daysInMonth={daysInMonth}
+                              getHabitCheck={getHabitCheck}
+                              currentDay={currentDay}
+                              onHabitChange={onHabitChange}
+                              editEnabled={editEnabled}
+                            />
+                          </TabsContent>
+                          <TabsContent value="password">
+                            <div className="border-t border border-neutral-200 mt-4 mb-4" ></div>
+                            <ul className="grid gap-2">
+                              {habits.filter((habit) => {
+                                const validStart = habit.start_date && isBefore(habit.start_date, currentDay);
+                                const validEnd = habit.recurrence_type === 'infinite' || (habit.end_date && isAfter(habit.end_date, currentDay));
+
+                                if (validStart && validEnd) return true;
+
+                                return false;
+                              }).map((habit) => {
+
+                                const checked = getHabitCheck(habit, format(currentDay, 'MM/dd/yyyy'))?.checked || false;
+
+                                return (
+                                  <li key={habit._id} className="flex">
+                                    <button className="flex items-center gap-4" onClick={() => handleCheckHabit(habit, format(currentDay, 'MM/dd/yyyy'))}>
+                                      <label className="flex items-center gap-4">
+                                        <Checkbox className="w-5 h-5" checked={checked} />
+                                        <p className={cn("font-medium", checked && "text-black/50 line-through")}>{habit.name}</p>
+                                      </label>
+                                    </button>
+                                  </li>
+                                )
+
+                              })}
+                            </ul>
+                          </TabsContent>
+                        </Tabs>
+
                       </div>
                     </div>
                   )}
