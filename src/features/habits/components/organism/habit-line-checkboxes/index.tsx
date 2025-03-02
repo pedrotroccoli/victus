@@ -10,10 +10,7 @@ import { HabitName } from "../../molecules/habit-name";
 
 export interface HabitLineCheckboxesProps {
   habit: Habit;
-  category?: {
-    id: string;
-    name: string;
-  };
+  category?: HabitCategory;
   getHabitCheck?: (habit: Habit, day: string) => HabitCheck;
   daysInMonth: Date[];
   currentDay: Date;
