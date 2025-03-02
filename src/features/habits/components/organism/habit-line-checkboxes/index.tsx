@@ -87,7 +87,6 @@ export function HabitLineCheckboxes({
     transform,
     transition,
     isDragging,
-    isOver
   } = useSortable({ id: habit._id, data: { type: 'habit', habit: habit } });
 
   const style = {
@@ -132,9 +131,9 @@ export function HabitLineCheckboxes({
                 onMouseEnter={() => setNameHovering(true)}
                 onMouseLeave={() => setNameHovering(false)}
               />
-              {isOver && (
+              {/* {isOver && (
                 <div className="w-4 h-4 bg-red-500"></div>
-              )}
+              )} */}
               {/* {editEnabled && (
                 <Edit size={14} />
               )} */}
