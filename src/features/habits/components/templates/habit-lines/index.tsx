@@ -25,6 +25,11 @@ import { HabitEmptyBox } from '../../molecules/habit-empty-box';
 import { HabitLineCheckboxes } from "../../organism/habit-line-checkboxes";
 import { groupByCategory, HabitGroup } from './utils';
 
+export type HabitLineChange = {
+  type: ('check' | 'order' | 'category')[];
+  habit: Habit;
+}
+
 interface HabitLinesProps {
   habits: Habit[];
   categories: HabitCategory[];
@@ -32,13 +37,11 @@ interface HabitLinesProps {
   daysInMonth: Date[];
   getHabitCheck: (habit: Habit, day: string) => HabitCheck;
   currentDay: Date;
-  onCheckHabit: (habit: Habit, day: string) => void;
-  onOrderChange?: (habit: Habit, newOrder: number) => void;
-  onCategoryChange?: (habit: Habit, newCategory: HabitCategory, order: number) => void;
+  onHabitChange: (habitChange: HabitLineChange) => void;
   editEnabled: boolean;
 }
 
-export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, daysInMonth, getHabitCheck, currentDay, onCheckHabit, onOrderChange, onCategoryChange, editEnabled }: HabitLinesProps) => {
+export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, daysInMonth, getHabitCheck, currentDay, onHabitChange, editEnabled }: HabitLinesProps) => {
   const currentLineId = useRef<string | undefined>('');
   const [hideHabits, setHideHabits] = useState<Record<string, boolean>>({});
   const timeOut = useRef<NodeJS.Timeout | null>(null);
@@ -89,34 +92,45 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
     return Number((Number(order) + 0.0001).toFixed(4));
   }
 
+
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id === over.id) return;
 
     if (over?.data.current?.type === 'empty-box') {
-      console.log('Dropou no box vazio', active, over);
-      const categoryId = over.id;
+      const newCategoryId = over?.data.current?.category?._id;
       const oldCategoryId = active.data.current?.habit.habit_category_id || 'general';
+
       const newHabit = {
         ...active.data.current?.habit,
-        habit_category_id: categoryId,
+        habit_category_id: newCategoryId,
+        habit_category: over?.data.current?.category,
         order: 1000
       }
 
       setHabits((prev) => {
-        return {
+        const newHabits = {
           ...prev,
           [oldCategoryId]: {
             ...prev[oldCategoryId],
             list: prev[oldCategoryId].list.filter((habit) => habit._id !== active.data.current?.habit._id)
           },
-          [categoryId]: {
-            ...prev[categoryId],
-            list: [...prev[categoryId].list, newHabit]
+          [newCategoryId]: {
+            ...prev[newCategoryId],
+            category: newHabit.habit_category,
+            list: [...(prev[newCategoryId]?.list || []), newHabit]
           }
         }
+
+        return newHabits;
       })
+
+      onHabitChange?.({
+        type: ['category'],
+        habit: newHabit,
+      });
+
 
       return;
     }
@@ -148,9 +162,13 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
         newOrder = 1000;
       }
 
-      // onOrderChange?.(newItems[newIndex], newOrder);
 
       newItems[newIndex].order = newOrder;
+
+      onHabitChange({
+        type: ['order'],
+        habit: newItems[newIndex],
+      });
 
       return ({
         ...prev,
@@ -164,6 +182,13 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
     setDraggingHabit(null);
   }
 
+  const onCheckHabit = (habit: Habit) => {
+    onHabitChange({
+      type: ['check'],
+      habit: habit,
+    });
+  }
+
   const [draggingHabit, setDraggingHabit] = useState<Habit | null>(null);
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -171,7 +196,9 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
   }
 
   const handleDragOver = (event: DragOverEvent) => {
-    if (event.over?.data.current?.type === 'empty-box') return;
+    if (event.over?.data.current?.type === 'empty-box') {
+      return;
+    }
 
     if (event.over?.data.current?.habit?.habit_category_id !== event.active?.data.current?.habit?.habit_category_id) {
       const { active, over } = event;
@@ -185,6 +212,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
         habit_category_id: newCategoryId,
         order: addOrder(over?.data.current?.habit.order || 0)
       };
+
 
       setHabits((prev) => {
         const oldCategory = prev[oldCategoryId || 'general'];
@@ -220,7 +248,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
             <div className="flex items-end justify-between">
               <div className="w-48 h-7 flex items-center gap-2 mb-3 group">
                 <div className="w-[2px] rounded-md h-full bg-black"></div>
-                <h6 className="text-sm font-medium font-[Recursive]">{categorizedHabits.name}</h6>
+                <h6 className="text-sm font-medium font-[Recursive] truncate">{categorizedHabits.category?.name}</h6>
 
                 <button className="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-5 h-5 rounded-full flex items-center justify-center border border-neutral-500"
                 // onClick={onHideHabit}
@@ -251,9 +279,8 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
             </div>
 
             <>
-
               {categorizedHabits && categorizedHabits?.list?.length === 0 && (
-                <HabitEmptyBox id={id} />
+                <HabitEmptyBox category={categorizedHabits.category} />
               )}
               {categorizedHabits && categorizedHabits?.list?.length > 0 && (
 
@@ -264,10 +291,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
                   {categorizedHabits?.list?.sort((a: Habit, b: Habit) => (a.order || 0) - (b.order || 0)).map((item: Habit, habitIndex: number, currentArray) => (
                     <HabitLineCheckboxes
                       editEnabled={editEnabled}
-                      category={{
-                        id,
-                        name: categorizedHabits.name
-                      }}
+                      category={categorizedHabits.category}
                       key={item._id}
                       onScroll={handleScroll}
                       enableOrder={orderEnabled}
