@@ -111,7 +111,7 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
       byweekday,
     });
 
-    return rrule.toString();
+    return rrule.toString().replace('RRULE:', '');
   }
 
   const handleSubmit: SubmitHandler<CreateHabitForm> = async (data) => {
@@ -119,6 +119,7 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
       setLoading(true);
 
       const rrule = generateRrule(data);
+
 
       await onSave?.({
         ...data,
