@@ -1,5 +1,5 @@
 import { addDays, eachDayOfInterval, format, isAfter, isBefore, subDays } from "date-fns";
-import { Book, BookOpen, Box, CirclePlus, LoaderCircle, PencilOff, PencilRuler, PlusCircle } from "lucide-react";
+import { Book, BookOpen, Box, CirclePlus, LoaderCircle, PackagePlus, PencilOff, PencilRuler, PlusCircle } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { Helmet } from "react-helmet";
 
@@ -14,7 +14,7 @@ import { AnalyticsBox } from "@/features/analytics/components/atoms/analytics-bo
 import { BoxesExplanation } from "@/features/habits/components/atoms/boxes-explanation";
 import { CreateCategoryForm, CreateCategoryModal } from "@/features/habits/components/templates/create-category-modal";
 import { CreateHabitModal, CreateHabitModalOnSaveProps } from "@/features/habits/components/templates/create-habit-modal";
-import { HabitLines } from "@/features/habits/components/templates/habit-lines";
+import { HabitLineChange, HabitLines } from "@/features/habits/components/templates/habit-lines";
 import { cn } from "@/lib/utils";
 import { useCreateHabitCategory, useHabitCategories } from "@/services/habit-category/hooks";
 import { DateFormat } from "@/services/habits/types";
@@ -178,11 +178,19 @@ export const Home = () => {
     })
   }, [getAnalyticsFromDate, currentDay])
 
-  const handleOrderChange = (habit: Habit, newOrder: number) => {
-    updateHabit({
-      _id: habit._id,
-      order: newOrder
-    });
+
+  const onHabitChange = (habitChange: HabitLineChange) => {
+    if (habitChange.type.includes('check')) {
+      handleCheckHabit(habitChange.habit, format(currentDay, 'MM/dd/yyyy'));
+    }
+
+    if (habitChange.type.includes('order') || habitChange.type.includes('category')) {
+      updateHabit({
+        _id: habitChange.habit._id,
+        order: habitChange.habit.order,
+        habit_category_id: habitChange.habit.habit_category_id || undefined
+      });
+    }
   }
 
   if (isLoadingMe) {
@@ -306,7 +314,7 @@ export const Home = () => {
                             )}
                           </button>
 
-                          {/* <button className={
+                          <button className={
                             cn(
                               "h-6 w-6 flex items-center justify-center",
                               "hover:bg-black hover:text-white duration-200 transition-colors"
@@ -315,7 +323,7 @@ export const Home = () => {
                             onClick={() => setCreateCategoryOpen(true)}
                           >
                             <PackagePlus size={14} className="-translate-y-px translate-x-px" />
-                          </button> */}
+                          </button>
 
                           <button className={
                             cn(
@@ -347,9 +355,8 @@ export const Home = () => {
                           daysInMonth={daysInMonth}
                           getHabitCheck={getHabitCheck}
                           currentDay={currentDay}
-                          onCheckHabit={handleCheckHabit}
+                          onHabitChange={onHabitChange}
                           editEnabled={editEnabled}
-                          onOrderChange={handleOrderChange}
                         />
                       </div>
                     </div>
