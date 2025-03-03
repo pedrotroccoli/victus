@@ -1,5 +1,5 @@
 import { QueryClient, useMutation, UseMutationOptions, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
-import { checkHabit, createHabit, getAllHabitsCheck, getHabits, updateHabit } from "./services";
+import { checkHabit, createHabit, deleteHabit, getAllHabitsCheck, getHabits, updateHabit } from "./services";
 import { CheckHabitRequest, CheckHabitResponse, CreateHabitRequest, CreateHabitResponse, GetAllHabitsCheckRequest, GetAllHabitsCheckResponse, GetHabitsRequest, GetHabitsResponse, UpdateHabitRequest } from "./types";
 
 type UseGetHabitsProps = Partial<UseQueryOptions<GetHabitsResponse, Error, GetHabitsResponse, string[]>>;
@@ -84,6 +84,19 @@ export const useUpdateHabit = (options?: Partial<UseMutationOptions<Habit, Error
       queryClient.setQueryData(['habits'], (prev: Habit[]) => prev.map(habit => habit._id === params._id ? response : habit));
 
       return response;
+    }
+  })
+}
+
+export const useDeleteHabit = (options?: Partial<UseMutationOptions<void, Error, string>>) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    ...options,
+    mutationFn: async (id) => {
+      await deleteHabit(id);
+
+      queryClient.setQueryData(['habits'], (prev: Habit[]) => prev.filter(habit => habit._id !== id));
     }
   })
 }

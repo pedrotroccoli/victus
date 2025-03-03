@@ -27,6 +27,10 @@ export const createHabit = async ({ infinite, ...params }: CreateHabitRequest): 
   return data;
 }
 
+export const deleteHabit = async (id: string): Promise<void> => {
+  await baseApi.delete(`/habits/${id}`);
+}
+
 export const updateHabit = async (params: UpdateHabitRequest): Promise<Habit> => {
   const { data } = await baseApi.put(`/habits/${params._id}`, {
     ...params,
