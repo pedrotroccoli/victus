@@ -5,9 +5,10 @@ import { Helmet } from "react-helmet";
 
 import { useMe } from "@/services/auth";
 import { signOut } from "@/services/auth/services";
-import { useCheckHabit, useCreateHabit, useGetHabits, useGetHabitsCheck, useUpdateHabit } from "@/services/habits/hooks";
+import { useCheckHabit, useCreateHabit, useDeleteHabit, useGetHabits, useGetHabitsCheck, useUpdateHabit } from "@/services/habits/hooks";
 
 import { Header } from "@/components/organisms/header";
+import { AlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -16,6 +17,7 @@ import { AnalyticsBox } from "@/features/analytics/components/atoms/analytics-bo
 import { BoxesExplanation } from "@/features/habits/components/atoms/boxes-explanation";
 import { CreateCategoryForm, CreateCategoryModal } from "@/features/habits/components/templates/create-category-modal";
 import { CreateHabitModal, CreateHabitModalOnSaveProps } from "@/features/habits/components/templates/create-habit-modal";
+import { DeleteHabitModal } from "@/features/habits/components/templates/delete-habit-modal";
 import { HabitLineChange, HabitLines } from "@/features/habits/components/templates/habit-lines";
 import { cn } from "@/lib/utils";
 import { useCreateHabitCategory, useHabitCategories } from "@/services/habit-category/hooks";
@@ -46,12 +48,14 @@ export const Home = () => {
 
   const { data: habitCategories, isLoading: isLoadingHabitCategories } = useHabitCategories();
   const { mutateAsync: createHabitCategory } = useCreateHabitCategory();
+  const { mutateAsync: deleteHabit } = useDeleteHabit();
 
   const generalLoading = useMemo(() => isLoadingMe || isLoadingHabits || isLoadingHabitsCheck || isLoadingHabitCategories, [isLoadingMe, isLoadingHabits, isLoadingHabitsCheck, isLoadingHabitCategories]);
 
   const [hideExplanation, setHideExplanation] = useState(true);
   const [editEnabled, setEditEnabled] = useState(false);
   const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
+  const [habitToDelete, setHabitToDelete] = useState<Habit | null>(null);
 
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
@@ -193,6 +197,14 @@ export const Home = () => {
         habit_category_id: habitChange.habit.habit_category_id
       });
     }
+  }
+
+  const onDeleteHabit = (habit: Habit) => {
+    setHabitToDelete(habit);
+  }
+
+  const onDeleteHabitConfirm = () => {
+    deleteHabit(habitToDelete?._id || '');
   }
 
   if (isLoadingMe) {
@@ -359,6 +371,7 @@ export const Home = () => {
                           <TabsContent value="account" className="w-full">
                             <div className="border-t border border-neutral-200 mt-4 mb-2" ></div>
                             <HabitLines
+                              onDeleteHabit={onDeleteHabit}
                               categories={habitCategories || []}
                               habits={habits}
                               orderEnabled={editEnabled}
@@ -415,6 +428,10 @@ export const Home = () => {
         <Dialog open={createCategoryOpen} onOpenChange={setCreateCategoryOpen}>
           <CreateCategoryModal onSave={handleCreateCategory} />
         </Dialog>
+
+        <AlertDialog open={!!habitToDelete} onOpenChange={() => setHabitToDelete(null)}>
+          <DeleteHabitModal habit={habitToDelete || undefined} onConfirm={onDeleteHabitConfirm} onCancel={() => setHabitToDelete(null)} />
+        </AlertDialog>
       </main>
     </>
   )

@@ -41,6 +41,9 @@ export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }
         </TooltipTrigger>
         <TooltipContent className="p-2">
           <div className="flex flex-col gap-1">
+            {process.env.NODE_ENV === 'development' && (
+              <p className="text-xs text-black/75 font-medium">Id: {item._id}</p>
+            )}
             <p className="text-sm text-bold text-black">Informações:</p>
             <span className="text-xs text-black/75 font-medium">Tipo: {typeToName[item.recurrence_type as keyof typeof typeToName] || 'Sem definição'}</span>
             <span className="text-xs text-black/75 font-medium">Iniciou em: {format(item.created_at, 'dd/MM/yyyy')}</span>
