@@ -41,9 +41,10 @@ interface HabitLinesProps {
   currentDay: Date;
   onHabitChange: (habitChange: HabitLineChange) => void;
   editEnabled: boolean;
+  onDeleteHabit: (habit: Habit) => void;
 }
 
-export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, daysInMonth, getHabitCheck, currentDay, onHabitChange, editEnabled }: HabitLinesProps) => {
+export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, daysInMonth, getHabitCheck, currentDay, onHabitChange, editEnabled, onDeleteHabit }: HabitLinesProps) => {
   const currentLineId = useRef<string | undefined>('');
   const [hideHabits, setHideHabits] = useState<Record<string, boolean>>({});
   const timeOut = useRef<NodeJS.Timeout | null>(null);
@@ -292,7 +293,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
               </div>
 
               {index === 0 && (
-                <div className="w-full overflow-x-auto flex-1" onScroll={handleScroll} data-scroll-line-id={id}>
+                <div className="w-full overflow-x-auto flex-1 no-scrollbar" onScroll={handleScroll} data-scroll-line-id={id}>
                   <div className='flex items-end w-full'>
                     {daysInMonth.map((day) => {
                       const formattedDay = format(day, 'MM/dd/yyyy');
@@ -321,7 +322,8 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
                 >
                   {categorizedHabits?.list?.sort((a: Habit, b: Habit) => (a.order || 0) - (b.order || 0)).map((item: Habit, habitIndex: number, currentArray) => (
                     <HabitLineCheckboxes
-                      editEnabled={editEnabled}
+                      enableEdit={editEnabled}
+                      enableDelete={editEnabled}
                       category={categorizedHabits.category}
                       key={item._id}
                       onScroll={handleScroll}
@@ -331,6 +333,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
                       getHabitCheck={getHabitCheck}
                       currentDay={currentDay}
                       onCheckHabit={onCheckHabit}
+                      onDelete={() => onDeleteHabit?.(item)}
                       isFirstRow={habitIndex === 0}
                       isLastRow={habitIndex === currentArray.length - 1}
                       hideHabits={hideHabits[id]}
@@ -347,10 +350,10 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
         <DragOverlay modifiers={[restrictToWindowEdges]}>
           {draggingHabit && (
             <HabitLineCheckboxes
+              enableEdit={false}
               isFirstRow={false}
               isLastRow={false}
               hideHabits={false}
-              editEnabled={editEnabled}
               onScroll={handleScroll}
               enableOrder={orderEnabled}
               habit={draggingHabit}
