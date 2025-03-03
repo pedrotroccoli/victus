@@ -3,7 +3,7 @@ import { isAcceptedByRRule } from "@/utils/habits";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from '@dnd-kit/utilities';
 import { format, isAfter, isBefore, subDays } from "date-fns";
-import { GripVertical } from "lucide-react";
+import { GripVertical, Trash } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { HabitCheckbox } from "../../molecules/habit-checkbox";
 import { HabitName } from "../../molecules/habit-name";
@@ -16,12 +16,14 @@ export interface HabitLineCheckboxesProps {
   currentDay: Date;
   onCheckHabit?: (habit: Habit, day: string) => void;
   isFirstRow: boolean;
+  onDelete?: () => void;
   isLastRow: boolean;
-  enableOrder: boolean;
+  enableOrder?: boolean;
+  enableEdit?: boolean;
+  enableDelete?: boolean;
   onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
   hideHabits: boolean;
   onHideHabit?: () => void;
-  editEnabled: boolean;
 }
 
 interface HabitRange {
@@ -39,8 +41,14 @@ export function HabitLineCheckboxes({
   getHabitCheck,
   currentDay,
   onCheckHabit,
-  isFirstRow, isLastRow, onScroll, enableOrder,
+  isFirstRow,
+  isLastRow,
+  onScroll,
+  enableOrder,
   hideHabits,
+  enableEdit,
+  enableDelete,
+  onDelete
 }: HabitLineCheckboxesProps) {
   const [nameHovering, setNameHovering] = useState(false);
   const [checkboxHovering, setCheckboxHovering] = useState(false);
@@ -123,7 +131,7 @@ export function HabitLineCheckboxes({
               </button>
             )}
 
-            <div className="flex items-center gap-4 min-w-24 md:min-w-24 w-full h-7 pl-1">
+            <div className="flex items-center min-w-24 w-full h-7 pl-1 data-[edit-enabled=true]:max-w-40" data-edit-enabled={enableEdit || enableDelete} >
               <HabitName
                 item={habit}
                 isHovering={checkboxHovering}
@@ -131,12 +139,19 @@ export function HabitLineCheckboxes({
                 onMouseEnter={() => setNameHovering(true)}
                 onMouseLeave={() => setNameHovering(false)}
               />
-              {/* {isOver && (
-                <div className="w-4 h-4 bg-red-500"></div>
-              )} */}
-              {/* {editEnabled && (
-                <Edit size={14} />
-              )} */}
+
+              <div className="flex items-center gap-px ml-1">
+                {/* {enableEdit && (
+                  <button className="cursor-pointer border border-transparent hover:border-black rounded-full p-1 group">
+                    <Pencil size={12} className="cursor-pointer text-neutral-400 group-hover:text-black" />
+                  </button>
+                )} */}
+                {enableDelete && (
+                  <button className="cursor-pointer border border-transparent hover:border-black rounded-full p-1 group" onClick={onDelete}>
+                    <Trash size={12} className="cursor-pointer text-neutral-400 group-hover:text-black" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
