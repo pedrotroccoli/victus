@@ -117,7 +117,8 @@ export const Home = () => {
 
     checkHabit({
       habit_id: habit._id,
-      check_id: habitCheck?._id
+      check_id: habitCheck?._id,
+      checked: !habitCheck?.checked
     });
   }
 

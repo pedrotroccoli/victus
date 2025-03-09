@@ -30,6 +30,7 @@ export type CreateHabitResponse = Habit;
 export interface CheckHabitRequest {
   habit_id: string;
   check_id?: string;
+  checked?: boolean;
 }
 
 export type CheckHabitResponse = HabitCheck;
