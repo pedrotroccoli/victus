@@ -1,17 +1,18 @@
-import { Input as UiInput } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface FieldWrapperProps {
   label?: string;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
   message?: string;
   messageClassName?: string;
+  children: React.ReactNode;
+  className?: string;
 }
 
-export const Input = ({ iconLeft, iconRight, className, label, message, messageClassName, ...props }: InputProps) => {
+export const FieldWrapper = ({ label, iconLeft, iconRight, message, messageClassName, children, className }: FieldWrapperProps) => {
   return (
-    <label className="flex flex-col gap-2">
+    <label className={cn("flex flex-col gap-2", className)}>
       {label && <span className="text-sm text-black font-medium">{label}</span>}
 
       <div className="relative">
@@ -20,7 +21,10 @@ export const Input = ({ iconLeft, iconRight, className, label, message, messageC
             {iconLeft}
           </div>
         )}
-        <UiInput {...props} className={cn('hover:bg-neutral-100', iconLeft ? "pl-10" : "", iconRight ? "pr-10" : "", className)} />
+
+        <div>
+          {children}
+        </div>
 
         {iconRight && (
           <div className="absolute right-4 top-1/2 -translate-y-1/2">

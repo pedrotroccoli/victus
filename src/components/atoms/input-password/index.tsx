@@ -1,4 +1,4 @@
-import { Input, InputProps } from "@/components/ions/input";
+import { Input, InputProps } from "@/components/atoms/input";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
