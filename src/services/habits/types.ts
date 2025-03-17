@@ -23,6 +23,10 @@ export interface UpdateHabitRequest {
   name?: string;
   order?: number;
   habit_category_id?: string;
+  recurrence_type?: string;
+  recurrence_details?: {
+    rule: string;
+  };
 }
 
 export type CreateHabitResponse = Habit;
