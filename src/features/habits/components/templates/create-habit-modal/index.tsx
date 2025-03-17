@@ -1,7 +1,5 @@
-import { Frequency, RRule, Weekday } from 'rrule';
-import { z } from 'zod';
-
 import { CheckboxField } from '@/components/molecules/form/CheckboxField';
+import { ComboBoxField } from '@/components/molecules/form/combo-box-field';
 import { DatePickerField } from '@/components/molecules/form/DatePickerField';
 import { SelectField } from '@/components/molecules/form/SelectField';
 import { TextField } from '@/components/molecules/form/TextField';
@@ -9,110 +7,55 @@ import { ToggleGroupField } from '@/components/molecules/form/ToggleGroupField';
 import { Button } from '@/components/ui/button';
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { addDays, isBefore, sub } from 'date-fns';
+import { addDays, format, isBefore, sub } from 'date-fns';
 import { Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
-
-const daysOfWeek = [
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-  'sunday',
-] as const
-
-const daysOfWeekTranslation = {
-  monday: 'S',
-  tuesday: 'T',
-  wednesday: 'Q',
-  thursday: 'Q',
-  friday: 'S',
-  saturday: 'S',
-  sunday: 'D',
-}
+import { CreateHabitForm, CreateHabitModalProps } from './types';
+import { createHabitValidation, daysOfWeek, daysOfWeekTranslation, generateRrule, rruleParse } from './utils';
 
 const daysOfWeekOptions = daysOfWeek.map(item => ({
   label: daysOfWeekTranslation[item as keyof typeof daysOfWeekTranslation],
   value: item,
 }))
 
-const createHabitValidation = z.object({
-  name: z.string().min(2, 'Nome do hábito é obrigatório'),
-  start_date: z.date(),
-  end_date: z.date(),
-  infinite: z.boolean().optional(),
-  frequency: z.enum(['daily', 'weekly', 'monthly', 'yearly']),
-  week_days: z.array(z.enum(daysOfWeek)).optional(),
-}).refine((data) => {
-  if (data.frequency === 'weekly' && !data.week_days?.length) {
-    return false;
-  }
-
-  return true;
-}, {
-  path: ['week_days'],
-  message: 'Selecione pelo menos um dia'
-})
-
-type CreateHabitForm = z.infer<typeof createHabitValidation>;
-
-export type CreateHabitModalOnSaveProps = CreateHabitForm & {
-  rrule: string;
-}
-
-export interface CreateHabitModalProps {
-  onSave?: (data: CreateHabitModalOnSaveProps) => void;
-}
-
-
-export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
+export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModalProps) => {
   const [loading, setLoading] = useState(false);
 
-  const defaultValues = {
-    name: '',
-    start_date: new Date(),
-    end_date: addDays(new Date(), 1),
-    infinite: false,
-    frequency: 'daily' as const,
-    week_days: [],
-  }
 
-  const form = useForm<z.infer<typeof createHabitValidation>>({
+  const defaultValues = useMemo(() => {
+    const recurrenceDetails = rruleParse(habit?.recurrence_details?.rule);
+
+    return !habit ? {
+      type: 'create',
+      name: '',
+      start_date: new Date(),
+      end_date: addDays(new Date(), 1),
+      infinite: false,
+      frequency: 'daily' as const,
+      week_days: [],
+      category: null,
+    } : {
+      type: 'edit',
+      name: habit.name,
+      start_date: new Date(habit.start_date),
+      end_date: habit.end_date ? new Date(habit.end_date) : addDays(new Date(), 1),
+      infinite: !habit.end_date,
+      frequency: recurrenceDetails?.type,
+      week_days: recurrenceDetails?.week_days,
+      category: habit?.habit_category?._id || null,
+    } as CreateHabitForm
+  }, [habit]);
+
+  const form = useForm<CreateHabitForm>({
     resolver: zodResolver(createHabitValidation),
     defaultValues,
   });
 
-  const generateRrule = (data: CreateHabitForm) => {
-    const { end_date, infinite } = data;
+  useEffect(() => {
+    form.reset(defaultValues);
+  }, [form, defaultValues, habit]);
 
-    const frequencyMap = {
-      daily: RRule.DAILY,
-      weekly: RRule.WEEKLY,
-    } as Record<string, Frequency>;
-
-    const daysMap = {
-      monday: RRule.MO,
-      tuesday: RRule.TU,
-      wednesday: RRule.WE,
-      thursday: RRule.TH,
-      friday: RRule.FR,
-      saturday: RRule.SA,
-      sunday: RRule.SU,
-    } as Record<string, Weekday>;
-
-    const byweekday = data.week_days && data.frequency === 'weekly' ? data.week_days.map((day) => daysMap[day]) : undefined;
-
-    const rrule = new RRule({
-      freq: frequencyMap[data.frequency] || RRule.DAILY,
-      until: !infinite ? end_date : undefined,
-      byweekday,
-    });
-
-    return rrule.toString().replace('RRULE:', '');
-  }
 
   const handleSubmit: SubmitHandler<CreateHabitForm> = async (data) => {
     try {
@@ -122,7 +65,12 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
 
 
       await onSave?.({
-        ...data,
+        infinite: data.infinite ? true : false,
+        name: data.name,
+        start_date: data.start_date,
+        frequency: data.frequency,
+        end_date: data.end_date,
+        category: data.category,
         rrule,
       });
 
@@ -141,15 +89,22 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
   }
 
   const endDate = form.watch('infinite') ? undefined : form.watch('end_date');
+  const categoriesOptions = useMemo(() => {
+    const list = [{ label: 'Sem categoria', value: null }] as { label: string; value: string | null }[];
+
+    list.push(...categories?.map(category => ({ label: category.name, value: category._id })) || []);
+
+    return list;
+  }, [categories]);
 
 
 
   return (
     <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded w-[calc(100vw-2rem)] rounded-lg">
       <DialogHeader className="p-4 border-b text-left">
-        <DialogTitle>Criar hábito</DialogTitle>
+        <DialogTitle>{!habit ? 'Criar hábito' : 'Editar hábito'}</DialogTitle>
         <DialogDescription className="text-black/70">
-          Defina a data de início e fim do hábito
+          {habit ? 'Edite as informações do hábito' : 'Defina a data de início e fim do hábito'}
         </DialogDescription>
       </DialogHeader>
       <FormProvider {...form}>
@@ -164,8 +119,9 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
 
           <div className="border-t border-neutral-200 my-px"></div>
 
-          <div>
+          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
             <SelectField
+              wrapperClassName={categories && categories.length > 0 ? '' : 'col-span-2'}
               name="frequency"
               label='Frequência'
               placeholder='Selecione a frequência'
@@ -178,9 +134,19 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
               ]}
             />
 
-            {form.watch('frequency') === 'weekly' && (
+            {categories && categories.length > 0 && (
+              <ComboBoxField
+                label='Categoria'
+                name="category"
+                options={categoriesOptions}
+                placeholder="Selecione a categoria"
+                commandPlaceholder="Pesquisar categoria"
+                commandEmpty="Nenhuma categoria encontrada"
+              />
+            )}
 
-              <div className="mt-4 flex justify-start">
+            {form.watch('frequency') === 'weekly' && (
+              <div className="mt-4 flex justify-start col-span-2">
                 <ToggleGroupField
                   name="week_days"
                   options={daysOfWeekOptions}
@@ -196,6 +162,7 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <DatePickerField name="start_date" label="Data de início"
+                disabledMessage={habit ? format(habit.start_date, 'dd/MM/yyyy') : undefined}
                 disabled={(date) => {
                   if (isBefore(date, sub(new Date(), { days: 1 }))) {
                     return true;
@@ -206,7 +173,8 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
                   }
 
                   return false;
-                }} />
+                }}
+              />
             </div>
             <div>
               <DatePickerField name="end_date" label="Data de fim" disabled={(date) => {
@@ -220,10 +188,10 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
 
                 return false;
               }}
-                disabledMessage={form.watch('infinite') ? 'Sem fim' : undefined}
+                disabledMessage={habit ? habit.end_date ? format(habit.end_date, 'dd/MM/yyyy') : 'Sem fim' : form.watch('infinite') ? 'Sem fim' : undefined}
               />
               <div className="flex items-center gap-2 mt-2">
-                <CheckboxField className="rounded" name="infinite" />
+                <CheckboxField className="rounded" name="infinite" disabled={!!habit} />
                 <p className="text-sm font-medium">Infinito</p>
               </div>
             </div>
@@ -234,7 +202,7 @@ export const CreateHabitModal = ({ onSave }: CreateHabitModalProps) => {
             onClick={form.handleSubmit(handleSubmit, handleError)}
             disabled={loading}
           >
-            {loading ? <Loader2 size={16} className="animate-spin" /> : 'Criar'}
+            {loading ? <Loader2 size={16} className="animate-spin" /> : !habit ? 'Criar' : 'Salvar'}
           </Button>
         </div>
       </FormProvider>
