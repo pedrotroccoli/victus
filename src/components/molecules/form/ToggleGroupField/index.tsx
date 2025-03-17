@@ -1,4 +1,4 @@
-import { ToggleGroup, ToggleGroupProps } from "@/components/ions/toggle-group";
+import { ToggleGroup, ToggleGroupProps } from "@/components/atoms/toggle-group";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface ToggleGroupFieldProps extends ToggleGroupProps {
