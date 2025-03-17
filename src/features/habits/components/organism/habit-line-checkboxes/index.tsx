@@ -3,7 +3,7 @@ import { isAcceptedByRRule } from "@/utils/habits";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from '@dnd-kit/utilities';
 import { format, isAfter, isBefore, subDays } from "date-fns";
-import { GripVertical, Trash } from "lucide-react";
+import { GripVertical, Pencil, Trash } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { HabitCheckbox } from "../../molecules/habit-checkbox";
 import { HabitName } from "../../molecules/habit-name";
@@ -24,6 +24,7 @@ export interface HabitLineCheckboxesProps {
   onScroll?: (event: React.UIEvent<HTMLDivElement>) => void;
   hideHabits: boolean;
   onHideHabit?: () => void;
+  onEdit?: () => void;
 }
 
 interface HabitRange {
@@ -48,7 +49,8 @@ export function HabitLineCheckboxes({
   hideHabits,
   enableEdit,
   enableDelete,
-  onDelete
+  onDelete,
+  onEdit
 }: HabitLineCheckboxesProps) {
   const [nameHovering, setNameHovering] = useState(false);
   const [checkboxHovering, setCheckboxHovering] = useState(false);
@@ -141,11 +143,11 @@ export function HabitLineCheckboxes({
               />
 
               <div className="flex items-center gap-px ml-1">
-                {/* {enableEdit && (
-                  <button className="cursor-pointer border border-transparent hover:border-black rounded-full p-1 group">
+                {enableEdit && (
+                  <button className="cursor-pointer border border-transparent hover:border-black rounded-full p-1 group" onClick={onEdit}>
                     <Pencil size={12} className="cursor-pointer text-neutral-400 group-hover:text-black" />
                   </button>
-                )} */}
+                )}
                 {enableDelete && (
                   <button className="cursor-pointer border border-transparent hover:border-black rounded-full p-1 group" onClick={onDelete}>
                     <Trash size={12} className="cursor-pointer text-neutral-400 group-hover:text-black" />
