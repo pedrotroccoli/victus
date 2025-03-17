@@ -1,4 +1,4 @@
-import { Input, InputProps } from "@/components/ions/input";
+import { Input, InputProps } from "@/components/atoms/input";
 import { cn } from "@/lib/utils";
 import { Controller, useFormContext } from "react-hook-form";
 

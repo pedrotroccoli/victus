@@ -1,4 +1,4 @@
-import { Select, SelectProps } from "@/components/ions/select";
+import { Select, SelectProps } from "@/components/atoms/select";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface SelectFieldProps extends SelectProps {
