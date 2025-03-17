@@ -29,6 +29,7 @@ export function DatePicker({ className, selected, disabledMessage, ...props }: D
           className={cn(
             "w-full justify-start text-left font-normal hover:border-black hover:bg-neutral-100",
             !date && "text-muted-foreground",
+            disabledMessage && "cursor-not-allowed",
             className
           )}
           disabled={!!disabledMessage}
