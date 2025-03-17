@@ -42,9 +42,10 @@ interface HabitLinesProps {
   onHabitChange: (habitChange: HabitLineChange) => void;
   editEnabled: boolean;
   onDeleteHabit: (habit: Habit) => void;
+  onEditHabit: (habit: Habit) => void;
 }
 
-export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, daysInMonth, getHabitCheck, currentDay, onHabitChange, editEnabled, onDeleteHabit }: HabitLinesProps) => {
+export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, daysInMonth, getHabitCheck, currentDay, onHabitChange, editEnabled, onDeleteHabit, onEditHabit }: HabitLinesProps) => {
   const currentLineId = useRef<string | undefined>('');
   const [hideHabits, setHideHabits] = useState<Record<string, boolean>>({});
   const timeOut = useRef<NodeJS.Timeout | null>(null);
@@ -338,6 +339,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
                       isLastRow={habitIndex === currentArray.length - 1}
                       hideHabits={hideHabits[id]}
                       onHideHabit={handleHideHabits(id)}
+                      onEdit={() => onEditHabit?.(item)}
                     />
                   ))}
                 </SortableContext>

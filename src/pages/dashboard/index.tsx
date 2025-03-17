@@ -56,7 +56,7 @@ export const Home = () => {
   const [editEnabled, setEditEnabled] = useState(false);
   const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
   const [habitToDelete, setHabitToDelete] = useState<Habit | null>(null);
-
+  const [editHabit, setEditHabit] = useState<Habit | null>(null);
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
 
@@ -208,6 +208,28 @@ export const Home = () => {
     deleteHabit(habitToDelete?._id || '');
   }
 
+  const handleEditHabit = (habit: Habit) => {
+    setEditHabit(habit);
+  }
+
+
+  const handleEditHabitSave = (data: CreateHabitModalOnSaveProps) => {
+    if (!editHabit) return;
+
+    updateHabit({
+      _id: editHabit._id,
+      name: data.name,
+      recurrence_type: data.frequency,
+      recurrence_details: {
+        rule: data.rrule
+      }
+    });
+
+    toast.success('Hábito atualizado com sucesso!');
+
+    setEditHabit(null);
+  }
+
   if (isLoadingMe) {
     return (
       <main>
@@ -242,7 +264,7 @@ export const Home = () => {
                     </Button>
                   </DialogTrigger>
 
-                  <CreateHabitModal onSave={onCreateHabit} />
+                  <CreateHabitModal onSave={onCreateHabit} categories={habitCategories || []} />
                 </Dialog>
               </div>
 
@@ -372,6 +394,7 @@ export const Home = () => {
                           <TabsContent value="account" className="w-full">
                             <div className="border-t border border-neutral-200 mt-4 mb-2" ></div>
                             <HabitLines
+                              onEditHabit={handleEditHabit}
                               onDeleteHabit={onDeleteHabit}
                               categories={habitCategories || []}
                               habits={habits}
@@ -425,6 +448,10 @@ export const Home = () => {
           </section>
 
         </div>
+
+        <Dialog open={!!editHabit} onOpenChange={() => setEditHabit(null)}>
+          <CreateHabitModal onSave={handleEditHabitSave} habit={editHabit || undefined} categories={habitCategories || []} />
+        </Dialog>
 
         <Dialog open={createCategoryOpen} onOpenChange={setCreateCategoryOpen}>
           <CreateCategoryModal onSave={handleCreateCategory} />
