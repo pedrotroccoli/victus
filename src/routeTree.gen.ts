@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as PrivateImport } from './routes/_private'
 import { Route as publicAuthImport } from './routes/(public)/_auth'
+import { Route as PrivateSubscriptionIndexImport } from './routes/_private/subscription/index'
 import { Route as PrivateDashboardIndexImport } from './routes/_private/dashboard/index'
 
 // Create Virtual Routes
@@ -49,6 +50,12 @@ const IndexLazyRoute = IndexLazyImport.update({
 const publicAuthRoute = publicAuthImport.update({
   id: '/_auth',
   getParentRoute: () => publicRoute,
+} as any)
+
+const PrivateSubscriptionIndexRoute = PrivateSubscriptionIndexImport.update({
+  id: '/subscription/',
+  path: '/subscription/',
+  getParentRoute: () => PrivateRoute,
 } as any)
 
 const PrivateDashboardIndexRoute = PrivateDashboardIndexImport.update({
@@ -116,6 +123,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateDashboardIndexImport
       parentRoute: typeof PrivateImport
     }
+    '/_private/subscription/': {
+      id: '/_private/subscription/'
+      path: '/subscription'
+      fullPath: '/subscription'
+      preLoaderRoute: typeof PrivateSubscriptionIndexImport
+      parentRoute: typeof PrivateImport
+    }
     '/(public)/_auth/sign-in/': {
       id: '/(public)/_auth/sign-in/'
       path: '/sign-in'
@@ -137,10 +151,12 @@ declare module '@tanstack/react-router' {
 
 interface PrivateRouteChildren {
   PrivateDashboardIndexRoute: typeof PrivateDashboardIndexRoute
+  PrivateSubscriptionIndexRoute: typeof PrivateSubscriptionIndexRoute
 }
 
 const PrivateRouteChildren: PrivateRouteChildren = {
   PrivateDashboardIndexRoute: PrivateDashboardIndexRoute,
+  PrivateSubscriptionIndexRoute: PrivateSubscriptionIndexRoute,
 }
 
 const PrivateRouteWithChildren =
@@ -175,6 +191,7 @@ export interface FileRoutesByFullPath {
   '/': typeof publicAuthRouteWithChildren
   '': typeof PrivateRouteWithChildren
   '/dashboard': typeof PrivateDashboardIndexRoute
+  '/subscription': typeof PrivateSubscriptionIndexRoute
   '/sign-in': typeof publicAuthSignInIndexLazyRoute
   '/sign-up': typeof publicAuthSignUpIndexLazyRoute
 }
@@ -183,6 +200,7 @@ export interface FileRoutesByTo {
   '/': typeof publicAuthRouteWithChildren
   '': typeof PrivateRouteWithChildren
   '/dashboard': typeof PrivateDashboardIndexRoute
+  '/subscription': typeof PrivateSubscriptionIndexRoute
   '/sign-in': typeof publicAuthSignInIndexLazyRoute
   '/sign-up': typeof publicAuthSignUpIndexLazyRoute
 }
@@ -194,15 +212,16 @@ export interface FileRoutesById {
   '/(public)': typeof publicRouteWithChildren
   '/(public)/_auth': typeof publicAuthRouteWithChildren
   '/_private/dashboard/': typeof PrivateDashboardIndexRoute
+  '/_private/subscription/': typeof PrivateSubscriptionIndexRoute
   '/(public)/_auth/sign-in/': typeof publicAuthSignInIndexLazyRoute
   '/(public)/_auth/sign-up/': typeof publicAuthSignUpIndexLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/dashboard' | '/sign-in' | '/sign-up'
+  fullPaths: '/' | '' | '/dashboard' | '/subscription' | '/sign-in' | '/sign-up'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/dashboard' | '/sign-in' | '/sign-up'
+  to: '/' | '' | '/dashboard' | '/subscription' | '/sign-in' | '/sign-up'
   id:
     | '__root__'
     | '/'
@@ -210,6 +229,7 @@ export interface FileRouteTypes {
     | '/(public)'
     | '/(public)/_auth'
     | '/_private/dashboard/'
+    | '/_private/subscription/'
     | '/(public)/_auth/sign-in/'
     | '/(public)/_auth/sign-up/'
   fileRoutesById: FileRoutesById
@@ -248,7 +268,8 @@ export const routeTree = rootRoute
     "/_private": {
       "filePath": "_private.tsx",
       "children": [
-        "/_private/dashboard/"
+        "/_private/dashboard/",
+        "/_private/subscription/"
       ]
     },
     "/(public)": {
@@ -267,6 +288,10 @@ export const routeTree = rootRoute
     },
     "/_private/dashboard/": {
       "filePath": "_private/dashboard/index.tsx",
+      "parent": "/_private"
+    },
+    "/_private/subscription/": {
+      "filePath": "_private/subscription/index.tsx",
       "parent": "/_private"
     },
     "/(public)/_auth/sign-in/": {

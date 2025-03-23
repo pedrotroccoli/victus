@@ -1,9 +1,10 @@
+import PrivateLayout from '@/pages/_private-layout';
 import { baseApi } from '@/services/api';
 import { getToken } from '@/services/auth/services';
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_private')({
-  component: Outlet,
+  component: PrivateLayout,
   beforeLoad: async () => {
     const token = getToken();
 
