@@ -7,9 +7,10 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 interface AccountAvatarProps {
   shortname: string;
   signOut: () => void;
+  goTo: (path: string) => void;
 }
 
-export const AccountAvatar = ({ shortname, signOut }: AccountAvatarProps) => {
+export const AccountAvatar = ({ shortname, signOut, goTo }: AccountAvatarProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -21,6 +22,11 @@ export const AccountAvatar = ({ shortname, signOut }: AccountAvatarProps) => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
+        <DropdownMenuItem asChild className="h-auto">
+          <Button variant="ghost" className="w-full justify-start py-1 cursor-pointer" onClick={() => goTo('/dashboard')}>
+            Dashboard
+          </Button>
+        </DropdownMenuItem>
         <DropdownMenuItem asChild className="h-auto">
           <Button variant="ghost" className="w-full justify-start py-1 cursor-pointer" onClick={signOut}>
             Sair
