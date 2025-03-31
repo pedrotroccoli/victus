@@ -14,7 +14,7 @@ export const useSignUp = () => useMutation({
 export const useMe = () => useQuery({
   queryKey: ['me'],
   queryFn: async () => {
-    const { data } = await baseApi.get(`/auth/me`);
+    const { data } = await baseApi.get(`/me`);
 
     return data;
   }
