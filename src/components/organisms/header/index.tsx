@@ -5,9 +5,10 @@ import { useMemo } from "react";
 export interface HeaderProps {
   account: Account;
   handleSignOut: () => void;
+  goTo: (path: string) => void;
 }
 
-export const Header = ({ account, handleSignOut }: HeaderProps) => {
+export const Header = ({ account, handleSignOut, goTo }: HeaderProps) => {
 
   const formattedShortname = useMemo(() => {
     if (!account) return 'X';
@@ -17,6 +18,8 @@ export const Header = ({ account, handleSignOut }: HeaderProps) => {
     return divided;
   }, [account])
 
+
+
   return (
     <header className="w-full border-neutral-300 border-b bg-white h-20">
       <div className="flex items-center justify-between max-w-screen-lg mx-auto px-4 sm:px-8 w-full h-full">
@@ -25,7 +28,7 @@ export const Header = ({ account, handleSignOut }: HeaderProps) => {
         </div>
 
         <div className="">
-          <AccountAvatar shortname={formattedShortname} signOut={handleSignOut} />
+          <AccountAvatar shortname={formattedShortname} signOut={handleSignOut} goTo={goTo} />
         </div>
       </div>
     </header>
