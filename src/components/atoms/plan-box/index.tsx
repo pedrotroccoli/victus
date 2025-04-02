@@ -1,4 +1,4 @@
-import { CircleCheck } from "lucide-react";
+import { CircleCheck, Loader2 } from "lucide-react";
 
 import { CircleProgress } from "@/components/ions/circle-progress";
 import { Button } from "@/components/ui/button";
@@ -13,9 +13,11 @@ interface PlanBoxProps {
   }[];
   progress: number;
   onClick: () => void;
+  loading?: boolean;
+  disabled?: boolean;
 }
 
-export const PlanBox = ({ name, price, features, progress, onClick }: PlanBoxProps) => {
+export const PlanBox = ({ name, price, features, progress, onClick, loading = false, disabled = false }: PlanBoxProps) => {
   return (
     <div className="border border-neutral-300 rounded-md p-4 bg-white h-full">
       <div className="w-16 h-16 bg-neutral-100 border border-neutral-300 rounded-full">
@@ -34,8 +36,12 @@ export const PlanBox = ({ name, price, features, progress, onClick }: PlanBoxPro
         ))}
       </ul>
       <div className="w-full border-t border-neutral-300 my-4"></div>
-      <Button className="w-full mt-auto font-[Recursive] font-medium" onClick={onClick}>
-        Teste grátis por 14 dias
+      <Button className="w-full mt-auto font-[Recursive] font-medium" onClick={onClick} disabled={loading || disabled}>
+        {loading ? (
+          <Loader2 className="w-4 h-4 animate-spin" />
+        ) : (
+          'Teste grátis por 14 dias'
+        )}
       </Button>
     </div>
   )
