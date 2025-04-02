@@ -37,9 +37,10 @@ export const signIn = async (account: SignInRequest) => {
   return data;
 }
 
-export const signUp = async (account: SignUpRequest) => {
+export const signUp = async ({ account, lookup_key }: SignUpRequest) => {
   const { data } = await baseApi.post<SignUpResponse>(`/auth/sign-up`, {
-    account
+    account,
+    lookup_key
   });
 
   setToken(data.token);

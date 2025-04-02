@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { BookMarked, CircleArrowRight, KeyRound, Mail, Phone, User } from 'lucide-react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -10,7 +10,6 @@ import { PasswordStrengthList } from '@/components/ions/password-strength-list';
 import { PasswordField } from '@/components/molecules/form/PasswordField';
 import { TextField } from '@/components/molecules/form/TextField';
 import { useSignUp } from '@/services/auth/hooks';
-import { setToken } from '@/services/auth/services';
 import { phoneParser } from '@/utils/parsers';
 import { evaluatePasswordStrength } from '@/utils/validators/password';
 import { AxiosError } from 'axios';
@@ -19,7 +18,12 @@ import { signUpSchema } from './schema';
 
 type SignUpFormData = z.infer<typeof signUpSchema>;
 
+interface SignUpSearchParams {
+  key: string;
+}
+
 export const SignUpPage = () => {
+  const search = useSearch({ from: '/(public)/_auth/sign-up/' }) as SignUpSearchParams;
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
   });
@@ -31,24 +35,22 @@ export const SignUpPage = () => {
     const firstName = data.name.split(' ')[0];
 
     try {
-      const { token } = await signUp({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        phone: data.phone,
-        password_confirmation: data.password_confirmation,
+      const { checkout_url } = await signUp({
+        account: {
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          phone: data.phone,
+          password_confirmation: data.password_confirmation,
+        },
+        lookup_key: search?.key || '',
       });
 
-      await setToken(token);
-
-      toast.success(
-        `Olá ${firstName}, seja bem-vindo!`, {
-        dismissible: true,
-        description: 'Agora você pode acessar o sistema',
+      if (checkout_url) {
+        window.location.href = checkout_url;
+      } else {
+        navigate({ to: '/dashboard' });
       }
-      )
-
-      navigate({ to: '/dashboard' });
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 401) {
         toast.error('Essa conta já existe em nosso sistema', {
