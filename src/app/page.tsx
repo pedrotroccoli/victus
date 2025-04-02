@@ -6,7 +6,6 @@ import { LuChevronRight } from "react-icons/lu";
 
 // https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529
 
-import '../app/globals.css';
 
 const title = Indie_Flower({
   weight: "400",
