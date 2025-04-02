@@ -1,11 +1,12 @@
 import { addDays, eachDayOfInterval, format, isAfter, isBefore, subDays } from "date-fns";
-import { Book, BookOpen, Box, CirclePlus, LoaderCircle, PackagePlus, PencilOff, PencilRuler, PlusCircle } from "lucide-react";
+import { Book, BookOpen, Box, CircleAlert, CirclePlus, LoaderCircle, PackagePlus, PencilOff, PencilRuler, PlusCircle, X } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { Helmet } from "react-helmet";
 
 import { useMe } from "@/services/auth";
 import { useCheckHabit, useCreateHabit, useDeleteHabit, useGetHabits, useGetHabitsCheck, useUpdateHabit } from "@/services/habits/hooks";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -46,6 +47,13 @@ export const Home = () => {
   const { data: habitCategories, isLoading: isLoadingHabitCategories } = useHabitCategories();
   const { mutateAsync: createHabitCategory } = useCreateHabitCategory();
   const { mutateAsync: deleteHabit } = useDeleteHabit();
+  const [trialAlert, setTrialAlert] = useState(() => {
+    const vjta = localStorage.getItem('@victus::vjta');
+
+    if (!vjta) return true;
+
+    return isAfter(new Date(), new Date(vjta));
+  });
 
   const generalLoading = useMemo(() => isLoadingMe || isLoadingHabits || isLoadingHabitsCheck || isLoadingHabitCategories, [isLoadingMe, isLoadingHabits, isLoadingHabitsCheck, isLoadingHabitCategories]);
 
@@ -219,6 +227,11 @@ export const Home = () => {
     setEditHabit(null);
   }
 
+  const handleDisableTrialAlert = () => {
+    localStorage.setItem('@victus::vjta', addDays(new Date(), 1).toISOString());
+    setTrialAlert(false);
+  }
+
   if (isLoadingMe) {
     return (
       <main>
@@ -236,8 +249,21 @@ export const Home = () => {
       </Helmet>
 
       <section className="max-w-screen-lg w-full mx-auto bg-sign ">
+        <div className="px-4 sm:px-8 pt-4 sm:pt-8">
+          {me?.subscription?.sub_status === 'trial' && trialAlert && (
+            <div className="relative ">
+              <Alert className="border-yellow-600 bg-yellow-500/10 mb-12">
+                <CircleAlert className="h-4 w-4 fill-yellow-500" />
+                <AlertTitle>Atenção!</AlertTitle>
+                <AlertDescription className="mt-2 leading-[150%]">
+                  Você esta em período de teste, seu acesso termina em <strong>{format(me?.subscription?.service_details?.trial_ends_at, 'dd/MM/yyyy')}</strong>,
+                  selecione uma assinatura para continuar usando o Victus Journal após o fim do período.
+                </AlertDescription>
+              </Alert>
+              <X size={16} className="cursor-pointer absolute top-2.5 right-2.5 " onClick={handleDisableTrialAlert} />
+            </div>
+          )}
 
-        <div className="px-4 sm:px-8 pt-8 sm:pt-16">
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-6">
             <h1 className="font-[Recursive] text-xl font-semibold">Olá {String(me.name).split(' ')[0]}, aqui está seu Jornal!</h1>
 
@@ -277,12 +303,12 @@ export const Home = () => {
 
             <div className="w-full">
               {habits && habits.length === 0 && (
-                <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
-                  <Box size={32} />
+                <div className="flex items-center justify-center h-full flex-col border-black border rounded-md p-8 min-h-56">
+                  <Box size={32} strokeWidth={1.5} />
 
-                  <p className="text-lg text-black/75 font-medium mt-4 mb-8">Nenhum hábito cadastrado</p>
+                  <p className="text-lg text-black/75 font-medium mt-4 mb-8 font-[Recursive]">Nenhum hábito cadastrado</p>
 
-                  <Button className="flex gap-4 bg-black rounded-md text-white" onClick={() => setCreateHabitOpen(true)}>
+                  <Button className="flex gap-4 bg-black rounded-md text-white font-[Recursive]" onClick={() => setCreateHabitOpen(true)}>
                     <PlusCircle size={16} />
                     Criar meu primeiro hábito
                   </Button>
