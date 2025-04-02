@@ -15,13 +15,19 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as PrivateImport } from './routes/_private'
 import { Route as publicAuthImport } from './routes/(public)/_auth'
-import { Route as PrivateSubscriptionIndexImport } from './routes/_private/subscription/index'
+import { Route as PrivateFreezedIndexImport } from './routes/_private/freezed/index'
 import { Route as PrivateDashboardIndexImport } from './routes/_private/dashboard/index'
+import { Route as PrivateCheckoutIndexImport } from './routes/_private/checkout/index'
+import { Route as PrivateAccountLayoutImport } from './routes/_private/account/_layout'
+import { Route as PrivateAccountLayoutSubscriptionIndexImport } from './routes/_private/account/_layout/subscription/index'
+import { Route as PrivateAccountLayoutPlansIndexImport } from './routes/_private/account/_layout/plans/index'
+import { Route as PrivateAccountLayoutGeneralIndexImport } from './routes/_private/account/_layout/general/index'
 
 // Create Virtual Routes
 
 const publicImport = createFileRoute('/(public)')()
 const IndexLazyImport = createFileRoute('/')()
+const PrivateAccountImport = createFileRoute('/_private/account')()
 const publicAuthSignUpIndexLazyImport = createFileRoute(
   '/(public)/_auth/sign-up/',
 )()
@@ -47,14 +53,20 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
+const PrivateAccountRoute = PrivateAccountImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => PrivateRoute,
+} as any)
+
 const publicAuthRoute = publicAuthImport.update({
   id: '/_auth',
   getParentRoute: () => publicRoute,
 } as any)
 
-const PrivateSubscriptionIndexRoute = PrivateSubscriptionIndexImport.update({
-  id: '/subscription/',
-  path: '/subscription/',
+const PrivateFreezedIndexRoute = PrivateFreezedIndexImport.update({
+  id: '/freezed/',
+  path: '/freezed/',
   getParentRoute: () => PrivateRoute,
 } as any)
 
@@ -62,6 +74,17 @@ const PrivateDashboardIndexRoute = PrivateDashboardIndexImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
   getParentRoute: () => PrivateRoute,
+} as any)
+
+const PrivateCheckoutIndexRoute = PrivateCheckoutIndexImport.update({
+  id: '/checkout/',
+  path: '/checkout/',
+  getParentRoute: () => PrivateRoute,
+} as any)
+
+const PrivateAccountLayoutRoute = PrivateAccountLayoutImport.update({
+  id: '/_layout',
+  getParentRoute: () => PrivateAccountRoute,
 } as any)
 
 const publicAuthSignUpIndexLazyRoute = publicAuthSignUpIndexLazyImport
@@ -83,6 +106,27 @@ const publicAuthSignInIndexLazyRoute = publicAuthSignInIndexLazyImport
   .lazy(() =>
     import('./routes/(public)/_auth/sign-in/index.lazy').then((d) => d.Route),
   )
+
+const PrivateAccountLayoutSubscriptionIndexRoute =
+  PrivateAccountLayoutSubscriptionIndexImport.update({
+    id: '/subscription/',
+    path: '/subscription/',
+    getParentRoute: () => PrivateAccountLayoutRoute,
+  } as any)
+
+const PrivateAccountLayoutPlansIndexRoute =
+  PrivateAccountLayoutPlansIndexImport.update({
+    id: '/plans/',
+    path: '/plans/',
+    getParentRoute: () => PrivateAccountLayoutRoute,
+  } as any)
+
+const PrivateAccountLayoutGeneralIndexRoute =
+  PrivateAccountLayoutGeneralIndexImport.update({
+    id: '/general/',
+    path: '/general/',
+    getParentRoute: () => PrivateAccountLayoutRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -116,6 +160,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicAuthImport
       parentRoute: typeof publicRoute
     }
+    '/_private/account': {
+      id: '/_private/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof PrivateAccountImport
+      parentRoute: typeof PrivateImport
+    }
+    '/_private/account/_layout': {
+      id: '/_private/account/_layout'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof PrivateAccountLayoutImport
+      parentRoute: typeof PrivateAccountRoute
+    }
+    '/_private/checkout/': {
+      id: '/_private/checkout/'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof PrivateCheckoutIndexImport
+      parentRoute: typeof PrivateImport
+    }
     '/_private/dashboard/': {
       id: '/_private/dashboard/'
       path: '/dashboard'
@@ -123,11 +188,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateDashboardIndexImport
       parentRoute: typeof PrivateImport
     }
-    '/_private/subscription/': {
-      id: '/_private/subscription/'
-      path: '/subscription'
-      fullPath: '/subscription'
-      preLoaderRoute: typeof PrivateSubscriptionIndexImport
+    '/_private/freezed/': {
+      id: '/_private/freezed/'
+      path: '/freezed'
+      fullPath: '/freezed'
+      preLoaderRoute: typeof PrivateFreezedIndexImport
       parentRoute: typeof PrivateImport
     }
     '/(public)/_auth/sign-in/': {
@@ -144,19 +209,72 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof publicAuthSignUpIndexLazyImport
       parentRoute: typeof publicAuthImport
     }
+    '/_private/account/_layout/general/': {
+      id: '/_private/account/_layout/general/'
+      path: '/general'
+      fullPath: '/account/general'
+      preLoaderRoute: typeof PrivateAccountLayoutGeneralIndexImport
+      parentRoute: typeof PrivateAccountLayoutImport
+    }
+    '/_private/account/_layout/plans/': {
+      id: '/_private/account/_layout/plans/'
+      path: '/plans'
+      fullPath: '/account/plans'
+      preLoaderRoute: typeof PrivateAccountLayoutPlansIndexImport
+      parentRoute: typeof PrivateAccountLayoutImport
+    }
+    '/_private/account/_layout/subscription/': {
+      id: '/_private/account/_layout/subscription/'
+      path: '/subscription'
+      fullPath: '/account/subscription'
+      preLoaderRoute: typeof PrivateAccountLayoutSubscriptionIndexImport
+      parentRoute: typeof PrivateAccountLayoutImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface PrivateAccountLayoutRouteChildren {
+  PrivateAccountLayoutGeneralIndexRoute: typeof PrivateAccountLayoutGeneralIndexRoute
+  PrivateAccountLayoutPlansIndexRoute: typeof PrivateAccountLayoutPlansIndexRoute
+  PrivateAccountLayoutSubscriptionIndexRoute: typeof PrivateAccountLayoutSubscriptionIndexRoute
+}
+
+const PrivateAccountLayoutRouteChildren: PrivateAccountLayoutRouteChildren = {
+  PrivateAccountLayoutGeneralIndexRoute: PrivateAccountLayoutGeneralIndexRoute,
+  PrivateAccountLayoutPlansIndexRoute: PrivateAccountLayoutPlansIndexRoute,
+  PrivateAccountLayoutSubscriptionIndexRoute:
+    PrivateAccountLayoutSubscriptionIndexRoute,
+}
+
+const PrivateAccountLayoutRouteWithChildren =
+  PrivateAccountLayoutRoute._addFileChildren(PrivateAccountLayoutRouteChildren)
+
+interface PrivateAccountRouteChildren {
+  PrivateAccountLayoutRoute: typeof PrivateAccountLayoutRouteWithChildren
+}
+
+const PrivateAccountRouteChildren: PrivateAccountRouteChildren = {
+  PrivateAccountLayoutRoute: PrivateAccountLayoutRouteWithChildren,
+}
+
+const PrivateAccountRouteWithChildren = PrivateAccountRoute._addFileChildren(
+  PrivateAccountRouteChildren,
+)
+
 interface PrivateRouteChildren {
+  PrivateAccountRoute: typeof PrivateAccountRouteWithChildren
+  PrivateCheckoutIndexRoute: typeof PrivateCheckoutIndexRoute
   PrivateDashboardIndexRoute: typeof PrivateDashboardIndexRoute
-  PrivateSubscriptionIndexRoute: typeof PrivateSubscriptionIndexRoute
+  PrivateFreezedIndexRoute: typeof PrivateFreezedIndexRoute
 }
 
 const PrivateRouteChildren: PrivateRouteChildren = {
+  PrivateAccountRoute: PrivateAccountRouteWithChildren,
+  PrivateCheckoutIndexRoute: PrivateCheckoutIndexRoute,
   PrivateDashboardIndexRoute: PrivateDashboardIndexRoute,
-  PrivateSubscriptionIndexRoute: PrivateSubscriptionIndexRoute,
+  PrivateFreezedIndexRoute: PrivateFreezedIndexRoute,
 }
 
 const PrivateRouteWithChildren =
@@ -190,19 +308,29 @@ const publicRouteWithChildren =
 export interface FileRoutesByFullPath {
   '/': typeof publicAuthRouteWithChildren
   '': typeof PrivateRouteWithChildren
+  '/account': typeof PrivateAccountLayoutRouteWithChildren
+  '/checkout': typeof PrivateCheckoutIndexRoute
   '/dashboard': typeof PrivateDashboardIndexRoute
-  '/subscription': typeof PrivateSubscriptionIndexRoute
+  '/freezed': typeof PrivateFreezedIndexRoute
   '/sign-in': typeof publicAuthSignInIndexLazyRoute
   '/sign-up': typeof publicAuthSignUpIndexLazyRoute
+  '/account/general': typeof PrivateAccountLayoutGeneralIndexRoute
+  '/account/plans': typeof PrivateAccountLayoutPlansIndexRoute
+  '/account/subscription': typeof PrivateAccountLayoutSubscriptionIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof publicAuthRouteWithChildren
   '': typeof PrivateRouteWithChildren
+  '/account': typeof PrivateAccountLayoutRouteWithChildren
+  '/checkout': typeof PrivateCheckoutIndexRoute
   '/dashboard': typeof PrivateDashboardIndexRoute
-  '/subscription': typeof PrivateSubscriptionIndexRoute
+  '/freezed': typeof PrivateFreezedIndexRoute
   '/sign-in': typeof publicAuthSignInIndexLazyRoute
   '/sign-up': typeof publicAuthSignUpIndexLazyRoute
+  '/account/general': typeof PrivateAccountLayoutGeneralIndexRoute
+  '/account/plans': typeof PrivateAccountLayoutPlansIndexRoute
+  '/account/subscription': typeof PrivateAccountLayoutSubscriptionIndexRoute
 }
 
 export interface FileRoutesById {
@@ -211,27 +339,61 @@ export interface FileRoutesById {
   '/_private': typeof PrivateRouteWithChildren
   '/(public)': typeof publicRouteWithChildren
   '/(public)/_auth': typeof publicAuthRouteWithChildren
+  '/_private/account': typeof PrivateAccountRouteWithChildren
+  '/_private/account/_layout': typeof PrivateAccountLayoutRouteWithChildren
+  '/_private/checkout/': typeof PrivateCheckoutIndexRoute
   '/_private/dashboard/': typeof PrivateDashboardIndexRoute
-  '/_private/subscription/': typeof PrivateSubscriptionIndexRoute
+  '/_private/freezed/': typeof PrivateFreezedIndexRoute
   '/(public)/_auth/sign-in/': typeof publicAuthSignInIndexLazyRoute
   '/(public)/_auth/sign-up/': typeof publicAuthSignUpIndexLazyRoute
+  '/_private/account/_layout/general/': typeof PrivateAccountLayoutGeneralIndexRoute
+  '/_private/account/_layout/plans/': typeof PrivateAccountLayoutPlansIndexRoute
+  '/_private/account/_layout/subscription/': typeof PrivateAccountLayoutSubscriptionIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '' | '/dashboard' | '/subscription' | '/sign-in' | '/sign-up'
+  fullPaths:
+    | '/'
+    | ''
+    | '/account'
+    | '/checkout'
+    | '/dashboard'
+    | '/freezed'
+    | '/sign-in'
+    | '/sign-up'
+    | '/account/general'
+    | '/account/plans'
+    | '/account/subscription'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/dashboard' | '/subscription' | '/sign-in' | '/sign-up'
+  to:
+    | '/'
+    | ''
+    | '/account'
+    | '/checkout'
+    | '/dashboard'
+    | '/freezed'
+    | '/sign-in'
+    | '/sign-up'
+    | '/account/general'
+    | '/account/plans'
+    | '/account/subscription'
   id:
     | '__root__'
     | '/'
     | '/_private'
     | '/(public)'
     | '/(public)/_auth'
+    | '/_private/account'
+    | '/_private/account/_layout'
+    | '/_private/checkout/'
     | '/_private/dashboard/'
-    | '/_private/subscription/'
+    | '/_private/freezed/'
     | '/(public)/_auth/sign-in/'
     | '/(public)/_auth/sign-up/'
+    | '/_private/account/_layout/general/'
+    | '/_private/account/_layout/plans/'
+    | '/_private/account/_layout/subscription/'
   fileRoutesById: FileRoutesById
 }
 
@@ -268,8 +430,10 @@ export const routeTree = rootRoute
     "/_private": {
       "filePath": "_private.tsx",
       "children": [
+        "/_private/account",
+        "/_private/checkout/",
         "/_private/dashboard/",
-        "/_private/subscription/"
+        "/_private/freezed/"
       ]
     },
     "/(public)": {
@@ -286,12 +450,32 @@ export const routeTree = rootRoute
         "/(public)/_auth/sign-up/"
       ]
     },
+    "/_private/account": {
+      "filePath": "_private/account",
+      "parent": "/_private",
+      "children": [
+        "/_private/account/_layout"
+      ]
+    },
+    "/_private/account/_layout": {
+      "filePath": "_private/account/_layout.tsx",
+      "parent": "/_private/account",
+      "children": [
+        "/_private/account/_layout/general/",
+        "/_private/account/_layout/plans/",
+        "/_private/account/_layout/subscription/"
+      ]
+    },
+    "/_private/checkout/": {
+      "filePath": "_private/checkout/index.tsx",
+      "parent": "/_private"
+    },
     "/_private/dashboard/": {
       "filePath": "_private/dashboard/index.tsx",
       "parent": "/_private"
     },
-    "/_private/subscription/": {
-      "filePath": "_private/subscription/index.tsx",
+    "/_private/freezed/": {
+      "filePath": "_private/freezed/index.tsx",
       "parent": "/_private"
     },
     "/(public)/_auth/sign-in/": {
@@ -301,6 +485,18 @@ export const routeTree = rootRoute
     "/(public)/_auth/sign-up/": {
       "filePath": "(public)/_auth/sign-up/index.lazy.tsx",
       "parent": "/(public)/_auth"
+    },
+    "/_private/account/_layout/general/": {
+      "filePath": "_private/account/_layout/general/index.tsx",
+      "parent": "/_private/account/_layout"
+    },
+    "/_private/account/_layout/plans/": {
+      "filePath": "_private/account/_layout/plans/index.tsx",
+      "parent": "/_private/account/_layout"
+    },
+    "/_private/account/_layout/subscription/": {
+      "filePath": "_private/account/_layout/subscription/index.tsx",
+      "parent": "/_private/account/_layout"
     }
   }
 }
