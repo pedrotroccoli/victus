@@ -20,13 +20,11 @@ export default function PrivateLayout() {
   const goToDashboard = useCallback(() => {
     const missingSubscription = me?.subscription?.status !== 'active' || !me?.subscription ? true : undefined;
 
-
     if (missingSubscription) {
       navigate({
         to: '/freezed',
         search: {
           missingSubscription: true,
-          view: 'subscription',
         },
         replace: true,
       });
@@ -40,7 +38,9 @@ export default function PrivateLayout() {
   }, [me, navigate])
 
   useEffect(() => {
-    const withoutSubscriptionPages = ['/account']
+    const withoutSubscriptionPages = ['/account', '/freezed', '/checkout']
+
+    if (!me) return;
 
     if ((me?.subscription?.status !== 'active' || !me?.subscription) && !withoutSubscriptionPages.some(page => location.pathname.includes(page))) {
       goToDashboard();
