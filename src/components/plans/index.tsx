@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils"
 import { CaretCircleRight, CheckCircle } from "@phosphor-icons/react/dist/ssr"
 import { Button } from "../ui/button"
 
@@ -37,13 +38,13 @@ export const Plans = () => {
   return (
     <section className="bg-[url('/bg-plans.png')] bg-cover bg-center border-y border-neutral-300">
       <div className="grid-container py-16">
-        <h2 className="text-2xl font-bold font-mono mb-16 mx-auto text-center">Planos e valores</h2>
-        <ul className="flex gap-6 items-end justify-center">
+        <h2 className="text-2xl md:text-4xl font-bold font-mono mb-16 mx-auto text-center">Planos e valores</h2>
+        <ul className="flex gap-6 items-center md:items-end justify-center flex-col md:flex-row">
           {items.map((item) => (
-            <li key={item.key} className="max-w-[26rem] w-full" >
+            <li key={item.key} className={cn("max-w-[26rem] w-full", item.recommended && "shadow-green")} >
               {item.recommended && (
                 <div className="w-full bg-victus-green/40 border-l border-t border-r border-victus-green rounded-t-md flex items-center justify-center py-4 translate-y-1 z-[-1]">
-                  <h5 className="text-sm font-mono font-bold">Mais recomendado</h5>
+                  <h5 className="text-sm font-mono font-bold text-victus-green-dark ">Mais recomendado</h5>
                 </div>
               )}
               <div className="w-full border border-neutral-300 rounded-md bg-white z-10">

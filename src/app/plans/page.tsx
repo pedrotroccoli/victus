@@ -1,6 +1,5 @@
-import { Header } from "@/components/header";
-import { Button } from "@/components/ui/button";
-import { CheckCircle } from "lucide-react";
+import { Grid } from "@/components/grid";
+import { Plans as PlansComponent } from "@/components/plans";
 
 const items = [
   {
@@ -30,41 +29,15 @@ const items = [
 
 export default function Plans() {
   return (
-    <main className="h-screen flex flex-col">
-      <Header />
-
-      <section className="bg-seasalt">
-        <div className="max-w-screen-lg mx-auto flex justify-center items-center flex-col text-center">
-          <h1 className="text-2xl font-bold my-16">Planos</h1>
-          <ul className="grid md:grid-cols-2 gap-4 w-full">
-            {items.map((item) => (
-              <li key={item.name} className="border border-neutral-300 rounded-md p-6 text-left">
-                <h2 className="text-lg font-bold">{item.name}</h2>
-                <p className="text-sm text-black font-medium mt-2">{item.price}</p>
-
-                <div className="my-6 w-full border-t border-neutral-300"></div>
-
-                <ul className="mt-4 grid gap-2">
-                  {item.features.map((feature) => (
-                    <li key={feature} className="text-sm text-black flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4" />
-                      <p>{feature}</p>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="my-6 w-full border-t border-neutral-300"></div>
-
-                <a href={`https://app.victusjournal.com/sign-up?key=${item.key}`} target="_blank" rel="noopener noreferrer">
-                  <Button className="w-full">
-                    Teste por 14 dias grátis
-                  </Button>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <main className="">
+      <section className="w-full h-20">
+        <Grid />
       </section>
+      <PlansComponent />
+      <section className="w-full h-20">
+        <Grid />
+      </section>
+
     </main>
   );
 }

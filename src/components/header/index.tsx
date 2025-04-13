@@ -25,20 +25,20 @@ export const Header = () => {
       <div className="fixed top-8 left-0 right-0 z-[100] grid-container">
         <header className="shadow-xs h-16  bg-white border border-neutral-200 rounded-md px-6 backdrop-blur-sm drop-shadow-md">
           <div className="h-full flex items-center justify-between">
-            <div>
+            <Link href="/">
               <Image src="/brain-logo.svg" alt="Victus Journal" width={32} height={32} />
-            </div>
+            </Link>
 
             <div className='flex gap-4 items-center'>
-              <a>
+              <a className="hidden md:block text-black" href="https://www.instagram.com/victusjournal/" target="_blank" rel="noopener noreferrer">
                 <InstagramLogo size={24} />
               </a>
-              <div className="w-1.5 h-1.5 border border-neutral-300 rounded-[1px]"></div>
-              <Button className='w-auto px-6 py-2 font-xs rounded-md border-black' onClick={() => window.open('https://app.victusjournal.com/sign-in', '_blank')} variant='outline'>
+              <div className="w-1.5 h-1.5 border border-neutral-300 rounded-[1px] hidden md:block"></div>
+              <Button className='w-auto px-3 py-1.5 md:px-6 md:py-2 font-xs rounded-md border-black bg-white text-black' onClick={() => window.open('https://app.victusjournal.com/sign-in', '_blank')} variant='outline'>
                 Acessar
               </Button>
               <Link href="/plans">
-                <Button className='w-auto px-6 py-2 rounded-md'>
+                <Button className='w-auto px-3 py-1.5 md:px-6 md:py-2 rounded-md'>
                   Ver planos
                 </Button>
               </Link>

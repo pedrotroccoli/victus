@@ -125,11 +125,11 @@ p {
 
   @media (max-width: 768px) {
     .grid-container {
-      padding: 0 1rem;
+      padding: 0 1.5rem;
     }
 
     .grid-container-small {
-      padding: 0 1rem;
+      padding: 0 1.5rem;
     }
   }
 

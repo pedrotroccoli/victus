@@ -15,6 +15,9 @@ const config = {
       },
     },
     extend: {
+      boxShadow: {
+        'green': '0px 0px 8px 0px rgba(106, 227, 152, 0.50);'
+      },
       fontFamily: {
         sans: ['var(--font-inter)'],
         mono: ['var(--font-recursive)'],

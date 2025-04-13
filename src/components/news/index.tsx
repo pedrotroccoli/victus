@@ -30,14 +30,14 @@ export const items = [
 export const News = () => {
   return (
     <section>
-      <Grid className="pt-16">
-        <h2 className="text-2xl font-bold font-mono mx-auto text-center mb-16">Novidades</h2>
+      <Grid className="pt-16" type="small">
+        <h2 className="text-2xl md:text-4xl font-bold font-mono mx-auto text-center mb-16">Novidades</h2>
         <ul className="grid gap-8">
           {items.map((item) => (
             <li key={item.title}>
-              <div className="w-full h-[19rem] bg-white border border-neutral-300 rounded-lg flex justify-between flex-1">
-                <div className="h-full flex flex-col justify-center items-center">
-                  <div className="pl-10">
+              <div className="w-full md:h-[19rem] bg-white border border-neutral-300 rounded-lg flex justify-between flex-1 md:flex-row flex-col">
+                <div className="h-full flex flex-col justify-center md:items-center">
+                  <div className="md:pl-10 p-8">
                     <div className="flex items-center gap-6">
                       {item.icon_url && <Image src={item.icon_url} alt={item.title} width={80} height={20} />}
                       {item.icon && <item.icon size={48} />}
@@ -56,7 +56,11 @@ export const News = () => {
                     </p>
                   </div>
                 </div>
-                <div className={cn("max-w-[33rem] w-full h-full bg-victus-green rounded-r-lg bg-cover bg-center")} style={{ backgroundImage: `url(${item.image_url})` }}></div>
+                <div className={cn("md:max-w-[33rem] w-full h-40 sm:h-60 lg:h-full bg-victus-good-white rounded-b-lg md:rounded-b-none md:rounded-r-lg bg-cover sm:bg-contain md:bg-cover bg-center",
+                  "bg-no-repeat"
+
+
+                )} style={{ backgroundImage: `url(${item.image_url})` }}></div>
               </div>
             </li>
           ))}
