@@ -70,10 +70,12 @@ export const Plans = () => {
                   ))}
                 </ul>
                 <div className="px-6 pb-6">
-                  <Button className="w-full flex items-center justify-between px-6 gap-2 py-3 h-auto rounded-lg">
-                    Teste grátis por 14 dias
-                    <CaretCircleRight size={18} weight="bold" />
-                  </Button>
+                  <a href={`https://app.victusjournal.com/sign-in?key=${item.key}`} target="_blank" rel="noopener noreferrer">
+                    <Button className="w-full flex items-center justify-between px-6 gap-2 py-3 h-auto rounded-lg">
+                      Teste grátis por 14 dias
+                      <CaretCircleRight size={18} weight="bold" />
+                    </Button>
+                  </a>
                 </div>
               </div>
             </li>
