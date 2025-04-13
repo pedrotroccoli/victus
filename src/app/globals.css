@@ -2,6 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  min-height: 100vh;
+  position: relative;
+}
+
+body {
+  height: 100%;
+}
+
+html,
+body {
+  font-family: var(--font-inter);
+  background-color: #F7F7F7;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button {
+  font-family: var(--font-recursive);
+  line-height: 130%;
+}
+
+p {
+  line-height: 150%;
+}
+
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -29,6 +61,11 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+
+    /*  */
+
+    --grid-container: calc(82rem + 6rem);
+    --grid-container-small: calc(68rem + 6rem);
   }
 
   .dark {
@@ -57,13 +94,43 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
 }
 
 @layer base {
-  * {
-  }
+  * {}
 
-  body {
-  }
+  body {}
 }
 
+@layer components {
+  .grid-container {
+    width: 100%;
+    padding: 0 3rem;
+    margin: 0 auto;
+    max-width: var(--grid-container);
+  }
+
+  .grid-container-small {
+    width: 100%;
+    padding: 0 3rem;
+    margin: 0 auto;
+    max-width: var(--grid-container-small);
+  }
+
+  .blur-block {
+    filter: blur(88px);
+    background-color: rgba(255, 255, 255, 1);
+  }
+
+  @media (max-width: 768px) {
+    .grid-container {
+      padding: 0 1rem;
+    }
+
+    .grid-container-small {
+      padding: 0 1rem;
+    }
+  }
+
+}

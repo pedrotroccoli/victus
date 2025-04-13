@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 
 import './globals.css';
 
-const inter = Inter({ subsets: ["latin"] });
+import { InterFont, RecursiveFont } from "./_fonts";
 
 export const metadata: Metadata = {
   title: "Jornal Victus",
@@ -19,7 +18,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${InterFont.variable} ${RecursiveFont.variable}`}>
         {children}
       </body>
     </html>
