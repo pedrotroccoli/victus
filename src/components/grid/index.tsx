@@ -19,7 +19,7 @@ export const Grid = ({ children, className, type, style = 'white' }: GridProps) 
           <div className={cn("w-px h-full border-r border-dashed absolute top-0 right-2 md:right-4", borderColor)}></div>
         </div>
       </div>
-      <div className={cn("z-[4]", gridClass, className)}>
+      <div className={cn("z-[4] relative", gridClass, className)}>
         {children}
       </div>
     </div>

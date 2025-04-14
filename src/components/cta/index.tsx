@@ -12,10 +12,10 @@ export const CTA = () => {
           <div className="blur-block absolute bottom-4 left-1/2 w-20 h-20 z-[1]"></div>
 
           <div className="p-8 md:p-16 md:pl-20 max-w-[40rem] z-10">
-            <h4 className="text-white text-2xl font-bold">Você está a um passo de ter controle
+            <h4 className="text-white text-lg sm:text-2xl font-bold">Você está a um passo de ter controle
               total do seu comportamento!</h4>
             <p className="text-white/70 mt-4">Dentro da plataforma você tem a oportunidade de saber onde melhorar na sua vida e atingir seus objetivos!</p>
-            <Button className="mt-12 py-5 w-80 h-auto flex items-center justify-between gap-2 px-6 rounded-md bg-victus-orange">
+            <Button className="mt-12 py-5 w-full md:w-80 h-auto flex items-center justify-between gap-2 px-6 rounded-md bg-victus-orange">
               Teste grátis por 14 dias
               <CaretCircleRight size={18} weight="bold" />
             </Button>

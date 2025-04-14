@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils"
 import { CaretCircleRight, ChartBar, ChartPieSlice, Fire, ProjectorScreenChart } from "@phosphor-icons/react/dist/ssr"
 import Image from "next/image"
+import Link from "next/link"
 import { Grid } from "../grid"
 import { Button } from "../ui/button"
 
@@ -32,7 +33,7 @@ const proofs = [
 export const Proofs = () => {
   return (
     <section>
-      <Grid className="grid gap-16 pt-40" type="small">
+      <Grid className="grid gap-16 pt-20 md:pt-40" type="small">
         {proofs.map((item, index) => (
           <div className="grid lg:grid-cols-2 gap-8" key={item.title}>
             <div className="">
@@ -44,17 +45,21 @@ export const Proofs = () => {
 
               <p className="mt-4 whitespace-pre-line lg:max-w-[28rem] text-victus-text">{item.description}</p>
 
-              <Button className="mt-12 py-5 w-80 h-auto items-center justify-between gap-2 px-6 rounded-md hidden lg:flex">
-                Teste grátis por 14 dias
-                <CaretCircleRight size={24} />
-              </Button>
+              <Link href="/plans">
+                <Button className="mt-12 py-5 w-80 h-auto items-center justify-between gap-2 px-6 rounded-md hidden lg:flex">
+                  Teste grátis por 14 dias
+                  <CaretCircleRight size={24} />
+                </Button>
+              </Link>
             </div>
             <div className={cn(index % 2 === 0 ? "lg:-order-1" : "", "flex items-center justify-center flex-col")}>
               <Image src={item.image} alt={item.title} width={528} height={400} className="rounded-md max-lg:w-full" />
-              <Button className="mt-8 py-5 w-full h-auto flex items-center justify-between gap-2 px-6 rounded-md lg:hidden">
-                Teste grátis por 14 dias
-                <CaretCircleRight size={24} />
-              </Button>
+              <Link href="/plans" className="w-full">
+                <Button className="mt-8 py-5 w-full h-auto flex items-center justify-between gap-2 px-6 rounded-md lg:hidden">
+                  Teste grátis por 14 dias
+                  <CaretCircleRight size={24} />
+                </Button>
+              </Link>
             </div>
           </div>
         ))}
