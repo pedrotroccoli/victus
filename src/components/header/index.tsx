@@ -34,9 +34,11 @@ export const Header = () => {
                 <InstagramLogo size={24} />
               </a>
               <div className="w-1.5 h-1.5 border border-neutral-300 rounded-[1px] hidden md:block"></div>
-              <Button className='w-auto px-3 py-1.5 md:px-6 md:py-2 font-xs rounded-md border-black bg-white text-black' onClick={() => window.open('https://app.victusjournal.com/sign-in', '_blank')} variant='outline'>
-                Acessar
-              </Button>
+              <a href="https://app.victusjournal.com/sign-in" target="_blank" rel="noopener noreferrer">
+                <Button className='w-auto px-3 py-1.5 md:px-6 md:py-2 font-xs rounded-md border-black bg-white text-black' variant='outline'>
+                  Acessar
+                </Button>
+              </a>
               <Link href="/plans">
                 <Button className='w-auto px-3 py-1.5 md:px-6 md:py-2 rounded-md'>
                   Ver planos
