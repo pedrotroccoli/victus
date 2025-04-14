@@ -22,7 +22,7 @@ export const Header = () => {
   return (
     <div className="h-24 z-50">
       <Grid></Grid>
-      <div className="fixed top-8 left-0 right-0 z-[100] grid-container">
+      <div className="fixed top-2 md:top-8 left-0 right-0 z-[100] grid-container">
         <header className="shadow-xs h-16  bg-white border border-neutral-200 rounded-md px-6 backdrop-blur-sm drop-shadow-md">
           <div className="h-full flex items-center justify-between">
             <Link href="/">

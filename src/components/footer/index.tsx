@@ -1,15 +1,22 @@
+import { cn } from "@/lib/utils";
+import { Barricade } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 import Link from "next/link";
 import { Grid } from "../grid";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { BackToTop } from "./back-to-top";
 
 export const links = [
   {
-    title: 'Sobre',
+    title: 'Páginas',
     links: [
       {
         title: 'Missão',
         href: '/sobre'
+      }, {
+        title: 'Planos',
+        href: '/plans',
+        enabled: true
       }
     ]
   },
@@ -59,11 +66,21 @@ export const Footer = () => {
                   <div className="w-full h-px bg-neutral-800 my-4"></div>
                   <ul className="grid gap-4">
                     {link.links.map((link) => (
-                      <li key={link.title}>
-                        <Link href={link.href} className="text-white/70">
-                          {link.title}
-                        </Link>
-                      </li>
+                      <TooltipProvider key={link.title}>
+                        <Tooltip open={link?.enabled ? false : undefined} delayDuration={100}>
+                          <TooltipTrigger asChild>
+                            <li key={link.title}>
+                              <Link href={link.href} className={cn("text-white/70 flex items-center gap-2 hover:text-white", !link?.enabled && "cursor-not-allowed")}>
+                                {link.title}
+                                {!link?.enabled && <Barricade size={24} />}
+                              </Link>
+                            </li>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            Estamos trabalhando para disponibilizar este recurso em breve!
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     ))}
                   </ul>
                 </li>
