@@ -1,4 +1,15 @@
 declare global {
+  interface HabitDelta {
+    _id: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at?: string;
+    description: string | null;
+    enabled: boolean;
+    name: string;
+    type: 'number';
+  }
+
   interface Habit {
     _id: string;
     account_id: string;
@@ -15,6 +26,7 @@ declare global {
     recurrence_details?: {
       rule: string;
     };
+    habit_deltas?: HabitDelta[];
   }
 
   interface HabitCheck {
