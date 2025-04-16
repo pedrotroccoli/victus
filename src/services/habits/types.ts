@@ -16,6 +16,10 @@ export interface CreateHabitRequest {
   recurrence_details?: {
     rule: string;
   };
+  habit_deltas?: {
+    name: string;
+    type: string;
+  }[];
 }
 
 export interface UpdateHabitRequest {
@@ -27,6 +31,13 @@ export interface UpdateHabitRequest {
   recurrence_details?: {
     rule: string;
   };
+  habit_deltas_attributes?: {
+    id?: string;
+    type: string;
+    name: string;
+    enabled: boolean;
+    _destroy?: boolean;
+  }[];
 }
 
 export type CreateHabitResponse = Habit;

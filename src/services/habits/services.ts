@@ -18,10 +18,14 @@ export const getHabits = async (params: GetHabitsRequest): Promise<GetHabitsResp
 }
 
 export const createHabit = async ({ infinite, ...params }: CreateHabitRequest): Promise<CreateHabitResponse[]> => {
+  console.log(params, '2');
   const { data } = await baseApi.post('/habits', {
-    ...params,
-    recurrence_type: infinite ? 'infinite' : 'daily',
-    end_date: infinite ? undefined : params.end_date
+    habit: {
+      ...params,
+      delta_enabled: params.habit_deltas && params.habit_deltas.length > 0,
+      recurrence_type: infinite ? 'infinite' : 'daily',
+      end_date: infinite ? undefined : params.end_date
+    }
   });
 
   return data;
@@ -33,7 +37,10 @@ export const deleteHabit = async (id: string): Promise<void> => {
 
 export const updateHabit = async (params: UpdateHabitRequest): Promise<Habit> => {
   const { data } = await baseApi.put(`/habits/${params._id}`, {
-    ...params,
+    habit: {
+
+      ...params,
+    }
   });
 
   return data;
