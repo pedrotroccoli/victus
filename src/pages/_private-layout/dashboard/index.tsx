@@ -98,7 +98,11 @@ export const Home = () => {
         infinite: !!params.infinite,
         recurrence_details: {
           rule: params.rrule
-        }
+        },
+        habit_deltas: params.deltas?.map(item => ({
+          name: item.name,
+          type: item.type
+        })) || []
       });
 
       toast.success('Hábito criado com sucesso!');
@@ -219,7 +223,14 @@ export const Home = () => {
       recurrence_type: data.frequency,
       recurrence_details: {
         rule: data.rrule
-      }
+      },
+      habit_deltas_attributes: data.deltas?.map(item => ({
+        id: item?.id,
+        name: item.name,
+        type: item.type,
+        enabled: item.state === 'active',
+        _destroy: item.state === 'deleted'
+      })) || []
     });
 
     toast.success('Hábito atualizado com sucesso!');
