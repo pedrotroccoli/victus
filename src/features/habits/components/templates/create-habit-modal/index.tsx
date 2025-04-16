@@ -1,27 +1,20 @@
-import { CheckboxField } from '@/components/molecules/form/CheckboxField';
-import { ComboBoxField } from '@/components/molecules/form/combo-box-field';
-import { DatePickerField } from '@/components/molecules/form/DatePickerField';
-import { SelectField } from '@/components/molecules/form/SelectField';
-import { TextField } from '@/components/molecules/form/TextField';
-import { ToggleGroupField } from '@/components/molecules/form/ToggleGroupField';
 import { Button } from '@/components/ui/button';
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { addDays, format, isBefore, sub } from 'date-fns';
+import { addDays } from 'date-fns';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import { DeltaTab } from './delta-tab';
+import { HabitTab } from './habit-tab';
 import { CreateHabitForm, CreateHabitModalProps } from './types';
-import { createHabitValidation, daysOfWeek, daysOfWeekTranslation, generateRrule, rruleParse } from './utils';
+import { createHabitValidation, generateRrule, rruleParse } from './utils';
 
-const daysOfWeekOptions = daysOfWeek.map(item => ({
-  label: daysOfWeekTranslation[item as keyof typeof daysOfWeekTranslation],
-  value: item,
-}))
 
 export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModalProps) => {
   const [loading, setLoading] = useState(false);
-
+  const [tabs, setTabs] = useState<string>('habit');
 
   const defaultValues = useMemo(() => {
     const recurrenceDetails = rruleParse(habit?.recurrence_details?.rule);
@@ -35,6 +28,7 @@ export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModal
       frequency: 'daily' as const,
       week_days: [],
       category: null,
+      deltas: [],
     } : {
       type: 'edit',
       name: habit.name,
@@ -44,6 +38,13 @@ export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModal
       frequency: recurrenceDetails?.type,
       week_days: recurrenceDetails?.week_days,
       category: habit?.habit_category?._id || null,
+      deltas: habit?.habit_deltas?.map(item => ({
+        id: item._id,
+        name: item.name,
+        type: item.type,
+        state: 'active',
+        delta_state: 'active',
+      })) || [],
     } as CreateHabitForm
   }, [habit]);
 
@@ -63,7 +64,6 @@ export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModal
 
       const rrule = generateRrule(data);
 
-
       await onSave?.({
         infinite: data.infinite ? true : false,
         name: data.name,
@@ -72,9 +72,11 @@ export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModal
         end_date: data.end_date,
         category: data.category,
         rrule,
+        deltas: data.deltas,
       });
 
       form.reset(defaultValues);
+      setTabs('habit');
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.log('CreateHabitModal error:', error);
@@ -85,7 +87,18 @@ export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModal
   }
 
   const handleError: SubmitErrorHandler<CreateHabitForm> = (errors) => {
-    console.log(errors);
+    const habitTab = ['name', 'start_date', 'end_date', 'frequency', 'week_days', 'category'].some(key => !!errors[key as keyof CreateHabitForm]);
+    const deltasTab = ['deltas'].some(key => !!errors[key as keyof CreateHabitForm]);
+
+    console.log(habitTab, deltasTab, errors);
+
+    if (habitTab) {
+      setTabs('habit');
+    }
+
+    if (deltasTab) {
+      setTabs('deltas');
+    }
   }
 
   const endDate = form.watch('infinite') ? undefined : form.watch('end_date');
@@ -94,109 +107,32 @@ export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModal
 
     list.push(...categories?.map(category => ({ label: category.name, value: category._id })) || []);
 
-    return list;
+    return list || [];
   }, [categories]);
-
 
 
   return (
     <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded w-[calc(100vw-2rem)] rounded-lg">
       <DialogHeader className="p-4 border-b text-left">
-        <DialogTitle>{!habit ? 'Criar hábito' : 'Editar hábito'}</DialogTitle>
+        <DialogTitle>{!habit ? 'Criar hábito' : `Editar hábito "${habit.name}"`}</DialogTitle>
         <DialogDescription className="text-black/70">
-          {habit ? 'Edite as informações do hábito' : 'Defina a data de início e fim do hábito'}
+          {habit ? 'Edite as informações do hábito ou deltas' : 'Defina a data de início e fim do hábito e defina seus deltas'}
         </DialogDescription>
       </DialogHeader>
       <FormProvider {...form}>
-        <div className="grid gap-4 py-4 px-6 pb-8">
-          <div>
-            <TextField
-              name="name"
-              label="Nome do hábito"
-              placeholder="Ex: Beber água"
-            />
-          </div>
+        <Tabs defaultValue="habit" onValueChange={setTabs} value={tabs}>
+          <TabsList className='mb-4 border border-neutral-300 ml-4 mt-6'>
+            <TabsTrigger value="habit" className='data-[state=active]:bg-black data-[state=active]:text-white'>Hábito</TabsTrigger>
+            <TabsTrigger value="deltas" className='data-[state=active]:bg-black data-[state=active]:text-white text-black'>Deltas</TabsTrigger>
+          </TabsList>
 
-          <div className="border-t border-neutral-200 my-px"></div>
-
-          <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-            <SelectField
-              wrapperClassName={categories && categories.length > 0 ? '' : 'col-span-2'}
-              name="frequency"
-              label='Frequência'
-              placeholder='Selecione a frequência'
-              defaultValue='daily'
-              options={[
-                { label: 'Diário', value: 'daily' },
-                { label: 'Semanal', value: 'weekly' },
-                // { label: 'Mensal', value: 'monthly' },
-                // { label: 'Anual', value: 'yearly' },
-              ]}
-            />
-
-            {categories && categories.length > 0 && (
-              <ComboBoxField
-                label='Categoria'
-                name="category"
-                options={categoriesOptions}
-                placeholder="Selecione a categoria"
-                commandPlaceholder="Pesquisar categoria"
-                commandEmpty="Nenhuma categoria encontrada"
-              />
-            )}
-
-            {form.watch('frequency') === 'weekly' && (
-              <div className="mt-4 flex justify-start col-span-2">
-                <ToggleGroupField
-                  name="week_days"
-                  options={daysOfWeekOptions}
-                />
-              </div>
-            )}
-
-          </div>
-
-
-          <div className="border-t border-neutral-200 my-px"></div>
-
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
-              <DatePickerField name="start_date" label="Data de início"
-                disabledMessage={habit ? format(habit.start_date, 'dd/MM/yyyy') : undefined}
-                disabled={(date) => {
-                  if (isBefore(date, sub(new Date(), { days: 1 }))) {
-                    return true;
-                  }
-
-                  if (endDate && isBefore(date, endDate)) {
-                    return false;
-                  }
-
-                  return false;
-                }}
-              />
-            </div>
-            <div>
-              <DatePickerField name="end_date" label="Data de fim" disabled={(date) => {
-                if (isBefore(date, sub(new Date(), { days: 0 }))) {
-                  return true;
-                }
-
-                if (isBefore(date, form.getValues('start_date'))) {
-                  return true;
-                }
-
-                return false;
-              }}
-                disabledMessage={habit ? habit.end_date ? format(habit.end_date, 'dd/MM/yyyy') : 'Sem fim' : form.watch('infinite') ? 'Sem fim' : undefined}
-              />
-              <div className="flex items-center gap-2 mt-2">
-                <CheckboxField className="rounded" name="infinite" disabled={!!habit} />
-                <p className="text-sm font-medium">Infinito</p>
-              </div>
-            </div>
-          </div>
-        </div>
+          <TabsContent value="habit">
+            <HabitTab categories={categoriesOptions} habit={habit} endDate={endDate} />
+          </TabsContent>
+          <TabsContent value="deltas">
+            <DeltaTab />
+          </TabsContent>
+        </Tabs>
         <div className="flex justify-end p-2 px-6 border-t border-neutral-300">
           <Button variant="default" className="bg-black text-white rounded text-sm font-bold hover:bg-black/80 min-w-24 h-8"
             onClick={form.handleSubmit(handleSubmit, handleError)}
