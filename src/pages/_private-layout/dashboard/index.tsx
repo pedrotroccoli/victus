@@ -67,13 +67,13 @@ export const Home = () => {
 
     return habitsCheck.reduce((previous: Record<string, Record<string, HabitCheck>>, current: HabitCheck) => {
 
-      if (!current.finished_at) return previous;
+      if (!current.created_at) return previous;
 
       return ({
         ...previous,
         [current.habit_id]: {
           ...(previous[current.habit_id] || {}),
-          [format(current.finished_at, 'MM/dd/yyyy')]: current
+          [format(current.created_at, 'MM/dd/yyyy')]: current
         }
       })
     }, {});
@@ -229,7 +229,7 @@ export const Home = () => {
         name: item.name,
         type: item.type,
         enabled: item.state === 'active',
-        _destroy: item.state === 'deleted'
+        _destroy: item.state === 'deleted' ? true : undefined
       })) || []
     });
 
