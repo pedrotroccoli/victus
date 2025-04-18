@@ -5,12 +5,13 @@ import { DatePickerField } from "@/components/molecules/form/DatePickerField";
 import { SelectField } from "@/components/molecules/form/SelectField";
 import { ToggleGroupField } from "@/components/molecules/form/ToggleGroupField";
 import { format, isBefore, sub } from "date-fns";
+import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { CreateHabitForm } from "./types";
 import { daysOfWeek, daysOfWeekTranslation } from "./utils";
 
 interface HabitTabProps {
-  categories?: { label: string; value: string | null }[];
+  categories?: HabitCategory[];
   habit?: Habit;
   endDate?: Date;
 }
@@ -22,6 +23,17 @@ const daysOfWeekOptions = daysOfWeek.map(item => ({
 
 export function HabitTab({ categories, habit, endDate }: HabitTabProps) {
   const form = useFormContext<CreateHabitForm>();
+
+  const categoriesOptions = useMemo(() => {
+    const list = [{ label: 'Sem categoria', value: null }] as { label: string; value: string | null }[];
+
+    list.push(...categories?.map(category => ({ label: category.name, value: category._id })) || []);
+
+    console.log(list);
+
+    return list || [];
+  }, [categories]);
+
 
   return (
     <div className="grid gap-4 px-6 pb-8">
@@ -54,7 +66,7 @@ export function HabitTab({ categories, habit, endDate }: HabitTabProps) {
           <ComboBoxField
             label='Categoria'
             name="category"
-            options={categories || []}
+            options={categoriesOptions}
             placeholder="Selecione a categoria"
             commandPlaceholder="Pesquisar categoria"
             commandEmpty="Nenhuma categoria encontrada"

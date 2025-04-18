@@ -112,11 +112,11 @@ export function HabitLineCheckboxes({
         id={`line-${habit._id}`}
         className={
           cn(
-            "flex justify-between items-center w-full max-w-full",
+            "flex justify-between items-center w-full max-w-full overflow-hidden",
             isDragging && "shadow-lg z-50"
           )
         } >
-        <div className="max-w-full overflow-hidden min-w-24 md:min-w-48">
+        <div className="w-full overflow-hidden min-w-32 max-w-32 sm:max-w-auto sm:min-w-48 ">
           <div className="flex items-center gap-1 ">
 
             {enableOrder && (
@@ -142,14 +142,14 @@ export function HabitLineCheckboxes({
                 onMouseLeave={() => setNameHovering(false)}
               />
 
-              <div className="flex items-center gap-px ml-1">
+              <div className="flex items-center gap-px ml-auto sm:ml-1">
                 {enableEdit && (
                   <button className="cursor-pointer border border-transparent hover:border-black rounded-full p-1 group" onClick={onEdit}>
                     <Pencil size={12} className="cursor-pointer text-neutral-400 group-hover:text-black" />
                   </button>
                 )}
                 {enableDelete && (
-                  <button className="cursor-pointer border border-transparent hover:border-black rounded-full p-1 group" onClick={onDelete}>
+                  <button className="cursor-pointer border border-transparent hover:border-black rounded-full p-1 group hidden sm:block" onClick={onDelete}>
                     <Trash size={12} className="cursor-pointer text-neutral-400 group-hover:text-black" />
                   </button>
                 )}
@@ -158,7 +158,7 @@ export function HabitLineCheckboxes({
           </div>
         </div>
 
-        <div className="flex justify-end overflow-x-auto md:max-w-full max-w-full flex-1 no-scrollbar" onScroll={onScroll}
+        <div className="flex justify-end overflow-x-auto no-scrollbar" onScroll={onScroll}
           data-scroll-line
           data-scroll-line-id={habit._id}
         >

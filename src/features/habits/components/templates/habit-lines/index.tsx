@@ -84,6 +84,29 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
     }, 500);
   }
 
+  useEffect(() => {
+    const handleResize = () => {
+      const allElements = Array.from(document.querySelectorAll('[data-scroll-line]')) as HTMLDivElement[];
+
+      console.log('allElements', allElements);
+
+      const days = 12;
+
+      allElements.forEach((element) => {
+        element.scroll({
+          left: (days - 1) * 28,
+          behavior: 'instant'
+        })
+      });
+    }
+
+    window.addEventListener('resize', handleResize);
+
+    handleResize();
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleHideHabits = (id: string) => () => {
     setHideHabits((prev) => ({ ...prev, [id]: !prev[id] }));
   }
@@ -282,7 +305,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
         {Object.entries(habits).map(([id, categorizedHabits], index) => (
           <div>
             <div className="flex items-end justify-between relative">
-              <div className={cn("w-full h-7 flex items-center gap-2 mb-3 group", index === 0 && "min-w-24 md:min-w-48 w-auto")}>
+              <div className={cn("w-full h-7 flex items-center gap-2 mb-3 group", index === 0 && "w-full min-w-32 max-w-32 sm:max-w-auto sm:min-w-48 sm:w-auto")}>
                 <div className="w-[2px] rounded-md h-full bg-black"></div>
                 <h6 className="text-sm font-medium font-[Recursive] truncate">{categorizedHabits.category?.name}</h6>
 
@@ -294,19 +317,17 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
               </div>
 
               {index === 0 && (
-                <div className="w-full overflow-x-auto flex-1 no-scrollbar" onScroll={handleScroll} data-scroll-line-id={id}>
-                  <div className='flex items-end w-full'>
-                    {daysInMonth.map((day) => {
-                      const formattedDay = format(day, 'MM/dd/yyyy');
-                      const isToday = format(currentDay, 'MM/dd/yyyy') === formattedDay;
+                <div className="overflow-x-auto no-scrollbar  flex items-end" onScroll={handleScroll} data-scroll-line-id={id}>
+                  {daysInMonth.map((day) => {
+                    const formattedDay = format(day, 'MM/dd/yyyy');
+                    const isToday = format(currentDay, 'MM/dd/yyyy') === formattedDay;
 
-                      return (
-                        <div className="min-w-7 min-h-7 border border-transparent flex items-center justify-center">
-                          <HabitDay monthDay={day} currentDay={isToday} shouldShowArrow />
-                        </div>
-                      )
-                    })}
-                  </div>
+                    return (
+                      <div className="min-w-7 min-h-7 border border-transparent flex items-center justify-center">
+                        <HabitDay monthDay={day} currentDay={isToday} shouldShowArrow />
+                      </div>
+                    )
+                  })}
                 </div>
               )}
             </div>

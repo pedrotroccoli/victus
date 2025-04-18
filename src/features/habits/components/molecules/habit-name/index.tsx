@@ -27,8 +27,8 @@ export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }
     <TooltipProvider>
       <Tooltip delayDuration={250}>
         <TooltipTrigger asChild>
-          <p className={cn(
-            "text-xs font-bold whitespace-nowrap truncate border-2 border-transparent rounded-md hover:border-black max-w-full flex items-center gap-2",
+          <div className={cn(
+            "text-xs font-bold whitespace-nowrap truncate border-2 border-transparent rounded-md hover:border-black max-w-full flex items-center gap-2 w-full",
             isHovering && "border-black",
             hide && "blur-sm"
           )
@@ -36,13 +36,14 @@ export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
           >
-            {item.name}
-            {/* {process.env.NODE_ENV === 'development' && <span className="text-[10px]">- {item.order}</span>} */}
+            <p className="max-w-[calc(100%-24px)] text-ellipsis overflow-hidden">
+              {item.name}
+            </p>
             {item.habit_deltas && (
               <Triangle size={12} />
             )}
 
-          </p>
+          </div>
         </TooltipTrigger>
         <TooltipContent className="p-2">
           <div className="flex flex-col gap-1">
