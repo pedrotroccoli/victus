@@ -6,6 +6,7 @@ import {
   GetAllHabitsCheckResponse,
   GetHabitsRequest,
   GetHabitsResponse,
+  UpdateHabitCheckRequest,
   UpdateHabitRequest
 } from "./types";
 
@@ -56,6 +57,12 @@ export const checkHabit = async (habit: CheckHabitRequest): Promise<CheckHabitRe
   const { data } = await baseApi.post(`/habits-check/${habit.habit_id}`, {
     checked: habit.checked
   });
+
+  return data;
+}
+
+export const updateHabitCheck = async (habitCheck: UpdateHabitCheckRequest): Promise<HabitCheck> => {
+  const { data } = await baseApi.put(`/habits-check/${habitCheck.habit_id}/${habitCheck.check_id}`, habitCheck);
 
   return data;
 }
