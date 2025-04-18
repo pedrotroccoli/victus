@@ -56,3 +56,17 @@ export interface GetAllHabitsCheckRequest {
 }
 
 export type GetAllHabitsCheckResponse = HabitCheck[];
+
+
+export interface UpdateHabitCheckRequest {
+  habit_id: string;
+  check_id: string;
+  habit_check_deltas_attributes: {
+    _id?: string;
+    habit_delta_id: string;
+    value: number;
+    _destroy?: boolean;
+  }[];
+}
+
+export type UpdateHabitCheckResponse = HabitCheck;
