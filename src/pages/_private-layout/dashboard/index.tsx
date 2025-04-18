@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Helmet } from "react-helmet";
 
 import { useMe } from "@/services/auth";
-import { useCheckHabit, useCreateHabit, useDeleteHabit, useGetHabits, useGetHabitsCheck, useUpdateHabit } from "@/services/habits/hooks";
+import { useCheckHabit, useCreateHabit, useDeleteHabit, useGetHabits, useGetHabitsCheck, useUpdateHabit, useUpdateHabitCheck } from "@/services/habits/hooks";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertDialog } from "@/components/ui/alert-dialog";
@@ -18,6 +18,7 @@ import { CreateCategoryForm, CreateCategoryModal } from "@/features/habits/compo
 import { CreateHabitModal } from "@/features/habits/components/templates/create-habit-modal";
 import { CreateHabitModalOnSaveProps } from "@/features/habits/components/templates/create-habit-modal/types";
 import { DeleteHabitModal } from "@/features/habits/components/templates/delete-habit-modal";
+import FillDeltaModal, { OnSaveDeltaModalProps } from "@/features/habits/components/templates/fill-delta-modal";
 import { HabitLineChange, HabitLines } from "@/features/habits/components/templates/habit-lines";
 import { cn } from "@/lib/utils";
 import { useCreateHabitCategory, useHabitCategories } from "@/services/habit-category/hooks";
@@ -43,6 +44,7 @@ export const Home = () => {
     enabled: !!me && habits && habits.length > 0
   });
   const { mutateAsync: updateHabit } = useUpdateHabit();
+  const { mutateAsync: updateHabitCheck } = useUpdateHabitCheck();
 
   const { data: habitCategories, isLoading: isLoadingHabitCategories } = useHabitCategories();
   const { mutateAsync: createHabitCategory } = useCreateHabitCategory();
@@ -62,6 +64,11 @@ export const Home = () => {
   const [createCategoryOpen, setCreateCategoryOpen] = useState(false);
   const [habitToDelete, setHabitToDelete] = useState<Habit | null>(null);
   const [editHabit, setEditHabit] = useState<Habit | null>(null);
+  const [fillDeltaModal, setFillDeltaModal] = useState<{
+    habit: Habit;
+    habitCheck: HabitCheck;
+  } | null>(null);
+
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
 
@@ -123,6 +130,13 @@ export const Home = () => {
 
   const handleCheckHabit = (habit: Habit, formattedDay: string) => {
     const habitCheck = getHabitCheck(habit, formattedDay);
+
+    if (habit.habit_deltas?.length && (habitCheck ? !habitCheck.checked : true)) {
+      setFillDeltaModal({
+        habit: habit,
+        habitCheck: habitCheck
+      });
+    }
 
     checkHabit({
       habit_id: habit._id,
@@ -241,6 +255,26 @@ export const Home = () => {
   const handleDisableTrialAlert = () => {
     localStorage.setItem('@victus::vjta', addDays(new Date(), 1).toISOString());
     setTrialAlert(false);
+  }
+
+  const handleFillDeltaModalSave = async (data: OnSaveDeltaModalProps) => {
+    console.log(data);
+
+    if (!fillDeltaModal) return;
+
+    await updateHabitCheck({
+      habit_id: fillDeltaModal?.habit._id,
+      check_id: fillDeltaModal?.habitCheck._id,
+      habit_check_deltas_attributes: data.deltas.map(item => ({
+        _id: item._id || undefined,
+        habit_delta_id: item.habit_delta_id,
+        value: item.value
+      }))
+    });
+
+    toast.success('Delta Preenchido com sucesso!');
+
+    setFillDeltaModal(null);
   }
 
   if (isLoadingMe) {
@@ -475,6 +509,10 @@ export const Home = () => {
 
       <Dialog open={createCategoryOpen} onOpenChange={setCreateCategoryOpen}>
         <CreateCategoryModal onSave={handleCreateCategory} />
+      </Dialog>
+
+      <Dialog open={!!fillDeltaModal} onOpenChange={() => setFillDeltaModal(null)}>
+        <FillDeltaModal habit={fillDeltaModal?.habit} habitCheck={fillDeltaModal?.habitCheck} onSave={handleFillDeltaModalSave} />
       </Dialog>
 
       <AlertDialog open={!!habitToDelete} onOpenChange={() => setHabitToDelete(null)}>
