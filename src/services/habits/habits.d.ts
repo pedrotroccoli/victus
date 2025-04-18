@@ -10,6 +10,15 @@ declare global {
     type: 'number';
   }
 
+  interface HabitDeltaCheck {
+    _id: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at?: string;
+    value: number;
+    habit_delta_id: string;
+  }
+
   interface Habit {
     _id: string;
     account_id: string;
@@ -37,6 +46,7 @@ declare global {
     finished_at?: string;
     updated_at: string;
     habit_id: string;
+    habit_check_deltas?: HabitDeltaCheck[];
   }
 }
 
