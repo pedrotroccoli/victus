@@ -102,15 +102,6 @@ export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModal
   }
 
   const endDate = form.watch('infinite') ? undefined : form.watch('end_date');
-  const categoriesOptions = useMemo(() => {
-    const list = [{ label: 'Sem categoria', value: undefined }] as { label: string; value: string | undefined }[];
-
-    list.push(...categories?.map(category => ({ label: category.name, value: category._id })) || []);
-
-    console.log(list);
-
-    return list || [];
-  }, [categories]);
 
 
   return (
@@ -129,7 +120,7 @@ export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModal
           </TabsList>
 
           <TabsContent value="habit">
-            <HabitTab categories={categoriesOptions} habit={habit} endDate={endDate} />
+            <HabitTab categories={categories} habit={habit} endDate={endDate} />
           </TabsContent>
           <TabsContent value="deltas">
             <DeltaTab />
