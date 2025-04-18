@@ -40,7 +40,7 @@ export function Combobox({ options, value, onChange, placeholder, commandEmpty, 
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value !== undefined
+          {(value !== undefined && value !== null)
             ? options.find((option) => option.value === value)?.label
             : placeholder}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
