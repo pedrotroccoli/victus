@@ -38,7 +38,6 @@ export const deleteHabit = async (id: string): Promise<void> => {
 export const updateHabit = async (params: UpdateHabitRequest): Promise<Habit> => {
   const { data } = await baseApi.put(`/habits/${params._id}`, {
     habit: {
-
       ...params,
     }
   });
