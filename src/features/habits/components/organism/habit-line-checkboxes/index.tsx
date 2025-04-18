@@ -176,7 +176,7 @@ export function HabitLineCheckboxes({
                   <HabitCheckbox
                     isHovering={nameHovering}
                     key={`${habit._id}-${formattedDay}`}
-                    disabled={!habitRange.isToday || type !== 'none'}
+                    disabled={!habitRange.isToday || (type !== 'none' && type !== 'checked')}
                     invertPattern={index % 2 === 0}
                     type={type}
                     onCheck={handleCheckHabit(habit, formattedDay)}
