@@ -67,7 +67,7 @@ export const SidebarLayout = () => {
             <SidebarTrigger />
           </div>
         </SidebarHeader>
-        <SidebarContent className="bg-white px-2">
+        <SidebarContent className="bg-white px-2 pt-10">
           <SidebarGroup >
             <SidebarGroupLabel>
               Geral
@@ -84,7 +84,7 @@ export const SidebarLayout = () => {
                 </SidebarMenuItem>
                 <SidebarMenuItem title="Analytics">
                   <Link to="/analytics">
-                    <SidebarMenuButton className={cn("text-neutral-500", pathname === "/analytics" && "text-black border font-bold border-black")}>
+                    <SidebarMenuButton className={cn("text-neutral-500", pathname === "/analytics" && "text-black border border-black")}>
                       <ChartLine size={16} weight="bold" />
                       Analytics
                     </SidebarMenuButton>
@@ -92,7 +92,7 @@ export const SidebarLayout = () => {
                 </SidebarMenuItem>
                 <SidebarMenuItem title="Configurações">
                   <Link to="/account/general">
-                    <SidebarMenuButton>
+                    <SidebarMenuButton className={cn("text-neutral-500", pathname === "/account/general" && "text-black border  border-black")}>
                       <Gear size={16} weight="bold" />
                       Configurações
                     </SidebarMenuButton>

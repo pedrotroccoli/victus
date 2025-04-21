@@ -33,8 +33,6 @@ export default function PrivateLayout() {
 
     const withoutSubscriptionPages = ['/account', '/freezed', '/checkout']
 
-    console.log(me, (me?.subscription?.status !== 'active' || !me?.subscription), !withoutSubscriptionPages.some(page => location.pathname.includes(page)));
-
     if (!me) return;
 
     if ((me?.subscription?.status !== 'active' || !me?.subscription) && !withoutSubscriptionPages.some(page => location.pathname.includes(page))) {
