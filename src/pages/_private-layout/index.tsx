@@ -1,5 +1,4 @@
 import { useMe } from "@/services/auth";
-import { signOut } from "@/services/auth/services";
 import { Outlet, useLocation, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef } from "react";
 
@@ -8,16 +7,6 @@ export default function PrivateLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const isLoggingOut = useRef(false);
-
-  const handleSignOut = async () => {
-    isLoggingOut.current = true;
-
-    await signOut();
-
-    navigate({
-      to: '/',
-    });
-  }
 
   const goToDashboard = useCallback(() => {
     const missingSubscription = me?.subscription?.status !== 'active' || !me?.subscription ? true : undefined;
@@ -52,16 +41,6 @@ export default function PrivateLayout() {
       goToDashboard();
     }
   }, [me, navigate, goToDashboard, location.pathname])
-
-  const goTo = (path: string) => {
-    switch (path) {
-      case '/dashboard':
-        goToDashboard();
-        break;
-      default:
-        break;
-    }
-  }
 
   return (
     <div className="w-full h-full">

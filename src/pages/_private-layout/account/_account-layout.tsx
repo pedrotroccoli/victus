@@ -8,7 +8,7 @@ interface AccountLayoutParams {
 
 export const AccountLayout = () => {
 
-  const params = useSearch({ from: '/_private/account/_layout' }) as AccountLayoutParams;
+  const params = useSearch({ from: '/_private/_sidebar/account/_layout' }) as AccountLayoutParams;
   const navigate = useNavigate();
 
   return (

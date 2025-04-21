@@ -13,7 +13,7 @@ interface SubscriptionParams {
 
 export default function Subscription() {
   const { data: me } = useMe();
-  const params = useSearch({ from: '/_private/account/_layout/subscription/' }) as SubscriptionParams;
+  const params = useSearch({ from: '/_private/_sidebar/account/_layout/subscription/' }) as SubscriptionParams;
   const navigate = useNavigate();
 
   const firstName = useMemo(() => {
