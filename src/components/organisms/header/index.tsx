@@ -1,5 +1,7 @@
 import { LogoWithText } from "@/assets/logo-with-text";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { AccountAvatar } from "@/features/account/components/ions";
+import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 
 export interface HeaderProps {
@@ -9,6 +11,7 @@ export interface HeaderProps {
 }
 
 export const Header = ({ account, handleSignOut, goTo }: HeaderProps) => {
+  const sidebar = useSidebar();
 
   const formattedShortname = useMemo(() => {
     if (!account) return 'X';
@@ -21,11 +24,24 @@ export const Header = ({ account, handleSignOut, goTo }: HeaderProps) => {
 
 
   return (
-    <header className="w-full border-neutral-300 border-b bg-white h-20">
-      <div className="flex items-center justify-between max-w-screen-lg mx-auto px-4 sm:px-8 w-full h-full">
-        <div className="flex items-center">
-          <LogoWithText className="max-w-20" />
-        </div>
+    <header className="w-full border-neutral-300 border-b bg-white h-20 relative">
+      <div
+        className={cn(
+          "flex items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-8 w-full h-full",
+          sidebar.open && "justify-end"
+        )}
+      >
+        {!sidebar.open && (
+          <div className="absolute left-4 top-1/2 -translate-y-1/2">
+            <SidebarTrigger />
+          </div>
+        )}
+        {!sidebar.open && (
+          <div className="flex items-center">
+            <LogoWithText className="max-w-16" />
+          </div>
+        )}
+
 
         <div className="">
           <AccountAvatar shortname={formattedShortname} signOut={handleSignOut} goTo={goTo} />
