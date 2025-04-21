@@ -258,8 +258,6 @@ export const Home = () => {
   }
 
   const handleFillDeltaModalSave = async (data: OnSaveDeltaModalProps) => {
-    console.log(data);
-
     if (!fillDeltaModal) return;
 
     await updateHabitCheck({
@@ -268,7 +266,7 @@ export const Home = () => {
       habit_check_deltas_attributes: data.deltas.map(item => ({
         _id: item._id || undefined,
         habit_delta_id: item.habit_delta_id,
-        value: String(item.value)
+        value: item.value
       }))
     });
 
@@ -293,7 +291,7 @@ export const Home = () => {
         <title>Victus Journal | Dashboard</title>
       </Helmet>
 
-      <section className="max-w-screen-lg w-full mx-auto bg-sign ">
+      <section className="max-w-screen-lg w-full mx-auto bg-sign">
         <div className="px-4 sm:px-8 pt-4 sm:pt-8">
           {me?.subscription?.sub_status === 'trial' && trialAlert && (
             <div className="relative ">
