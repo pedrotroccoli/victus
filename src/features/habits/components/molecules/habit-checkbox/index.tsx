@@ -68,7 +68,7 @@ export const HabitCheckbox = ({ today, onCheck, isFirstRow, isLastRow, isFirstCo
         <TooltipProvider>
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
-              <div className="bg-red-500 w-full h-full rounded-full"></div>
+              <div className="w-full h-full rounded-full"></div>
             </TooltipTrigger>
             <TooltipContent>
               <p>isFirst: {String(isFirstRow)}</p>

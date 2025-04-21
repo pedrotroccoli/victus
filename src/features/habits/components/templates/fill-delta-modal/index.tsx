@@ -66,13 +66,7 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
   });
 
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
-    console.log(habit, habitCheck);
-  }, [habit, habitCheck]);
-
-  useEffect(() => {
-    console.log(habit?.habit_deltas, deltas);
     form.reset({
       deltas: (habit?.habit_deltas?.map((delta) => ({
         _id: deltas?.[delta._id]._id,
