@@ -64,7 +64,7 @@ export interface UpdateHabitCheckRequest {
   habit_check_deltas_attributes: {
     _id?: string;
     habit_delta_id: string;
-    value: number;
+    value: number | string;
     _destroy?: boolean;
   }[];
 }
