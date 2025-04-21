@@ -86,7 +86,7 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
     });
   }, [habit, deltas, form]);
 
-  if (!habitCheck || !habit) return null;
+  if (!habit) return null;
 
   const handleSubmit: SubmitHandler<FillDeltaModalForm> = async (data: FillDeltaModalForm) => {
     if (!onSave) return;
