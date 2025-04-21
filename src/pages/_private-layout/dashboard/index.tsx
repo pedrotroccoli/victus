@@ -268,7 +268,7 @@ export const Home = () => {
       habit_check_deltas_attributes: data.deltas.map(item => ({
         _id: item._id || undefined,
         habit_delta_id: item.habit_delta_id,
-        value: item.value
+        value: String(item.value)
       }))
     });
 
