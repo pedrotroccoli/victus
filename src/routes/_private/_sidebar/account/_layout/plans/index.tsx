@@ -1,4 +1,4 @@
-import PlansPage from '@/pages/_private-layout/account/plans'
+import PlansPage from '@/pages/_private-layout/_sidebar/account/plans'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
