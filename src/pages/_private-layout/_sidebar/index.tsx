@@ -1,7 +1,8 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
-import { BookOpenText, ChartLine, Chat, Gear } from "@phosphor-icons/react"
+import { BookOpenText, ChartLine, Chat, Gear, House } from "@phosphor-icons/react"
 import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router"
+import { motion } from "motion/react"
 
 import { LogoWithText } from "@/assets/logo-with-text"
 import { Header } from "@/components/organisms/header"
@@ -20,6 +21,8 @@ export const SidebarLayout = () => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
   const isLoggingOut = useRef(false);
+
+  const location = useLocation();
 
   const handleSignOut = async () => {
     isLoggingOut.current = true;
@@ -129,6 +132,39 @@ export const SidebarLayout = () => {
           <div className="border-x border-neutral-300 min-h-full  bg-[url('/dashboard-bg.png')] bg-cover bg-repeat relative">
             <Outlet />
           </div>
+          <nav className="absolute bottom-8 left-1/2 -translate-x-1/2">
+            <ul className="flex items-center gap-2 px-2.5 py-1 relative z-10 shadow-2xl">
+              <div
+                className={
+                  cn("absolute bottom-0 left-0 w-full h-full bg-white border border-neutral-300 rounded-full px-2.5 py-1 z-[-1] flex items-center",
+                    pathname === "/analytics" && "justify-end"
+                  )
+                }
+              >
+                <motion.div className="w-10 h-9 bg-black rounded-full" layout transition={{ duration: 0.7, type: "spring", bounce: 0.5 }} />
+              </div>
+              <li>
+                <Link to="/dashboard">
+                  <motion.button className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center",
+                    pathname === "/dashboard" && "text-white"
+                  )} >
+                    <House size={18} weight="bold" />
+                  </motion.button>
+                </Link>
+              </li>
+              <li>
+                <Link to="/analytics">
+                  <motion.button className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center",
+                    pathname === "/analytics" && "text-white"
+                  )} >
+                    <ChartLine size={18} weight="bold" />
+                  </motion.button>
+                </Link>
+              </li>
+            </ul>
+          </nav>
           <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-16">
             <Popover>
               <HoverCard openDelay={200} closeDelay={0}>
