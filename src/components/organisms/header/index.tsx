@@ -31,11 +31,12 @@ export const Header = ({ account, handleSignOut, goTo }: HeaderProps) => {
           sidebar.open && "justify-end"
         )}
       >
-        {!sidebar.open && (
-          <div className="absolute left-4 top-1/2 -translate-y-1/2">
-            <SidebarTrigger />
-          </div>
-        )}
+        <div className={cn(
+          "absolute left-4 top-1/2 -translate-y-1/2",
+          sidebar.open && "sm:hidden"
+        )}>
+          <SidebarTrigger />
+        </div>
         {!sidebar.open && (
           <div className="flex items-center">
             <LogoWithText className="max-w-16" />
