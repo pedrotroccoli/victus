@@ -1,11 +1,100 @@
-import { Blueprint } from "@phosphor-icons/react"
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { getHabitsAnalytics, HabitsAnalytics } from "@/features/habits/utils/analytics"
+import { useMe } from "@/services/auth"
+import { useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks"
+import { DateFormat } from "@/services/habits/types"
+import { Percent } from "@phosphor-icons/react"
+import { eachDayOfInterval, endOfDay, format, subDays } from "date-fns"
+import { useMemo } from "react"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
+
+
+const chartConfig = {
+  percentage: {
+    label: "Performance: ",
+    color: "#2563eb",
+    icon: Percent
+  },
+  mobile: {
+    label: "Mobile",
+    color: "#60a5fa",
+  },
+} satisfies ChartConfig
 
 export const Analytics = () => {
+  const startRange = subDays(new Date(), 7);
+  const endRange = endOfDay(new Date());
+
+  const { data: me } = useMe();
+  const { data: habits } = useGetHabits({
+    start_date: format(startRange, 'yyyy-MM-dd') as DateFormat,
+    end_date: format(endRange, 'yyyy-MM-dd') as DateFormat
+  }, {
+    enabled: !!me
+  });
+  const { data: habitsCheck } = useGetHabitsCheck({
+    start_date: format(startRange, 'yyyy-MM-dd') as DateFormat,
+    end_date: format(endRange, 'yyyy-MM-dd') as DateFormat,
+  }, {
+    enabled: !!me && habits && habits.length > 0
+  });
+
+  const habitsCheckedHash = useMemo(() => {
+    if (!habitsCheck) return {};
+
+    return habitsCheck.reduce((previous: Record<string, Record<string, HabitCheck>>, current: HabitCheck) => {
+      if (!current.finished_at) return previous;
+
+      return ({
+        ...previous,
+        [current.habit_id]: {
+          ...(previous[current.habit_id] || {}),
+          [format(current.finished_at, 'MM/dd/yyyy')]: current
+        }
+      })
+    }, {});
+  }, [habitsCheck])
+
+  const { getAnalyticsFromDate } = useMemo(() => getHabitsAnalytics(habits as Habit[], habitsCheckedHash), [habits, habitsCheckedHash]);
+
+  const analytics = useMemo((): HabitsAnalytics[] => {
+    const sevenDaysAgo = subDays(new Date(), 7);
+    const currentDay = new Date();
+
+    return eachDayOfInterval({
+      start: sevenDaysAgo,
+      end: currentDay
+    }).map(day => getAnalyticsFromDate(day));
+  }, [getAnalyticsFromDate]);
+
   return (
-    <div className="flex flex-col items-center justify-center h-full pt-40">
-      <Blueprint size={48} />
-      <h1 className="text-2xl font-bold font-[Recursive] mt-8">O analytics está em construção</h1>
-      <p className="text-sm text-black/75 mt-4">Estamos trabalhando para disponibilizar este recurso em breve!</p>
+    <div className="flex flex-col items-center justify-center h-full pt-8 w-full">
+      <ul className="grid grid-cols-1 gap-4 w-full">
+        <li>
+          <div className="bg-white border border-black rounded-lg w-full relative">
+            <div className="flex items-center justify-between p-4">
+              <h3 className="text-lg font-bold font-[Recursive]">Sua performance:</h3>
+            </div>
+            <ChartContainer config={chartConfig} className="min-h-[250px] w-full max-w-full p-2">
+              <BarChart accessibilityLayer data={analytics}>
+                <CartesianGrid vertical={true} />
+
+                <Bar dataKey="percentage" fill="var(--color-percentage)" radius={4} />
+
+                <ChartTooltip content={<ChartTooltipContent />} />
+
+                <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={16} />
+
+                <YAxis max={100} min={0} tickLine={false} axisLine={false} tickMargin={16} tickFormatter={(value) => `${value}%`} />
+
+                {/* <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} /> */}
+              </BarChart>
+            </ChartContainer>
+          </div>
+
+        </li>
+
+      </ul>
     </div>
   )
 }
