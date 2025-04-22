@@ -130,8 +130,8 @@ export const SidebarLayout = () => {
           <div className="border-x border-neutral-300 min-h-full  bg-[url('/dashboard-bg.png')] bg-cover bg-repeat relative">
             <Outlet />
           </div>
-          <nav className="absolute bottom-8 left-1/2 -translate-x-1/2">
-            <ul className="flex items-center gap-2 px-2.5 py-1 relative z-10 shadow-2xl">
+          <nav className="absolute bottom-8 left-1/2 -translate-x-1/2 md:hidden bg-transparent">
+            <ul className="flex items-center gap-2 px-2.5 py-1 relative z-10 shadow-2xl rounded-full">
               <div
                 className={
                   cn("absolute bottom-0 left-0 w-full h-full bg-white border border-neutral-300 rounded-full px-2.5 py-1 z-[-1] flex items-center",
