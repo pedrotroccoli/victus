@@ -129,13 +129,13 @@ export const SidebarLayout = () => {
           <div className="border-x border-neutral-300 min-h-full  bg-[url('/dashboard-bg.png')] bg-cover bg-repeat relative">
             <Outlet />
           </div>
-          <div className="absolute bottom-8 right-16">
+          <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-16">
             <Popover>
               <HoverCard openDelay={200} closeDelay={0}>
                 <HoverCardTrigger asChild>
                   <PopoverTrigger asChild>
-                    <button className="w-16 h-16 bg-white border border-neutral-300 rounded-full flex items-center justify-center shadow-2xl">
-                      <img src={MrHabbit} alt="Mr Habbit" className="w-14 h-14 rounded-full p-1" />
+                    <button className="w-12 h-12 sm:w-16 sm:h-16 bg-white border border-neutral-300 rounded-full flex items-center justify-center shadow-2xl">
+                      <img src={MrHabbit} alt="Mr Habbit" className="w-10 h-10 sm:w-14 sm:h-14 rounded-full p-1" />
                     </button>
                   </PopoverTrigger>
                 </HoverCardTrigger>
