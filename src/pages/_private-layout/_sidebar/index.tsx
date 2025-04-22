@@ -22,8 +22,6 @@ export const SidebarLayout = () => {
   const navigate = useNavigate()
   const isLoggingOut = useRef(false);
 
-  const location = useLocation();
-
   const handleSignOut = async () => {
     isLoggingOut.current = true;
 
@@ -165,7 +163,7 @@ export const SidebarLayout = () => {
               </li>
             </ul>
           </nav>
-          <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-16">
+          <div className="absolute bottom-8 right-4 sm:bottom-8 sm:right-16">
             <Popover>
               <HoverCard openDelay={200} closeDelay={0}>
                 <HoverCardTrigger asChild>
