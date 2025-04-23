@@ -4,8 +4,10 @@ export interface HabitGroup {
   category?: HabitCategory;
 }
 
-export const groupByCategory = (habits: Habit[], categories: HabitCategory[]): Record<string, HabitGroup> => {
-  const grouped = habits.reduce((acc: Record<string, HabitGroup>, habit: Habit) => {
+export type CategorizedHabits = Record<string, HabitGroup>;
+
+export const groupByCategory = (habits: Habit[], categories: HabitCategory[]): CategorizedHabits => {
+  const grouped = habits.reduce((acc: CategorizedHabits, habit: Habit) => {
     if (!acc[habit.habit_category_id] && habit.habit_category_id) {
       acc[habit.habit_category_id] = {
         categoryId: habit.habit_category_id,
@@ -44,11 +46,10 @@ export const groupByCategory = (habits: Habit[], categories: HabitCategory[]): R
 
   withEmptyCategories.unshift(grouped['general'])
 
-  const all = withEmptyCategories.reduce((acc: Record<string, HabitGroup>, item: HabitGroup) => {
+  const all = withEmptyCategories.reduce((acc: CategorizedHabits, item: HabitGroup) => {
     acc[item.categoryId] = item;
     return acc;
   }, {});
-
 
   return all;
 }

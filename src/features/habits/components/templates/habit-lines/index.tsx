@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 import {
   closestCenter,
   DndContext,
@@ -18,13 +17,11 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy
 } from '@dnd-kit/sortable';
-import { format } from 'date-fns';
 import { omit } from 'lodash';
-import { Eye, EyeOff } from 'lucide-react';
 import { useEffect, useRef, useState } from "react";
-import { HabitDay } from '../../atoms/habit-day';
 import { HabitEmptyBox } from '../../molecules/habit-empty-box';
 import { HabitLineCheckboxes } from "../../organism/habit-line-checkboxes";
+import { HabitLineHeader } from '../../organism/habit-line-header';
 import { groupByCategory, HabitGroup } from './utils';
 
 export type HabitLineChange = {
@@ -69,6 +66,8 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
     currentLineId.current = event.currentTarget['dataset']['scrollLineId'];
 
     const allElements = Array.from(document.querySelectorAll('[data-scroll-line]')) as HTMLDivElement[];
+
+    console.log('allElements', allElements);
     const filteredElements = allElements
       .filter((element) => element.dataset['scrollLineId'] !== event.currentTarget['dataset']['scrollLineId']);
 
@@ -81,20 +80,20 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
 
     timeOut.current = setTimeout(() => {
       currentLineId.current = '';
-    }, 500);
+    }, 300);
   }
 
   useEffect(() => {
     const handleResize = () => {
       const allElements = Array.from(document.querySelectorAll('[data-scroll-line]')) as HTMLDivElement[];
 
-      console.log('allElements', allElements);
-
       const days = 12;
+
+      const isMobile = window.innerWidth < 768;
 
       allElements.forEach((element) => {
         element.scroll({
-          left: (days - 1) * 28,
+          left: (days - 1) * (isMobile ? 40 : 28),
           behavior: 'instant'
         })
       });
@@ -304,34 +303,15 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
       >
         {Object.entries(habits).map(([id, categorizedHabits], index) => (
           <div>
-            <div className="flex items-end justify-between relative">
-              <div className={cn("w-full h-7 flex items-center gap-2 mb-3 group", index === 0 && "w-full min-w-32 max-w-32 sm:max-w-auto sm:min-w-48 sm:w-auto")}>
-                <div className="w-[2px] rounded-md h-full bg-black"></div>
-                <h6 className="text-sm font-medium font-[Recursive] truncate">{categorizedHabits.category?.name}</h6>
-
-                <button className="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-5 h-5 rounded-full flex items-center justify-center border border-neutral-500"
-                  onClick={onHideHabit(id)}
-                >
-                  {hideHabits ? <EyeOff size={12} /> : <Eye size={14} />}
-                </button>
-              </div>
-
-              {index === 0 && (
-                <div className="overflow-x-auto no-scrollbar  flex items-end" onScroll={handleScroll} data-scroll-line-id={id}>
-                  {daysInMonth.map((day) => {
-                    const formattedDay = format(day, 'MM/dd/yyyy');
-                    const isToday = format(currentDay, 'MM/dd/yyyy') === formattedDay;
-
-                    return (
-                      <div className="min-w-7 min-h-7 border border-transparent flex items-center justify-center">
-                        <HabitDay monthDay={day} currentDay={isToday} shouldShowArrow />
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
-
+            <HabitLineHeader
+              isFirstRow={index === 0}
+              category={categorizedHabits.category}
+              hideHabits={hideHabits[id]}
+              onHideHabit={onHideHabit(id)}
+              daysInMonth={daysInMonth}
+              handleScroll={handleScroll}
+              currentDay={currentDay}
+            />
             <>
               {categorizedHabits && categorizedHabits?.list?.length === 0 && (
                 <HabitEmptyBox category={categorizedHabits.category} />
