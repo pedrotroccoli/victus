@@ -440,12 +440,12 @@ export const Home = () => {
 
                   <div className="p-4">
 
-                    <Tabs defaultValue="account" className="w-full">
+                    <Tabs defaultValue="focus" className="w-full">
                       <TabsList className="border border-black p-0 h-auto">
-                        <TabsTrigger value="account" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Visão Geral</TabsTrigger>
-                        <TabsTrigger value="password" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Modo Foco</TabsTrigger>
+                        <TabsTrigger value="general" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Visão Geral</TabsTrigger>
+                        <TabsTrigger value="focus" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Modo Foco</TabsTrigger>
                       </TabsList>
-                      <TabsContent value="account" className="w-full">
+                      <TabsContent value="general" className="w-full">
                         <div className="border-t border border-neutral-200 mt-4 mb-2" ></div>
                         <HabitLines
                           onEditHabit={handleEditHabit}
@@ -460,7 +460,7 @@ export const Home = () => {
                           editEnabled={editEnabled}
                         />
                       </TabsContent>
-                      <TabsContent value="password">
+                      <TabsContent value="focus">
                         <div className="border-t border border-neutral-200 mt-4 mb-4" ></div>
                         <ul className="grid gap-2">
                           {habits.filter((habit) => {
