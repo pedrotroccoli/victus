@@ -23,7 +23,7 @@ import { HabitLineChange, HabitLines } from "@/features/habits/components/templa
 import { cn } from "@/lib/utils";
 import { useCreateHabitCategory, useHabitCategories } from "@/services/habit-category/hooks";
 import { DateFormat } from "@/services/habits/types";
-import { isAcceptedByRRule } from "@/utils/habits";
+import { isAcceptedByRRule, isInfiniteHabit } from "@/utils/habits";
 import { toast } from "sonner";
 
 export const Home = () => {
@@ -464,10 +464,11 @@ export const Home = () => {
                         <div className="border-t border border-neutral-200 mt-4 mb-4" ></div>
                         <ul className="grid gap-2">
                           {habits.filter((habit) => {
-                            const validStart = habit.start_date && isBefore(habit.start_date, currentDay);
-                            const validEnd = habit.recurrence_type === 'infinite' || (habit.end_date && isAfter(habit.end_date, currentDay));
+                            const isAccepted = isAcceptedByRRule(habit, format(currentDay, 'MM/dd/yyyy'));
+                            const startsBeforeCurrentDay = isBefore(habit.start_date, currentDay);
+                            const endsAfterCurrentDay = isInfiniteHabit(habit) ? true : isAfter(habit.end_date, currentDay);
 
-                            if (validStart && validEnd) return true;
+                            if (isAccepted && startsBeforeCurrentDay && endsAfterCurrentDay) return true;
 
                             return false;
                           }).map((habit) => {
