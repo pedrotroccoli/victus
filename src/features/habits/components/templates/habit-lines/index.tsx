@@ -67,7 +67,6 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
 
     const allElements = Array.from(document.querySelectorAll('[data-scroll-line]')) as HTMLDivElement[];
 
-    console.log('allElements', allElements);
     const filteredElements = allElements
       .filter((element) => element.dataset['scrollLineId'] !== event.currentTarget['dataset']['scrollLineId']);
 
@@ -213,8 +212,6 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
 
 
       newItems[newIndex].order = newOrder;
-
-      console.log('newItems[newIndex]', newItems[newIndex]);
 
       onHabitChange({
         type: ['order', 'category'],
