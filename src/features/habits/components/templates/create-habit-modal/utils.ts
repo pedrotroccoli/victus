@@ -24,7 +24,7 @@ export const createHabitValidation = z.object({
     id: z.string().optional(),
     state: z.enum(['deleted', 'active']),
     name: z.string({ message: 'O nome do delta é obrigatório' }).min(2, 'Mínimo de 2 caracteres'),
-    type: z.enum(['number', 'string']),
+    type: z.enum(['number', 'string', 'time']),
   })).optional(),
 }).refine((data) => {
   if (data.frequency === 'weekly' && !data.week_days?.length) {
