@@ -128,21 +128,21 @@ export const Home = () => {
     return habitsCheckedHash?.[habit._id]?.[formattedDay];
   }
 
-  const handleCheckHabit = (habit: Habit, formattedDay: string) => {
+  const handleCheckHabit = async (habit: Habit, formattedDay: string) => {
     const habitCheck = getHabitCheck(habit, formattedDay);
 
-    if (habit.habit_deltas?.length && (habitCheck ? !habitCheck.checked : true)) {
-      setFillDeltaModal({
-        habit: habit,
-        habitCheck: habitCheck
-      });
-    }
-
-    checkHabit({
+    const check = await checkHabit({
       habit_id: habit._id,
       check_id: habitCheck?._id,
       checked: !habitCheck?.checked
     });
+
+    if (habit.habit_deltas?.length && (habitCheck ? !habitCheck.checked : true)) {
+      setFillDeltaModal({
+        habit: habit,
+        habitCheck: check
+      });
+    }
   }
 
   const handleCreateCategory = async (data: CreateCategoryForm) => {
@@ -260,11 +260,13 @@ export const Home = () => {
   const handleFillDeltaModalSave = async (data: OnSaveDeltaModalProps) => {
     if (!fillDeltaModal) return;
 
+    console.log(fillDeltaModal, data);
+
     await updateHabitCheck({
-      habit_id: fillDeltaModal?.habit._id,
-      check_id: fillDeltaModal?.habitCheck._id,
+      habit_id: fillDeltaModal?.habit?._id,
+      check_id: fillDeltaModal?.habitCheck?._id,
       habit_check_deltas_attributes: data.deltas.map(item => ({
-        _id: item._id || undefined,
+        _id: item?._id || undefined,
         habit_delta_id: item.habit_delta_id,
         value: item.value
       }))
