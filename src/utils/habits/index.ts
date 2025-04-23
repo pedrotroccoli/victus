@@ -37,3 +37,11 @@ export const isAcceptedByRRule = (habit: Habit, monthDay: string) => {
 
   return isAccepted;
 }
+
+export const isInfiniteHabit = (habit: Habit) => {
+  if (!habit.recurrence_details?.rule) return false;
+
+  const rrule = rrulestr(habit.recurrence_details?.rule);
+
+  return rrule.options.until === null;
+}
