@@ -127,10 +127,11 @@ export const SidebarLayout = () => {
       <main className="w-full h-full bg-red-20">
         <Header account={me} handleSignOut={handleSignOut} goTo={goTo} />
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8 h-[calc(100vh-5rem)] overflow-y-auto">
-          <div className="border-x border-neutral-300 min-h-full  bg-[url('/dashboard-bg.png')] bg-cover bg-repeat relative">
+          <div className="min-h-[calc(100vh-5rem)]  bg-[url('/dashboard-bg.png')] bg-cover bg-repeat relative">
             <Outlet />
+            <div className="h-20 w-full" />
           </div>
-          <nav className="absolute bottom-8 left-1/2 -translate-x-1/2 md:hidden bg-transparent">
+          <nav className="absolute bottom-6 left-1/2 -translate-x-1/2 md:hidden bg-transparent">
             <ul className="flex items-center gap-2 px-2.5 py-1 relative z-10 shadow-2xl rounded-full">
               <div
                 className={
@@ -163,7 +164,7 @@ export const SidebarLayout = () => {
               </li>
             </ul>
           </nav>
-          <div className="absolute bottom-8 right-4 sm:bottom-8 sm:right-16">
+          <div className="absolute bottom-6 right-4 sm:bottom-8 sm:right-16">
             <Popover>
               <HoverCard openDelay={200} closeDelay={0}>
                 <HoverCardTrigger asChild>

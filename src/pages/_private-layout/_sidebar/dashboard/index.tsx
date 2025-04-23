@@ -292,7 +292,7 @@ export const Home = () => {
       </Helmet>
 
       <section className="max-w-screen-lg w-full mx-auto bg-sign">
-        <div className="px-4 sm:px-8 pt-4 sm:pt-8">
+        <div className="sm:px-4 pt-4 sm:pt-8">
           {me?.subscription?.sub_status === 'trial' && trialAlert && (
             <div className="relative ">
               <Alert className="border-yellow-600 bg-yellow-500/10 mb-12">
