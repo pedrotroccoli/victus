@@ -310,7 +310,7 @@ export const Home = () => {
           )}
 
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-6">
-            <h1 className="font-[Recursive] text-xl font-semibold">Olá {String(me.name).split(' ')[0]}, aqui está seu Jornal!</h1>
+            <h1 className="font-[Recursive] text-xl font-semibold">Olá {me?.name ? String(me?.name).split(' ')[0] : ''}, aqui está seu Jornal!</h1>
 
             <Dialog open={createHabitOpen} onOpenChange={setCreateHabitOpen}>
               <DialogTrigger asChild>
