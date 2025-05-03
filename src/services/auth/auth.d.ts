@@ -5,6 +5,7 @@ declare global {
     email: string;
     createdAt: string;
     updatedAt: string;
+    connected_providers: ['worldapp' | 'web']
   }
 }
 
