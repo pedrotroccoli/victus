@@ -4,7 +4,8 @@ import { getToken, removeToken } from "./auth/services";
 export const baseApi = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
   headers: {
-    'Access-Control-Allow-Origin': 'https://dev.victusjournal.com',
+    'Access-Control-Allow-Origin': process.env.NODE_ENV === 'development' ? '*' : 'https://dev.victusjournal.com',
+    'ngrok-skip-browser-warning': true,
   }
 });
 
@@ -40,7 +41,7 @@ baseApi.interceptors.request.use(async (config) => {
 baseApi.interceptors.response.use(async (config) => {
   return config;
 }, (error) => {
-  if (error.response.status === 401 && error.config.url !== '/auth/sign-in') {
+  if (error?.response?.status === 401 && error?.config?.url !== '/auth/sign-in') {
     tries++;
   }
 })
