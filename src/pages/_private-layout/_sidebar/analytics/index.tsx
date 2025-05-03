@@ -1,4 +1,3 @@
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { AnalyticsBox } from "@/features/analytics/components/atoms/analytics-box"
 import { getHabitsAnalytics, HabitsAnalytics } from "@/features/habits/utils/analytics"
 import { useMe } from "@/services/auth"
@@ -7,7 +6,9 @@ import { DateFormat } from "@/services/habits/types"
 import { Percent } from "@phosphor-icons/react"
 import { eachDayOfInterval, endOfDay, format, subDays } from "date-fns"
 import { useMemo } from "react"
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
+
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { Area, AreaChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
 
 
 const chartConfig = {
@@ -15,11 +16,7 @@ const chartConfig = {
     label: "Performance: ",
     color: "#2563eb",
     icon: Percent
-  },
-  mobile: {
-    label: "Mobile",
-    color: "#60a5fa",
-  },
+  }
 } satisfies ChartConfig
 
 const currentDay = new Date();
@@ -108,26 +105,33 @@ export const Analytics = () => {
           loading={generalLoading}
         />
       </div>
-      <ul className="grid grid-cols-1 gap-4 w-full">
+      <ul className="grid grid-cols-1 gap-4 w-full md:grid-cols-3">
         <li>
           <div className="bg-white border border-black rounded-lg w-full relative">
             <div className="flex items-center justify-between p-4">
-              <h3 className="text-lg font-bold font-[Recursive]">Sua performance:</h3>
+              <h3 className="text-lg font-medium font-[Recursive]">Sua performance:</h3>
             </div>
-            <ChartContainer config={chartConfig} className="min-h-[250px] w-full max-w-full p-2">
-              <BarChart accessibilityLayer data={analytics}>
-                <CartesianGrid vertical={true} />
+            <ChartContainer config={chartConfig} className="w-full max-w-full p-2"  >
+              <AreaChart accessibilityLayer data={analytics} width={200} margin={{ top: 20 }} >
+                <CartesianGrid vertical={false} />
 
-                <Bar dataKey="percentage" fill="var(--color-percentage)" radius={4} />
+                <Area dataKey="percentage" fill="#8884d8" radius={4} >
+                  <LabelList
+                    position="top"
+                    offset={12}
+                    className="fill-foreground"
+                    fontSize={12}
+                  />
+                </Area>
 
-                <ChartTooltip content={<ChartTooltipContent />} />
+                <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
 
                 <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={16} />
 
-                <YAxis max={100} min={0} tickLine={false} axisLine={false} tickMargin={16} tickFormatter={(value) => `${value}%`} />
-
-                {/* <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} /> */}
-              </BarChart>
+                <YAxis max={100} min={0} tickLine={false} axisLine={false} tickMargin={16} tickFormatter={(value) => `${value}%`}
+                  domain={[0, 100]}
+                />
+              </AreaChart>
             </ChartContainer>
           </div>
 

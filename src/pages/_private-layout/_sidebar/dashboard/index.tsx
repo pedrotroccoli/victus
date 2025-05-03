@@ -406,12 +406,15 @@ export const Home = () => {
                           editEnabled={editEnabled}
                         />
                       </TabsContent>
-                      <TabsContent value="focus" className="pt-2 grid gap-4">
-                        <div className="">
+                      <TabsContent value="focus" className="pt-2">
+                        <div className="grid gap-6">
                           {Object.entries(groupByCategory(habits, habitCategories || [])).filter(([_, category]) => category?.list?.length > 0).map(([id, category]) => {
                             return (
                               <div key={id}>
-                                <h4 className="font-[Recursive] font-bold mb-2">{category?.category?.name}</h4>
+                                <div className="flex items-center gap-2 mb-4">
+                                  <div className="w-[2px] h-6 bg-black"></div>
+                                  <h4 className="font-[Recursive] font-medium">{category?.category?.name}</h4>
+                                </div>
                                 <ul className="grid gap-2">
                                   {category.list.filter((habit) => {
                                     const isAccepted = isAcceptedByRRule(habit, format(currentDay, 'MM/dd/yyyy'));
