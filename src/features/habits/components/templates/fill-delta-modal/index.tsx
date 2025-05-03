@@ -85,12 +85,14 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
   const handleSubmit: SubmitHandler<FillDeltaModalForm> = async (data: FillDeltaModalForm) => {
     if (!onSave) return;
 
+
     try {
       setLoading(true);
 
+
       await onSave?.({
         deltas: data.deltas.map((delta) => ({
-          _id: delta._id,
+          _id: delta?._id,
           habit_delta_id: delta.habit_delta_id,
           value: numberParser(delta.value || '0'),
         })),
@@ -98,6 +100,7 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
 
       setLoading(false);
     } catch (error) {
+      console.log(error);
       toast.error('Erro ao preencher deltas');
       setLoading(false);
     }
