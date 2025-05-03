@@ -43,8 +43,12 @@ export const Header = ({ account, handleSignOut, goTo }: HeaderProps) => {
           </div>
         )}
 
-
-        <div className="">
+        <div className="flex items-center">
+          {/* <button className="flex items-center justify-center gap-1 h-10 w-16 rounded-full">
+            <Fire size={24} />
+            <p className="text-sm font-medium font-[Recursive]">0</p>
+          </button>
+          <div className="w-px h-4 bg-neutral-300 ml-2 mr-4"></div> */}
           <AccountAvatar shortname={formattedShortname} signOut={handleSignOut} goTo={goTo} />
         </div>
       </div>
