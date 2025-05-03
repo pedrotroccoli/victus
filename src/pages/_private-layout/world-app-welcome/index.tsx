@@ -18,7 +18,7 @@ export const WorldAppWelcomePage = () => {
   const stepsInformation = [
     {
       title: "Olá, bem vindo ao Victus Journal!",
-      description: <p>Seu diário de hábitos, pensamentos e experiências. Tenha mais controle sobre sua vida.</p>,
+      description: <p>Seu diário de hábitos, pensamentos e experiências. Controle sua vida!</p>,
       image: Step1Image,
     },
     {
@@ -54,8 +54,8 @@ export const WorldAppWelcomePage = () => {
         <Logo width={24} height={24} />
         <p className="text-sm font-[Recursive] font-bold">Victus Journal</p>
       </header>
-      <div className="p-4 h-[calc(100vh-4rem)] flex flex-col">
-        <SquareImage image={stepsInformation[step].image} alt={stepsInformation[step].title} />
+      <div className="p-4 flex flex-col">
+        <SquareImage image={stepsInformation[step].image} alt={stepsInformation[step].title} className="mx-auto w-full" />
 
         <div className="mt-8">
           <h1 className="text-2xl font-[Recursive] font-bold" >{stepsInformation[step].title}</h1>
@@ -64,14 +64,12 @@ export const WorldAppWelcomePage = () => {
           </p>
         </div>
 
-        <div className="w-full h-px bg-neutral-300 my-8"></div>
+        <StepsBullet numberOfSteps={stepsInformation.length} currentStep={step} className="mt-12" />
 
-        <StepsBullet numberOfSteps={stepsInformation.length} currentStep={step} />
-
-        <div className="h-40 bg-transparent w-full"></div>
+        <div className="h-32 w-full"></div>
       </div>
-      <div className="fixed bottom-0 w-full bg-white p-4 pt-6 pb-8 border-t border-neutral-300 rounded-t-3xl shadow-2xl">
-        <div className="grid gap-4 w-full mt-auto">
+      <div className="fixed bottom-0 w-full bg-white p-4 pt-6 pb-10 border-t border-neutral-300 rounded-t-3xl shadow-2xl">
+        <div className="grid gap-4 w-full">
           <Button className="w-full font-[Recursive] font-bold h-12 flex items-center justify-center gap-4" onClick={nextStep}>
             <p>Próximo</p>
           </Button>
