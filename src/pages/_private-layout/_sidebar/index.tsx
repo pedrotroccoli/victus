@@ -5,13 +5,13 @@ import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router"
 import { motion } from "motion/react"
 
 import { LogoWithText } from "@/assets/logo-with-text"
-import { Header } from "@/components/organisms/header"
 import { useMe } from "@/services/auth"
 import { signOut } from "@/services/auth/services"
 import { useCallback, useRef } from "react"
 import packageJson from "../../../../package.json"
 
 import MrHabbit from "@/assets/rabbit.png"
+import { Header } from "@/components/organisms/header"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { toast } from "sonner"
@@ -90,7 +90,7 @@ export const SidebarLayout = () => {
               <SidebarMenu className="gap-3">
                 <SidebarMenuItem title="Jornal">
                   <Link to="/dashboard">
-                    <SidebarMenuButton className={cn("text-neutral-500", pathname === "/dashboard" && "text-black border border-black")}>
+                    <SidebarMenuButton className={cn("text-neutral-500", pathname === "/dashboard" && "text-black border border-neutral-300")}>
                       <BookOpenText size={16} weight="bold" />
                       Jornal
                     </SidebarMenuButton>
@@ -98,7 +98,7 @@ export const SidebarLayout = () => {
                 </SidebarMenuItem>
                 <SidebarMenuItem title="Analytics">
                   <Link to="/analytics">
-                    <SidebarMenuButton className={cn("text-neutral-500", pathname === "/analytics" && "text-black border border-black")}>
+                    <SidebarMenuButton className={cn("text-neutral-500", pathname === "/analytics" && "text-black border border-neutral-300")}>
                       <ChartLine size={16} weight="bold" />
                       Analytics
                     </SidebarMenuButton>
@@ -106,7 +106,7 @@ export const SidebarLayout = () => {
                 </SidebarMenuItem>
                 <SidebarMenuItem title="Configurações">
                   <Link to="/account/general">
-                    <SidebarMenuButton className={cn("text-neutral-500", pathname === "/account/general" && "text-black border  border-black")}>
+                    <SidebarMenuButton className={cn("text-neutral-500", pathname === "/account/general" && "text-black border border-neutral-300")}>
                       <Gear size={16} weight="bold" />
                       Configurações
                     </SidebarMenuButton>

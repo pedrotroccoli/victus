@@ -3,12 +3,12 @@ import { getHabitsAnalytics, HabitsAnalytics } from "@/features/habits/utils/ana
 import { useMe } from "@/services/auth"
 import { useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks"
 import { DateFormat } from "@/services/habits/types"
-import { Percent } from "@phosphor-icons/react"
+import { Hash, Percent } from "@phosphor-icons/react"
 import { eachDayOfInterval, endOfDay, format, subDays } from "date-fns"
 import { useMemo } from "react"
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { Area, AreaChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
+import { Area, AreaChart, Bar, BarChart, XAxis } from "recharts"
 
 
 const chartConfig = {
@@ -16,6 +16,14 @@ const chartConfig = {
     label: "Performance: ",
     color: "#2563eb",
     icon: Percent
+  }
+} satisfies ChartConfig
+
+const chartConfig2 = {
+  total: {
+    label: "Hábitos completados:",
+    color: "#2563eb",
+    icon: Hash
   }
 } satisfies ChartConfig
 
@@ -53,7 +61,7 @@ export const Analytics = () => {
         ...previous,
         [current.habit_id]: {
           ...(previous[current.habit_id] || {}),
-          [format(current.finished_at, 'MM/dd/yyyy')]: current
+          [format(current.finished_at, 'MM/dd')]: current
         }
       })
     }, {});
@@ -83,6 +91,14 @@ export const Analytics = () => {
     })
   }, [getAnalyticsFromDate])
 
+  const chart2Data = useMemo(() => {
+    return analytics.map(item => ({
+      ...item,
+      missing: item.total - item.alreadyChecked,
+      completed: item.alreadyChecked
+    }));
+  }, [analytics]);
+
 
   return (
     <div className="flex flex-col items-center justify-center h-full pt-4 w-full gap-8">
@@ -105,37 +121,72 @@ export const Analytics = () => {
           loading={generalLoading}
         />
       </div>
-      <ul className="grid grid-cols-1 gap-4 w-full md:grid-cols-3">
+      <ul className="grid grid-cols-1 gap-4 w-full md:grid-cols-2">
         <li>
-          <div className="bg-white border border-black rounded-lg w-full relative">
-            <div className="flex items-center justify-between p-4">
-              <h3 className="text-lg font-medium font-[Recursive]">Sua performance:</h3>
+          <div className="bg-white border border-neutral-300 rounded-lg w-full relative">
+            <div className="flexflex-col">
+              <h3 className="text-lg font-medium font-[Recursive] m-2 ml-4">Sua performance</h3>
+              <div className="w-full my-2 h-[1px] bg-neutral-300"></div>
+              <div className="flex items-center justify-between p-2 px-4">
+                <h4 className="text-sm font-medium font-[Recursive]">Média nos últimos 7 dias:</h4>
+                <p className="text-sm font-medium text-black/75">{smallAnalytics.today.percentage}%</p>
+              </div>
             </div>
-            <ChartContainer config={chartConfig} className="w-full max-w-full p-2"  >
+            <ChartContainer config={chartConfig} className="w-full max-w-full"  >
               <AreaChart accessibilityLayer data={analytics} width={200} margin={{ top: 20 }} >
-                <CartesianGrid vertical={false} />
+                {/* <CartesianGrid vertical={false} /> */}
 
                 <Area dataKey="percentage" fill="#8884d8" radius={4} >
-                  <LabelList
-                    position="top"
-                    offset={12}
-                    className="fill-foreground"
-                    fontSize={12}
-                  />
+
                 </Area>
 
                 <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
 
-                <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={16} />
-
-                <YAxis max={100} min={0} tickLine={false} axisLine={false} tickMargin={16} tickFormatter={(value) => `${value}%`}
-                  domain={[0, 100]}
+                <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} angle={0}
+                  padding={{ left: 0, right: 0 }}
                 />
+
+                {/* <YAxis max={100} min={0} tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => `${value}%`} domain={[0, 100]}
+                  width={0}
+                /> */}
               </AreaChart>
             </ChartContainer>
           </div>
 
         </li>
+
+        <li>
+          <div className="bg-white border border-neutral-300 rounded-lg w-full relative">
+            <div className="flexflex-col">
+              <h3 className="text-lg font-medium font-[Recursive] m-2 ml-4">Hábitos completados</h3>
+              <div className="w-full my-2 h-[1px] bg-neutral-300"></div>
+              <div className="flex items-center justify-between p-2 px-4">
+                <h4 className="text-sm font-medium font-[Recursive]">Média nos últimos 7 dias:</h4>
+                <p className="text-sm font-medium text-black/75">{Math.floor(analytics.reduce((acc, item) => acc + item.alreadyChecked, 0) / analytics.length)} hábitos por dia</p>
+              </div>
+            </div>
+            <ChartContainer config={chartConfig2} className="w-full max-w-full"  >
+              <BarChart accessibilityLayer data={chart2Data} width={200} className="px-4" >
+                <Bar dataKey="missing" fill="#e1615a" radius={4} stackId="a" />
+
+                <Bar dataKey="completed" fill="#20cfad" radius={4} stackId="a" />
+
+
+                <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+
+                <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} angle={0}
+                  padding={{ left: 0, right: 0 }}
+                />
+
+                {/* <YAxis max={100} min={0} tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => `${value}%`} domain={[0, 100]}
+                  width={0}
+                /> */}
+              </BarChart>
+            </ChartContainer>
+          </div>
+
+        </li>
+
 
       </ul>
     </div>

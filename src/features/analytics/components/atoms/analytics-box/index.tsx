@@ -7,7 +7,7 @@ interface AnalyticsBoxProps {
 
 export const AnalyticsBox = ({ title, value, loading }: AnalyticsBoxProps) => {
   return (
-    <div className=" bg-white border border-black p-3 rounded-md sm:p-4">
+    <div className=" bg-white border border-neutral-300 p-3 rounded-md sm:p-4">
       <h6 className="font-[Recursive] text-base font-medium sm:text-lg text-black">{title}</h6>
       <div className="mt-2">
         {loading ? (

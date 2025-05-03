@@ -30,7 +30,7 @@ export const getHabitsAnalytics = (habits: Habit[], habitsCheckedHash: HabitsChe
       return false;
     });
 
-    const dayFormatted = format(date, 'MM/dd/yyyy');
+    const dayFormatted = format(date, 'MM/dd');
 
     const alreadyChecked = dayHabits?.filter(item => habitsCheckedHash?.[item._id]?.[dayFormatted]?.checked || false);
 
