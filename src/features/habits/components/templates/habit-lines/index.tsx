@@ -289,7 +289,7 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
   }
 
   return (
-    <div className="flex justify-between flex-col gap-4" >
+    <div className="flex justify-between flex-col gap-4">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

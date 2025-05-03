@@ -19,6 +19,7 @@ import { CreateHabitModalOnSaveProps } from "@/features/habits/components/templa
 import { DeleteHabitModal } from "@/features/habits/components/templates/delete-habit-modal";
 import FillDeltaModal, { OnSaveDeltaModalProps } from "@/features/habits/components/templates/fill-delta-modal";
 import { HabitLineChange, HabitLines } from "@/features/habits/components/templates/habit-lines";
+import { groupByCategory } from "@/features/habits/components/templates/habit-lines/utils";
 import { cn } from "@/lib/utils";
 import { useCreateHabitCategory, useHabitCategories } from "@/services/habit-category/hooks";
 import { DateFormat } from "@/services/habits/types";
@@ -405,19 +406,19 @@ export const Home = () => {
                     )}
                   </div>
 
-                  <div className="px-4 pt-4">
+                  <div className="p-4">
                     <h3 className="text-lg font-[Recursive] font-medium">Hábitos</h3>
                   </div>
 
-                  <div className="p-4">
 
-                    <Tabs defaultValue="focus" className="w-full">
+                  <div className="">
+                    <div className="border-t border-black" ></div>
+                    <Tabs defaultValue="focus" className="w-full p-4 pt-6">
                       <TabsList className="border border-black p-0 h-auto">
                         <TabsTrigger value="general" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Visão Geral</TabsTrigger>
                         <TabsTrigger value="focus" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Modo Foco</TabsTrigger>
                       </TabsList>
-                      <TabsContent value="general" className="w-full">
-                        <div className="border-t border border-neutral-200 mt-4 mb-2" ></div>
+                      <TabsContent value="general" className="w-full pt-2">
                         <HabitLines
                           onEditHabit={handleEditHabit}
                           onDeleteHabit={onDeleteHabit}
@@ -431,37 +432,45 @@ export const Home = () => {
                           editEnabled={editEnabled}
                         />
                       </TabsContent>
-                      <TabsContent value="focus">
-                        <div className="border-t border border-neutral-200 mt-4 mb-4" ></div>
-                        <ul className="grid gap-2">
-                          {habits.filter((habit) => {
-                            const isAccepted = isAcceptedByRRule(habit, format(currentDay, 'MM/dd/yyyy'));
-                            const startsBeforeCurrentDay = isBefore(habit.start_date, currentDay);
-                            const endsAfterCurrentDay = isInfiniteHabit(habit) ? true : isAfter(habit.end_date, currentDay);
+                      <TabsContent value="focus" className="pt-2">
+                        <div className="">
 
-                            if (isAccepted && startsBeforeCurrentDay && endsAfterCurrentDay) return true;
 
-                            return false;
-                          }).map((habit) => {
-
-                            const checked = getHabitCheck(habit, format(currentDay, 'MM/dd/yyyy'))?.checked || false;
-
+                          {Object.entries(groupByCategory(habits, habitCategories || [])).filter(([_, category]) => category?.list?.length > 0).map(([id, category]) => {
                             return (
-                              <li key={habit._id} className="flex">
-                                <button className="flex items-center gap-4" onClick={() => handleCheckHabit(habit, format(currentDay, 'MM/dd/yyyy'))}>
-                                  <label className="flex items-center gap-4">
-                                    <Checkbox className="w-5 h-5" checked={checked} />
-                                    <p className={cn("font-medium text-left truncate text-ellipsis", checked && "text-black/50 line-through")}>{habit.name}</p>
-                                  </label>
-                                </button>
-                              </li>
-                            )
+                              <div key={id}>
+                                <h4 className="font-[Recursive] font-bold mb-4">{category?.category?.name}</h4>
+                                <ul className="grid gap-2">
+                                  {category.list.filter((habit) => {
+                                    const isAccepted = isAcceptedByRRule(habit, format(currentDay, 'MM/dd/yyyy'));
+                                    const startsBeforeCurrentDay = isBefore(habit.start_date, currentDay);
+                                    const endsAfterCurrentDay = isInfiniteHabit(habit) ? true : isAfter(habit.end_date, currentDay);
 
+                                    if (isAccepted && startsBeforeCurrentDay && endsAfterCurrentDay) return true;
+
+                                    return false;
+                                  }).map((habit) => {
+
+                                    const checked = getHabitCheck(habit, format(currentDay, 'MM/dd/yyyy'))?.checked || false;
+
+                                    return (
+                                      <li key={habit._id} className="flex">
+                                        <button className="flex items-center gap-4" onClick={() => handleCheckHabit(habit, format(currentDay, 'MM/dd/yyyy'))}>
+                                          <label className="flex items-center gap-4">
+                                            <Checkbox className="w-5 h-5" checked={checked} />
+                                            <p className={cn("font-medium text-left truncate text-ellipsis", checked && "text-black/50 line-through")}>{habit.name}</p>
+                                          </label>
+                                        </button>
+                                      </li>
+                                    )
+                                  })}
+                                </ul>
+                              </div>
+                            )
                           })}
-                        </ul>
+                        </div>
                       </TabsContent>
                     </Tabs>
-
                   </div>
                 </div>
               )}
