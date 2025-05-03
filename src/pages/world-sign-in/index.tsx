@@ -9,10 +9,13 @@ import { useEffect, useState } from "react";
 
 import { Logo } from "@/assets/logo";
 import MrHabitImage from "@/assets/mrhabit.png";
-import { cn } from "@/lib/utils";
+import { SquareImage } from "@/features/world/components/ions/SquareImage";
+import { useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 export const WorldSignInPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const { mutateAsync: startSiweAuth, isPending: isStartingSiweAuth } = useStartSiweAuth();
   const { mutateAsync: verifySiweAuth, isPending: isVerifyingSiweAuth } = useVerifySiweAuth();
@@ -34,16 +37,15 @@ export const WorldSignInPage = () => {
     })
 
     try {
-      const abc = await verifySiweAuth({
+      await verifySiweAuth({
         payload: finalPayload,
         nonce
       })
 
-      console.log({
-        abc
-      })
+      navigate({ to: "/world-app/welcome" })
     } catch (error) {
-      console.log("Método interno", error)
+      console.log(error)
+      toast.error("Erro ao conectar-se com World ID")
     }
 
     setIsLoading(false)
@@ -55,41 +57,25 @@ export const WorldSignInPage = () => {
     }, 300)
   }, []);
 
-
   return (
     <main className="min-h-screen w-full flex flex-col">
       <header className="flex items-center gap-2  h-16 border-b border-neutral-300 px-4">
         <Logo width={24} height={24} />
         <p className="text-sm font-[Recursive] font-bold">Victus Journal</p>
       </header>
-      <div className="p-4 pt-8 h-[calc(100vh-4rem)] flex flex-col justify-between">
-        <div className="border border-neutral-300 rounded-lg h-80">
-
-          <div className={cn("relative w-full h-full group overflow-hidden")}>
-            <img src={MrHabitImage} alt="Mr Habit" className={cn("w-full h-full object-cover object-[0_-40px] rounded-lg")} />
-            <div className={
-              cn(
-                "absolute w-3/5 h-full top-0 left-[-125%] bg-white/30 skew-x-[45deg] backdrop-blur-lg",
-                animate && "left-[150%]"
-              )
-            } style={{
-              transition: "500ms"
-            }}></div>
-
-            <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-black/50 to-transparent rounded-lg">
-
-
-            </div>
-          </div>
-        </div>
+      <div className="p-4 h-[calc(100vh-4rem)] flex flex-col">
+        <SquareImage image={MrHabitImage} alt="Mr Habit" animate={animate} imgClassName="object-[0_-40px]" />
         <div className="mt-8">
           <h1 className="text-2xl font-[Recursive] font-bold" >Bem-vindo ao Victus Journal</h1>
-          <p className=" text-black/75 mt-4">
+          <p className=" text-black/75 mt-2">
             Seu diário de hábitos, pensamentos e experiências. Tenha mais controle sobre sua vida.
           </p>
         </div>
+        <div className="h-40 bg-transparent w-full"></div>
+      </div>
 
-        <div className="grid gap-4 w-full mt-auto pb-8">
+      <div className="fixed bottom-0 w-full bg-white p-4 pt-6 pb-8 border-t border-neutral-300 rounded-t-3xl shadow-2xl">
+        <div className="grid gap-4 w-full">
           <Button className="w-full font-[Recursive] font-bold h-12 flex items-center justify-center gap-4" onClick={signInWithWallet} disabled={isStartingSiweAuth || isVerifyingSiweAuth}>
             <p>Conectar-se com World ID</p>
             {isLoading && <CircleNotch className="animate-spin" size={16} />}

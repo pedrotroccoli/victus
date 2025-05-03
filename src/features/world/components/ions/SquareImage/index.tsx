@@ -3,16 +3,19 @@ import { cn } from "@/lib/utils";
 interface SquareImageProps {
   image: string;
   alt: string;
+  animate?: boolean;
+  imgClassName?: string;
 }
 
-export const SquareImage = ({ image, alt }: SquareImageProps) => {
+export const SquareImage = ({ image, alt, animate = false, imgClassName }: SquareImageProps) => {
   return (
     <div className="border border-neutral-300 rounded-lg h-80 max-w-[32rem]">
       <div className={cn("relative w-full h-full")}>
-        <img src={image} alt={alt} className={cn("w-full h-full object-cover rounded-lg")} />
+        <img src={image} alt={alt} className={cn("w-full h-full object-cover rounded-lg", imgClassName)} />
         <div className={
           cn(
             "absolute w-3/5 h-full top-0 left-[-125%] bg-white/30 skew-x-[45deg] backdrop-blur-lg",
+            animate && "left-[150%]"
           )
         } style={{
           transition: "500ms"
