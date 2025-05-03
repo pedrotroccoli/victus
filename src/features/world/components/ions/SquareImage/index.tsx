@@ -5,12 +5,13 @@ interface SquareImageProps {
   alt: string;
   animate?: boolean;
   imgClassName?: string;
+  className?: string;
 }
 
-export const SquareImage = ({ image, alt, animate = false, imgClassName }: SquareImageProps) => {
+export const SquareImage = ({ image, alt, animate = false, imgClassName, className }: SquareImageProps) => {
   return (
-    <div className="border border-neutral-300 rounded-lg h-80 max-w-[32rem]">
-      <div className={cn("relative w-full h-full")}>
+    <div className={cn("border border-neutral-300 rounded-lg h-80 max-w-[32rem]", className)}>
+      <div className={cn("relative w-full h-full overflow-hidden")}>
         <img src={image} alt={alt} className={cn("w-full h-full object-cover rounded-lg", imgClassName)} />
         <div className={
           cn(
