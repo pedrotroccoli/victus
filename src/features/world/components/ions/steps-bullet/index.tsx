@@ -4,11 +4,12 @@ import { motion } from "motion/react";
 interface StepsBulletProps {
   numberOfSteps: number;
   currentStep: number;
+  className?: string;
 }
 
-export const StepsBullet = ({ numberOfSteps, currentStep }: StepsBulletProps) => {
+export const StepsBullet = ({ numberOfSteps, currentStep, className }: StepsBulletProps) => {
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className={cn("flex items-center justify-center gap-2", className)}>
       {Array.from({ length: numberOfSteps }).map((_, index) => (
         <div className="w-6 h-3 flex items-center justify-center rounded-full">
           <motion.div
