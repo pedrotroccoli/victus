@@ -1,4 +1,5 @@
 import { ButtonProps as ButtonPropsUI, Button as ButtonUI } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { LoaderCircle, LucideIcon } from 'lucide-react';
 
 interface ButtonProps extends ButtonPropsUI {
@@ -7,9 +8,9 @@ interface ButtonProps extends ButtonPropsUI {
   loading?: boolean;
 }
 
-export const Button = ({ children, iconLeft: LeftIcon, iconRight: RightIcon, loading, disabled, ...props }: ButtonProps) => {
+export const Button = ({ children, iconLeft: LeftIcon, iconRight: RightIcon, loading, disabled, className, ...props }: ButtonProps) => {
   return (
-    <ButtonUI {...props} disabled={loading || disabled}>
+    <ButtonUI {...props} disabled={loading || disabled} className={cn("font-[Recursive] font-bold h-12 flex items-center justify-center gap-4", className)}>
       {!loading && LeftIcon && <LeftIcon size={16} strokeWidth={1.5} className='' />}
       {children}
       {!loading && RightIcon && <RightIcon size={16} strokeWidth={1.5} className='' />}
