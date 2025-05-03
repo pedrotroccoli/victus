@@ -292,7 +292,7 @@ export const Home = () => {
 
             <div className="w-full">
               {habits && habits.length === 0 && (
-                <div className="flex items-center justify-center h-full flex-col border-black border rounded-md p-8 min-h-56">
+                <div className="flex items-center justify-center h-full flex-col border-neutral-300 border rounded-md p-8 min-h-56">
                   <Box size={32} strokeWidth={1.5} />
 
                   <p className="text-lg text-black/75 font-medium mt-4 mb-8 font-[Recursive]">Nenhum hábito cadastrado</p>
@@ -305,20 +305,20 @@ export const Home = () => {
               )}
 
               {generalLoading && (
-                <div className="flex items-center justify-center h-full flex-col border-black border-2 rounded-md p-8 min-h-56">
+                <div className="flex items-center justify-center h-full flex-col border-neutral-300 border rounded-md p-8 min-h-56">
                   <LoaderCircle size={32} className="animate-spin" strokeWidth={1.75} />
                 </div>
               )}
 
               {habits && habits.length > 0 && !generalLoading && (
-                <div className="border border-black rounded-md">
+                <div className="border border-neutral-300 rounded-md">
                   <div className={
                     cn(
-                      "flex items-center justify-between border-b border-black p-4 pr-8 relative",
+                      "flex items-center justify-between border-b border-neutral-300 p-4 pr-8 relative",
                       hideExplanation && "border-b-0 p-0 pr-0"
                     )
                   }>
-                    <div className="absolute top-0 right-0 border-l border-b border-black rounded-bl-md flex items-center divide-x divide-black">
+                    <div className="absolute top-0 right-0 border-l border-b border-neutral-300 rounded-bl-md flex items-center divide-x divide-neutral-300">
 
 
                       <button className={
@@ -386,9 +386,9 @@ export const Home = () => {
 
 
                   <div className="">
-                    <div className="border-t border-black" ></div>
+                    <div className="border-t border-neutral-300" ></div>
                     <Tabs defaultValue="focus" className="w-full p-4 pt-6">
-                      <TabsList className="border border-black p-0 h-auto">
+                      <TabsList className="border border-neutral-300 p-0 h-auto">
                         <TabsTrigger value="general" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Visão Geral</TabsTrigger>
                         <TabsTrigger value="focus" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Modo Foco</TabsTrigger>
                       </TabsList>
