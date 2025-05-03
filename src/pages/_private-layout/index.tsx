@@ -9,6 +9,15 @@ export default function PrivateLayout() {
   const isLoggingOut = useRef(false);
 
   const goToDashboard = useCallback(() => {
+    if (me?.connected_providers?.includes('worldapp')) {
+      navigate({
+        to: '/dashboard',
+        replace: true,
+      })
+
+      return;
+    }
+
     const missingSubscription = me?.subscription?.status !== 'active' || !me?.subscription ? true : undefined;
 
     if (missingSubscription) {
@@ -31,9 +40,13 @@ export default function PrivateLayout() {
   useEffect(() => {
     if (isLoggingOut.current) return;
 
-    const withoutSubscriptionPages = ['/account', '/freezed', '/checkout']
+    if (me?.connected_providers?.includes('worldapp')) {
+      return;
+    }
 
     if (!me) return;
+
+    const withoutSubscriptionPages = ['/account', '/freezed', '/checkout']
 
     if ((me?.subscription?.status !== 'active' || !me?.subscription) && !withoutSubscriptionPages.some(page => location.pathname.includes(page))) {
       goToDashboard();
