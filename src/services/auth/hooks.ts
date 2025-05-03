@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { baseApi } from '../api';
-import { signIn, signUp } from './services';
+import { signIn, signUp, startSiweAuth, verifySiweAuth } from './services';
 
 
 export const useSignIn = () => useMutation({
@@ -18,4 +18,15 @@ export const useMe = () => useQuery({
 
     return data;
   }
+})
+
+
+//
+
+export const useStartSiweAuth = () => useMutation({
+  mutationFn: startSiweAuth
+})
+
+export const useVerifySiweAuth = () => useMutation({
+  mutationFn: verifySiweAuth
 })
