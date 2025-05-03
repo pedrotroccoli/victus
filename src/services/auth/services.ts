@@ -1,5 +1,5 @@
 import { baseApi } from "../api";
-import { SignInRequest, SignUpRequest, SignUpResponse } from "./types";
+import { SignInRequest, SignUpRequest, SignUpResponse, VerifySiweAuthRequest, VerifySiweAuthResponse } from "./types";
 
 // Session Management
 
@@ -51,3 +51,19 @@ export const signUp = async ({ account, lookup_key }: SignUpRequest) => {
 export const signOut = async () => {
   await removeToken();
 }
+
+export const startSiweAuth = async (): Promise<{ nonce: string }> => {
+  const { data } = await baseApi.get(`/auth/start_siwe_auth`);
+
+  return data;
+}
+
+export const verifySiweAuth = async ({ payload, nonce }: VerifySiweAuthRequest) => {
+  const { data } = await baseApi.post<VerifySiweAuthResponse>(`/auth/siwe_verify`, {
+    nonce,
+    payload,
+  });
+
+  return data;
+}
+
