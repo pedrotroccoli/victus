@@ -14,10 +14,12 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as PrivateImport } from './routes/_private'
+import { Route as IndexImport } from './routes/index'
 import { Route as PrivateSidebarImport } from './routes/_private/_sidebar'
 import { Route as publicAuthImport } from './routes/(public)/_auth'
 import { Route as PrivateFreezedIndexImport } from './routes/_private/freezed/index'
 import { Route as PrivateCheckoutIndexImport } from './routes/_private/checkout/index'
+import { Route as PrivateWorldAppWelcomeIndexImport } from './routes/_private/world-app/welcome/index'
 import { Route as PrivateSidebarDashboardIndexImport } from './routes/_private/_sidebar/dashboard/index'
 import { Route as PrivateSidebarAnalyticsIndexImport } from './routes/_private/_sidebar/analytics/index'
 import { Route as PrivateSidebarAccountLayoutImport } from './routes/_private/_sidebar/account/_layout'
@@ -28,9 +30,11 @@ import { Route as PrivateSidebarAccountLayoutGeneralIndexImport } from './routes
 // Create Virtual Routes
 
 const publicImport = createFileRoute('/(public)')()
-const IndexLazyImport = createFileRoute('/')()
 const PrivateSidebarAccountImport = createFileRoute(
   '/_private/_sidebar/account',
+)()
+const publicAuthWorldSignInIndexLazyImport = createFileRoute(
+  '/(public)/_auth/world-sign-in/',
 )()
 const publicAuthSignUpIndexLazyImport = createFileRoute(
   '/(public)/_auth/sign-up/',
@@ -51,11 +55,11 @@ const PrivateRoute = PrivateImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexLazyRoute = IndexLazyImport.update({
+const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+} as any)
 
 const PrivateSidebarRoute = PrivateSidebarImport.update({
   id: '/_sidebar',
@@ -85,6 +89,18 @@ const PrivateCheckoutIndexRoute = PrivateCheckoutIndexImport.update({
   getParentRoute: () => PrivateRoute,
 } as any)
 
+const publicAuthWorldSignInIndexLazyRoute = publicAuthWorldSignInIndexLazyImport
+  .update({
+    id: '/world-sign-in/',
+    path: '/world-sign-in/',
+    getParentRoute: () => publicAuthRoute,
+  } as any)
+  .lazy(() =>
+    import('./routes/(public)/_auth/world-sign-in/index.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
 const publicAuthSignUpIndexLazyRoute = publicAuthSignUpIndexLazyImport
   .update({
     id: '/sign-up/',
@@ -104,6 +120,13 @@ const publicAuthSignInIndexLazyRoute = publicAuthSignInIndexLazyImport
   .lazy(() =>
     import('./routes/(public)/_auth/sign-in/index.lazy').then((d) => d.Route),
   )
+
+const PrivateWorldAppWelcomeIndexRoute =
+  PrivateWorldAppWelcomeIndexImport.update({
+    id: '/world-app/welcome/',
+    path: '/world-app/welcome/',
+    getParentRoute: () => PrivateRoute,
+  } as any)
 
 const PrivateSidebarDashboardIndexRoute =
   PrivateSidebarDashboardIndexImport.update({
@@ -154,7 +177,7 @@ declare module '@tanstack/react-router' {
       id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexLazyImport
+      preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/_private': {
@@ -227,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivateSidebarDashboardIndexImport
       parentRoute: typeof PrivateSidebarImport
     }
+    '/_private/world-app/welcome/': {
+      id: '/_private/world-app/welcome/'
+      path: '/world-app/welcome'
+      fullPath: '/world-app/welcome'
+      preLoaderRoute: typeof PrivateWorldAppWelcomeIndexImport
+      parentRoute: typeof PrivateImport
+    }
     '/(public)/_auth/sign-in/': {
       id: '/(public)/_auth/sign-in/'
       path: '/sign-in'
@@ -239,6 +269,13 @@ declare module '@tanstack/react-router' {
       path: '/sign-up'
       fullPath: '/sign-up'
       preLoaderRoute: typeof publicAuthSignUpIndexLazyImport
+      parentRoute: typeof publicAuthImport
+    }
+    '/(public)/_auth/world-sign-in/': {
+      id: '/(public)/_auth/world-sign-in/'
+      path: '/world-sign-in'
+      fullPath: '/world-sign-in'
+      preLoaderRoute: typeof publicAuthWorldSignInIndexLazyImport
       parentRoute: typeof publicAuthImport
     }
     '/_private/_sidebar/account/_layout/general/': {
@@ -322,12 +359,14 @@ interface PrivateRouteChildren {
   PrivateSidebarRoute: typeof PrivateSidebarRouteWithChildren
   PrivateCheckoutIndexRoute: typeof PrivateCheckoutIndexRoute
   PrivateFreezedIndexRoute: typeof PrivateFreezedIndexRoute
+  PrivateWorldAppWelcomeIndexRoute: typeof PrivateWorldAppWelcomeIndexRoute
 }
 
 const PrivateRouteChildren: PrivateRouteChildren = {
   PrivateSidebarRoute: PrivateSidebarRouteWithChildren,
   PrivateCheckoutIndexRoute: PrivateCheckoutIndexRoute,
   PrivateFreezedIndexRoute: PrivateFreezedIndexRoute,
+  PrivateWorldAppWelcomeIndexRoute: PrivateWorldAppWelcomeIndexRoute,
 }
 
 const PrivateRouteWithChildren =
@@ -336,11 +375,13 @@ const PrivateRouteWithChildren =
 interface publicAuthRouteChildren {
   publicAuthSignInIndexLazyRoute: typeof publicAuthSignInIndexLazyRoute
   publicAuthSignUpIndexLazyRoute: typeof publicAuthSignUpIndexLazyRoute
+  publicAuthWorldSignInIndexLazyRoute: typeof publicAuthWorldSignInIndexLazyRoute
 }
 
 const publicAuthRouteChildren: publicAuthRouteChildren = {
   publicAuthSignInIndexLazyRoute: publicAuthSignInIndexLazyRoute,
   publicAuthSignUpIndexLazyRoute: publicAuthSignUpIndexLazyRoute,
+  publicAuthWorldSignInIndexLazyRoute: publicAuthWorldSignInIndexLazyRoute,
 }
 
 const publicAuthRouteWithChildren = publicAuthRoute._addFileChildren(
@@ -366,8 +407,10 @@ export interface FileRoutesByFullPath {
   '/account': typeof PrivateSidebarAccountLayoutRouteWithChildren
   '/analytics': typeof PrivateSidebarAnalyticsIndexRoute
   '/dashboard': typeof PrivateSidebarDashboardIndexRoute
+  '/world-app/welcome': typeof PrivateWorldAppWelcomeIndexRoute
   '/sign-in': typeof publicAuthSignInIndexLazyRoute
   '/sign-up': typeof publicAuthSignUpIndexLazyRoute
+  '/world-sign-in': typeof publicAuthWorldSignInIndexLazyRoute
   '/account/general': typeof PrivateSidebarAccountLayoutGeneralIndexRoute
   '/account/plans': typeof PrivateSidebarAccountLayoutPlansIndexRoute
   '/account/subscription': typeof PrivateSidebarAccountLayoutSubscriptionIndexRoute
@@ -381,8 +424,10 @@ export interface FileRoutesByTo {
   '/account': typeof PrivateSidebarAccountLayoutRouteWithChildren
   '/analytics': typeof PrivateSidebarAnalyticsIndexRoute
   '/dashboard': typeof PrivateSidebarDashboardIndexRoute
+  '/world-app/welcome': typeof PrivateWorldAppWelcomeIndexRoute
   '/sign-in': typeof publicAuthSignInIndexLazyRoute
   '/sign-up': typeof publicAuthSignUpIndexLazyRoute
+  '/world-sign-in': typeof publicAuthWorldSignInIndexLazyRoute
   '/account/general': typeof PrivateSidebarAccountLayoutGeneralIndexRoute
   '/account/plans': typeof PrivateSidebarAccountLayoutPlansIndexRoute
   '/account/subscription': typeof PrivateSidebarAccountLayoutSubscriptionIndexRoute
@@ -390,7 +435,7 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexLazyRoute
+  '/': typeof IndexRoute
   '/_private': typeof PrivateRouteWithChildren
   '/(public)': typeof publicRouteWithChildren
   '/(public)/_auth': typeof publicAuthRouteWithChildren
@@ -401,8 +446,10 @@ export interface FileRoutesById {
   '/_private/_sidebar/account/_layout': typeof PrivateSidebarAccountLayoutRouteWithChildren
   '/_private/_sidebar/analytics/': typeof PrivateSidebarAnalyticsIndexRoute
   '/_private/_sidebar/dashboard/': typeof PrivateSidebarDashboardIndexRoute
+  '/_private/world-app/welcome/': typeof PrivateWorldAppWelcomeIndexRoute
   '/(public)/_auth/sign-in/': typeof publicAuthSignInIndexLazyRoute
   '/(public)/_auth/sign-up/': typeof publicAuthSignUpIndexLazyRoute
+  '/(public)/_auth/world-sign-in/': typeof publicAuthWorldSignInIndexLazyRoute
   '/_private/_sidebar/account/_layout/general/': typeof PrivateSidebarAccountLayoutGeneralIndexRoute
   '/_private/_sidebar/account/_layout/plans/': typeof PrivateSidebarAccountLayoutPlansIndexRoute
   '/_private/_sidebar/account/_layout/subscription/': typeof PrivateSidebarAccountLayoutSubscriptionIndexRoute
@@ -418,8 +465,10 @@ export interface FileRouteTypes {
     | '/account'
     | '/analytics'
     | '/dashboard'
+    | '/world-app/welcome'
     | '/sign-in'
     | '/sign-up'
+    | '/world-sign-in'
     | '/account/general'
     | '/account/plans'
     | '/account/subscription'
@@ -432,8 +481,10 @@ export interface FileRouteTypes {
     | '/account'
     | '/analytics'
     | '/dashboard'
+    | '/world-app/welcome'
     | '/sign-in'
     | '/sign-up'
+    | '/world-sign-in'
     | '/account/general'
     | '/account/plans'
     | '/account/subscription'
@@ -450,8 +501,10 @@ export interface FileRouteTypes {
     | '/_private/_sidebar/account/_layout'
     | '/_private/_sidebar/analytics/'
     | '/_private/_sidebar/dashboard/'
+    | '/_private/world-app/welcome/'
     | '/(public)/_auth/sign-in/'
     | '/(public)/_auth/sign-up/'
+    | '/(public)/_auth/world-sign-in/'
     | '/_private/_sidebar/account/_layout/general/'
     | '/_private/_sidebar/account/_layout/plans/'
     | '/_private/_sidebar/account/_layout/subscription/'
@@ -459,13 +512,13 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
+  IndexRoute: typeof IndexRoute
   PrivateRoute: typeof PrivateRouteWithChildren
   publicRoute: typeof publicRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexLazyRoute: IndexLazyRoute,
+  IndexRoute: IndexRoute,
   PrivateRoute: PrivateRouteWithChildren,
   publicRoute: publicRouteWithChildren,
 }
@@ -486,14 +539,15 @@ export const routeTree = rootRoute
       ]
     },
     "/": {
-      "filePath": "index.lazy.tsx"
+      "filePath": "index.tsx"
     },
     "/_private": {
       "filePath": "_private.tsx",
       "children": [
         "/_private/_sidebar",
         "/_private/checkout/",
-        "/_private/freezed/"
+        "/_private/freezed/",
+        "/_private/world-app/welcome/"
       ]
     },
     "/(public)": {
@@ -507,7 +561,8 @@ export const routeTree = rootRoute
       "parent": "/(public)",
       "children": [
         "/(public)/_auth/sign-in/",
-        "/(public)/_auth/sign-up/"
+        "/(public)/_auth/sign-up/",
+        "/(public)/_auth/world-sign-in/"
       ]
     },
     "/_private/_sidebar": {
@@ -551,12 +606,20 @@ export const routeTree = rootRoute
       "filePath": "_private/_sidebar/dashboard/index.tsx",
       "parent": "/_private/_sidebar"
     },
+    "/_private/world-app/welcome/": {
+      "filePath": "_private/world-app/welcome/index.tsx",
+      "parent": "/_private"
+    },
     "/(public)/_auth/sign-in/": {
       "filePath": "(public)/_auth/sign-in/index.lazy.tsx",
       "parent": "/(public)/_auth"
     },
     "/(public)/_auth/sign-up/": {
       "filePath": "(public)/_auth/sign-up/index.lazy.tsx",
+      "parent": "/(public)/_auth"
+    },
+    "/(public)/_auth/world-sign-in/": {
+      "filePath": "(public)/_auth/world-sign-in/index.lazy.tsx",
       "parent": "/(public)/_auth"
     },
     "/_private/_sidebar/account/_layout/general/": {

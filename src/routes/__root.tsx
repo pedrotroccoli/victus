@@ -1,11 +1,6 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
+import { RootPage } from '@/pages/root'
+import { createRootRoute } from '@tanstack/react-router'
 
 export const Route = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      {process.env.NODE_ENV === 'development' && <TanStackRouterDevtools />}
-    </>
-  ),
+  component: RootPage,
 })
