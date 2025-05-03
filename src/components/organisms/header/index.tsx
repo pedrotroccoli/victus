@@ -14,7 +14,7 @@ export const Header = ({ account, handleSignOut, goTo }: HeaderProps) => {
   const sidebar = useSidebar();
 
   const formattedShortname = useMemo(() => {
-    if (!account) return 'X';
+    if (!account || !account.name) return 'X';
 
     const divided = account.name.split(' ').slice(0, 2).map((item: string) => String(item[0]).toUpperCase()).join('');
 
