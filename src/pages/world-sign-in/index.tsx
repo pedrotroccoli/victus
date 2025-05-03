@@ -1,11 +1,10 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ions/button";
 import { Drawer, DrawerTrigger } from "@/components/ui/drawer";
 import { WorldEmailConnectModal } from "@/features/world/components/organisms/world-email-connect";
 import { useStartSiweAuth } from "@/services/auth";
 import { useVerifySiweAuth } from "@/services/auth/hooks";
-import { CircleNotch } from "@phosphor-icons/react";
 import { MiniKit } from "@worldcoin/minikit-js";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Logo } from "@/assets/logo";
 import MrHabitImage from "@/assets/mrhabit.png";
@@ -20,6 +19,8 @@ export const WorldSignInPage = () => {
   const { mutateAsync: startSiweAuth, isPending: isStartingSiweAuth } = useStartSiweAuth();
   const { mutateAsync: verifySiweAuth, isPending: isVerifyingSiweAuth } = useVerifySiweAuth();
   const [animate, setAnimate] = useState(false);
+
+  const generalLoading = useMemo(() => isStartingSiweAuth || isVerifyingSiweAuth || isLoading, [isStartingSiweAuth, isVerifyingSiweAuth, isLoading]);
 
   const signInWithWallet = async () => {
     if (!MiniKit.isInstalled()) {
@@ -63,7 +64,7 @@ export const WorldSignInPage = () => {
         <Logo width={24} height={24} />
         <p className="text-sm font-[Recursive] font-bold">Victus Journal</p>
       </header>
-      <div className="p-4 h-[calc(100vh-4rem)] flex flex-col">
+      <div className="p-4 flex flex-col">
         <SquareImage image={MrHabitImage} alt="Mr Habit" animate={animate} imgClassName="object-[0_-40px]" />
         <div className="mt-8">
           <h1 className="text-2xl font-[Recursive] font-bold" >Bem-vindo ao Victus Journal</h1>
@@ -74,16 +75,15 @@ export const WorldSignInPage = () => {
         <div className="h-40 bg-transparent w-full"></div>
       </div>
 
-      <div className="fixed bottom-0 w-full bg-white p-4 pt-6 pb-8 border-t border-neutral-300 rounded-t-3xl shadow-2xl">
+      <div className="fixed bottom-0 w-full bg-white p-4 pt-6 pb-10 border-t border-neutral-300 rounded-t-3xl shadow-2xl">
         <div className="grid gap-4 w-full">
-          <Button className="w-full font-[Recursive] font-bold h-12 flex items-center justify-center gap-4" onClick={signInWithWallet} disabled={isStartingSiweAuth || isVerifyingSiweAuth}>
+          <Button onClick={signInWithWallet} loading={generalLoading}>
             <p>Conectar-se com World ID</p>
-            {isLoading && <CircleNotch className="animate-spin" size={16} />}
           </Button>
 
-          <Drawer >
+          <Drawer>
             <DrawerTrigger>
-              <Button className="w-full font-[Recursive] font-bold h-12" variant="outline">
+              <Button variant="outline">
                 <p>Conectar-se com conta existente</p>
               </Button>
             </DrawerTrigger>
