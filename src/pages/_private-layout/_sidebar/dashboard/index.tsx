@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AnalyticsBox } from "@/features/analytics/components/atoms/analytics-box";
 import { BoxesExplanation } from "@/features/habits/components/atoms/boxes-explanation";
 import { CreateCategoryForm, CreateCategoryModal } from "@/features/habits/components/templates/create-category-modal";
 import { CreateHabitModal } from "@/features/habits/components/templates/create-habit-modal";
@@ -187,18 +186,6 @@ export const Home = () => {
     })
   }, [habits, habitsCheckedHash])
 
-  const smallAnalytics = useMemo(() => {
-    const yesterday = subDays(currentDay, 1);
-    const yesterdayAnalytics = getAnalyticsFromDate(yesterday);
-
-    const todayAnalytics = getAnalyticsFromDate(currentDay);
-
-    return ({
-      yesterday: yesterdayAnalytics,
-      today: todayAnalytics,
-      compare: todayAnalytics.percentage - yesterdayAnalytics.percentage,
-    })
-  }, [getAnalyticsFromDate, currentDay])
 
 
   const onHabitChange = (habitChange: HabitLineChange) => {
@@ -324,25 +311,7 @@ export const Home = () => {
             </Dialog>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4 sm:mt-8 lg:grid-cols-3">
-            <AnalyticsBox
-              title="Hoje você completou"
-              value={`${smallAnalytics.today.alreadyChecked} de ${smallAnalytics.today.total} hábitos`}
-              loading={generalLoading}
-            />
 
-            <AnalyticsBox
-              title="Hoje você está em"
-              value={`${smallAnalytics.today.percentage}% de aproveitamento`}
-              loading={generalLoading}
-            />
-
-            <AnalyticsBox
-              title="Comparando com ontem"
-              value={`${smallAnalytics.compare > 0 ? 'Aumentou' : 'Diminuiu'} em ${smallAnalytics.compare}%`}
-              loading={generalLoading}
-            />
-          </div>
 
           <div className="mt-6 sm:mt-8 bg-white w-full">
 

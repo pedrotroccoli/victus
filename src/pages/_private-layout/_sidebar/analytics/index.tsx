@@ -1,4 +1,5 @@
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { AnalyticsBox } from "@/features/analytics/components/atoms/analytics-box"
 import { getHabitsAnalytics, HabitsAnalytics } from "@/features/habits/utils/analytics"
 import { useMe } from "@/services/auth"
 import { useGetHabits, useGetHabitsCheck } from "@/services/habits/hooks"
@@ -21,6 +22,8 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
+const currentDay = new Date();
+
 export const Analytics = () => {
   const startRange = subDays(new Date(), 7);
   const endRange = endOfDay(new Date());
@@ -38,6 +41,10 @@ export const Analytics = () => {
   }, {
     enabled: !!me && habits && habits.length > 0
   });
+
+  const generalLoading = useMemo(() => {
+    return !habits || !habitsCheck;
+  }, [habits, habitsCheck])
 
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
@@ -57,9 +64,9 @@ export const Analytics = () => {
 
   const { getAnalyticsFromDate } = useMemo(() => getHabitsAnalytics(habits as Habit[], habitsCheckedHash), [habits, habitsCheckedHash]);
 
+
   const analytics = useMemo((): HabitsAnalytics[] => {
     const sevenDaysAgo = subDays(new Date(), 7);
-    const currentDay = new Date();
 
     return eachDayOfInterval({
       start: sevenDaysAgo,
@@ -67,8 +74,41 @@ export const Analytics = () => {
     }).map(day => getAnalyticsFromDate(day));
   }, [getAnalyticsFromDate]);
 
+  const smallAnalytics = useMemo(() => {
+    const yesterday = subDays(currentDay, 1);
+    const yesterdayAnalytics = getAnalyticsFromDate(yesterday);
+
+    const todayAnalytics = getAnalyticsFromDate(currentDay);
+
+    return ({
+      yesterday: yesterdayAnalytics,
+      today: todayAnalytics,
+      compare: todayAnalytics.percentage - yesterdayAnalytics.percentage,
+    })
+  }, [getAnalyticsFromDate])
+
+
   return (
-    <div className="flex flex-col items-center justify-center h-full pt-8 w-full">
+    <div className="flex flex-col items-center justify-center h-full pt-4 w-full gap-8">
+      <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4 sm:mt-8 lg:grid-cols-3 w-full">
+        <AnalyticsBox
+          title="Hoje você completou"
+          value={`${smallAnalytics.today.alreadyChecked} de ${smallAnalytics.today.total} hábitos`}
+          loading={generalLoading}
+        />
+
+        <AnalyticsBox
+          title="Hoje você está em"
+          value={`${smallAnalytics.today.percentage}% de aproveitamento`}
+          loading={generalLoading}
+        />
+
+        <AnalyticsBox
+          title="Comparando com ontem"
+          value={`${smallAnalytics.compare > 0 ? 'Aumentou' : 'Diminuiu'} em ${smallAnalytics.compare}%`}
+          loading={generalLoading}
+        />
+      </div>
       <ul className="grid grid-cols-1 gap-4 w-full">
         <li>
           <div className="bg-white border border-black rounded-lg w-full relative">
