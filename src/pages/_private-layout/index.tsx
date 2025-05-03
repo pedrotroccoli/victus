@@ -53,9 +53,5 @@ export default function PrivateLayout() {
     }
   }, [me, navigate, goToDashboard, location.pathname])
 
-  return (
-    <div className="w-full h-full">
-      <Outlet />
-    </div>
-  )
+  return <Outlet />
 }
