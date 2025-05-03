@@ -2,16 +2,15 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 import { Logo } from "@/assets/logo";
-import { cn } from "@/lib/utils";
-
 
 import Step4Image from "@/assets/steps/analytics.png";
 import Step3Image from "@/assets/steps/deltas.png";
 import Step2Image from "@/assets/steps/journal-item.png";
 import Step1Image from "@/assets/steps/journal.png";
 
+import { SquareImage } from "@/features/world/components/ions/SquareImage";
+import { StepsBullet } from "@/features/world/components/ions/steps-bullet";
 import { useNavigate } from "@tanstack/react-router";
-import { motion } from "motion/react";
 export const WorldAppWelcomePage = () => {
   const [step, setStep] = useState(0);
   const navigate = useNavigate();
@@ -55,52 +54,25 @@ export const WorldAppWelcomePage = () => {
         <Logo width={24} height={24} />
         <p className="text-sm font-[Recursive] font-bold">Victus Journal</p>
       </header>
-      <div className="p-4 pt-8 h-[calc(100vh-4rem)] flex flex-col justify-between">
-        <div className="border border-neutral-300 rounded-lg h-80 max-w-[32rem]">
-          <div className={cn("relative w-full h-full")}>
-            <img src={stepsInformation[step].image} alt="Mr Habit" className={cn("w-full h-full object-cover rounded-lg")} />
-            <div className={
-              cn(
-                "absolute w-3/5 h-full top-0 left-[-125%] bg-white/30 skew-x-[45deg] backdrop-blur-lg",
-              )
-            } style={{
-              transition: "500ms"
-            }}></div>
+      <div className="p-4 h-[calc(100vh-4rem)] flex flex-col">
+        <SquareImage image={stepsInformation[step].image} alt={stepsInformation[step].title} />
 
-            <div className="absolute bottom-0 left-0 w-full h-12 bg-gradient-to-t from-black/50 to-transparent rounded-lg">
-
-
-            </div>
-          </div>
-        </div>
         <div className="mt-8">
           <h1 className="text-2xl font-[Recursive] font-bold" >{stepsInformation[step].title}</h1>
-          <p className=" text-black/75 mt-4 text-lg ">
+          <p className=" text-black/75 mt-2">
             {stepsInformation[step].description}
           </p>
         </div>
+
         <div className="w-full h-px bg-neutral-300 my-8"></div>
-        <div className="flex items-center justify-center gap-2">
-          {stepsInformation.map((_, index) => (
-            <div className="w-6 h-3 flex items-center justify-center rounded-full">
-              <motion.div
-                key={index}
-                className={cn("h-2 border border-neutral-300 rounded-full", {
-                  "bg-[#a87320] w-6": index <= step,
-                })}
-                initial={{ width: 16 }}
-                animate={{ width: index === step ? 24 : 16 }}
-                transition={{ duration: 0.3 }}
-              >
 
-              </motion.div>
-            </div>
-          ))}
-        </div>
+        <StepsBullet numberOfSteps={stepsInformation.length} currentStep={step} />
 
-
-        <div className="grid gap-4 w-full mt-auto pb-8">
-          <Button className="w-full font-[Recursive] font-bold h-12 flex items-center justify-center gap-4" onClick={nextStep} disabled={isLoading}>
+        <div className="h-40 bg-transparent w-full"></div>
+      </div>
+      <div className="fixed bottom-0 w-full bg-white p-4 pt-6 pb-8 border-t border-neutral-300 rounded-t-3xl shadow-2xl">
+        <div className="grid gap-4 w-full mt-auto">
+          <Button className="w-full font-[Recursive] font-bold h-12 flex items-center justify-center gap-4" onClick={nextStep}>
             <p>Próximo</p>
           </Button>
         </div>
