@@ -64,7 +64,6 @@ export const Analytics = () => {
 
   const { getAnalyticsFromDate } = useMemo(() => getHabitsAnalytics(habits as Habit[], habitsCheckedHash), [habits, habitsCheckedHash]);
 
-
   const analytics = useMemo((): HabitsAnalytics[] => {
     const sevenDaysAgo = subDays(new Date(), 7);
 

@@ -1,6 +1,6 @@
 import { addDays, eachDayOfInterval, format, isAfter, isBefore, subDays } from "date-fns";
 import { Book, BookOpen, Box, CircleAlert, CirclePlus, LoaderCircle, PackagePlus, PencilOff, PencilRuler, PlusCircle, X } from "lucide-react";
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet";
 
 import { useMe } from "@/services/auth";
@@ -162,32 +162,6 @@ export const Home = () => {
       toast.error('Erro ao criar categoria!');
     }
   }
-
-  const getAnalyticsFromDate = useCallback((date: Date) => {
-    const dayHabits = habits?.filter((item: Habit) => {
-      const isAccepted = isAcceptedByRRule(item, format(date, 'MM/dd/yyyy'));
-
-      if (!isAccepted) return false;
-
-      if (isBefore(item.start_date, date)) return true;
-
-      if (item?.end_date && isAfter(item.end_date, date)) return true;
-
-      return false;
-    });
-
-    const dayFormatted = format(date, 'MM/dd/yyyy');
-
-    const alreadyChecked = dayHabits?.filter(item => habitsCheckedHash?.[item._id]?.[dayFormatted]?.checked || false);
-
-    return ({
-      total: dayHabits?.length,
-      alreadyChecked: alreadyChecked?.length,
-      percentage: Number((((alreadyChecked?.length || 0) / (dayHabits?.length || 1)) * 100).toFixed(0))
-    })
-  }, [habits, habitsCheckedHash])
-
-
 
   const onHabitChange = (habitChange: HabitLineChange) => {
     if (habitChange.type.includes('check')) {
@@ -434,8 +408,6 @@ export const Home = () => {
                       </TabsContent>
                       <TabsContent value="focus" className="pt-2">
                         <div className="">
-
-
                           {Object.entries(groupByCategory(habits, habitCategories || [])).filter(([_, category]) => category?.list?.length > 0).map(([id, category]) => {
                             return (
                               <div key={id}>
