@@ -64,6 +64,8 @@ export const verifySiweAuth = async ({ payload, nonce }: VerifySiweAuthRequest) 
     payload,
   });
 
+  setToken(data.token);
+
   return data;
 }
 
