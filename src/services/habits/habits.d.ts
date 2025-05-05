@@ -7,7 +7,7 @@ declare global {
     description: string | null;
     enabled: boolean;
     name: string;
-    type: 'number';
+    type: 'number' | 'time';
   }
 
   interface HabitDeltaCheck {
