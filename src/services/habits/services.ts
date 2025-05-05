@@ -19,7 +19,6 @@ export const getHabits = async (params: GetHabitsRequest): Promise<GetHabitsResp
 }
 
 export const createHabit = async ({ infinite, ...params }: CreateHabitRequest): Promise<CreateHabitResponse[]> => {
-  console.log(params, '2');
   const { data } = await baseApi.post('/habits', {
     habit: {
       ...params,
