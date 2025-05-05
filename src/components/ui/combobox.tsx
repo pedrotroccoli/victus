@@ -20,7 +20,7 @@ import {
 import { cn } from "@/lib/utils"
 
 export interface ComboboxProps {
-  options: { label: string; value: string | null }[];
+  options: { label: string; value: string | null | undefined }[];
   value: string | null;
   onChange: (value: string | null) => void;
   placeholder: string;
@@ -57,7 +57,9 @@ export function Combobox({ options, value, onChange, placeholder, commandEmpty, 
                   key={option.value}
                   value={option.value as string}
                   onSelect={() => {
-                    onChange(option.value)
+                    if (option.value) {
+                      onChange(option.value)
+                    }
                     setOpen(false)
                   }}
                 >
