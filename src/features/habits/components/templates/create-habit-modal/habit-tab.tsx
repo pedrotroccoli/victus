@@ -25,11 +25,9 @@ export function HabitTab({ categories, habit, endDate }: HabitTabProps) {
   const form = useFormContext<CreateHabitForm>();
 
   const categoriesOptions = useMemo(() => {
-    const list = [{ label: 'Sem categoria', value: null }] as { label: string; value: string | null }[];
+    const list = [{ label: 'Sem categoria', value: undefined }] as { label: string; value: string | undefined }[];
 
     list.push(...categories?.map(category => ({ label: category.name, value: category._id })) || []);
-
-    console.log(list);
 
     return list || [];
   }, [categories]);
