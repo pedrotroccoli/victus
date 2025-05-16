@@ -12,7 +12,7 @@ import { CreateHabitForm, CreateHabitModalProps } from './types';
 import { createHabitValidation, generateRrule, rruleParse } from './utils';
 
 
-export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModalProps) => {
+export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta }: CreateHabitModalProps) => {
   const [loading, setLoading] = useState(false);
   const [tabs, setTabs] = useState<string>('habit');
 
@@ -123,7 +123,7 @@ export const CreateHabitModal = ({ onSave, categories, habit }: CreateHabitModal
             <HabitTab categories={categories} habit={habit} endDate={endDate} />
           </TabsContent>
           <TabsContent value="deltas">
-            <DeltaTab />
+            <DeltaTab onEditDelta={onEditDelta} />
           </TabsContent>
         </Tabs>
         <div className="flex justify-end p-2 px-6 border-t border-neutral-300">

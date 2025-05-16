@@ -14,6 +14,7 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BoxesExplanation } from "@/features/habits/components/atoms/boxes-explanation";
 import { CreateCategoryForm, CreateCategoryModal } from "@/features/habits/components/templates/create-category-modal";
+import { CreateDeltaModal } from "@/features/habits/components/templates/create-delta-modal";
 import { CreateHabitModal } from "@/features/habits/components/templates/create-habit-modal";
 import { CreateHabitModalOnSaveProps } from "@/features/habits/components/templates/create-habit-modal/types";
 import { DeleteHabitModal } from "@/features/habits/components/templates/delete-habit-modal";
@@ -68,6 +69,12 @@ export const Home = () => {
     habit: Habit;
     habitCheck: HabitCheck;
   } | null>(null);
+
+  const [deltaOpen, setDeltaOpen] = useState<{
+    habit: Habit;
+    deltaId: string;
+  } | null>(null);
+
 
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
@@ -193,6 +200,8 @@ export const Home = () => {
   const handleEditHabitSave = (data: CreateHabitModalOnSaveProps) => {
     if (!editHabit) return;
 
+    console.log(data);
+
     updateHabit({
       _id: editHabit._id,
       name: data.name,
@@ -238,6 +247,8 @@ export const Home = () => {
 
     setFillDeltaModal(null);
   }
+
+  const [time, setTime] = useState('00:00');
 
   if (isLoadingMe) {
     return (
@@ -457,8 +468,17 @@ export const Home = () => {
         <div className="w-full h-20 "></div>
       </section>
 
+      {console.log({ editHabit })}
+
       <Dialog open={!!editHabit} onOpenChange={() => setEditHabit(null)}>
-        <CreateHabitModal onSave={handleEditHabitSave} habit={editHabit || undefined} categories={habitCategories || []} />
+        <CreateHabitModal onSave={handleEditHabitSave} habit={editHabit || undefined} categories={habitCategories || []}
+          onEditDelta={(deltaId) => {
+            setDeltaOpen({
+              habit: editHabit as Habit,
+              deltaId
+            });
+          }}
+        />
       </Dialog>
 
       <Dialog open={createCategoryOpen} onOpenChange={setCreateCategoryOpen}>
@@ -468,6 +488,34 @@ export const Home = () => {
       <Dialog open={!!fillDeltaModal} onOpenChange={() => setFillDeltaModal(null)}>
         <FillDeltaModal habit={fillDeltaModal?.habit} habitCheck={fillDeltaModal?.habitCheck} onSave={handleFillDeltaModalSave} />
       </Dialog>
+
+      <Dialog open={!!deltaOpen} onOpenChange={() => setDeltaOpen(null)}>
+        <CreateDeltaModal onSave={({ name, type }) => {
+          const delta = deltaOpen?.habit?.habit_deltas?.find(item => item._id === deltaOpen?.deltaId);
+
+          console.log({ delta }, 'aqui');
+
+          if (delta) {
+            setEditHabit(prev => ({
+              ...(prev as Habit),
+              habit_deltas: [
+                ...(prev?.habit_deltas?.filter(item => item._id !== deltaOpen?.deltaId) || []),
+                {
+                  ...delta,
+                  name: name,
+                  type: type
+                }
+              ]
+            }))
+          }
+
+          setDeltaOpen(null);
+
+        }} habit={deltaOpen?.habit} deltaId={deltaOpen?.deltaId}
+
+        />
+      </Dialog>
+
 
       <AlertDialog open={!!habitToDelete} onOpenChange={() => setHabitToDelete(null)}>
         <DeleteHabitModal habit={habitToDelete || undefined} onConfirm={onDeleteHabitConfirm} onCancel={() => setHabitToDelete(null)} />

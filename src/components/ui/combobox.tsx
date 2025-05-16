@@ -21,8 +21,8 @@ import { cn } from "@/lib/utils"
 
 export interface ComboboxProps {
   options: { label: string; value: string | null | undefined }[];
-  value: string | null;
-  onChange: (value: string | null) => void;
+  value: string | null | undefined;
+  onChange: (value: string | null | undefined) => void;
   placeholder: string;
   commandPlaceholder: string;
   commandEmpty: string;

@@ -5,6 +5,7 @@ export interface CreateHabitModalProps {
   onSave?: (data: CreateHabitModalOnSaveProps) => void;
   habit?: Habit;
   categories?: HabitCategory[];
+  onEditDelta?: (deltaId: string) => void;
 }
 
 export type CreateHabitForm = z.infer<typeof createHabitValidation>;

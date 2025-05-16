@@ -14,7 +14,11 @@ interface Delta {
   type: string;
 }
 
-export function DeltaTab() {
+interface DeltaTabProps {
+  onEditDelta?: (deltaId: string) => void;
+}
+
+export function DeltaTab({ onEditDelta }: DeltaTabProps) {
   const form = useFormContext<{
     deltas: Delta[];
   }>();
@@ -149,7 +153,10 @@ export function DeltaTab() {
                   <div className="absolute right-3 top-3">
                     {!hasAndEditingState && (
                       <button onClick={() => {
-                        form.setValue(`deltas.${index}.state`, 'edit');
+                        // form.setValue(`deltas.${index}.state`, 'edit');
+                        console.log(item);
+                        onEditDelta?.(item.id);
+
                       }}>
                         <Pencil size={18} weight='bold' className='text-black/70' />
                       </button>

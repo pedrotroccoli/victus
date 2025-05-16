@@ -124,15 +124,22 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
             <li key={delta._id}>
               <input type="hidden" value={delta._id} className="hidden w-0 h-0" {...form.register(`deltas.${index}.habit_delta_id`)} />
               <input type="hidden" value={deltas?.[delta._id]._id} className="hidden w-0 h-0" {...form.register(`deltas.${index}._id`)} />
-              <TextField
-                name={`deltas.${index}.value`}
-                type="tel"
-                label={`Delta ${delta.name}`}
-                placeholder="Ex: 1"
-                parser={(value) => {
-                  return String(numberParser(value));
-                }}
-              />
+              {delta.type === 'time' ? (
+                <>
+                  a</>
+
+              ) : (
+
+                <TextField
+                  name={`deltas.${index}.value`}
+                  type="tel"
+                  label={`Delta ${delta.name}`}
+                  placeholder="Ex: 1"
+                  parser={(value) => {
+                    return String(numberParser(value));
+                  }}
+                />
+              )}
             </li>
           ))}
         </ul>
