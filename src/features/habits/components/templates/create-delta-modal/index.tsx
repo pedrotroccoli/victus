@@ -38,12 +38,12 @@ export const CreateDeltaModal = ({ onSave, habit, deltaId }: CreateDeltaModalPro
   const handleSubmit: SubmitHandler<CreateDeltaForm> = async (data) => {
     try {
       setLoading(true);
-      console.log(data);
 
       await onSave?.({
         name: data.name,
         type: data.type,
       });
+
 
       form.reset(defaultValues);
     } catch (error) {
@@ -63,9 +63,9 @@ export const CreateDeltaModal = ({ onSave, habit, deltaId }: CreateDeltaModalPro
   return (
     <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded w-[calc(100vw-2rem)] rounded-lg">
       <DialogHeader className="p-4 border-b text-left">
-        <DialogTitle>{!habit ? 'Criar hábito' : `Editar hábito "${habit.name}"`}</DialogTitle>
+        <DialogTitle>{!deltaId ? 'Criar Delta' : `Editar Delta "${habit?.name}"`}</DialogTitle>
         <DialogDescription className="text-black/70">
-          {habit ? 'Edite as informações do hábito ou deltas' : 'Defina a data de início e fim do hábito e defina seus deltas'}
+          {deltaId ? 'Edite as informações do delta' : 'Defina o nome e o tipo do delta'}
         </DialogDescription>
       </DialogHeader>
       <FormProvider {...form}>
