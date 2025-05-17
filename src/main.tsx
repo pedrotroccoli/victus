@@ -7,6 +7,9 @@ import packageJson from '../package.json'
 import { Toaster } from './components/ui/sonner'
 import './globals.css'
 import { routeTree } from './routeTree.gen'
+
+import './lib/i18n'
+
 // Import package version
 console.log('v:', packageJson['version']);
 
