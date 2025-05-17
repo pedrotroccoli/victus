@@ -13,7 +13,6 @@
       "deltas": "Deltas"
     },
     "form": {
-      
       "fields": {
         "name": {
           "label": "Nome do hábito",
@@ -88,6 +87,60 @@
     "buttons": {
       "create": "Criar hábito",
       "edit": "Salvar hábito"
+    }
+  },
+  "fill_delta_modal": {
+    "title": "Preencha o delta",
+    "description": "Preencha o delta para o hábito",
+    "form": {
+      "fields": {
+        "delta": {
+          "label": "Delta {{name}}",
+          "placeholder": "Ex: 1"
+        }
+      }
+    }
+  },
+  "delete_habit_modal": {
+    "title": "Você tem absoluta certeza?",
+    "description": "Esta ação não pode ser revertida. Isso irá deletar o hábito **{{name}}** permanentemente e remover seus dados dos nossos servidores."
+  },
+  "create_delta_modal": {
+    "title": {
+      "create": "Criar delta",
+      "edit": "Editar delta {{name}}"
+    },
+    "description": {
+      "create": "Defina o nome e o tipo do delta",
+      "edit": "Edite o nome e o tipo do delta"
+    },
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Nome do delta",
+          "placeholder": "Ex: Quantidade de água"
+        },
+        "type": {
+          "label": "Tipo",
+          "placeholder": "Selecione o tipo",
+          "options": {
+            "number": "Número",
+            "time": "Tempo"
+          }
+        }
+      }
+    }
+  },
+  "create_category_modal": {
+    "title": "Criar categoria",
+    "description": "Defina o nome da categoria",
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Nome da categoria",
+          "placeholder": "Ex: Saúde ou Educação"
+        }
+      }
     }
   }
 }

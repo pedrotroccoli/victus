@@ -3,5 +3,6 @@
   "delete": "Deletar",
   "add": "Adicionar",
   "create": "Criar",
-  "save": "Salvar"
+  "save": "Salvar",
+  "cancel": "Cancelar"
 }
