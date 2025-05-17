@@ -1,3 +1,4 @@
+import { useLocalStorage } from '@uidotdev/usehooks';
 import { addDays, eachDayOfInterval, format, isAfter, isBefore, subDays } from "date-fns";
 import { Book, BookOpen, Box, CircleAlert, CirclePlus, LoaderCircle, PackagePlus, PencilOff, PencilRuler, PlusCircle, X } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -70,6 +71,8 @@ export const Home = () => {
     habit: Habit;
     habitCheck: HabitCheck;
   } | null>(null);
+
+  const [tab, setTab] = useLocalStorage('@victus::tab', 'focus');
 
   const [deltaOpen, setDeltaOpen] = useState<{
     open?: boolean;
@@ -148,6 +151,12 @@ export const Home = () => {
       check_id: habitCheck?._id,
       checked: !habitCheck?.checked
     });
+
+    if (!habitCheck?.checked) {
+      toast.success(`${habit.name} marcado com sucesso! :D`);
+    } else {
+      toast.info(`${habit.name} desmarcado com sucesso! :(`);
+    }
 
     if (habit.habit_deltas?.length && (habitCheck ? !habitCheck.checked : true)) {
       setFillDeltaModal({
@@ -446,7 +455,7 @@ export const Home = () => {
 
                   <div className="">
                     <div className="border-t border-neutral-300" ></div>
-                    <Tabs defaultValue="focus" className="w-full p-4 pt-6">
+                    <Tabs defaultValue={tab} className="w-full p-4 pt-6" onValueChange={setTab}>
                       <TabsList className="border border-neutral-300 p-0 h-auto">
                         <TabsTrigger value="general" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Visão Geral</TabsTrigger>
                         <TabsTrigger value="focus" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Modo Foco</TabsTrigger>
