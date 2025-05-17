@@ -153,3 +153,12 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Fix for iOS */
+@media screen and (-webkit-min-device-pixel-ratio:0) { 
+  select,
+  textarea,
+  input {
+    font-size: 16px;
+  }
+}
