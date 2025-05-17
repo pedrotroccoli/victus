@@ -6,6 +6,7 @@ import { addDays } from 'date-fns';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { DeltaTab } from './delta-tab';
 import { HabitTab } from './habit-tab';
 import { CreateHabitForm, CreateHabitModalProps } from './types';
@@ -13,6 +14,8 @@ import { createHabitValidation, generateRrule, rruleParse } from './utils';
 
 
 export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCreateDelta, newDeltas }: CreateHabitModalProps) => {
+  const { t } = useTranslation('habit', { keyPrefix: 'create_habit_modal' })
+
   const [loading, setLoading] = useState(false);
   const [tabs, setTabs] = useState<string>('habit');
 
@@ -101,16 +104,16 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
   return (
     <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded w-[calc(100vw-2rem)] rounded-lg">
       <DialogHeader className="p-4 border-b text-left">
-        <DialogTitle>{!habit ? 'Criar hábito' : `Editar hábito "${habit.name}"`}</DialogTitle>
+        <DialogTitle>{!habit ? t('title.create') : t('title.edit', { name: habit.name })}</DialogTitle>
         <DialogDescription className="text-black/70">
-          {habit ? 'Edite as informações do hábito ou deltas' : 'Defina a data de início e fim do hábito e defina seus deltas'}
+          {habit ? t('description.edit') : t('description.create')}
         </DialogDescription>
       </DialogHeader>
       <FormProvider {...form}>
         <Tabs defaultValue="habit" onValueChange={setTabs} value={tabs}>
           <TabsList className='mb-4 border border-neutral-300 ml-4 mt-6'>
-            <TabsTrigger value="habit" className='data-[state=active]:bg-black data-[state=active]:text-white'>Hábito</TabsTrigger>
-            <TabsTrigger value="deltas" className='data-[state=active]:bg-black data-[state=active]:text-white text-black'>Deltas</TabsTrigger>
+            <TabsTrigger value="habit" className='data-[state=active]:bg-black data-[state=active]:text-white'>{t('tabs.habit')}</TabsTrigger>
+            <TabsTrigger value="deltas" className='data-[state=active]:bg-black data-[state=active]:text-white text-black'>{t('tabs.deltas')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="habit">
@@ -130,7 +133,7 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
             onClick={form.handleSubmit(handleSubmit, handleError)}
             disabled={loading}
           >
-            {loading ? <Loader2 size={16} className="animate-spin" /> : !habit ? 'Criar' : 'Salvar'}
+            {loading ? <Loader2 size={16} className="animate-spin" /> : !habit ? t('buttons.create') : t('buttons.edit')}
           </Button>
         </div>
       </FormProvider>

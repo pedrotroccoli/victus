@@ -7,6 +7,7 @@ import { ToggleGroupField } from "@/components/molecules/form/ToggleGroupField";
 import { format, isBefore, sub } from "date-fns";
 import { useMemo } from "react";
 import { useFormContext } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { CreateHabitForm } from "./types";
 import { daysOfWeek, daysOfWeekTranslation } from "./utils";
 
@@ -22,6 +23,7 @@ const daysOfWeekOptions = daysOfWeek.map(item => ({
 }))
 
 export function HabitTab({ categories, habit, endDate }: HabitTabProps) {
+  const { t } = useTranslation('habit', { keyPrefix: 'create_habit_modal' })
   const form = useFormContext<CreateHabitForm>();
 
   const categoriesOptions = useMemo(() => {
@@ -38,8 +40,8 @@ export function HabitTab({ categories, habit, endDate }: HabitTabProps) {
       <div>
         <TextField
           name="name"
-          label="Nome do hábito"
-          placeholder="Ex: Beber água"
+          label={t('form.fields.name.label')}
+          placeholder={t('form.fields.name.placeholder')}
         />
       </div>
 
@@ -49,12 +51,12 @@ export function HabitTab({ categories, habit, endDate }: HabitTabProps) {
         <SelectField
           wrapperClassName={categories && categories.length > 0 ? '' : 'col-span-2'}
           name="frequency"
-          label='Frequência'
-          placeholder='Selecione a frequência'
+          label={t('form.fields.frequency.label')}
+          placeholder={t('form.fields.frequency.placeholder')}
           defaultValue='daily'
           options={[
-            { label: 'Diário', value: 'daily' },
-            { label: 'Semanal', value: 'weekly' },
+            { label: t('form.fields.frequency.options.daily'), value: 'daily' },
+            { label: t('form.fields.frequency.options.weekly'), value: 'weekly' },
             // { label: 'Mensal', value: 'monthly' },
             // { label: 'Anual', value: 'yearly' },
           ]}
@@ -62,12 +64,12 @@ export function HabitTab({ categories, habit, endDate }: HabitTabProps) {
 
         {categories && categories.length > 0 && (
           <ComboBoxField
-            label='Categoria'
+            label={t('form.fields.category.label')}
             name="category"
             options={categoriesOptions}
-            placeholder="Selecione a categoria"
-            commandPlaceholder="Pesquisar categoria"
-            commandEmpty="Nenhuma categoria encontrada"
+            placeholder={t('form.fields.category.placeholder')}
+            commandPlaceholder={t('form.fields.category.commandPlaceholder')}
+            commandEmpty={t('form.fields.category.commandEmpty')}
           />
         )}
 
@@ -87,7 +89,7 @@ export function HabitTab({ categories, habit, endDate }: HabitTabProps) {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <DatePickerField name="start_date" label="Data de início"
+          <DatePickerField name="start_date" label={t('form.fields.start_date.label')}
             disabledMessage={habit ? format(habit.start_date, 'dd/MM/yyyy') : undefined}
             disabled={(date) => {
               if (isBefore(date, sub(new Date(), { days: 1 }))) {
@@ -103,7 +105,7 @@ export function HabitTab({ categories, habit, endDate }: HabitTabProps) {
           />
         </div>
         <div>
-          <DatePickerField name="end_date" label="Data de fim" disabled={(date) => {
+          <DatePickerField name="end_date" label={t('form.fields.end_date.label')} disabled={(date) => {
             if (isBefore(date, sub(new Date(), { days: 0 }))) {
               return true;
             }
@@ -118,7 +120,7 @@ export function HabitTab({ categories, habit, endDate }: HabitTabProps) {
           />
           <div className="flex items-center gap-2 mt-2">
             <CheckboxField className="rounded" name="infinite" disabled={!!habit} />
-            <p className="text-sm font-medium">Infinito</p>
+            <p className="text-sm font-medium">{t('form.fields.infinite.label')}</p>
           </div>
         </div>
       </div>

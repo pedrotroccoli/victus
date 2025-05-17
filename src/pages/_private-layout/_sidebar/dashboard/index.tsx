@@ -28,9 +28,12 @@ import { cn } from "@/lib/utils";
 import { useCreateHabitCategory, useHabitCategories } from "@/services/habit-category/hooks";
 import { DateFormat } from "@/services/habits/types";
 import { isAcceptedByRRule, isInfiniteHabit } from "@/utils/habits";
+import { useTranslation } from 'react-i18next';
 import { toast } from "sonner";
 
 export const Home = () => {
+  const { t } = useTranslation('dashboard');
+
   const startRange = subDays(new Date(), 12);
   const endRange = addDays(new Date(), 12);
 
@@ -317,7 +320,7 @@ export const Home = () => {
   return (
     <>
       <Helmet>
-        <title>Victus Journal | Dashboard</title>
+        <title>{t('page.title')}</title>
       </Helmet>
 
       <section className="max-w-screen-lg w-full mx-auto bg-sign">
@@ -326,10 +329,9 @@ export const Home = () => {
             <div className="relative ">
               <Alert className="border-yellow-600 bg-yellow-500/10 mb-12">
                 <CircleAlert className="h-4 w-4 fill-yellow-500" />
-                <AlertTitle>Atenção!</AlertTitle>
+                <AlertTitle>{t('trial_period.title')}</AlertTitle>
                 <AlertDescription className="mt-2 leading-[150%]">
-                  Você esta em período de teste, seu acesso termina em <strong>{format(me?.subscription?.service_details?.trial_ends_at, 'dd/MM/yyyy')}</strong>,
-                  selecione uma assinatura para continuar usando o Victus Journal após o fim do período.
+                  {t('trial_period.description', { date: format(me?.subscription?.service_details?.trial_ends_at, 'dd/MM/yyyy') })}
                 </AlertDescription>
               </Alert>
               <X size={16} className="cursor-pointer absolute top-2.5 right-2.5 " onClick={handleDisableTrialAlert} />
@@ -337,13 +339,13 @@ export const Home = () => {
           )}
 
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-6">
-            <h1 className="font-[Recursive] text-xl font-semibold">Olá {me?.name ? String(me?.name).split(' ')[0] : ''}, aqui está seu Jornal!</h1>
+            <h1 className="font-[Recursive] text-xl font-semibold">{t('greeting', { name: me?.name ? String(me?.name).split(' ')[0] : '' })}</h1>
 
             <Dialog open={createHabitOpen} onOpenChange={setCreateHabitOpen}>
               <DialogTrigger asChild>
                 <Button className="w-full flex gap-4 bg-black rounded-md text-white sm:max-w-40" onClick={() => setCreateHabitOpen(true)}>
                   <PlusCircle size={16} />
-                  Adicionar
+                  {t('common.add')}
                 </Button>
               </DialogTrigger>
 
@@ -364,11 +366,11 @@ export const Home = () => {
                 <div className="flex items-center justify-center h-full flex-col border-neutral-300 border rounded-md p-8 min-h-56">
                   <Box size={32} strokeWidth={1.5} />
 
-                  <p className="text-lg text-black/75 font-medium mt-4 mb-8 font-[Recursive]">Nenhum hábito cadastrado</p>
+                  <p className="text-lg text-black/75 font-medium mt-4 mb-8 font-[Recursive]">{t('habits.no_habits')}</p>
 
                   <Button className="flex gap-4 bg-black rounded-md text-white font-[Recursive]" onClick={() => setCreateHabitOpen(true)}>
                     <PlusCircle size={16} />
-                    Criar meu primeiro hábito
+                    {t('habits.create_first_habit')}
                   </Button>
                 </div>
               )}
@@ -450,7 +452,7 @@ export const Home = () => {
                   </div>
 
                   <div className="p-4">
-                    <h3 className="text-lg font-[Recursive] font-medium">Hábitos</h3>
+                    <h3 className="text-lg font-[Recursive] font-medium">{t('habits.title')}</h3>
                   </div>
 
 
@@ -458,8 +460,12 @@ export const Home = () => {
                     <div className="border-t border-neutral-300" ></div>
                     <Tabs defaultValue={tab} className="w-full p-4 pt-6" onValueChange={setTab}>
                       <TabsList className="border border-neutral-300 p-0 h-auto">
-                        <TabsTrigger value="general" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Visão Geral</TabsTrigger>
-                        <TabsTrigger value="focus" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">Modo Foco</TabsTrigger>
+                        <TabsTrigger value="general" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">
+                          {t('habits.tab_general')}
+                        </TabsTrigger>
+                        <TabsTrigger value="focus" className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black">
+                          {t('habits.tab_focus')}
+                        </TabsTrigger>
                       </TabsList>
                       <TabsContent value="general" className="w-full pt-2">
                         <HabitLines
