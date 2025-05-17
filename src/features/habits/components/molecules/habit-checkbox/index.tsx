@@ -30,8 +30,11 @@ export const HabitCheckbox = ({ today, onCheck, isFirstRow, isLastRow, isFirstCo
 
   const handleCheckHabit = async () => {
     try {
+      if (disabled) return;
+
       setChecked(prev => !prev);
-      await onCheck();
+
+      onCheck();
     } catch (error) {
       setChecked(prev => !prev);
     }
