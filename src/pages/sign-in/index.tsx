@@ -12,6 +12,7 @@ import { useSignIn } from '@/services/auth';
 import { getToken } from '@/services/auth/services';
 import { AxiosError } from 'axios';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 const signInSchema = z.object({
@@ -26,6 +27,9 @@ const signInSchema = z.object({
 type SignInFormData = z.infer<typeof signInSchema>;
 
 export const SignInPage = () => {
+  const { t } = useTranslation('auth');
+  const { t: tForm } = useTranslation('form');
+
   const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
   });
@@ -77,14 +81,14 @@ export const SignInPage = () => {
         <div className="flex items-center justify-center gap-4">
           <BookMarked size={32} strokeWidth={1.5} />
 
-          <h5 className="text-4xl text-black font-title font-normal">
-            Acessar seu jornal
+          <h5 className="text-3xl text-black font-[Recursive] font-medium">
+            {t('sign_in.normal.title')}
           </h5>
         </div>
 
         <FormProvider {...form}>
           <form className='flex flex-col gap-4 mt-8' onSubmit={form.handleSubmit(onFormSubmit, onFormError)}>
-            <TextField name="email" iconLeft={<Mail size={16} />} label='Email' placeholder='emaildigno@gmail.com' />
+            <TextField name="email" iconLeft={<Mail size={16} />} label={tForm('email.label')} placeholder={tForm('email.placeholder')} />
 
             <div className='relative'>
               <Link to="/sign-up" className={
@@ -92,22 +96,22 @@ export const SignInPage = () => {
                   ' absolute right-0 top-0 font-title text-sm underline text-black/50 cursor-pointer hover:text-black/70 duration-200 transition-colors'
                 )
               }>
-                Esqueceu sua senha?
+                {t('sign_in.normal.forgot_password')}
               </Link>
 
-              <PasswordField name="password" iconLeft={<KeyRound size={16} />} label='Senha' placeholder='••••••••••' />
+              <PasswordField name="password" iconLeft={<KeyRound size={16} />} label={tForm('password.label')} placeholder={tForm('password.placeholder')} />
             </div>
 
             <Button type="submit" iconRight={CircleArrowRight} className='flex justify-between mt-4' loading={isLoading} disabled={!form.formState.isValid}>
-              Acessar
+              {t('sign_in.normal.sign_in')}
             </Button>
           </form>
         </FormProvider>
 
         <p className='text-sm text-black/50 mt-4 font-title text-center'>
-          Não tem uma conta?{' '}
+          {t('sign_in.normal.no_account')}{' '}
           <Link to="/sign-up" className='text-[#2C7DA0] underline cursor-pointer hover:text-[#014F86] duration-200 transition-colors'>
-            Criar conta
+            {t('sign_in.normal.sign_up')}
           </Link>
         </p>
       </section>
