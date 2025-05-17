@@ -1,0 +1,33 @@
+{
+  "page": {
+    "title": "Victus Journal | Dashboard"
+  },
+  "trial_period": {
+    "title": "Atenção!",
+    "description": "Você esta em período de teste, seu acesso termina em **{{date}}**, selecione uma assinatura para continuar usando o Victus Journal após o fim do período."
+  },
+  "greeting": "Olá {{name}}, aqui está seu Jornal!",
+  "habits": {
+    "title": "Hábitos",
+    "description": "Aqui estão todos os hábitos que você criou.",
+    "create": "Criar hábito",
+    "create_first_habit": "Criar meu primeiro hábito",
+    "no_habits": "Nenhum hábito cadastrado",
+    "tab_general": "Visão Geral",
+    "tab_focus": "Modo Foco",
+    "tabs": {
+      "general": "Visão Geral",
+      "focus": "Modo Foco"
+    }
+  },
+  "explanation": {
+    "title": "Informações",
+    "boxes": {
+      "checked": "Completado",
+      "blocked": "Fora de data",
+      "blocked-dark": "Fora da data de início ou fim",
+      "empty": "Não completado",
+      "none": "Habilitado"
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "create_habit_modal": {
+    "title": {
+      "create": "Criar hábito",
+      "edit": "Editar hábito"
+    },
+    "description": {
+      "create": "Defina a data de início e fim do hábito e defina seus deltas",
+      "edit": "Edite as informações do hábito ou deltas"
+    },
+    "tabs": {
+      "habit": "Hábito",
+      "deltas": "Deltas"
+    },
+    "form": {
+      
+      "fields": {
+        "name": {
+          "label": "Nome do hábito",
+          "placeholder": "Ex: Beber água"
+        },
+        "frequency": {
+          "label": "Frequência",
+          "placeholder": "Selecione a frequência",
+          "options": {
+            "daily": "Diário",
+            "weekly": "Semanal"
+          }
+        },
+        "category": {
+          "label": "Categoria",
+          "placeholder": "Selecione a categoria",
+          "commandPlaceholder": "Pesquisar categoria",
+          "commandEmpty": "Nenhuma categoria encontrada"
+
+
+        },
+        "week_days": {
+          "label": "Dias da semana",
+          "placeholder": "Selecione os dias da semana"
+        },
+        "start_date": {
+          "label": "Data de início",
+          "placeholder": "Selecione a data de início"
+        },
+        "end_date": {
+          "label": "Data de término",
+          "placeholder": "Selecione a data de término"
+        },
+        "infinite": {
+          "label": "Período infinito",
+          "placeholder": "Selecione se o hábito é infinito"
+        }
+      }
+    },
+    "deltas": {
+      "title": "Gerencie seus deltas",
+      "description": "Crie e edite seus deltas para o hábito",
+      "tooltip": {
+        "title": "O que é um delta?",
+        "description": "Um delta é uma quantidade que você completou do hábito. <br /> <br />Por exemplo, se você bebeu 2 litros de água em um dia o seu delta será 2 ou 2000 se preferir em mililitros. <br /> <br />Você tem total liberdade para usar os deltas como quiser."
+      },
+      "empty": {
+        "title": "Crie seu primeiro delta",
+        "one_more": "Criar um novo delta"
+      },
+      "blocks": {
+        "name": {
+          "label": "Nome",
+          "placeholder": "Ex: Beber água"
+        },
+        "type": {
+          "label": "Tipo",
+          "options": {
+            "number": "Número",
+            "time": "Tempo"
+          }
+        },
+        "status": {
+          "label": "Status",
+          "options": {
+            "active": "Ativo",
+            "new": "Novo"
+          }
+        }
+      }
+    },
+    "buttons": {
+      "create": "Criar hábito",
+      "edit": "Salvar hábito"
+    }
+  }
+}
