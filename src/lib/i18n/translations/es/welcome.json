@@ -1,0 +1,24 @@
+{
+  "welcome": {
+    "step1": {
+      "title": "Hola, bienvenido a Victus Journal",
+      "description": "Tu diario de hábitos, pensamientos y experiencias. ¡Toma el control de tu vida!"
+    },
+    "step2": {
+      "title": "Crea tus hábitos y metas",
+      "description": "Crea uno a uno tus hábitos, establece metas y obtén tu **diario general** para completar."
+    },
+    "step3": {
+      "title": "Crea deltas para cada hábito",
+      "description": "Obtén datos detallados sobre tus comportamientos en tus analíticas."
+    },
+    "step4": {
+      "title": "Mira tus analíticas",
+      "description": "Con las analíticas puedes ver tu rendimiento y progreso hacia tus objetivos."
+    }
+  },
+  "world_app": {
+    "title": "Bienvenido a Victus World",
+    "description": "Tu diario de hábitos, pensamientos y experiencias. ¡Toma el control de tu vida!"
+  }
+} 
