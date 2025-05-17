@@ -6,6 +6,12 @@ export interface CreateHabitModalProps {
   habit?: Habit;
   categories?: HabitCategory[];
   onEditDelta?: (deltaId: string) => void;
+  onCreateDelta?: () => void;
+  newDeltas?: {
+    _id: string;
+    name: string;
+    type: 'number' | 'time';
+  }[];
 }
 
 export type CreateHabitForm = z.infer<typeof createHabitValidation>;

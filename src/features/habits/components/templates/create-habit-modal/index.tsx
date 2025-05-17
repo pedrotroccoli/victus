@@ -12,7 +12,7 @@ import { CreateHabitForm, CreateHabitModalProps } from './types';
 import { createHabitValidation, generateRrule, rruleParse } from './utils';
 
 
-export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta }: CreateHabitModalProps) => {
+export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCreateDelta, newDeltas }: CreateHabitModalProps) => {
   const [loading, setLoading] = useState(false);
   const [tabs, setTabs] = useState<string>('habit');
 
@@ -28,7 +28,6 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta }: Cre
       frequency: 'daily' as const,
       week_days: [],
       category: null,
-      deltas: [],
     } : {
       type: 'edit',
       name: habit.name,
@@ -57,7 +56,6 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta }: Cre
     form.reset(defaultValues);
   }, [form, defaultValues, habit]);
 
-
   const handleSubmit: SubmitHandler<CreateHabitForm> = async (data) => {
     try {
       setLoading(true);
@@ -72,7 +70,6 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta }: Cre
         end_date: data.end_date,
         category: data.category,
         rrule,
-        deltas: data.deltas,
       });
 
       form.reset(defaultValues);
@@ -90,8 +87,6 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta }: Cre
     const habitTab = ['name', 'start_date', 'end_date', 'frequency', 'week_days', 'category'].some(key => !!errors[key as keyof CreateHabitForm]);
     const deltasTab = ['deltas'].some(key => !!errors[key as keyof CreateHabitForm]);
 
-    console.log(habitTab, deltasTab, errors);
-
     if (habitTab) {
       setTabs('habit');
     }
@@ -102,7 +97,6 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta }: Cre
   }
 
   const endDate = form.watch('infinite') ? undefined : form.watch('end_date');
-
 
   return (
     <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded w-[calc(100vw-2rem)] rounded-lg">
@@ -123,7 +117,12 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta }: Cre
             <HabitTab categories={categories} habit={habit} endDate={endDate} />
           </TabsContent>
           <TabsContent value="deltas">
-            <DeltaTab onEditDelta={onEditDelta} />
+            <DeltaTab 
+            onEditDelta={onEditDelta} 
+            onCreateDelta={onCreateDelta} 
+            deltas={habit?.habit_deltas} 
+            newDeltas={newDeltas || []}
+            />
           </TabsContent>
         </Tabs>
         <div className="flex justify-end p-2 px-6 border-t border-neutral-300">

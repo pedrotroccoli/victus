@@ -20,12 +20,6 @@ export const createHabitValidation = z.object({
   frequency: z.enum(['daily', 'weekly', 'monthly', 'yearly']),
   week_days: z.array(z.enum(daysOfWeek)).optional(),
   category: z.string().nullable(),
-  deltas: z.array(z.object({
-    id: z.string().optional(),
-    state: z.enum(['deleted', 'active']),
-    name: z.string({ message: 'O nome do delta é obrigatório' }).min(2, 'Mínimo de 2 caracteres'),
-    type: z.enum(['number', 'string', 'time']),
-  })).optional(),
 }).refine((data) => {
   if (data.frequency === 'weekly' && !data.week_days?.length) {
     return false;
@@ -67,8 +61,6 @@ export const rruleParse = (rrule?: string) => {
 
 
 export const generateRrule = (data: CreateHabitForm) => {
-
-
   const { end_date, infinite } = data;
 
   const frequencyMap = {
@@ -95,8 +87,4 @@ export const generateRrule = (data: CreateHabitForm) => {
   });
 
   return rrule.toString().replace('RRULE:', '');
-}
-
-export const isInAEditingState = (type: string) => {
-  return type === 'edit' || type === 'draft';
 }
