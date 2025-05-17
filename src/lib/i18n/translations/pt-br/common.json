@@ -4,5 +4,10 @@
   "add": "Adicionar",
   "create": "Criar",
   "save": "Salvar",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "language": "Linguagem",
+  "logout": "Sair",
+  "portuguese": "Português",
+  "english": "Inglês",
+  "spanish": "Espanhol"
 }
