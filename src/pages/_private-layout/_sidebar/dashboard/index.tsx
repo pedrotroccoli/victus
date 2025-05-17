@@ -2,6 +2,7 @@ import { addDays, eachDayOfInterval, format, isAfter, isBefore, subDays } from "
 import { Book, BookOpen, Box, CircleAlert, CirclePlus, LoaderCircle, PackagePlus, PencilOff, PencilRuler, PlusCircle, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet";
+import { v4 as uuidv4 } from 'uuid';
 
 import { useMe } from "@/services/auth";
 import { useCheckHabit, useCreateHabit, useDeleteHabit, useGetHabits, useGetHabitsCheck, useUpdateHabit, useUpdateHabitCheck } from "@/services/habits/hooks";
@@ -71,10 +72,12 @@ export const Home = () => {
   } | null>(null);
 
   const [deltaOpen, setDeltaOpen] = useState<{
-    habit: Habit;
-    deltaId: string;
+    open?: boolean;
+    habit?: Habit;
+    deltaId?: string;
+    type: 'create' | 'edit';
+    newDeltas?: { name: string, type: 'number' | 'time', _id: string }[];
   } | null>(null);
-
 
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
@@ -113,14 +116,16 @@ export const Home = () => {
         recurrence_details: {
           rule: params.rrule
         },
-        habit_deltas: params.deltas?.map(item => ({
+        habit_deltas: deltaOpen?.newDeltas?.map(item => ({
           name: item.name,
           type: item.type
         })) || []
       });
 
+
       toast.success('Hábito criado com sucesso!');
 
+      setDeltaOpen(null);
       setCreateHabitOpen(false);
     } catch (error) {
       toast.error('Erro ao criar hábito!');
@@ -200,8 +205,6 @@ export const Home = () => {
   const handleEditHabitSave = (data: CreateHabitModalOnSaveProps) => {
     if (!editHabit) return;
 
-    console.log(data);
-
     updateHabit({
       _id: editHabit._id,
       name: data.name,
@@ -209,17 +212,26 @@ export const Home = () => {
       recurrence_details: {
         rule: data.rrule
       },
-      habit_deltas_attributes: data.deltas?.map(item => ({
-        id: item?.id,
+      habit_deltas_attributes: [
+        ...(editHabit?.habit_deltas?.map(item => ({
+        id: item?._id,
         name: item.name,
         type: item.type,
-        enabled: item.state === 'active',
-        _destroy: item.state === 'deleted' ? true : undefined
-      })) || []
+        enabled: true,
+        _destroy: false
+      })) || []),
+      ...(deltaOpen?.newDeltas?.map(item => ({
+        name: item.name,
+        type: item.type,
+        enabled: true,
+        _destroy: false
+      })) || [])
+    ]
     });
 
     toast.success('Hábito atualizado com sucesso!');
 
+    setDeltaOpen(null);
     setEditHabit(null);
   }
 
@@ -248,7 +260,39 @@ export const Home = () => {
     setFillDeltaModal(null);
   }
 
-  const [time, setTime] = useState('00:00');
+  const onSaveDelta = (data: { name: string, type: 'number' | 'time' }) => {
+    if (deltaOpen?.type === 'create') {
+      setDeltaOpen(prev => ({
+        type: 'create',
+        open: false,
+        newDeltas: [
+          ...(prev?.newDeltas || []), 
+          { name: data.name, type: data.type, _id: uuidv4() }
+        ] as { name: string, type: 'number' | 'time', _id: string }[]
+      }));
+
+
+      return;
+    }
+
+    const delta = deltaOpen?.habit?.habit_deltas?.find(item => item._id === deltaOpen?.deltaId) as HabitDelta;
+
+    if (delta) {
+      setEditHabit(prev => ({
+        ...(prev as Habit),
+        habit_deltas: [
+          ...(prev?.habit_deltas?.filter(item => item._id !== deltaOpen?.deltaId) || []),
+          {
+            ...delta,
+            name: data.name,
+            type: data.type
+          }
+        ]
+      }));
+    }
+
+    setDeltaOpen(null);
+  }
 
   if (isLoadingMe) {
     return (
@@ -293,11 +337,15 @@ export const Home = () => {
                 </Button>
               </DialogTrigger>
 
-              <CreateHabitModal onSave={onCreateHabit} categories={habitCategories || []} />
+              <CreateHabitModal onSave={onCreateHabit} categories={habitCategories || []} newDeltas={deltaOpen?.newDeltas} onCreateDelta={() => setDeltaOpen({
+                open: true,
+                type: 'create',
+                habit: undefined,
+                deltaId: '',
+                newDeltas: []
+              })} />
             </Dialog>
           </div>
-
-
 
           <div className="mt-6 sm:mt-8 bg-white w-full">
 
@@ -468,14 +516,26 @@ export const Home = () => {
         <div className="w-full h-20 "></div>
       </section>
 
-      {console.log({ editHabit })}
-
       <Dialog open={!!editHabit} onOpenChange={() => setEditHabit(null)}>
-        <CreateHabitModal onSave={handleEditHabitSave} habit={editHabit || undefined} categories={habitCategories || []}
+        <CreateHabitModal 
+          newDeltas={deltaOpen?.newDeltas}
+          onSave={handleEditHabitSave} 
+          habit={editHabit || undefined} 
+          categories={habitCategories || []}
           onEditDelta={(deltaId) => {
             setDeltaOpen({
               habit: editHabit as Habit,
-              deltaId
+              deltaId,
+              type: 'edit',
+              open: true
+            });
+          }}
+          onCreateDelta={() => {
+            setDeltaOpen({
+              habit: editHabit as Habit,
+              deltaId: '',
+              type: 'create',
+              open: true
             });
           }}
         />
@@ -489,33 +549,13 @@ export const Home = () => {
         <FillDeltaModal habit={fillDeltaModal?.habit} habitCheck={fillDeltaModal?.habitCheck} onSave={handleFillDeltaModalSave} />
       </Dialog>
 
-      <Dialog open={!!deltaOpen} onOpenChange={() => setDeltaOpen(null)}>
-        <CreateDeltaModal onSave={({ name, type }) => {
-          const delta = deltaOpen?.habit?.habit_deltas?.find(item => item._id === deltaOpen?.deltaId);
-
-          console.log({ delta }, 'aqui');
-
-          if (delta) {
-            setEditHabit(prev => ({
-              ...(prev as Habit),
-              habit_deltas: [
-                ...(prev?.habit_deltas?.filter(item => item._id !== deltaOpen?.deltaId) || []),
-                {
-                  ...delta,
-                  name: name,
-                  type: type
-                }
-              ]
-            }))
-          }
-
-          setDeltaOpen(null);
-
-        }} habit={deltaOpen?.habit} deltaId={deltaOpen?.deltaId}
-
+      <Dialog open={!!deltaOpen?.open} onOpenChange={() => setDeltaOpen(null)}>
+        <CreateDeltaModal 
+          onSave={onSaveDelta} 
+          habit={deltaOpen?.habit} 
+          deltaId={deltaOpen?.deltaId}
         />
       </Dialog>
-
 
       <AlertDialog open={!!habitToDelete} onOpenChange={() => setHabitToDelete(null)}>
         <DeleteHabitModal habit={habitToDelete || undefined} onConfirm={onDeleteHabitConfirm} onCancel={() => setHabitToDelete(null)} />
