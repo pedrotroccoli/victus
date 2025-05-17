@@ -1,9 +1,10 @@
 import { useLocalStorage } from '@uidotdev/usehooks';
 import { addDays, eachDayOfInterval, format, isAfter, isBefore, subDays } from "date-fns";
-import { Book, BookOpen, Box, CircleAlert, CirclePlus, LoaderCircle, PackagePlus, PencilOff, PencilRuler, PlusCircle, X } from "lucide-react";
+import { Book, BookOpen, Box, CircleAlert, CirclePlus, LoaderCircle, PackagePlus, Pencil, PencilOff, PencilRuler, PlusCircle, Trash, X } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet";
 import { v4 as uuidv4 } from 'uuid';
+
 
 import { useMe } from "@/services/auth";
 import { useCheckHabit, useCreateHabit, useDeleteHabit, useGetHabits, useGetHabitsCheck, useUpdateHabit, useUpdateHabitCheck } from "@/services/habits/hooks";
@@ -497,13 +498,24 @@ export const Home = () => {
                                     const checked = getHabitCheck(habit, format(currentDay, 'MM/dd/yyyy'))?.checked || false;
 
                                     return (
-                                      <li key={habit._id} className="flex">
+                                      <li key={habit._id} className="flex gap-4">
                                         <button className="flex items-center gap-4" onClick={() => handleCheckHabit(habit, format(currentDay, 'MM/dd/yyyy'))}>
                                           <label className="flex items-center gap-4">
                                             <Checkbox className="w-5 h-5" checked={checked} />
                                             <p className={cn("font-medium text-left truncate text-ellipsis", checked && "text-black/50 line-through")}>{habit.name}</p>
                                           </label>
                                         </button>
+                                        {editEnabled && (
+
+                                        <div className='flex items-center gap-2'>
+                                        <button className="flex items-center justify-center w-6 h-6 border border-neutral-300 rounded-full" onClick={() => handleEditHabit(habit)}>
+                                          <Pencil size={12} className="text-neutral-500" />
+                                        </button>
+                                        <button className="flex items-center justify-center w-6 h-6 border border-neutral-300 rounded-full" onClick={() => onDeleteHabit(habit)}>
+                                          <Trash size={12} className="text-neutral-500" />
+                                        </button>
+                                        </div>
+                                        )}
                                       </li>
                                     )
                                   })}
