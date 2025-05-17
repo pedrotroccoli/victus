@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { FieldErrors, FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { z } from "zod";
 
@@ -34,6 +35,8 @@ const fillDeltaValidation = z.object({
 type FillDeltaModalForm = z.infer<typeof fillDeltaValidation>;
 
 export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaModalProps) {
+  const { t } = useTranslation('habit');
+  const { t: tCommon } = useTranslation('common');
 
   const deltas = useMemo(() => {
     return habitCheck?.habit_check_deltas?.reduce((acc, delta) => {
@@ -113,9 +116,9 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
   return (
     <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded w-[calc(100vw-2rem)] rounded-lg">
       <DialogHeader className="p-4 border-b text-left">
-        <DialogTitle className="font-[Recursive]">Deltas</DialogTitle>
+        <DialogTitle className="font-[Recursive]">{t('fill_delta_modal.title')}</DialogTitle>
         <DialogDescription className="text-black/70">
-          Preencha os deltas do hábito
+          {t('fill_delta_modal.description')}
         </DialogDescription>
       </DialogHeader>
       <FormProvider {...form}>
@@ -126,15 +129,15 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
               <input type="hidden" value={deltas?.[delta._id]._id} className="hidden w-0 h-0" {...form.register(`deltas.${index}._id`)} />
               {delta.type === 'time' ? (
                 <>
-                  a</>
-
+                  a
+                </>
               ) : (
 
                 <TextField
                   name={`deltas.${index}.value`}
                   type="tel"
-                  label={`Delta ${delta.name}`}
-                  placeholder="Ex: 1"
+                  label={t('fill_delta_modal.form.fields.delta.label', { name: delta.name })}
+                  placeholder={t('fill_delta_modal.form.fields.delta.placeholder')}
                   parser={(value) => {
                     return String(numberParser(value));
                   }}
@@ -149,14 +152,14 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
               onClick={() => setLoading(false)}
               disabled={loading}
             >
-              Cancelar
+              {tCommon('cancel')}
             </Button>
           </DialogClose>
           <Button variant="default" className="bg-black text-white rounded text-sm font-bold hover:bg-black/80 min-w-24 h-8 font-[Recursive]"
             onClick={form.handleSubmit(handleSubmit, handleError)}
             disabled={loading}
           >
-            {loading ? <Loader2 size={16} className="animate-spin" /> : 'Salvar'}
+            {loading ? <Loader2 size={16} className="animate-spin" /> : tCommon('save')}
           </Button>
         </div>
       </FormProvider>

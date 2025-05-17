@@ -124,7 +124,7 @@ export const SidebarLayout = () => {
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
-      <main className="w-full h-full bg-red-20">
+      <main className="w-full h-full bg-neutral-50">
         <Header account={me} handleSignOut={handleSignOut} goTo={goTo} />
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8 h-[calc(100vh-5rem)] overflow-y-auto">
           <div className="min-h-[calc(100vh-5rem)]  bg-[url('/dashboard-bg.png')] bg-cover bg-repeat relative">

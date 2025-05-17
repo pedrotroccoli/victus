@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 const createCategoryValidation = z.object({
   name: z.string().min(2, 'Nome da categoria é obrigatório'),
@@ -20,6 +21,8 @@ export interface CreateCategoryModalProps {
 
 
 export const CreateCategoryModal = ({ onSave }: CreateCategoryModalProps) => {
+  const { t } = useTranslation('habit');
+  const { t: tCommon } = useTranslation('common');
   const [loading, setLoading] = useState(false);
 
   const defaultValues = {
@@ -57,9 +60,9 @@ export const CreateCategoryModal = ({ onSave }: CreateCategoryModalProps) => {
   return (
     <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded w-[calc(100vw-2rem)] rounded-lg">
       <DialogHeader className="p-4 border-b text-left">
-        <DialogTitle>Criar categoria</DialogTitle>
+        <DialogTitle>{t('create_category_modal.title')}</DialogTitle>
         <DialogDescription className="text-black/70">
-          Defina o nome da categoria
+          {t('create_category_modal.description')}
         </DialogDescription>
       </DialogHeader>
       <FormProvider {...form}>
@@ -67,8 +70,8 @@ export const CreateCategoryModal = ({ onSave }: CreateCategoryModalProps) => {
           <div>
             <TextField
               name="name"
-              label="Nome da categoria"
-              placeholder="Ex: Saúde"
+              label={t('create_category_modal.form.fields.name.label')}
+              placeholder={t('create_category_modal.form.fields.name.placeholder')}
             />
           </div>
         </div>
@@ -77,7 +80,7 @@ export const CreateCategoryModal = ({ onSave }: CreateCategoryModalProps) => {
             onClick={form.handleSubmit(handleSubmit, handleError)}
             disabled={loading}
           >
-            {loading ? <Loader2 size={16} className="animate-spin" /> : 'Criar'}
+            {loading ? <Loader2 size={16} className="animate-spin" /> : tCommon('create')}
           </Button>
         </div>
       </FormProvider>

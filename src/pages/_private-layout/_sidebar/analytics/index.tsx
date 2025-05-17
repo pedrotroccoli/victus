@@ -8,6 +8,7 @@ import { eachDayOfInterval, endOfDay, format, subDays } from "date-fns"
 import { useMemo } from "react"
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { useTranslation } from "react-i18next"
 import { Area, AreaChart, Bar, BarChart, XAxis } from "recharts"
 
 
@@ -30,6 +31,8 @@ const chartConfig2 = {
 const currentDay = new Date();
 
 export const Analytics = () => {
+  const { t } = useTranslation('analytics');
+
   const startRange = subDays(new Date(), 7);
   const endRange = endOfDay(new Date());
 
@@ -104,20 +107,20 @@ export const Analytics = () => {
     <div className="flex flex-col items-center justify-center h-full pt-4 w-full gap-8">
       <div className="mt-6 grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4 sm:mt-8 lg:grid-cols-3 w-full">
         <AnalyticsBox
-          title="Hoje você completou"
-          value={`${smallAnalytics.today.alreadyChecked} de ${smallAnalytics.today.total} hábitos`}
+          title={t('small_analytics.today.title')}
+          value={t('small_analytics.today.description', { amount: smallAnalytics.today.alreadyChecked, total: smallAnalytics.today.total })}
           loading={generalLoading}
         />
 
         <AnalyticsBox
-          title="Hoje você está em"
-          value={`${smallAnalytics.today.percentage}% de aproveitamento`}
+          title={t('small_analytics.enjoyment.title')}
+          value={t('small_analytics.enjoyment.description', { percentage: smallAnalytics.today.percentage })}
           loading={generalLoading}
         />
 
         <AnalyticsBox
-          title="Comparando com ontem"
-          value={`${smallAnalytics.compare > 0 ? 'Aumentou' : 'Diminuiu'} em ${smallAnalytics.compare}%`}
+          title={t('small_analytics.compare_with_yesterday.title')}
+          value={smallAnalytics.compare > 0 ? t('small_analytics.compare_with_yesterday.description_increase', { compare: smallAnalytics.compare }) : t('small_analytics.compare_with_yesterday.description_decrease', { compare: smallAnalytics.compare })}
           loading={generalLoading}
         />
       </div>
@@ -125,10 +128,10 @@ export const Analytics = () => {
         <li>
           <div className="bg-white border border-neutral-300 rounded-lg w-full relative">
             <div className="flexflex-col">
-              <h3 className="text-lg font-medium font-[Recursive] m-2 ml-4">Sua performance</h3>
+              <h3 className="text-lg font-medium font-[Recursive] m-2 ml-4">{t('performance.title')}</h3>
               <div className="w-full my-2 h-[1px] bg-neutral-300"></div>
               <div className="flex items-center justify-between p-2 px-4">
-                <h4 className="text-sm font-medium font-[Recursive]">Média nos últimos 7 dias:</h4>
+                <h4 className="text-sm font-medium font-[Recursive]">{t('performance.description', { average: smallAnalytics.today.percentage })}</h4>
                 <p className="text-sm font-medium text-black/75">{smallAnalytics.today.percentage}%</p>
               </div>
             </div>
@@ -158,11 +161,11 @@ export const Analytics = () => {
         <li>
           <div className="bg-white border border-neutral-300 rounded-lg w-full relative">
             <div className="flexflex-col">
-              <h3 className="text-lg font-medium font-[Recursive] m-2 ml-4">Hábitos completados</h3>
+              <h3 className="text-lg font-medium font-[Recursive] m-2 ml-4">{t('habits_completed.title')}</h3>
               <div className="w-full my-2 h-[1px] bg-neutral-300"></div>
               <div className="flex items-center justify-between p-2 px-4">
-                <h4 className="text-sm font-medium font-[Recursive]">Média nos últimos 7 dias:</h4>
-                <p className="text-sm font-medium text-black/75">{Math.floor(analytics.reduce((acc, item) => acc + item.alreadyChecked, 0) / analytics.length)} hábitos por dia</p>
+                <h4 className="text-sm font-medium font-[Recursive]">{t('habits_completed.description', { average: Math.floor(analytics.reduce((acc, item) => acc + item.alreadyChecked, 0) / analytics.length) })}</h4>
+                <p className="text-sm font-medium text-black/75">{t('habits_completed.number_of_habits', { count: Math.floor(analytics.reduce((acc, item) => acc + item.alreadyChecked, 0) / analytics.length) })}</p>
               </div>
             </div>
             <ChartContainer config={chartConfig2} className="w-full max-w-full"  >
@@ -184,10 +187,7 @@ export const Analytics = () => {
               </BarChart>
             </ChartContainer>
           </div>
-
         </li>
-
-
       </ul>
     </div>
   )

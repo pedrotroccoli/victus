@@ -1,6 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
+import analyticsPtBr from './translations/pt-br/analytics.json';
 import commonPtBr from './translations/pt-br/common.json';
 import dashboardPtBr from './translations/pt-br/dashboard.json';
 import habitPtBr from './translations/pt-br/habit.json';
@@ -12,12 +13,14 @@ const resources = {
   'pt-BR': {
     common: commonPtBr,
     dashboard: dashboardPtBr,
-    habit: habitPtBr
+    habit: habitPtBr,
+    analytics: analyticsPtBr
   },
   en: {
     common: commonPtBr,
     dashboard: dashboardPtBr,
-    habit: habitPtBr
+    habit: habitPtBr,
+    analytics: analyticsPtBr
   }
 };
 

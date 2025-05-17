@@ -6,11 +6,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { CreateDeltaForm, CreateDeltaModalProps } from './types';
 import { createDeltaValidation } from './utils';
 
 
 export const CreateDeltaModal = ({ onSave, habit, deltaId }: CreateDeltaModalProps) => {
+  const { t } = useTranslation('habit');
+  const { t: tCommon } = useTranslation('common');
   const [loading, setLoading] = useState(false);
 
   const defaultValues = useMemo(() => {
@@ -63,20 +66,20 @@ export const CreateDeltaModal = ({ onSave, habit, deltaId }: CreateDeltaModalPro
   return (
     <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded w-[calc(100vw-2rem)] rounded-lg">
       <DialogHeader className="p-4 border-b text-left">
-        <DialogTitle>{!deltaId ? 'Criar Delta' : `Editar Delta "${habit?.name}"`}</DialogTitle>
+        <DialogTitle>{!deltaId ? t('create_delta_modal.title.create') : t('create_delta_modal.title.edit', { name: habit?.name })}</DialogTitle>
         <DialogDescription className="text-black/70">
-          {deltaId ? 'Edite as informações do delta' : 'Defina o nome e o tipo do delta'}
+          {deltaId ? t('create_delta_modal.description.edit') : t('create_delta_modal.description.create')}
         </DialogDescription>
       </DialogHeader>
       <FormProvider {...form}>
         <div className='p-4 grid gap-4'>
-          <TextField name="name" label="Nome" placeholder='Ex: Quantidade de água' />
+          <TextField name="name" label={t('create_delta_modal.form.fields.name.label')} placeholder={t('create_delta_modal.form.fields.name.placeholder')} />
 
-          <SelectField 
-            name="type" 
-            label="Tipo" 
-            options={[{ label: 'Numerico', value: 'number' }, { label: 'Tempo', value: 'time' }]} 
-            placeholder='Selecione o tipo' 
+          <SelectField
+            name="type"
+            label={t('create_delta_modal.form.fields.type.label')}
+            options={[{ label: t('create_delta_modal.form.fields.type.options.number'), value: 'number' }, { label: t('create_delta_modal.form.fields.type.options.time'), value: 'time' }]}
+            placeholder={t('create_delta_modal.form.fields.type.placeholder')}
             disabled={!!deltaId}
           />
         </div>
@@ -86,7 +89,7 @@ export const CreateDeltaModal = ({ onSave, habit, deltaId }: CreateDeltaModalPro
             onClick={form.handleSubmit(handleSubmit, handleError)}
             disabled={loading}
           >
-            {loading ? <Loader2 size={16} className="animate-spin" /> : !habit ? 'Criar' : 'Salvar'}
+            {loading ? <Loader2 size={16} className="animate-spin" /> : !habit ? tCommon('create') : tCommon('edit')}
           </Button>
         </div>
       </FormProvider>

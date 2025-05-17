@@ -33,6 +33,7 @@ import { toast } from "sonner";
 
 export const Home = () => {
   const { t } = useTranslation('dashboard');
+  const { t: tCommon } = useTranslation('common');
 
   const startRange = subDays(new Date(), 12);
   const endRange = addDays(new Date(), 12);
@@ -345,7 +346,7 @@ export const Home = () => {
               <DialogTrigger asChild>
                 <Button className="w-full flex gap-4 bg-black rounded-md text-white sm:max-w-40" onClick={() => setCreateHabitOpen(true)}>
                   <PlusCircle size={16} />
-                  {t('common.add')}
+                  {tCommon('add')}
                 </Button>
               </DialogTrigger>
 
