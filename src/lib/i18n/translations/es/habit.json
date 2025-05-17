@@ -1,0 +1,144 @@
+{
+  "create_habit_modal": {
+    "title": {
+      "create": "Crear hábito",
+      "edit": "Editar hábito"
+    },
+    "description": {
+      "create": "Establece la fecha de inicio y fin del hábito y define tus deltas",
+      "edit": "Edita la información del hábito o los deltas"
+    },
+    "tabs": {
+      "habit": "Hábito",
+      "deltas": "Deltas"
+    },
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Nombre del hábito",
+          "placeholder": "Ej: Beber agua"
+        },
+        "frequency": {
+          "label": "Frecuencia",
+          "placeholder": "Selecciona la frecuencia",
+          "options": {
+            "daily": "Diario",
+            "weekly": "Semanal"
+          }
+        },
+        "category": {
+          "label": "Categoría",
+          "placeholder": "Selecciona la categoría",
+          "commandPlaceholder": "Buscar categoría",
+          "commandEmpty": "No se encontraron categorías"
+        },
+        "week_days": {
+          "label": "Días de la semana",
+          "placeholder": "Selecciona los días de la semana"
+        },
+        "start_date": {
+          "label": "Fecha de inicio",
+          "placeholder": "Selecciona la fecha de inicio"
+        },
+        "end_date": {
+          "label": "Fecha de fin",
+          "placeholder": "Selecciona la fecha de fin"
+        },
+        "infinite": {
+          "label": "Período infinito",
+          "placeholder": "Selecciona si el hábito es infinito"
+        }
+      }
+    },
+    "deltas": {
+      "title": "Gestiona tus deltas",
+      "description": "Crea y edita tus deltas para el hábito",
+      "tooltip": {
+        "title": "¿Qué es un delta?",
+        "description": "Un delta es una cantidad que has completado del hábito. <br /> <br />Por ejemplo, si bebiste 2 litros de agua en un día, tu delta será 2 o 2000 si prefieres en mililitros. <br /> <br />Tienes total libertad para usar los deltas como quieras."
+      },
+      "empty": {
+        "title": "Crea tu primer delta",
+        "one_more": "Crear un nuevo delta"
+      },
+      "blocks": {
+        "name": {
+          "label": "Nombre",
+          "placeholder": "Ej: Consumo de agua"
+        },
+        "type": {
+          "label": "Tipo",
+          "options": {
+            "number": "Número",
+            "time": "Tiempo"
+          }
+        },
+        "status": {
+          "label": "Estado",
+          "options": {
+            "active": "Activo",
+            "new": "Nuevo"
+          }
+        }
+      }
+    },
+    "buttons": {
+      "create": "Crear hábito",
+      "edit": "Guardar hábito"
+    }
+  },
+  "fill_delta_modal": {
+    "title": "Completa el delta",
+    "description": "Completa el delta para el hábito",
+    "form": {
+      "fields": {
+        "delta": {
+          "label": "Delta {{name}}",
+          "placeholder": "Ej: 1"
+        }
+      }
+    }
+  },
+  "delete_habit_modal": {
+    "title": "¿Estás completamente seguro?",
+    "description": "Esta acción no se puede deshacer. Esto eliminará permanentemente el hábito **{{name}}** y eliminará sus datos de nuestros servidores."
+  },
+  "create_delta_modal": {
+    "title": {
+      "create": "Crear delta",
+      "edit": "Editar delta {{name}}"
+    },
+    "description": {
+      "create": "Establece el nombre y el tipo del delta",
+      "edit": "Edita el nombre y el tipo del delta"
+    },
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Nombre del delta",
+          "placeholder": "Ej: Cantidad de agua"
+        },
+        "type": {
+          "label": "Tipo",
+          "placeholder": "Selecciona el tipo",
+          "options": {
+            "number": "Número",
+            "time": "Tiempo"
+          }
+        }
+      }
+    }
+  },
+  "create_category_modal": {
+    "title": "Crear categoría",
+    "description": "Establece el nombre de la categoría",
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Nombre de la categoría",
+          "placeholder": "Ej: Salud o Educación"
+        }
+      }
+    }
+  }
+} 
