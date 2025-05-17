@@ -1,51 +1,57 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import analyticsPtBr from './translations/pt-br/analytics.json';
-import commonPtBr from './translations/pt-br/common.json';
-import dashboardPtBr from './translations/pt-br/dashboard.json';
-import habitPtBr from './translations/pt-br/habit.json';
+import translationsEn from './translations/en';
+import translationsEs from './translations/es';
+import translationsPtBr from './translations/pt-br';
 
-// the translations
-// (tip move them in a JSON file and import them,
-// or even better, manage them separated from your code: https://react.i18next.com/guides/multiple-translation-files)
+import { storage } from '@/globals/storage';
+
 const resources = {
-  'pt-BR': {
-    common: commonPtBr,
-    dashboard: dashboardPtBr,
-    habit: habitPtBr,
-    analytics: analyticsPtBr
-  },
-  en: {
-    common: commonPtBr,
-    dashboard: dashboardPtBr,
-    habit: habitPtBr,
-    analytics: analyticsPtBr
+  'pt-BR': translationsPtBr,
+  en: translationsEn,
+  es: translationsEs
+};
+
+const getStoredLanguage = () => {
+  const storedLanguage = localStorage.getItem(storage.language);
+  if (storedLanguage && resources[storedLanguage as keyof typeof resources]) {
+    return storedLanguage;
   }
+  
+  const browserLanguage = navigator.language;
+
+  if (browserLanguage.startsWith('pt')) {
+    return 'pt-BR';
+  }
+  
+  if (browserLanguage.startsWith('es')) {
+    return 'es';
+  }
+  
+  if (browserLanguage.startsWith('en')) {
+    return 'en';
+  }
+  
+  return 'en';
 };
 
 i18n
-  .use(initReactI18next) // passes i18n down to react-i18next
+  .use(initReactI18next)
   .init({
     resources,
-    lng: "en", // Changed to pt-BR to test
+    lng: getStoredLanguage(),
     fallbackLng: 'en',
-    debug: true, // Enable debug mode
+    debug: true,
     ns: ['common', 'dashboard'],
     defaultNS: 'dashboard',
     interpolation: {
-      escapeValue: false // react already safes from xss
+      escapeValue: false
     }
   });
 
-// Add a listener to log when language changes
 i18n.on('languageChanged', (lng) => {
-  console.log('Language changed to:', lng);
+  localStorage.setItem(storage.language, lng);
 });
-
-// Log initial state
-console.log('Current language:', i18n.language);
-console.log('Available languages:', i18n.languages);
-console.log('Translation resources:', i18n.options.resources);
 
 export default i18n;
