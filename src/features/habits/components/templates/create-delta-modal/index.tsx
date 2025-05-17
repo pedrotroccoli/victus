@@ -72,7 +72,13 @@ export const CreateDeltaModal = ({ onSave, habit, deltaId }: CreateDeltaModalPro
         <div className='p-4 grid gap-4'>
           <TextField name="name" label="Nome" placeholder='Ex: Quantidade de água' />
 
-          <SelectField name="type" label="Tipo" options={[{ label: 'Numerico', value: 'number' }, { label: 'Tempo', value: 'time' }]} placeholder='Selecione o tipo' />
+          <SelectField 
+            name="type" 
+            label="Tipo" 
+            options={[{ label: 'Numerico', value: 'number' }, { label: 'Tempo', value: 'time' }]} 
+            placeholder='Selecione o tipo' 
+            disabled={!!deltaId}
+          />
         </div>
 
         <div className="flex justify-end p-2 px-6 border-t border-neutral-300">
