@@ -173,7 +173,8 @@ export const SidebarLayout = () => {
                 <HoverCardTrigger asChild>
                   <PopoverTrigger asChild>
                     <button className="w-12 h-12 sm:w-16 sm:h-16 bg-white border border-neutral-300 rounded-full flex items-center justify-center shadow-2xl">
-                      <img src={MrHabbit} alt="Mr Habbit" className="w-10 h-10 sm:w-14 sm:h-14 rounded-full p-1" />
+                      {/* <img src={MrHabbit} alt="Mr Habbit" className="w-10 h-10 sm:w-14 sm:h-14 rounded-full p-1" /> */}
+                      <Chat size={24} weight="bold" />
                     </button>
                   </PopoverTrigger>
                 </HoverCardTrigger>
@@ -197,7 +198,7 @@ export const SidebarLayout = () => {
                       <div className="w-6 h-6 rounded-full bg-white border border-neutral-300 flex items-center justify-center">
                         <Chat size={14} weight="bold" />
                       </div>
-                      {t('float_button.talk_to_support')}
+                      {t('float_button.support.talk')}
                     </button>
                   </li>
                 </ul>
