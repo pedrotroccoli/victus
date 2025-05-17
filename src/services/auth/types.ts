@@ -29,3 +29,7 @@ export interface VerifySiweAuthRequest {
 export interface VerifySiweAuthResponse {
   token: string;
 }
+
+export interface UpdateMeRequest {
+  name: string;
+}

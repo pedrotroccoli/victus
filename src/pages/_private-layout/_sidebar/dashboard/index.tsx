@@ -28,6 +28,7 @@ import { cn } from "@/lib/utils";
 import { useCreateHabitCategory, useHabitCategories } from "@/services/habit-category/hooks";
 import { DateFormat } from "@/services/habits/types";
 import { isAcceptedByRRule, isInfiniteHabit } from "@/utils/habits";
+import { MiniKit } from '@worldcoin/minikit-js';
 import { useTranslation } from 'react-i18next';
 import { toast } from "sonner";
 
@@ -308,6 +309,17 @@ export const Home = () => {
     setDeltaOpen(null);
   }
 
+  const name = useMemo(() => {
+    if (!me) return '';
+
+    if (me?.connected_providers?.includes('worldapp')) {
+      return MiniKit.user.username;
+    }
+
+    return me?.name ? String(me?.name).split(' ')[0] : '';
+
+  }, [me?.name])
+
   if (isLoadingMe) {
     return (
       <main>
@@ -340,7 +352,7 @@ export const Home = () => {
           )}
 
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-6">
-            <h1 className="font-[Recursive] text-xl font-semibold">{t('greeting', { name: me?.name ? String(me?.name).split(' ')[0] : '' })}</h1>
+            <h1 className="font-[Recursive] text-xl font-semibold">{t('greeting', { name })}</h1>
 
             <Dialog open={createHabitOpen} onOpenChange={setCreateHabitOpen}>
               <DialogTrigger asChild>

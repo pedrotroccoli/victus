@@ -1,5 +1,5 @@
 import { baseApi } from "../api";
-import { SignInRequest, SignUpRequest, SignUpResponse, VerifySiweAuthRequest, VerifySiweAuthResponse } from "./types";
+import { SignInRequest, SignUpRequest, SignUpResponse, UpdateMeRequest, VerifySiweAuthRequest, VerifySiweAuthResponse } from "./types";
 
 // Session Management
 
@@ -69,3 +69,19 @@ export const verifySiweAuth = async ({ payload, nonce }: VerifySiweAuthRequest) 
   return data;
 }
 
+
+// Me
+
+export const getMe = async (): Promise<Account> => {
+  const { data } = await baseApi.get(`/me`);
+
+  return data;
+}
+
+export const updateMe = async (account: UpdateMeRequest): Promise<Account> => {
+  const { data } = await baseApi.put(`/me`, {
+    account
+  });
+
+  return data;
+}
