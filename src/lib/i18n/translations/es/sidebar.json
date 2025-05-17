@@ -1,0 +1,19 @@
+{
+  "sidebar": {
+    "general": "General",
+    "journal": "Diario",
+    "analytics": "Analíticas",
+    "settings": "Configuración"
+  },
+  "float_button": {
+    "mr_habbit": {
+      "talk": "Hablar con Mr. Habbit",
+      "coming_soon": "Próximamente"
+    },
+    "support": {
+      "talk": "Hablar con soporte",
+      "toast_message": "Mensaje enviado con éxito",
+      "message": "Hola, me gustaría hablar con soporte. Mi nombre es {{name}}"
+    }
+  }
+} 

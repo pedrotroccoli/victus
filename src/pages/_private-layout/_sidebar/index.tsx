@@ -14,9 +14,12 @@ import MrHabbit from "@/assets/rabbit.png"
 import { Header } from "@/components/organisms/header"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
 export const SidebarLayout = () => {
+  const { t } = useTranslation('sidebar');
+
   const { data: me } = useMe()
   const { pathname } = useLocation()
   const navigate = useNavigate()
@@ -64,11 +67,11 @@ export const SidebarLayout = () => {
   }
 
   const onClickSupport = () => {
-    const message = encodeURIComponent(`Olá, gostaria de falar com o suporte. Meu nome é ${me?.name} e meu email é ${me?.email}`);
+    const message = encodeURIComponent(t('support.message', { name: me?.name }));
 
     window.open(`https://wa.me/5591989407261?text=${message}`, '_blank');
 
-    toast.success('Mensagem enviada com sucesso!')
+    toast.success(t('support.toast_message'))
   }
 
   return (
@@ -84,31 +87,31 @@ export const SidebarLayout = () => {
         <SidebarContent className="bg-white px-2 pt-10">
           <SidebarGroup >
             <SidebarGroupLabel>
-              Geral
+              {t('sidebar.general')}
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu className="gap-3">
-                <SidebarMenuItem title="Jornal">
+                <SidebarMenuItem title={t('sidebar.journal')}>
                   <Link to="/dashboard">
                     <SidebarMenuButton className={cn("text-neutral-500", pathname === "/dashboard" && "text-black border border-neutral-300")}>
                       <BookOpenText size={16} weight="bold" />
-                      Jornal
+                      {t('sidebar.journal')}
                     </SidebarMenuButton>
                   </Link>
                 </SidebarMenuItem>
-                <SidebarMenuItem title="Analytics">
+                <SidebarMenuItem title={t('sidebar.analytics')}>
                   <Link to="/analytics">
                     <SidebarMenuButton className={cn("text-neutral-500", pathname === "/analytics" && "text-black border border-neutral-300")}>
                       <ChartLine size={16} weight="bold" />
-                      Analytics
+                      {t('sidebar.analytics')}
                     </SidebarMenuButton>
                   </Link>
                 </SidebarMenuItem>
-                <SidebarMenuItem title="Configurações">
+                <SidebarMenuItem title={t('sidebar.settings')}>
                   <Link to="/account/general">
                     <SidebarMenuButton className={cn("text-neutral-500", pathname === "/account/general" && "text-black border border-neutral-300")}>
                       <Gear size={16} weight="bold" />
-                      Configurações
+                      {t('sidebar.settings')}
                     </SidebarMenuButton>
                   </Link>
                 </SidebarMenuItem>
@@ -175,7 +178,7 @@ export const SidebarLayout = () => {
                   </PopoverTrigger>
                 </HoverCardTrigger>
                 <HoverCardContent className="bg-black text-white shadow-2xl px-2 py-1 w-auto h-auto text-sm max-w-32 text-center">
-                  Converse com Mr. Habbit
+                  {t('float_button.mr_habbit.talk')}
                 </HoverCardContent>
               </HoverCard>
               <PopoverContent className="p-0 max-w-[22rem] w-full" side="top" align="end">
@@ -183,8 +186,10 @@ export const SidebarLayout = () => {
                   <li >
                     <button className="w-full flex items-center gap-4 px-4 py-2.5 text-sm font-[Recursive] bg-neutral-100 opacity-50 transition-colors text-left hover:cursor-not-allowed" disabled>
                       <img src={MrHabbit} alt="Mr Habbit" className="w-6 h-6 rounded-full border border-neutral-300" />
-                      Converse com Mr. Habbit
-                      <span className="text-xs text-yellow-500 bg-yellow-500/20 p-1 rounded-full border border-yellow-500 text-center">Em breve</span>
+                      {t('float_button.mr_habbit.talk')}
+                      <span className="text-xs text-yellow-500 bg-yellow-500/20 p-1 rounded-full border border-yellow-500 text-center">
+                        {t('float_button.mr_habbit.coming_soon')}
+                      </span>
                     </button>
                   </li>
                   <li >
@@ -192,7 +197,7 @@ export const SidebarLayout = () => {
                       <div className="w-6 h-6 rounded-full bg-white border border-neutral-300 flex items-center justify-center">
                         <Chat size={14} weight="bold" />
                       </div>
-                      Falar com o suporte
+                      {t('float_button.talk_to_support')}
                     </button>
                   </li>
                 </ul>
