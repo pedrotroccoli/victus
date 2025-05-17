@@ -1,0 +1,33 @@
+{
+  "page": {
+    "title": "Victus Journal | Dashboard"
+  },
+  "trial_period": {
+    "title": "Attention!",
+    "description": "You are in a trial period, your access ends on **{{date}}**, select a subscription to continue using Victus Journal after the trial period ends."
+  },
+  "greeting": "Hello {{name}}, here is your Journal!",
+  "habits": {
+    "title": "Habits",
+    "description": "Here are all the habits you have created.",
+    "create": "Create habit",
+    "create_first_habit": "Create my first habit",
+    "no_habits": "No habits registered",
+    "tab_general": "Overview",
+    "tab_focus": "Focus Mode",
+    "tabs": {
+      "general": "Overview",
+      "focus": "Focus Mode"
+    }
+  },
+  "explanation": {
+    "title": "Information",
+    "boxes": {
+      "checked": "Completed",
+      "blocked": "Out of date",
+      "blocked-dark": "Outside start or end date",
+      "empty": "Not completed",
+      "none": "Enabled"
+    }
+  }
+} 

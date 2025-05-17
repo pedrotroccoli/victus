@@ -1,0 +1,144 @@
+{
+  "create_habit_modal": {
+    "title": {
+      "create": "Create habit",
+      "edit": "Edit habit"
+    },
+    "description": {
+      "create": "Set the start and end date of the habit and define your deltas",
+      "edit": "Edit habit information or deltas"
+    },
+    "tabs": {
+      "habit": "Habit",
+      "deltas": "Deltas"
+    },
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Habit name",
+          "placeholder": "Ex: Drink water"
+        },
+        "frequency": {
+          "label": "Frequency",
+          "placeholder": "Select frequency",
+          "options": {
+            "daily": "Daily",
+            "weekly": "Weekly"
+          }
+        },
+        "category": {
+          "label": "Category",
+          "placeholder": "Select category",
+          "commandPlaceholder": "Search category",
+          "commandEmpty": "No categories found"
+        },
+        "week_days": {
+          "label": "Week days",
+          "placeholder": "Select week days"
+        },
+        "start_date": {
+          "label": "Start date",
+          "placeholder": "Select start date"
+        },
+        "end_date": {
+          "label": "End date",
+          "placeholder": "Select end date"
+        },
+        "infinite": {
+          "label": "Infinite period",
+          "placeholder": "Select if the habit is infinite"
+        }
+      }
+    },
+    "deltas": {
+      "title": "Manage your deltas",
+      "description": "Create and edit your deltas for the habit",
+      "tooltip": {
+        "title": "What is a delta?",
+        "description": "A delta is a quantity that you completed for the habit. <br /> <br />For example, if you drank 2 liters of water in a day, your delta would be 2 or 2000 if you prefer in milliliters. <br /> <br />You have complete freedom to use deltas as you wish."
+      },
+      "empty": {
+        "title": "Create your first delta",
+        "one_more": "Create a new delta"
+      },
+      "blocks": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Ex: Water intake"
+        },
+        "type": {
+          "label": "Type",
+          "options": {
+            "number": "Number",
+            "time": "Time"
+          }
+        },
+        "status": {
+          "label": "Status",
+          "options": {
+            "active": "Active",
+            "new": "New"
+          }
+        }
+      }
+    },
+    "buttons": {
+      "create": "Create habit",
+      "edit": "Save habit"
+    }
+  },
+  "fill_delta_modal": {
+    "title": "Fill the delta",
+    "description": "Fill the delta for the habit",
+    "form": {
+      "fields": {
+        "delta": {
+          "label": "Delta {{name}}",
+          "placeholder": "Ex: 1"
+        }
+      }
+    }
+  },
+  "delete_habit_modal": {
+    "title": "Are you absolutely sure?",
+    "description": "This action cannot be undone. This will permanently delete the habit **{{name}}** and remove its data from our servers."
+  },
+  "create_delta_modal": {
+    "title": {
+      "create": "Create delta",
+      "edit": "Edit delta {{name}}"
+    },
+    "description": {
+      "create": "Set the name and type of the delta",
+      "edit": "Edit the name and type of the delta"
+    },
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Delta name",
+          "placeholder": "Ex: Water quantity"
+        },
+        "type": {
+          "label": "Type",
+          "placeholder": "Select type",
+          "options": {
+            "number": "Number",
+            "time": "Time"
+          }
+        }
+      }
+    }
+  },
+  "create_category_modal": {
+    "title": "Create category",
+    "description": "Set the category name",
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Category name",
+          "placeholder": "Ex: Health or Education"
+        }
+      }
+    }
+  }
+} 
