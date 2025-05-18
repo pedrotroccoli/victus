@@ -125,6 +125,7 @@ export const Home = () => {
         recurrence_details: {
           rule: params.rrule
         },
+        habit_category_id: params.category || undefined,
         habit_deltas: deltaOpen?.newDeltas?.map(item => ({
           name: item.name,
           type: item.type
@@ -362,7 +363,8 @@ export const Home = () => {
                 </Button>
               </DialogTrigger>
 
-              <CreateHabitModal onSave={onCreateHabit} categories={habitCategories || []} newDeltas={deltaOpen?.newDeltas} onCreateDelta={() => setDeltaOpen({
+              <CreateHabitModal 
+                onSave={onCreateHabit} categories={habitCategories || []} newDeltas={deltaOpen?.newDeltas} onCreateDelta={() => setDeltaOpen({
                 open: true,
                 type: 'create',
                 habit: undefined,
