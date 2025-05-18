@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export interface FieldWrapperProps {
   label?: string;
@@ -11,6 +12,8 @@ export interface FieldWrapperProps {
 }
 
 export const FieldWrapper = ({ label, iconLeft, iconRight, message, messageClassName, children, className }: FieldWrapperProps) => {
+  const { t } = useTranslation();
+
   return (
     <label className={cn("flex flex-col gap-2", className)}>
       {label && <span className="text-sm text-black font-medium">{label}</span>}
@@ -33,7 +36,7 @@ export const FieldWrapper = ({ label, iconLeft, iconRight, message, messageClass
         )}
       </div>
 
-      {message && <span className={cn("text-xs", messageClassName)}>{message}</span>}
+      {message && <span className={cn("text-xs", messageClassName)}>{t(message)}</span>}
     </label>
   )
 }
