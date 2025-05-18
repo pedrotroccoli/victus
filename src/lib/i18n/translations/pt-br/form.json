@@ -10,5 +10,9 @@
     "placeholder": "********",
     "required": "A senha é obrigatória",
     "invalid": "A senha não é válida"
+  },
+  "habit_name": {
+    "label": "Nome do hábito",
+    "required": "O nome do hábito é obrigatório"
   }
 }

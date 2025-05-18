@@ -10,5 +10,9 @@
     "placeholder": "********",
     "required": "Password is required",
     "invalid": "Password is not valid"
+  },
+  "habit_name": {
+    "label": "Habit name",
+    "required": "Habit name is required"
   }
 } 
