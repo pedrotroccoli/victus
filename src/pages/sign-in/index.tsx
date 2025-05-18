@@ -17,11 +17,11 @@ import { toast } from 'sonner';
 
 const signInSchema = z.object({
   email: z.string({
-    required_error: 'Um email por favor',
-  }).trim().email('O email com certeza não é válido'),
+    required_error: 'form.email.required',
+  }).trim().email('form.email.invalid'),
   password: z.string({
-    required_error: 'Uma senha por favor',
-  }).trim().min(3, 'Deve ter pelo menos alguns caracteres a mais né?'),
+    required_error: 'form.password.required',
+  }).trim().min(3, 'form.password.invalid'),
 });
 
 type SignInFormData = z.infer<typeof signInSchema>;

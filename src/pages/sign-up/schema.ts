@@ -4,23 +4,23 @@ import { z } from "zod";
 
 export const signUpSchema = z.object({
   name: z.string({
-    required_error: 'Um nome por favor',
-  }).min(3, 'Seu nome e sobrenome querido :)'),
+    required_error: 'name.required',
+  }).min(3, 'name.at_least_3_characters'),
   email: z.string({
-    required_error: 'Um email por favor',
-  }).email('O email com certeza não é válido'),
+    required_error: 'email.required',
+  }).email('email.invalid'),
   password: z.string({
-    required_error: 'Uma senha por favor',
-  }).min(8, 'Deve ter pelo menos 8 caracteres'),
+    required_error: 'password.required',
+  }).min(8, 'password.invalid'),
   password_confirmation: z.string({
-    required_error: 'Uma senha, se possível a mesma que a anterior heheh',
-  }).min(8, 'Deve ter pelo menos 8 caracteres'),
+    required_error: 'password_confirmation.required',
+  }).min(8, 'password_confirmation.invalid'),
   phone: z.string({
-    required_error: 'Um telefone por favor',
-  }).min(11, 'Um telefone válido por favor').refine(phoneValidator, {
-    message: 'O telefone não é válido',
+    required_error: 'phone.required',
+  }).min(11, 'phone.invalid').refine(phoneValidator, {
+    message: 'phone.invalid',
   }),
 }).refine(data => data.password === data.password_confirmation, {
-  message: 'As senhas não coincidem',
+  message: 'password.not_match',
   path: ['password_confirmation'],
 });
