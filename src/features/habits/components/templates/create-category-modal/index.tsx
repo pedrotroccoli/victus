@@ -10,7 +10,7 @@ import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-
 import { useTranslation } from 'react-i18next';
 
 const createCategoryValidation = z.object({
-  name: z.string().min(2, 'Nome da categoria é obrigatório'),
+  name: z.string().min(2, 'category_name.required'),
 })
 
 export type CreateCategoryForm = z.infer<typeof createCategoryValidation>;

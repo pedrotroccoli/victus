@@ -13,7 +13,7 @@ export const daysOfWeek = [
 ] as const
 
 export const createHabitValidation = z.object({
-  name: z.string().min(2, 'form.habit_name.required'),
+  name: z.string().min(2, 'habit_name.required'),
   start_date: z.date(),
   end_date: z.date(),
   infinite: z.boolean().optional(),

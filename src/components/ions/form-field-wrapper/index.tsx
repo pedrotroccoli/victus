@@ -12,7 +12,7 @@ export interface FieldWrapperProps {
 }
 
 export const FieldWrapper = ({ label, iconLeft, iconRight, message, messageClassName, children, className }: FieldWrapperProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('form');
 
   return (
     <label className={cn("flex flex-col gap-2", className)}>
