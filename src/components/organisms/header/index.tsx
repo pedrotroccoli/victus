@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 
 export interface HeaderProps {
-  account: Account;
+  account?: Account;
   handleSignOut: () => void;
   goTo: (path: string) => void;
 }
@@ -14,13 +14,12 @@ export const Header = ({ account, handleSignOut, goTo }: HeaderProps) => {
   const sidebar = useSidebar();
 
   const formattedShortname = useMemo(() => {
-    if (!account || !account.name) return 'X';
+    if (!account || !account.name) return '@';
 
     const divided = account.name.split(' ').slice(0, 2).map((item: string) => String(item[0]).toUpperCase()).join('');
 
     return divided;
   }, [account])
-
 
 
   return (

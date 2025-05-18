@@ -21,7 +21,6 @@ export const AccountGeneralPage = () => {
   const form = useForm<SubscriptionForm>();
   const [loading, setLoading] = useState(false);
 
-
   useEffect(() => {
     form.reset({
       name: me?.name,

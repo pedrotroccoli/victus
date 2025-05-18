@@ -3,10 +3,12 @@ declare global {
     id: string;
     name: string;
     email: string;
+    phone: string;
     createdAt: string;
     updatedAt: string;
     connected_providers: ['worldapp' | 'web']
     subscription: {
+      status: string;
       sub_status: 'trial' | 'active' | 'inactive'
       service_details: {
         trial_ends_at: string;
