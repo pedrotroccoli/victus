@@ -7,6 +7,8 @@ import habit from './habit.json';
 import sidebar from './sidebar.json';
 import welcome from './welcome.json';
 
+import zodTranslation from 'zod-i18n-map/locales/pt/zod.json';
+
 export default {
   common: common,
   dashboard: dashboard,
@@ -15,5 +17,6 @@ export default {
   sidebar: sidebar,
   form: form,
   auth: auth,
-  welcome: welcome
+  welcome: welcome,
+  zod: zodTranslation
 }
