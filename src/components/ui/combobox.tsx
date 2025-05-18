@@ -57,10 +57,7 @@ export function Combobox({ options, value, onChange, placeholder, commandEmpty, 
                   key={option.value}
                   value={option.value as string}
                   onSelect={() => {
-                    if (option.value) {
                       onChange(option.value)
-                    }
-                    setOpen(false)
                   }}
                 >
                   <Check
