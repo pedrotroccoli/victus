@@ -1,18 +1,33 @@
 {
+  "name": {
+    "label": "Nombre",
+    "required": "El nombre es obligatorio",
+    "at_least_3_characters": "El nombre debe tener al menos 3 caracteres"
+  },
   "email": {
-    "label": "Email",
+    "label": "Correo electrónico",
     "placeholder": "ejemplo@email.com",
-    "required": "El email es obligatorio",
-    "invalid": "El email no es válido"
+    "required": "El correo electrónico es obligatorio",
+    "invalid": "El correo electrónico no es válido"
   },
   "password": {
     "label": "Contraseña",
     "placeholder": "********",
     "required": "La contraseña es obligatoria",
-    "invalid": "La contraseña no es válida"
+    "invalid": "La contraseña no es válida",
+    "not_match": "Las contraseñas no coinciden"
+  },
+  "phone": {
+    "label": "Teléfono",
+    "required": "El teléfono es obligatorio",
+    "invalid": "El teléfono no es válido"
   },
   "habit_name": {
     "label": "Nombre del hábito",
     "required": "El nombre del hábito es obligatorio"
+  },
+  "category_name": {
+    "label": "Nombre de la categoría",
+    "required": "El nombre de la categoría es obligatorio"
   }
 } 

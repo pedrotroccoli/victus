@@ -1,4 +1,9 @@
 {
+  "name": {
+    "label": "Name",
+    "required": "Name is required",
+    "at_least_3_characters": "Name must have at least 3 characters"
+  },
   "email": {
     "label": "Email",
     "placeholder": "example@email.com",
@@ -9,10 +14,20 @@
     "label": "Password",
     "placeholder": "********",
     "required": "Password is required",
-    "invalid": "Password is not valid"
+    "invalid": "Password is not valid",
+    "not_match": "Passwords do not match"
+  },
+  "phone": {
+    "label": "Phone",
+    "required": "Phone is required",
+    "invalid": "Phone is not valid"
   },
   "habit_name": {
     "label": "Habit name",
     "required": "Habit name is required"
+  },
+  "category_name": {
+    "label": "Category name",
+    "required": "Category name is required"
   }
 } 

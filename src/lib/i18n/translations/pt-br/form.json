@@ -1,4 +1,9 @@
 {
+  "name": {
+    "label": "Nome",
+    "required": "O nome é obrigatório",
+    "at_least_3_characters": "O nome deve ter pelo menos 3 caracteres"
+  },
   "email": {
     "label": "Email",
     "placeholder": "exemplo@email.com",
@@ -9,7 +14,13 @@
     "label": "Senha",
     "placeholder": "********",
     "required": "A senha é obrigatória",
-    "invalid": "A senha não é válida"
+    "invalid": "A senha não é válida",
+    "not_match": "As senhas não coincidem"
+  },
+  "phone": {
+    "label": "Telefone",
+    "required": "O telefone é obrigatório",
+    "invalid": "O telefone não é válido"
   },
   "habit_name": {
     "label": "Nome do hábito",
