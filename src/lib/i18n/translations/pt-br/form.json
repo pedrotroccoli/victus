@@ -14,5 +14,9 @@
   "habit_name": {
     "label": "Nome do hábito",
     "required": "O nome do hábito é obrigatório"
+  },
+  "category_name": {
+    "label": "Nome da categoria",
+    "required": "O nome da categoria é obrigatório"
   }
 }
