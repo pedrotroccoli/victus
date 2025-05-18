@@ -1,5 +1,5 @@
+import { z } from "@/lib/zod";
 import { Frequency, RRule, Weekday } from "rrule";
-import { z } from "zod";
 import { CreateHabitForm } from "./types";
 
 export const daysOfWeek = [
@@ -13,7 +13,7 @@ export const daysOfWeek = [
 ] as const
 
 export const createHabitValidation = z.object({
-  name: z.string().min(2, 'Nome do hábito é obrigatório'),
+  name: z.string().min(2, 'form.habit_name.required'),
   start_date: z.date(),
   end_date: z.date(),
   infinite: z.boolean().optional(),
