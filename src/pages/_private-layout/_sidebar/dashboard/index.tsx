@@ -377,7 +377,7 @@ export const Home = () => {
           <div className="mt-6 sm:mt-8 bg-white w-full">
 
             <div className="w-full">
-              {habits && habits.length === 0 && (
+              {habits && habits.length === 0 && !generalLoading && (
                 <div className="flex items-center justify-center h-full flex-col border-neutral-300 border rounded-md p-8 min-h-56">
                   <Box size={32} strokeWidth={1.5} />
 
