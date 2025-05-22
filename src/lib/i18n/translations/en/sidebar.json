@@ -5,6 +5,11 @@
     "analytics": "Analytics",
     "settings": "Settings"
   },
+  "account_sidebar": {
+    "account": "Account",
+    "plans": "Plans",
+    "settings": "Settings"
+  },
   "float_button": {
     "mr_habbit": {
       "talk": "Talk to Mr. Habbit",

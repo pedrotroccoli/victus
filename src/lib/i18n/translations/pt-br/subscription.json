@@ -1,0 +1,21 @@
+{
+  "plans": {
+    "features": {
+    "monthly_habit_creation": "Criação de 50 hábitos",
+    "monthly_delta_creation": "Criação de Deltas",
+    "monthly_analytics": "Analytics avançado",
+    "monthly_support": "Suporte via chat (Email e WhatsApp)",
+    "yearly_habit_creation": "Criação de infinitos hábitos",
+    "yearly_delta_creation": "Criação de Deltas",
+    "yearly_analytics": "Analytics avançado",
+    "yearly_support": "Suporte via chat (Email e WhatsApp)"
+  },
+  "free_trial": "Teste grátis por 14 dias",
+    "monthly": {
+      "title": "Mensal"
+    },
+    "yearly": {
+      "title": "Anual"
+    }
+  }
+}

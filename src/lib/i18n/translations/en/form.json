@@ -17,6 +17,13 @@
     "invalid": "Password is not valid",
     "not_match": "Passwords do not match"
   },
+  "password_confirmation": {
+    "label": "Password confirmation",
+    "placeholder": "********",
+    "required": "Password confirmation is required",
+    "invalid": "Password confirmation is not valid",
+    "not_match": "Passwords do not match"
+  },
   "phone": {
     "label": "Phone",
     "required": "Phone is required",
