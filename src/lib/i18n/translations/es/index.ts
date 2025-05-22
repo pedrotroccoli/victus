@@ -5,6 +5,7 @@ import common from './common.json';
 import dashboard from './dashboard.json';
 import form from './form.json';
 import habit from './habit.json';
+import plans from './plans.json';
 import sidebar from './sidebar.json';
 import welcome from './welcome.json';
 
@@ -17,5 +18,6 @@ export default {
   welcome,
   form,
   auth,
+  plans,
   zod: zodTranslation
 }; 
