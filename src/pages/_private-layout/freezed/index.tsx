@@ -3,9 +3,11 @@ import { useCreateCheckoutSession } from "@/services/checkout";
 import { useGetPlans } from "@/services/plans/hooks";
 import { Snowflake } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 export default function FreezedPage() {
+  const { t } = useTranslation(['subscription', 'common']);
   const { data: plans } = useGetPlans();
   const { mutateAsync: createCheckoutSession } = useCreateCheckoutSession();
   const [isLoading, setIsLoading] = useState('');
@@ -55,11 +57,14 @@ export default function FreezedPage() {
                 <PlanBox
                   loading={isLoading === plan.key}
                   disabled={!!isLoading}
-                  name={plan.name}
+                  title={t(`subscription:plans.${plan.plan_key}.title`)}
                   price={plan.price}
-                  features={plan.features}
+                  features={plan.features.map((feature) => ({
+                    description: t(`subscription:plans.features.${feature.key}`)
+                  }))}
                   progress={index === 0 ? 50 : 100}
                   onClick={() => handlePlanClick(plan)}
+                  buttonText={t('subscription:plans.free_trial')}
                 />
               </li>
             ))}
