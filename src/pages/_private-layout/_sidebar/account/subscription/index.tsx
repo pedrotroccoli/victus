@@ -51,7 +51,7 @@ export default function Subscription() {
       </Helmet>
 
 
-      <div className="px-4 flex-1">
+      <div className="px-4 flex-1 w-full">
         <h1 className="text-2xl font-medium font-[Recursive]">Assinatura</h1>
 
         <div className="flex flex-col mt-4 border rounded-md bg-white border-neutral-300 pt-4 w-full p-4">
