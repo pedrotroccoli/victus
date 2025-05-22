@@ -2,10 +2,10 @@ declare global {
   namespace Plan {
     export interface Item {
       key: string;
-      name: string;
+      plan_key: string;
       price: string;
       features: {
-        name: string;
+        key: string;
       }[];
     }
   }
