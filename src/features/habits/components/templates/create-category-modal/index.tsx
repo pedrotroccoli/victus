@@ -1,10 +1,9 @@
 import { z } from 'zod';
 
+import { Button } from '@/components/ions/button';
 import { TextField } from '@/components/molecules/form/TextField';
-import { Button } from '@/components/ui/button';
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -21,8 +20,7 @@ export interface CreateCategoryModalProps {
 
 
 export const CreateCategoryModal = ({ onSave }: CreateCategoryModalProps) => {
-  const { t } = useTranslation('habit');
-  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation(['habit', 'common']);
   const [loading, setLoading] = useState(false);
 
   const defaultValues = {
@@ -79,8 +77,9 @@ export const CreateCategoryModal = ({ onSave }: CreateCategoryModalProps) => {
           <Button variant="default" className="bg-black text-white rounded text-sm font-bold hover:bg-black/80 min-w-24 h-8"
             onClick={form.handleSubmit(handleSubmit, handleError)}
             disabled={loading}
+            loading={loading}
           >
-            {loading ? <Loader2 size={16} className="animate-spin" /> : tCommon('create')}
+            {t('common:create')}
           </Button>
         </div>
       </FormProvider>
