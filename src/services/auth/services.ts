@@ -83,5 +83,5 @@ export const updateMe = async (account: UpdateMeRequest): Promise<Account> => {
     account
   });
 
-  return data;
+  return data as Account;
 }

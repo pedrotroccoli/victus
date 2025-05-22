@@ -23,7 +23,7 @@ export const AccountGeneralPage = () => {
   const { t } = useTranslation(['form', 'common', 'account']);
 
   const { data: me } = useMe();
-  const { mutate: updateMe, isPending: isUpdatingMe } = useUpdateMe();
+  const { mutateAsync: updateMe, isPending: isUpdatingMe } = useUpdateMe();
   const [updatingForm, setUpdatingForm] = useState<'basic_info' | 'password'>('basic_info');
 
   const form = useForm<SubscriptionForm>();
@@ -40,9 +40,15 @@ export const AccountGeneralPage = () => {
     try {
       setUpdatingForm('basic_info');
 
-      await updateMe({
+      const response = await updateMe({
         name: data.name,
         phone: data.phone,
+      });
+
+      form.reset({
+        name: response.name,
+        email: response.email,
+        phone: response.phone,
       });
 
       toast.success(t('account:toasts.success.basic_info'));
@@ -61,6 +67,14 @@ export const AccountGeneralPage = () => {
       await updateMe({
         password: data.password,
         password_confirmation: data.password_confirmation,
+      });
+
+      form.reset({
+        name: me?.name,
+        email: me?.email,
+        phone: me?.phone,
+        password: '',
+        password_confirmation: '',
       });
 
       toast.success(t('account:toasts.success.password'));
