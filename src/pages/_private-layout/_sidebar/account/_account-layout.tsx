@@ -59,7 +59,7 @@ export const AccountLayout = () => {
               Planos
             </TabsTrigger>
           </TabsList>
-          <TabsContent value={params.view || 'account'} className="flex-1">
+          <TabsContent value={params.view || 'account'} className="flex-1 px-4">
             <Outlet />
           </TabsContent>
         </Tabs>
