@@ -14,6 +14,7 @@ import MrHabbit from "@/assets/rabbit.png"
 import { Header } from "@/components/organisms/header"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { MiniKit } from "@worldcoin/minikit-js"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
 
@@ -107,6 +108,7 @@ export const SidebarLayout = () => {
                     </SidebarMenuButton>
                   </Link>
                 </SidebarMenuItem>
+                {!MiniKit.isInstalled() && (
                 <SidebarMenuItem title={t('sidebar.settings')}>
                   <Link to="/account/general">
                     <SidebarMenuButton className={cn("text-neutral-500", pathname === "/account/general" && "text-black border border-neutral-300")}>
@@ -115,6 +117,7 @@ export const SidebarLayout = () => {
                     </SidebarMenuButton>
                   </Link>
                 </SidebarMenuItem>
+                )}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
