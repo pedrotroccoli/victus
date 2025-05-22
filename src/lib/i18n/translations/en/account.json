@@ -1,0 +1,19 @@
+{
+  "basic_info": {
+    "title": "Basic information"
+  },
+  "password": {
+    "title": "Password"
+  },
+  "hello": "Hello {{name}}",
+  "toasts": {
+    "success": {
+      "basic_info": "Basic information updated successfully!",
+      "password": "Password updated successfully!"
+    },
+    "error": {
+      "basic_info": "Error updating basic information!",
+      "password": "Error updating password!"
+    }
+  }
+}
