@@ -259,8 +259,6 @@ export const Home = () => {
   const handleFillDeltaModalSave = async (data: OnSaveDeltaModalProps) => {
     if (!fillDeltaModal) return;
 
-    console.log(fillDeltaModal, data);
-
     await updateHabitCheck({
       habit_id: fillDeltaModal?.habit?._id,
       check_id: fillDeltaModal?.habitCheck?._id,
