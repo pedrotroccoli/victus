@@ -14,7 +14,7 @@ export const TimeInput = ({ iconLeft, iconRight, className, label, message, mess
       message={message}
       messageClassName={messageClassName}
     >
-      <Time {...props} className={cn('hover:bg-neutral-100', iconLeft ? "pl-10" : "", iconRight ? "pr-10" : "", className)} />
+      <Time {...props} className={cn('hover:bg-neutral-100', iconLeft ? "pl-10" : "", iconRight ? "pr-10" : "", className)} hours min="00:00:00" max="23:59:59" />
     </FieldWrapper>
   )
 }

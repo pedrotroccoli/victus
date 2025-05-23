@@ -1,10 +1,12 @@
+import { secondsToHHMMSS } from "@/components/ions/time-selector";
 import { TextField } from "@/components/molecules/form";
+import { TimeField } from "@/components/molecules/form/time-field";
 import { Button } from "@/components/ui/button";
 import { DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { numberParser } from "@/utils/parsers/number";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldErrors, FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -28,7 +30,7 @@ const fillDeltaValidation = z.object({
   deltas: z.array(z.object({
     _id: z.string().optional(),
     habit_delta_id: z.string(),
-    value: z.string().optional(),
+    value: z.string().or(z.number()).optional(),
   })),
 });
 
@@ -53,33 +55,33 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
     }>)
   }, [habitCheck]);
 
-  const form = useForm<z.infer<typeof fillDeltaValidation>>({
-    resolver: zodResolver(fillDeltaValidation),
-    defaultValues: {
-      deltas: (habit?.habit_deltas?.map((delta) => ({
-        _id: deltas?.[delta._id]._id,
-        habit_delta_id: delta._id || '',
-        value: deltas?.[delta._id].value || undefined,
-      })) || []) as {
+  const getDefaultValues = useCallback(() => {
+    return (habit?.habit_deltas?.map((delta) => {
+      const formatValue = delta.type === 'time' ? secondsToHHMMSS(Number(deltas?.[delta._id].value)) : deltas?.[delta._id].value;
+
+      return ({
+      _id: deltas?.[delta._id]._id,
+      habit_delta_id: delta._id || '',
+      value: formatValue || undefined,
+    })
+    }) || []) as {
         _id?: string;
         habit_delta_id: string;
         value?: string;
-      }[],
+      }[]
+  }, [habit, deltas]);
+
+  const form = useForm<z.infer<typeof fillDeltaValidation>>({
+    resolver: zodResolver(fillDeltaValidation),
+    defaultValues: {
+      deltas: getDefaultValues(),
     },
   });
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     form.reset({
-      deltas: (habit?.habit_deltas?.map((delta) => ({
-        _id: deltas?.[delta._id]._id,
-        habit_delta_id: delta._id,
-        value: deltas?.[delta._id].value || undefined,
-      })) || []) as {
-        _id?: string;
-        habit_delta_id: string;
-        value?: string;
-      }[],
+      deltas: getDefaultValues(),
     });
   }, [habit, deltas, form]);
 
@@ -88,10 +90,8 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
   const handleSubmit: SubmitHandler<FillDeltaModalForm> = async (data: FillDeltaModalForm) => {
     if (!onSave) return;
 
-
     try {
       setLoading(true);
-
 
       await onSave?.({
         deltas: data.deltas.map((delta) => ({
@@ -129,7 +129,12 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
               <input type="hidden" value={deltas?.[delta._id]._id} className="hidden w-0 h-0" {...form.register(`deltas.${index}._id`)} />
               {delta.type === 'time' ? (
                 <>
-                  a
+                  <TimeField
+                    name={`deltas.${index}.value`}
+                    label={t('fill_delta_modal.form.fields.delta.label', { name: delta.name })}
+                    placeholder={t('fill_delta_modal.form.fields.delta.placeholder')}
+                    hours
+                  />
                 </>
               ) : (
 
