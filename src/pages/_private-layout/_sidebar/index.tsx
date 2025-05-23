@@ -130,10 +130,10 @@ export const SidebarLayout = () => {
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
-      <main className="w-full h-full bg-neutral-50">
+      <main className="w-full h-full bg-neutral-50 bg-[url('/dashboard-bg.png')] overflow-y-auto bg-repeat bg-cover">
         <Header account={me} handleSignOut={handleSignOut} goTo={goTo} />
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-8 h-[calc(100vh-5rem)] overflow-y-auto">
-          <div className="min-h-[calc(100vh-5rem)]  bg-[url('/dashboard-bg.png')] bg-cover bg-repeat relative">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-8 h-[calc(100vh-5rem)]">
+          <div className="min-h-[calc(100vh-5rem)]">
             <Outlet />
             <div className="h-20 w-full" />
           </div>
