@@ -14,7 +14,15 @@ body {
 
 * {
   -webkit-overflow-scrolling: touch;
+}
 
+button {
+  font-family: 'Recursive', sans-serif;
+  font-weight: 500;
+}
+
+@theme {
+  --font-display: 'Recursive', sans-serif;
 }
 
 
