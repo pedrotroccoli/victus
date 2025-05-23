@@ -20,9 +20,13 @@
   },
   "performance": {
     "title": "Tu rendimiento",
-    "description": "Promedio en los últimos 7 días: {{average}}%"
+    "description": "Promedio en los últimos 7 días: {{average}}%",
+    "performance_label": "Rendimiento: ",
+    "completed_habits_label": "Hábitos completados: "
   },
   "habits_completed": {
+    "completed_habits_label": "Completados: ",
+    "missing_habits_label": "No completados: ",
     "title": "Hábitos completados",
     "description": "Promedio en los últimos 7 días: {{average}} hábitos por día",
     "number_of_habits": "{{count}} hábitos por día",

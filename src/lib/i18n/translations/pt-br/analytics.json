@@ -20,9 +20,13 @@
   },
   "performance": {
     "title": "Sua performance",
-    "description": "Média nos últimos 7 dias: {{average}}%"
+    "description": "Média nos últimos 7 dias: {{average}}%",
+    "performance_label": "Performance: ",
+    "completed_habits_label": "Completados: "
   },
   "habits_completed": {
+    "completed_habits_label": "Completados: ",
+    "missing_habits_label": "Não completados: ",
     "title": "Hábitos completados",
     "description": "Média nos últimos 7 dias: {{average}} hábitos por dia",
     "number_of_habits": "{{count}} hábitos por dia",

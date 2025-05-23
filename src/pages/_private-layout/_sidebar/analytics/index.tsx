@@ -12,26 +12,38 @@ import { useTranslation } from "react-i18next"
 import { Area, AreaChart, Bar, BarChart, XAxis } from "recharts"
 
 
+
+const currentDay = new Date();
+
+export const Analytics = () => {
+  const { t } = useTranslation('analytics');
+
 const chartConfig = {
   percentage: {
-    label: "Performance: ",
+    label: t('performance.performance_label'),
     color: "#2563eb",
     icon: Percent
   }
 } satisfies ChartConfig
 
 const chartConfig2 = {
+  completed: {
+    label: t('habits_completed.completed_habits_label'),
+    color: "#2563eb",
+    icon: Hash
+  },
+  missing: {
+    label: t('habits_completed.missing_habits_label'),
+    color: "#e1615a",
+    icon: Hash
+  },
   total: {
-    label: "Hábitos completados:",
+    label: t('habits_completed.completed_habits_label'),
     color: "#2563eb",
     icon: Hash
   }
 } satisfies ChartConfig
 
-const currentDay = new Date();
-
-export const Analytics = () => {
-  const { t } = useTranslation('analytics');
 
   const startRange = subDays(new Date(), 7);
   const endRange = endOfDay(new Date());
@@ -170,10 +182,9 @@ export const Analytics = () => {
             </div>
             <ChartContainer config={chartConfig2} className="w-full max-w-full"  >
               <BarChart accessibilityLayer data={chart2Data} width={200} className="px-4" >
-                <Bar dataKey="missing" fill="#e1615a" radius={4} stackId="a" />
+                <Bar dataKey="missing" fill="#e1615a" radius={4} stackId="a" label="dskfjl" />
 
                 <Bar dataKey="completed" fill="#20cfad" radius={4} stackId="a" />
-
 
                 <ChartTooltip content={<ChartTooltipContent hideLabel />} />
 
