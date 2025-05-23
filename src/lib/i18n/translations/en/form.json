@@ -36,5 +36,10 @@
   "category_name": {
     "label": "Category name",
     "required": "Category name is required"
+  },
+  "time": {
+    "explicit_time": "{{hours}} hours, {{minutes}} minutes and {{seconds}} seconds",
+    "explicit_time_without_hours": "{{minutes}} minutes and {{seconds}} seconds",
+    "explicit_time_without_hour_and_minute": "{{seconds}} seconds"
   }
 } 
