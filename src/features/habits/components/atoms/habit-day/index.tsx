@@ -2,10 +2,10 @@ import { Tooltip, TooltipProvider, TooltipTrigger } from "@/components/ui/toolti
 
 import { TooltipContent } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { CircleArrowDown } from "lucide-react";
 import { useMemo } from "react";
+
+import { useDate } from "@/lib/date-fns";
 
 interface HabitDayProps {
   monthDay: Date;
@@ -14,12 +14,12 @@ interface HabitDayProps {
 }
 
 export const HabitDay = ({ monthDay, currentDay, shouldShowArrow }: HabitDayProps) => {
-  const monthDayFormatted = format(monthDay, 'dd');
-  const day = format(monthDay, 'dd/MM/yyyy');
+  const { formatDate } = useDate();
+
+  const monthDayFormatted = formatDate(monthDay, 'dd');
+  const day = formatDate(monthDay, 'P');
   const weekDayName = useMemo(() => {
-    const weekday = format(monthDay, 'EEEE', {
-      locale: ptBR,
-    });
+    const weekday = formatDate(monthDay, 'EEEE');
 
     return weekday[0].toLocaleUpperCase() + weekday.slice(1);
   }, [monthDay]);
