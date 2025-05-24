@@ -2,6 +2,7 @@ import account from './account.json';
 import analytics from './analytics.json';
 import auth from './auth.json';
 import common from './common.json';
+import components from './components.json';
 import dashboard from './dashboard.json';
 import form from './form.json';
 import habit from './habit.json';
@@ -22,5 +23,6 @@ export default {
   account: account,
   auth: auth,
   welcome: welcome,
+  components: components,
   zod: zodTranslation
 }

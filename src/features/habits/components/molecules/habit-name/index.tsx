@@ -5,6 +5,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { format } from "date-fns";
 import { Triangle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface HabitNameProps {
   item: Habit;
@@ -23,6 +24,8 @@ const typeToName = {
 }
 
 export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }: HabitNameProps) => {
+  const { t } = useTranslation('components');
+
   return (
     <TooltipProvider>
       <Tooltip delayDuration={250}>
@@ -50,10 +53,10 @@ export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }
             {process.env.NODE_ENV === 'development' && (
               <p className="text-xs text-black/75 font-medium">Id: {item._id}</p>
             )}
-            <p className="text-sm text-bold text-black">Informações:</p>
-            <span className="text-xs text-black/75 font-medium">Tipo: {typeToName[item.recurrence_type as keyof typeof typeToName] || 'Sem definição'}</span>
-            <span className="text-xs text-black/75 font-medium">Iniciou em: {format(item.created_at, 'dd/MM/yyyy')}</span>
-            {item.end_date && <span className="text-xs text-black/75 font-medium">Termina em: {format(item.end_date, 'dd/MM/yyyy')}</span>}
+            <p className="text-sm text-bold text-black">{t('habit_name.information.title')}</p>
+            <span className="text-xs text-black/75 font-medium">{t('habit_name.information.type')}: {typeToName[item.recurrence_type as keyof typeof typeToName] || t('habit_name.information.no_definition')}</span>
+            <span className="text-xs text-black/75 font-medium">{t('habit_name.information.started_at')}: {format(item.created_at, 'dd/MM/yyyy')}</span>
+            {item.end_date && <span className="text-xs text-black/75 font-medium">{t('habit_name.information.ended_at')}: {format(item.end_date, 'dd/MM/yyyy')}</span>}
           </div>
         </TooltipContent>
       </Tooltip>

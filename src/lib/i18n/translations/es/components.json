@@ -1,0 +1,11 @@
+{
+  "habit_name": {
+    "information": {
+      "title": "Información: ",
+      "type": "Tipo: ",
+      "started_at": "Comenzó en: ",
+      "ended_at": "Termina en: ",
+      "no_definition": "Sin definición"
+    }
+  }
+}
