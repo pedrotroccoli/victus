@@ -8,10 +8,11 @@ declare global {
     updatedAt: string;
     connected_providers: ['worldapp' | 'web']
     subscription: {
-      status: string;
-      sub_status: 'trial' | 'active' | 'inactive'
+      status: 'active' | 'cancelled' | 'trial';
+      sub_status: 'trial' | 'success' | 'payment_failed'
       service_details: {
-        trial_ends_at: string;
+        customer_id: string;
+        trial_ends_at?: string;
       }
     }
   }
