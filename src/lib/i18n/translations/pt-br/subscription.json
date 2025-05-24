@@ -17,5 +17,32 @@
     "yearly": {
       "title": "Anual"
     }
+  },
+  "subscription": {
+    "active": {
+      "title": "Assinatura ativa",
+      "description": "Você tem uma assinatura ativa. Você pode gerenciar sua assinatura no painel de controle.",
+      "button": "Gerenciar assinatura"
+    },
+    "cancelled": {
+      "title": "Assinatura cancelada",
+      "description": "Você cancelou sua assinatura. Você pode assinar um novo plano para continuar usando o Victus Journal.",
+      "button": "Assinar plano"
+    },
+    "trial": {
+      "title": "Teste grátis",
+      "description": "Você está em um período de teste. Você pode assinar um plano para continuar usando o Victus Journal.",
+      "button": "Assinar plano"
+    },
+    "missing": {
+      "title": "Assinatura não encontrada",
+      "description": "Você não possui uma assinatura. Você pode assinar um plano para continuar usando o Victus Journal.",
+      "button": "Assinar plano"
+    },
+    "freezed": {
+      "title": "Assinatura congelada",
+      "description": "Você tem uma assinatura congelada. Você pode gerenciar sua assinatura no painel de controle.",
+      "button": "Ver planos"
+    }
   }
 }

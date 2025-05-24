@@ -17,5 +17,32 @@
     "yearly": {
       "title": "Yearly"
     }
-  }
+  },
+  "subscription": {
+    "active": {
+      "title": "Active subscription",
+      "description": "You have an active subscription. You can manage your subscription in the control panel.",
+      "button": "Manage subscription"
+    },
+    "cancelled": {
+      "title": "Cancelled subscription",
+      "description": "You have cancelled your subscription. You can subscribe to a new plan to continue using the Victus Journal.",
+      "button": "Subscribe to plan"
+    },
+    "trial": {
+      "title": "Free trial",
+      "description": "You are in a free trial period. You can subscribe to a plan to continue using the Victus Journal.",
+      "button": "Subscribe to plan"
+    },
+    "missing": {
+      "title": "Subscription not found",
+      "description": "You do not have a subscription. You can subscribe to a plan to continue using the Victus Journal.",
+      "button": "Subscribe to plan"
+    },
+    "freezed": {
+      "title": "Freezed subscription",
+      "description": "You have a freezed subscription. You can manage your subscription in the control panel.",
+      "button": "View plans"
+    }
+  } 
 }

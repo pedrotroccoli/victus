@@ -1,10 +1,14 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ions/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useMe } from "@/services/auth";
+import { useAccountInformations } from "@/services/auth/use-account-informations";
+import { useCreateSubscriptionSession } from "@/services/subscription/hooks";
+import { MaskSad, Prohibit, Snowflake, TestTube } from "@phosphor-icons/react";
+import { Smiley } from "@phosphor-icons/react/dist/ssr";
 import { useNavigate, useSearch } from "@tanstack/react-router";
 import { Frown, Laugh } from "lucide-react";
 import { useMemo } from "react";
 import { Helmet } from "react-helmet";
+import { useTranslation } from "react-i18next";
 
 interface SubscriptionParams {
   missingSubscription: string;
@@ -12,9 +16,11 @@ interface SubscriptionParams {
 }
 
 export default function Subscription() {
-  const { data: me } = useMe();
+  const { data: me, informations } = useAccountInformations();
   const params = useSearch({ from: '/_private/_sidebar/account/_layout/subscription/' }) as SubscriptionParams;
   const navigate = useNavigate();
+  const { mutateAsync: createSubscriptionSession, isPending } = useCreateSubscriptionSession();
+  const { t } = useTranslation('subscription');
 
   const firstName = useMemo(() => {
     return me?.name?.split(' ')[0]
@@ -44,6 +50,50 @@ export default function Subscription() {
     });
   }
 
+  const openSubscriptionSession = async () => {
+    const { session_url } = await createSubscriptionSession();
+
+    window.open(session_url, '_blank');
+  }
+
+  const accountType = {
+    'active': {
+      icon: <Smiley size={48} />,
+      title: t('subscription.active.title'),
+      description: t('subscription.active.description'),
+      button: t('subscription.active.button'),
+      buttonAction: openSubscriptionSession,
+    },
+    'missing': {
+      icon: <MaskSad size={48} />,
+      title: t('subscription.missing.title'),
+      description: t('subscription.missing.description'),
+      button: t('subscription.missing.button'),
+      buttonAction: goToPlans,
+    },
+    'trial': {
+      icon: <TestTube size={48} />,
+      title: t('subscription.trial.title'),
+      description: t('subscription.trial.description'),
+      button: t('subscription.trial.button'),
+      buttonAction: goToPlans,
+    },
+    'freezed': {
+      icon: <Snowflake size={48} />,
+      title: t('subscription.freezed.title'),
+      description: t('subscription.freezed.description'),
+      button: t('subscription.freezed.button'),
+      buttonAction: openSubscriptionSession,
+    },
+    'cancelled': {
+      icon: <Prohibit size={48} />,
+      title: t('subscription.cancelled.title'),
+      description: t('subscription.cancelled.description'),
+      button: t('subscription.cancelled.button'),
+      buttonAction: goToPlans,
+    }
+  }
+
   return (
     <>
       <Helmet>
@@ -57,15 +107,17 @@ export default function Subscription() {
         <div className="flex flex-col mt-4 border rounded-md bg-white border-neutral-300 pt-4 w-full p-4">
           {/* <h1 className="font-medium font-[Recursive]">Plano atual:</h1> */}
 
-          <Frown size={48} />
+          {accountType[informations.subscriptionType as keyof typeof accountType].icon}
 
-          <h1 className="text-2xl font-medium font-[Recursive] mt-6">Você não possui uma assinatura ativa</h1>
+          <h1 className="text-xl font-medium font-[Recursive] mt-6">{accountType[informations.subscriptionType as keyof typeof accountType].title}</h1>
 
-          <p className="text-neutral-500 mt-2">Aparentemente você não possui uma assinatura ativa. Por favor, assine um plano para continuar usando o Victus Journal.</p>
+          <p className="text-neutral-500 mt-2">{accountType[informations.subscriptionType as keyof typeof accountType].description}</p>
 
-          <div className="w-full border-t border-t-neutral-300 my-8"></div>
+          <div className="w-full border-t border-t-neutral-300 my-6"></div>
 
-          <Button className="font-medium">Ver planos</Button>
+          <Button loading={isPending} className="font-medium" onClick={accountType[informations.subscriptionType as keyof typeof accountType].buttonAction}>
+            {accountType[informations.subscriptionType as keyof typeof accountType].button}
+          </Button>
         </div>
 
 

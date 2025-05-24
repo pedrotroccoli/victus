@@ -17,5 +17,32 @@
     "yearly": {
       "title": "Anual"
     }
+  },
+  "subscription": {
+    "active": {
+      "title": "Suscripción activa",
+      "description": "Tienes una suscripción activa. Puedes gestionar tu suscripción en el panel de control.",
+      "button": "Gestionar suscripción"
+    },
+    "cancelled": {
+      "title": "Suscripción cancelada",
+      "description": "Has cancelado tu suscripción. Puedes suscribirte a un nuevo plano para continuar usando el Victus Journal.",
+      "button": "Suscribir plano"
+    },
+    "trial": {
+      "title": "Prueba gratuita",
+      "description": "Estás en un período de prueba. Puedes suscribirte a un plano para continuar usando el Victus Journal.",
+      "button": "Suscribir plano"
+    },
+    "missing": {
+      "title": "Suscripción no encontrada",
+      "description": "No tienes una suscripción. Puedes suscribirte a un plano para continuar usando el Victus Journal.",
+      "button": "Suscribir plano"
+    },
+    "freezed": {
+      "title": "Suscripción congelada",
+      "description": "Tienes una suscripción congelada. Puedes gestionar tu suscripción en el panel de control.",
+      "button": "Ver planes"
+    }
   }
 }
