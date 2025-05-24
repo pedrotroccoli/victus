@@ -116,7 +116,7 @@ export function HabitTab({ categories, habit, endDate }: HabitTabProps) {
 
             return false;
           }}
-            disabledMessage={habit ? habit.end_date ? format(habit.end_date, 'dd/MM/yyyy') : 'Sem fim' : form.watch('infinite') ? 'Sem fim' : undefined}
+            disabledMessage={habit ? habit.end_date ? format(habit.end_date, 'dd/MM/yyyy') : t('form.fields.end_date.disabled_message') : form.watch('infinite') ? t('form.fields.end_date.disabled_message') : undefined}
           />
           <div className="flex items-center gap-2 mt-2">
             <CheckboxField className="rounded" name="infinite" disabled={!!habit} />

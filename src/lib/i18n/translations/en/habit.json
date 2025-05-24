@@ -42,7 +42,8 @@
         },
         "end_date": {
           "label": "End date",
-          "placeholder": "Select end date"
+          "placeholder": "Select end date",
+          "disabled_message": "No end date"
         },
         "infinite": {
           "label": "Infinite period",

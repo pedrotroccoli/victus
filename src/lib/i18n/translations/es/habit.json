@@ -42,7 +42,8 @@
         },
         "end_date": {
           "label": "Fecha de fin",
-          "placeholder": "Selecciona la fecha de fin"
+          "placeholder": "Selecciona la fecha de fin",
+          "disabled_message": "Sin fecha de fin"
         },
         "infinite": {
           "label": "Período infinito",
