@@ -1,49 +1,52 @@
 import { cn } from "@/lib/utils";
 import { Barricade } from "@phosphor-icons/react/dist/ssr";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { Grid } from "../grid";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 import { BackToTop } from "./back-to-top";
 
-export const links = [
+export const links = (t: any) => [
   {
-    title: 'Páginas',
+    title: t('items.pages.title'),
     links: [
       {
-        title: 'Missão',
+        title: t('items.pages.items.mission'),
         href: '/sobre'
       }, {
-        title: 'Planos',
+        title: t('items.pages.items.plans'),
         href: '/plans',
         enabled: true
       }
     ]
   },
   {
-    title: 'Redes Sociais',
+    title: t('items.social.title'),
     links: [
       {
-        title: 'Instagram',
+        title: t('items.social.items.instagram'),
         href: 'https://www.instagram.com/victusjournal/'
       },
     ]
   },
   {
-    title: 'Links',
+    title: t('items.links.title'),
     links: [
       {
-        title: 'Termos de uso',
+        title: t('items.links.items.terms'),
         href: '/termos-de-uso'
       },
       {
-        title: 'Política de privacidade',
+        title: t('items.links.items.privacy'),
         href: '/politica-de-privacidade'
       },
     ]
   }
 ]
 export const Footer = () => {
+  const t = useTranslations('footer');
+
   return (
     <>
       <div className="bg-victus-black bg-[url('/noise-1.png')] bg-cover bg-center w-full">
@@ -60,7 +63,7 @@ export const Footer = () => {
             </div>
 
             <ul className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-[44rem] w-full">
-              {links.map((link) => (
+              {links(t).map((link) => (
                 <li key={link.title}>
                   <h4 className="text-white font-mono font-medium w-full">{link.title}</h4>
                   <div className="w-full h-px bg-neutral-800 my-4"></div>
@@ -77,7 +80,7 @@ export const Footer = () => {
                             </li>
                           </TooltipTrigger>
                           <TooltipContent>
-                            Estamos trabalhando para disponibilizar este recurso em breve!
+                            {t('work_in_progress')}
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
@@ -88,7 +91,9 @@ export const Footer = () => {
             </ul>
           </div>
           <div className="w-full h-16 lg:h-40 relative overflow-hidden">
-            <h1 className="text-[3rem] md:text-[5rem] lg:text-[7.5rem] font-mono font-bold absolute bottom-[-25px] md:bottom-[-40px] lg:bottom-[-60px] left-1/2 -translate-x-1/2 whitespace-nowrap text-white">Victus Journal</h1>
+            <h1 className="text-[3rem] md:text-[5rem] lg:text-[7.5rem] font-mono font-bold absolute bottom-[-25px] md:bottom-[-40px] lg:bottom-[-60px] left-1/2 -translate-x-1/2 whitespace-nowrap text-white">
+Victus Journal
+            </h1>
           </div>
           <div className="w-full h-20 border-t border-neutral-800">
             <Grid style="black" className="flex items-center justify-between h-full">
