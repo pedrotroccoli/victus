@@ -111,7 +111,7 @@ export const SidebarLayout = () => {
                 {!MiniKit.isInstalled() && (
                 <SidebarMenuItem title={t('sidebar.settings')}>
                   <Link to="/account/general">
-                    <SidebarMenuButton className={cn("text-neutral-500", pathname === "/account/general" && "text-black border border-neutral-300")}>
+                    <SidebarMenuButton className={cn("text-neutral-500", pathname.includes('/account') && "text-black border border-neutral-300")}>
                       <Gear size={16} weight="bold" />
                       {t('sidebar.settings')}
                     </SidebarMenuButton>
