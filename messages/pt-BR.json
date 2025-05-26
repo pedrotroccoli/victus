@@ -12,6 +12,26 @@
       "button": "Teste grátis por 14 dias"
     }
   },
+  "advantages": {
+    "items": {
+      "advantage_01": {
+        "title": "Acompanhe a evolução dos seus hábitos",
+        "description": "Com o Victus Journal você pode acompanhar a evolução dos seus hábitos dia a dia."
+      },
+      "advantage_02": {
+        "title": "Veja em um quadro onde você pode melhorar",
+        "description": "Com o Victus Journal você pode ver em um quadro onde você pode melhorar."
+      },
+      "advantage_03": {
+        "title": "Tenha um streak dos seus hábitos",  
+        "description": "Com o Victus Journal você pode ter um streak dos seus hábitos." 
+      },
+      "advantage_04": {
+        "title": "Tenha gráficos dos seus hábitos",
+        "description": "Com o Victus Journal você pode ter gráficos dos seus hábitos."
+      }
+    }
+  },
   "news": {
     "title": "Novidades",
     "available": "Disponível",

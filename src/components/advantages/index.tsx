@@ -1,36 +1,39 @@
 import { cn } from "@/lib/utils";
 import { ChartBar, ChartPieSlice, Fire, ProjectorScreenChart } from "@phosphor-icons/react/dist/ssr";
+import { useTranslations } from "next-intl";
 import { Grid } from "../grid";
 
-const advantages = [
+const advantages = (t: any) => [
   {
     icon: ChartBar,
-    title: "Acompanhe a evolução dos seus hábitos",
-    description: "Com a Victus Journal você pode acompanhar suas métricas dia a dia.",
+    title: t('items.advantage_01.title'),
+    description: t('items.advantage_01.description'),
   },
   {
     icon: ProjectorScreenChart,
-    title: "Veja em um quadro onde você pode melhorar",
-    description: "Com a Victus Journal você pode acompanhar suas métricas dia a dia.",
+    title: t('items.advantage_02.title'),
+    description: t('items.advantage_02.description'),
   },
   {
     icon: Fire,
-    title: "Tenha um streak dos seus hábitos",
-    description: "Com a Victus Journal você pode acompanhar suas métricas dia a dia.",
+    title: t('items.advantage_03.title'),
+    description: t('items.advantage_03.description'),
   },
   {
     icon: ChartPieSlice,
-    title: "Tenha gráficos dos seus hábitos",
-    description: "Com a Victus Journal você pode acompanhar suas métricas dia a dia.",
+    title: t('items.advantage_04.title'),
+    description: t('items.advantage_04.description'),
   }
 ];
 
 export const Advantages = () => {
+  const t = useTranslations('advantages');
+
   return (
     <section id="advantages">
       <Grid className="pt-20 md:pt-40">
         <ul className="grid sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 divide-y sm:divide-y-0 lg:divide-x divider-neutral-300 border border-neutral-300 rounded-md w-full bg-white shadow-sm">
-          {advantages.map((advantage, index) => (
+          {advantages(t).map((advantage, index) => (
             <li key={advantage.title} className={
               cn(
                 "p-8 border-neutral-300 ",
