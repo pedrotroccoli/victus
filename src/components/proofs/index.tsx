@@ -1,40 +1,43 @@
 import { cn } from "@/lib/utils"
 import { CaretCircleRight, ChartBar, ChartPieSlice, Fire, ProjectorScreenChart } from "@phosphor-icons/react/dist/ssr"
+import { useTranslations } from "next-intl"
 import Image from "next/image"
 import Link from "next/link"
 import { Grid } from "../grid"
 import { Button } from "../ui/button"
 
-const proofs = [
+const proofs = (t: any) => [
   {
     icon: ChartBar,
-    title: "Como você pode acompanhar a evolução dos seus hábitos?",
-    description: "Dentro da plataforma você tem o seu jornal, diariamente você precisa preencher os hábitos completados.\n\n Com o passar do tempo você vai começar a perceber onde você falha mais e onde você é consistente.",
+    title: t('items.proof_01.title'),
+    description: t('items.proof_01.description'),
     image: "/proofs/proof-01.png"
   },
   {
     icon: ProjectorScreenChart,
-    title: "Como você pode acompanhar a evolução dos seus hábitos?",
-    description: "Dentro da plataforma você tem o seu jornal,diariamente você precisa preencher os hábitos completados.\n\n Com o passar do tempo você vai começar a perceber onde você falha mais e onde você é consistente.",
+    title: t('items.proof_02.title'),
+    description: t('items.proof_02.description'),
     image: "/proofs/calendar.png"
   }, {
     icon: Fire,
-    title: "Como você pode acompanhar a evolução dos seus hábitos?",
-    description: "Dentro da plataforma você tem o seu jornal, diariamente você precisa preencher os hábitos completados.\n\n Com o passar do tempo você vai começar a perceber onde você falha mais e onde você é consistente.",
+    title: t('items.proof_03.title'),
+    description: t('items.proof_03.description'),
     image: "/proofs/journal.png"
   }, {
     icon: ChartPieSlice,
-    title: "Como você pode acompanhar a evolução dos seus hábitos?",
-    description: "Dentro da plataforma você tem o seu jornal, diariamente você precisa preencher os hábitos completados.\n\n Com o passar do tempo você vai começar a perceber onde você falha mais e onde você é consistente.",
+    title: t('items.proof_04.title'),
+    description: t('items.proof_04.description'),
     image: "/proofs/analytics.png"
   },
 
 ]
 export const Proofs = () => {
+  const t = useTranslations('proofs');
+
   return (
     <section>
       <Grid className="grid gap-16 pt-20 md:pt-40" type="small">
-        {proofs.map((item, index) => (
+        {proofs(t).map((item, index) => (
           <div className="grid lg:grid-cols-2 gap-8" key={item.title}>
             <div className="">
               <div className="flex items-center justify-center w-12 h-12 border border-black bg-white rounded-full">
@@ -47,7 +50,7 @@ export const Proofs = () => {
 
               <Link href="/plans">
                 <Button className="mt-12 py-5 w-80 h-auto items-center justify-between gap-2 px-6 rounded-md hidden lg:flex">
-                  Teste grátis por 14 dias
+                  {t('trial_button')}
                   <CaretCircleRight size={24} />
                 </Button>
               </Link>
@@ -56,7 +59,7 @@ export const Proofs = () => {
               <Image src={item.image} alt={item.title} width={528} height={400} className="rounded-md max-lg:w-full" />
               <Link href="/plans" className="w-full">
                 <Button className="mt-8 py-5 w-full h-auto flex items-center justify-between gap-2 px-6 rounded-md lg:hidden">
-                  Teste grátis por 14 dias
+                  {t('trial_button')}
                   <CaretCircleRight size={24} />
                 </Button>
               </Link>

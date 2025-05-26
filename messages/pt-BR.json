@@ -61,6 +61,27 @@
     "trial": "Teste grátis por 14 dias",
     "recommended": "Mais recomendado"
   },
+  "proofs": {
+    "items": {
+      "proof_01": {
+        "title": "Como você pode acompanhar a evolução dos seus hábitos?",
+        "description": "Dentro da plataforma você tem o seu jornal, diariamente você precisa preencher os hábitos completados.\n\n Com o passar do tempo você vai começar a perceber onde você falha mais e onde você é consistente."
+      },
+      "proof_02": {
+        "title": "Como você pode acompanhar a evolução dos seus hábitos?",
+        "description": "Dentro da plataforma você tem o seu jornal, diariamente você precisa preencher os hábitos completados.\n\n Com o passar do tempo você vai começar a perceber onde você falha mais e onde você é consistente."
+      },
+      "proof_03": {
+        "title": "Como você pode acompanhar a evolução dos seus hábitos?",
+        "description": "Dentro da plataforma você tem o seu jornal, diariamente você precisa preencher os hábitos completados.\n\n Com o passar do tempo você vai começar a perceber onde você falha mais e onde você é consistente."
+      },
+      "proof_04": {
+        "title": "Como você pode acompanhar a evolução dos seus hábitos?",
+        "description": "Dentro da plataforma você tem o seu jornal, diariamente você precisa preencher os hábitos completados.\n\n Com o passar do tempo você vai começar a perceber onde você falha mais e onde você é consistente."
+      }
+    },
+    "trial_button": "Teste grátis por 14 dias"
+  },
   "footer": {
     "back_to_top": "Voltar ao topo",
     "work_in_progress": "Estamos trabalhando para disponibilizar este recurso em breve!",
