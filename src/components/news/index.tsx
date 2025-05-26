@@ -34,7 +34,9 @@ export const News = () => {
   return (
     <section>
       <Grid className="pt-16" type="small">
-        <h2 className="text-2xl md:text-4xl font-bold font-mono mx-auto text-center mb-16">Novidades</h2>
+        <h2 className="text-2xl md:text-4xl font-bold font-mono mx-auto text-center mb-16">
+          {t('title')}
+        </h2>
         <ul className="grid gap-8">
           {items(t).map((item) => (
             <li key={item.title}>
