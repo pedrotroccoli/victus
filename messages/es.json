@@ -6,6 +6,14 @@
     "button": {
       "access": "Acceder",
       "plans": "Ver planes"
+    },
+    "languages": {
+      "title": "Idiomas",
+      "items": {
+        "pt": "Portugués",
+        "es": "Español",
+        "en": "Inglés"
+      }
     }
   },
   "home": {

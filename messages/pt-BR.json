@@ -3,6 +3,14 @@
     "button": {
       "access": "Acessar",
       "plans": "Ver planos"
+    },
+    "languages": {
+      "title": "Idiomas",
+      "items": {
+        "pt": "Português",
+        "es": "Espanhol",
+        "en": "Inglês"
+      }
     }
   },
   "home": {
