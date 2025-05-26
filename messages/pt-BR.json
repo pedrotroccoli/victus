@@ -1,0 +1,15 @@
+{
+  "header": {
+    "button": {
+      "access": "Acessar",
+      "plans": "Ver planos"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Organizar sua mente é nosso **único trabalho**.",
+      "description": "Temos como propósito simplificar e harmonizar a vida das pessoas, promovendo **organização e minimalismo** para uma mente mais **leve e produtiva**.",
+      "button": "Teste grátis por 14 dias"
+    }
+  }
+}
