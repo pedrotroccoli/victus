@@ -6,11 +6,15 @@ import { Proofs } from "@/components/proofs";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CaretCircleRight } from "@phosphor-icons/react/dist/ssr";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
+import Markdown from "react-markdown";
 // https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529
 
 export default function Home() {
+  const t = useTranslations('home');
+  
   return (
     <main className="">
       <section className="relative">
@@ -24,18 +28,22 @@ export default function Home() {
             }>
               Victus Journal
             </div>
-            <h1
-              className={`text-4xl font-bold text-black lg:text-4xl mt-8`}
+            <Markdown 
+              components={{
+                p: ({ children }) => <h1 className="text-4xl font-bold text-black lg:text-4xl mt-8">{children}</h1>,
+                strong: ({ children }) => <span className="text-[#707070]">{children}</span>
+              }}
             >
-              Organizar sua mente é
-              nosso <span className="text-[#707070]">único trabalho</span>.
-            </h1>
+              {t('hero.title')}
+            </Markdown>
 
-            <p className="lg:text-lg text-victus-text mt-4">
-              Temos como propósito simplificar e harmonizar a vida
-              das pessoas, promovendo <strong>organização e minimalismo </strong>
-              para uma mente mais <strong>leve e produtiva</strong>.
-            </p>
+            <Markdown 
+              components={{
+                p: ({ children }) => <p className="lg:text-lg text-victus-text mt-4">{children}</p>
+              }}
+            >
+              {t('hero.description')}
+            </Markdown>
 
             <Link href="/plans" className="w-[90%] sm:w-auto">
               <div className="relative z-20 w-full sm:w-auto">
@@ -53,7 +61,7 @@ export default function Home() {
                     "h-full flex items-center justify-between translate-x-2 -translate-y-2 border-2 border-black rounded-lg py-5 w-full sm:w-auto sm:min-w-72 bg-white px-6",
                     "hover:translate-x-0 hover:translate-y-0 hover:shadow-md transition-all duration-100 ease-in-out hover:bg-black hover:text-white"
                   )}>
-                    Teste grátis por 14 dias
+                    {t('hero.button')}
                     <CaretCircleRight size={18} weight="bold" />
                   </div>
                 </Button>
