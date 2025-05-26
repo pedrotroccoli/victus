@@ -1,6 +1,7 @@
 'use client';
 
 import { InstagramLogo } from "@phosphor-icons/react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import { Grid } from "../grid";
@@ -19,6 +20,8 @@ backdrop-filter: blur(100px);
  */
 
 export const Header = () => {
+  const t = useTranslations('header');
+
   return (
     <div className="h-24 z-50">
       <Grid></Grid>
@@ -36,12 +39,12 @@ export const Header = () => {
               <div className="w-1.5 h-1.5 border border-neutral-300 rounded-[1px] hidden md:block"></div>
               <a href="https://app.victusjournal.com/sign-in" target="_blank" rel="noopener noreferrer">
                 <Button className='w-auto px-3 py-1.5 md:px-6 md:py-2 font-xs rounded-md border-black bg-white text-black' variant='outline'>
-                  Acessar
+                  {t('button.access')}
                 </Button>
               </a>
               <Link href="/plans">
                 <Button className='w-auto px-3 py-1.5 md:px-6 md:py-2 rounded-md'>
-                  Ver planos
+                  {t('button.plans')}
                 </Button>
               </Link>
             </div>
