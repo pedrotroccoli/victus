@@ -11,5 +11,50 @@
       "description": "Temos como propósito simplificar e harmonizar a vida das pessoas, promovendo **organização e minimalismo** para uma mente mais **leve e produtiva**.",
       "button": "Teste grátis por 14 dias"
     }
+  },
+  "news": {
+    "title": "Novidades",
+    "available": "Disponível",
+    "soon": "Em breve",
+    "items": {
+      "desktop": {
+        "title": "Plataforma Desktop",
+        "description": "A nossa plataforma desktop já está disponível para uso."
+      },
+      "mobile": {
+        "title": "Plataforma Mobile",
+        "description": "Os nossos apps mobile já estão em construção e logo estarão prontos para uso."
+      },
+      "world": {
+        "title": "Integração com a World Foundation",
+        "description": "A integração com a World Chain está próxima e com ela vem desafios, integrações e ganhos de WLD tokens!"
+      }
+    }
+  },
+  "footer": {
+    "back_to_top": "Voltar ao topo",
+    "work_in_progress": "Estamos trabalhando para disponibilizar este recurso em breve!",
+    "items": {
+      "pages": {
+        "title": "Páginas",
+        "items": {
+          "mission": "Missão",
+          "plans": "Planos"
+        }
+      },
+      "social": {
+        "title": "Redes Sociais",
+        "items": {
+          "instagram": "Instagram"
+        }
+      },
+      "links": {
+        "title": "Links",
+        "items": {
+          "terms": "Termos de uso",
+          "privacy": "Política de privacidade"
+        }
+      }
+    }
   }
 }
