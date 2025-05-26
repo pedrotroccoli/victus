@@ -1,8 +1,136 @@
 {
+  "header": {
+    "button": {
+      "access": "Access",
+      "plans": "View plans"
+    }
+  },
   "home": {
     "hero": {
-      "title": "Organize your mind is our **only job**.",
-      "description": "We aim to simplify and harmonize people's lives, promoting **organization and minimalism** for a **lighter and more productive** mind."
+      "title": "Organizing your mind is our **only job**.",
+      "description": "Our purpose is to simplify and harmonize people's lives, promoting **organization and minimalism** for a **lighter and more productive** mind.",
+      "button": "Free trial for 14 days"
+    }
+  },
+  "advantages": {
+    "items": {
+      "advantage_01": {
+        "title": "Track your habits evolution",
+        "description": "With Victus Journal you can track your habits evolution day by day."
+      },
+      "advantage_02": {
+        "title": "See in a board where you can improve",
+        "description": "With Victus Journal you can see in a board where you can improve."
+      },
+      "advantage_03": {
+        "title": "Have a streak of your habits",
+        "description": "With Victus Journal you can have a streak of your habits."
+      },
+      "advantage_04": {
+        "title": "Have graphs of your habits",
+        "description": "With Victus Journal you can have graphs of your habits."
+      }
+    }
+  },
+  "news": {
+    "title": "News",
+    "available": "Available",
+    "soon": "Coming soon",
+    "items": {
+      "desktop": {
+        "title": "Desktop Platform",
+        "description": "Our desktop platform is now available for use."
+      },
+      "mobile": {
+        "title": "Mobile Platform",
+        "description": "Our mobile apps are under construction and will be ready for use soon."
+      },
+      "world": {
+        "title": "World Foundation Integration",
+        "description": "Integration with World Chain is coming soon, bringing challenges, integrations, and WLD token rewards!"
+      }
+    }
+  },
+  "cta": {
+    "title": "You're one step away from having total control of your behavior!",
+    "description": "Within the platform, you have the opportunity to know where to improve in your life and achieve your goals!",
+    "button": "Free trial for 14 days"
+  },
+  "plans": {
+    "items": {
+      "monthly": {
+        "title": "Monthly",
+        "after_name": "/ month",
+        "price": "R$ 15.00",
+        "features": {
+          "habit_creation": "Creation of 50 habits",
+          "delta_creation": "Delta Creation",
+          "analytics": "Advanced analytics",
+          "support": "Chat support (Email)"
+        }
+      },
+      "yearly": {
+        "title": "Yearly",
+        "after_name": "/ year",
+        "price": "R$ 8.33",
+        "oldPrice": "R$ 180.00",
+        "features": {
+          "habit_creation": "Creation of unlimited habits",
+          "delta_creation": "Delta Creation",
+          "analytics": "Advanced analytics",
+          "support": "Chat support (Email and WhatsApp)"
+        }
+      }
+    },
+    "title": "Plans and pricing",
+    "trial": "Free trial for 14 days",
+    "recommended": "Most recommended"
+  },
+  "proofs": {
+    "items": {
+      "proof_01": {
+        "title": "How can you track your habits evolution?",
+        "description": "Within the platform, you have your journal where you need to fill in completed habits daily.\n\nOver time, you'll start to notice where you fail more and where you're consistent."
+      },
+      "proof_02": {
+        "title": "How can you track your habits evolution?",
+        "description": "Within the platform, you have your journal where you need to fill in completed habits daily.\n\nOver time, you'll start to notice where you fail more and where you're consistent."
+      },
+      "proof_03": {
+        "title": "How can you track your habits evolution?",
+        "description": "Within the platform, you have your journal where you need to fill in completed habits daily.\n\nOver time, you'll start to notice where you fail more and where you're consistent."
+      },
+      "proof_04": {
+        "title": "How can you track your habits evolution?",
+        "description": "Within the platform, you have your journal where you need to fill in completed habits daily.\n\nOver time, you'll start to notice where you fail more and where you're consistent."
+      }
+    },
+    "trial_button": "Free trial for 14 days"
+  },
+  "footer": {
+    "back_to_top": "Back to top",
+    "work_in_progress": "We're working to make this feature available soon!",
+    "items": {
+      "pages": {
+        "title": "Pages",
+        "items": {
+          "mission": "Mission",
+          "plans": "Plans"
+        }
+      },
+      "social": {
+        "title": "Social Media",
+        "items": {
+          "instagram": "Instagram"
+        }
+      },
+      "links": {
+        "title": "Links",
+        "items": {
+          "terms": "Terms of use",
+          "privacy": "Privacy policy"
+        }
+      }
     }
   }
 }

@@ -1,5 +1,139 @@
 {
   "common": {
     "title": "Victus"
+  },
+  "header": {
+    "button": {
+      "access": "Acceder",
+      "plans": "Ver planes"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Organizar tu mente es nuestro **único trabajo**.",
+      "description": "Nuestro propósito es simplificar y armonizar la vida de las personas, promoviendo **organización y minimalismo** para una mente más **ligera y productiva**.",
+      "button": "Prueba gratis por 14 días"
+    }
+  },
+  "advantages": {
+    "items": {
+      "advantage_01": {
+        "title": "Sigue la evolución de tus hábitos",
+        "description": "Con Victus Journal puedes seguir la evolución de tus hábitos día a día."
+      },
+      "advantage_02": {
+        "title": "Ve en un tablero dónde puedes mejorar",
+        "description": "Con Victus Journal puedes ver en un tablero dónde puedes mejorar."
+      },
+      "advantage_03": {
+        "title": "Ten una racha de tus hábitos",
+        "description": "Con Victus Journal puedes tener una racha de tus hábitos."
+      },
+      "advantage_04": {
+        "title": "Ten gráficos de tus hábitos",
+        "description": "Con Victus Journal puedes tener gráficos de tus hábitos."
+      }
+    }
+  },
+  "news": {
+    "title": "Novedades",
+    "available": "Disponible",
+    "soon": "Próximamente",
+    "items": {
+      "desktop": {
+        "title": "Plataforma Desktop",
+        "description": "Nuestra plataforma desktop ya está disponible para uso."
+      },
+      "mobile": {
+        "title": "Plataforma Móvil",
+        "description": "Nuestras aplicaciones móviles están en construcción y pronto estarán listas para uso."
+      },
+      "world": {
+        "title": "Integración con World Foundation",
+        "description": "La integración con World Chain está próxima y con ella vienen desafíos, integraciones y recompensas en tokens WLD!"
+      }
+    }
+  },
+  "cta": {
+    "title": "¡Estás a un paso de tener control total de tu comportamiento!",
+    "description": "¡Dentro de la plataforma tienes la oportunidad de saber dónde mejorar en tu vida y alcanzar tus objetivos!",
+    "button": "Prueba gratis por 14 días"
+  },
+  "plans": {
+    "items": {
+      "monthly": {
+        "title": "Mensual",
+        "after_name": "/ mes",
+        "price": "R$ 15.00",
+        "features": {
+          "habit_creation": "Creación de 50 hábitos",
+          "delta_creation": "Creación de Deltas",
+          "analytics": "Analítica avanzada",
+          "support": "Soporte por chat (Email)"
+        }
+      },
+      "yearly": {
+        "title": "Anual",
+        "after_name": "/ año",
+        "price": "R$ 8.33",
+        "oldPrice": "R$ 180.00",
+        "features": {
+          "habit_creation": "Creación de hábitos ilimitados",
+          "delta_creation": "Creación de Deltas",
+          "analytics": "Analítica avanzada",
+          "support": "Soporte por chat (Email y WhatsApp)"
+        }
+      }
+    },
+    "title": "Planes y precios",
+    "trial": "Prueba gratis por 14 días",
+    "recommended": "Más recomendado"
+  },
+  "proofs": {
+    "items": {
+      "proof_01": {
+        "title": "¿Cómo puedes seguir la evolución de tus hábitos?",
+        "description": "Dentro de la plataforma tienes tu diario, diariamente necesitas completar los hábitos realizados.\n\nCon el tiempo comenzarás a notar dónde fallas más y dónde eres consistente."
+      },
+      "proof_02": {
+        "title": "¿Cómo puedes seguir la evolución de tus hábitos?",
+        "description": "Dentro de la plataforma tienes tu diario, diariamente necesitas completar los hábitos realizados.\n\nCon el tiempo comenzarás a notar dónde fallas más y dónde eres consistente."
+      },
+      "proof_03": {
+        "title": "¿Cómo puedes seguir la evolución de tus hábitos?",
+        "description": "Dentro de la plataforma tienes tu diario, diariamente necesitas completar los hábitos realizados.\n\nCon el tiempo comenzarás a notar dónde fallas más y dónde eres consistente."
+      },
+      "proof_04": {
+        "title": "¿Cómo puedes seguir la evolución de tus hábitos?",
+        "description": "Dentro de la plataforma tienes tu diario, diariamente necesitas completar los hábitos realizados.\n\nCon el tiempo comenzarás a notar dónde fallas más y dónde eres consistente."
+      }
+    },
+    "trial_button": "Prueba gratis por 14 días"
+  },
+  "footer": {
+    "back_to_top": "Volver arriba",
+    "work_in_progress": "¡Estamos trabajando para disponibilizar esta función pronto!",
+    "items": {
+      "pages": {
+        "title": "Páginas",
+        "items": {
+          "mission": "Misión",
+          "plans": "Planes"
+        }
+      },
+      "social": {
+        "title": "Redes Sociales",
+        "items": {
+          "instagram": "Instagram"
+        }
+      },
+      "links": {
+        "title": "Enlaces",
+        "items": {
+          "terms": "Términos de uso",
+          "privacy": "Política de privacidad"
+        }
+      }
+    }
   }
 }
