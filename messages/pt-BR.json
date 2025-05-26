@@ -51,6 +51,11 @@
       }
     }
   },
+  "cta": {
+    "title": "Você está a um passo de ter controle total do seu comportamento!",
+    "description": "Dentro da plataforma você tem a oportunidade de saber onde melhorar na sua vida e atingir seus objetivos!",
+    "button": "Teste grátis por 14 dias"
+  },
   "plans": {
     "items": {
       "monthly": {
