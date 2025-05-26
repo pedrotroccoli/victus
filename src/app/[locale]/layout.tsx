@@ -31,7 +31,7 @@ export default async function RootLayout({
     }
 
   return (
-    <html lang="en">
+    <html lang={locale}>
       <body className={`${InterFont.variable} ${RecursiveFont.variable}`}>
         <NextIntlClientProvider>
           <Header />
