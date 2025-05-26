@@ -31,6 +31,36 @@
       }
     }
   },
+  "plans": {
+    "items": {
+      "monthly": {
+        "title": "Mensal",
+        "after_name": "/ mês",
+        "price": "R$ 15,00",
+        "features": {
+          "habit_creation": "Criação de 50 hábitos",  
+          "delta_creation": "Criação de Deltas",
+          "analytics": "Analytics avançado",
+          "support": "Suporte via chat (Email)"
+        }
+      },
+      "yearly": {
+        "title": "Anual",
+        "after_name": "/ ano",
+        "price": "R$ 8,33",
+        "oldPrice": "R$ 180,00",
+        "features": {
+          "habit_creation": "Criação de infinitos hábitos",
+          "delta_creation": "Criação de Deltas",
+          "analytics": "Analytics avançado",
+          "support": "Suporte via chat (Email e WhatsApp)"
+        }
+      }
+    },
+    "title": "Planos e valores",
+    "trial": "Teste grátis por 14 dias",
+    "recommended": "Mais recomendado"
+  },
   "footer": {
     "back_to_top": "Voltar ao topo",
     "work_in_progress": "Estamos trabalhando para disponibilizar este recurso em breve!",

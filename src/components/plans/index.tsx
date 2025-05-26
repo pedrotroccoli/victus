@@ -1,50 +1,57 @@
 import { cn } from "@/lib/utils"
 import { CaretCircleRight, CheckCircle } from "@phosphor-icons/react/dist/ssr"
+import { useTranslations } from "next-intl"
 import { Button } from "../ui/button"
 
-const items = [
+const items = (t: any) => [
   {
     type: 'monthly',
-    name: 'Mensal',
-    after_name: '/ mês',
-    price: 'R$ 15,00',
+    name: t('items.monthly.title'),
+    after_name: t('items.monthly.after_name'),
+    price: t('items.monthly.price'),
     key: 'victus_journal_monthly',
     features: [
-      'Criação de 50 hábitos',
-      'Criação de Deltas',
-      'Analytics avançado',
-      'Suporte via chat (Email)',
+      t('items.monthly.features.habit_creation'),
+      t('items.monthly.features.delta_creation'),
+      t('items.monthly.features.analytics'),
+      t('items.monthly.features.support'),
     ],
   },
   {
     type: 'yearly',
     recommended: true,
-    name: 'Anual',
-    after_name: '/ ano',
-    price: 'R$ 8,33',
-    oldPrice: 'R$ 180,00',
+    name: t('items.yearly.title'),
+    after_name: t('items.yearly.after_name'),
+    price: t('items.yearly.price'),
+    oldPrice: t('items.yearly.oldPrice'),
     key: 'victus_journal_yearly',
     features: [
-      'Criação de infinitos hábitos',
-      'Criação de Deltas',
-      'Analytics avançado',
-      'Suporte via chat (Email e WhatsApp)',
+      t('items.yearly.features.habit_creation'),
+      t('items.yearly.features.delta_creation'),
+      t('items.yearly.features.analytics'),
+      t('items.yearly.features.support'),
     ],
   },
 ]
 
 
 export const Plans = () => {
+  const t = useTranslations('plans');
+
   return (
     <section className="bg-[url('/bg-plans.png')] bg-cover bg-center border-y border-neutral-300">
       <div className="grid-container py-16">
-        <h2 className="text-2xl md:text-4xl font-bold font-mono mb-16 mx-auto text-center">Planos e valores</h2>
+        <h2 className="text-2xl md:text-4xl font-bold font-mono mb-16 mx-auto text-center">
+          {t('title')}
+        </h2>
         <ul className="flex gap-6 items-center md:items-end justify-center flex-col md:flex-row">
-          {items.map((item) => (
+          {items(t).map((item) => (
             <li key={item.key} className={cn("max-w-[26rem] w-full", item.recommended && "shadow-green")} >
               {item.recommended && (
                 <div className="w-full bg-victus-green/40 border-l border-t border-r border-victus-green rounded-t-md flex items-center justify-center py-4 translate-y-1 z-[-1]">
-                  <h5 className="text-sm font-mono font-bold text-victus-green-dark ">Mais recomendado</h5>
+                  <h5 className="text-sm font-mono font-bold text-victus-green-dark ">
+                    {t('recommended')}
+                  </h5>
                 </div>
               )}
               <div className="w-full border border-neutral-300 rounded-md bg-white z-10">
@@ -72,7 +79,7 @@ export const Plans = () => {
                 <div className="px-6 pb-6">
                   <a href={`https://app.victusjournal.com/sign-up?key=${item.key}`} target="_blank" rel="noopener noreferrer">
                     <Button className="w-full flex items-center justify-between px-6 gap-2 py-3 h-auto rounded-lg">
-                      Teste grátis por 14 dias
+                      {t('trial')}
                       <CaretCircleRight size={18} weight="bold" />
                     </Button>
                   </a>
