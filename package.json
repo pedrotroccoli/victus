@@ -60,6 +60,7 @@
     "react-world-flags": "^1.6.0",
     "recharts": "^2.15.3",
     "rrule": "^2.8.1",
+    "sage-support": "^0.0.2",
     "sonner": "^1.7.0",
     "tailwind-merge": "^2.4.0",
     "tailwindcss-animate": "^1.0.7",
