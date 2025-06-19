@@ -19,6 +19,9 @@
       "talk": "Falar com o suporte",
       "toast_message": "Mensagem enviada com sucesso",
       "message": "Olá, gostaria de falar com o suporte. Meu nome é {{name}}"
+    },
+    "sage": {
+      "talk": "Falar com a Sage (IA)"
     }
   }
 }

@@ -19,6 +19,9 @@
       "talk": "Talk to support",
       "toast_message": "Message sent successfully",
       "message": "Hello, I would like to talk to support. My name is {{name}}"
+    },
+    "sage": {
+      "talk": "Talk to the Sage (AI)"
     }
   }
 } 
