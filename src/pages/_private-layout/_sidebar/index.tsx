@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils"
 import { BookOpenText, ChartLine, Chat, Gear, House } from "@phosphor-icons/react"
 import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router"
 import { motion } from "motion/react"
+import { SageSupport } from "sage-support"
 
 import { LogoWithText } from "@/assets/logo-with-text"
 import { useMe } from "@/services/auth"
@@ -204,6 +205,20 @@ export const SidebarLayout = () => {
                       {t('float_button.support.talk')}
                     </button>
                   </li>
+                  {MiniKit.isInstalled() && (
+                    
+                  <li >
+                      <SageSupport projectId={50}>
+                        <button className="w-full flex items-center gap-4 px-4 py-2.5 text-sm font-[Recursive] hover:bg-neutral-100 transition-colors text-left">
+
+                        <div className="w-6 h-6 rounded-full bg-white border border-neutral-300 flex items-center justify-center">
+                          <Chat size={14} weight="bold" />
+                        </div>
+                        {t('float_button.sage.talk')}
+                        </button>
+                      </SageSupport>
+                  </li>
+                  )}
                 </ul>
               </PopoverContent>
             </Popover>
