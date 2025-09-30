@@ -6,10 +6,10 @@
 - [ X ] Complete an habit
 - [ X ] Show Habits Check in List
 
-- [ ] Permit to create habit in recurrence and specific date and day of week
-- [ ] List habits with right dates
-- [ ] List habits with dates
-- [ ] List habits with dates and status
+- [ X ] Permit to create habit in recurrence and specific date and day of week
+- [ X ] List habits with right dates
+- [ X ] List habits with dates
+- [ X ] List habits with dates and status
 
-- [ ] Delete habit
-- [ ] Edit habit
+- [ X ] Delete habit
+- [ x ] Edit habit
