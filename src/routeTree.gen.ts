@@ -10,98 +10,84 @@
 
 import { createFileRoute } from '@tanstack/react-router'
 
-// Import Routes
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as PrivateRouteImport } from './routes/_private'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as PrivateSidebarRouteImport } from './routes/_private/_sidebar'
+import { Route as publicAuthRouteImport } from './routes/(public)/_auth'
+import { Route as PrivateFreezedIndexRouteImport } from './routes/_private/freezed/index'
+import { Route as PrivateCheckoutIndexRouteImport } from './routes/_private/checkout/index'
+import { Route as PrivateWorldAppWelcomeIndexRouteImport } from './routes/_private/world-app/welcome/index'
+import { Route as PrivateSidebarDashboardIndexRouteImport } from './routes/_private/_sidebar/dashboard/index'
+import { Route as PrivateSidebarAnalyticsIndexRouteImport } from './routes/_private/_sidebar/analytics/index'
+import { Route as PrivateSidebarAccountLayoutRouteImport } from './routes/_private/_sidebar/account/_layout'
+import { Route as PrivateSidebarAccountLayoutSubscriptionIndexRouteImport } from './routes/_private/_sidebar/account/_layout/subscription/index'
+import { Route as PrivateSidebarAccountLayoutPlansIndexRouteImport } from './routes/_private/_sidebar/account/_layout/plans/index'
+import { Route as PrivateSidebarAccountLayoutGeneralIndexRouteImport } from './routes/_private/_sidebar/account/_layout/general/index'
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as PrivateImport } from './routes/_private'
-import { Route as IndexImport } from './routes/index'
-import { Route as PrivateSidebarImport } from './routes/_private/_sidebar'
-import { Route as publicAuthImport } from './routes/(public)/_auth'
-import { Route as PrivateFreezedIndexImport } from './routes/_private/freezed/index'
-import { Route as PrivateCheckoutIndexImport } from './routes/_private/checkout/index'
-import { Route as PrivateWorldAppWelcomeIndexImport } from './routes/_private/world-app/welcome/index'
-import { Route as PrivateSidebarDashboardIndexImport } from './routes/_private/_sidebar/dashboard/index'
-import { Route as PrivateSidebarAnalyticsIndexImport } from './routes/_private/_sidebar/analytics/index'
-import { Route as PrivateSidebarAccountLayoutImport } from './routes/_private/_sidebar/account/_layout'
-import { Route as PrivateSidebarAccountLayoutSubscriptionIndexImport } from './routes/_private/_sidebar/account/_layout/subscription/index'
-import { Route as PrivateSidebarAccountLayoutPlansIndexImport } from './routes/_private/_sidebar/account/_layout/plans/index'
-import { Route as PrivateSidebarAccountLayoutGeneralIndexImport } from './routes/_private/_sidebar/account/_layout/general/index'
-
-// Create Virtual Routes
-
-const publicImport = createFileRoute('/(public)')()
-const PrivateSidebarAccountImport = createFileRoute(
+const publicRouteImport = createFileRoute('/(public)')()
+const PrivateSidebarAccountRouteImport = createFileRoute(
   '/_private/_sidebar/account',
 )()
-const publicAuthWorldSignInIndexLazyImport = createFileRoute(
+const publicAuthWorldSignInIndexLazyRouteImport = createFileRoute(
   '/(public)/_auth/world-sign-in/',
 )()
-const publicAuthSignUpIndexLazyImport = createFileRoute(
+const publicAuthSignUpIndexLazyRouteImport = createFileRoute(
   '/(public)/_auth/sign-up/',
 )()
-const publicAuthSignInIndexLazyImport = createFileRoute(
+const publicAuthSignInIndexLazyRouteImport = createFileRoute(
   '/(public)/_auth/sign-in/',
 )()
 
-// Create/Update Routes
-
-const publicRoute = publicImport.update({
+const publicRoute = publicRouteImport.update({
   id: '/(public)',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const PrivateRoute = PrivateImport.update({
+const PrivateRoute = PrivateRouteImport.update({
   id: '/_private',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const IndexRoute = IndexImport.update({
+const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => rootRouteImport,
 } as any)
-
-const PrivateSidebarRoute = PrivateSidebarImport.update({
+const PrivateSidebarRoute = PrivateSidebarRouteImport.update({
   id: '/_sidebar',
   getParentRoute: () => PrivateRoute,
 } as any)
-
-const publicAuthRoute = publicAuthImport.update({
+const publicAuthRoute = publicAuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => publicRoute,
 } as any)
-
-const PrivateSidebarAccountRoute = PrivateSidebarAccountImport.update({
+const PrivateSidebarAccountRoute = PrivateSidebarAccountRouteImport.update({
   id: '/account',
   path: '/account',
   getParentRoute: () => PrivateSidebarRoute,
 } as any)
-
-const PrivateFreezedIndexRoute = PrivateFreezedIndexImport.update({
+const PrivateFreezedIndexRoute = PrivateFreezedIndexRouteImport.update({
   id: '/freezed/',
   path: '/freezed/',
   getParentRoute: () => PrivateRoute,
 } as any)
-
-const PrivateCheckoutIndexRoute = PrivateCheckoutIndexImport.update({
+const PrivateCheckoutIndexRoute = PrivateCheckoutIndexRouteImport.update({
   id: '/checkout/',
   path: '/checkout/',
   getParentRoute: () => PrivateRoute,
 } as any)
-
-const publicAuthWorldSignInIndexLazyRoute = publicAuthWorldSignInIndexLazyImport
-  .update({
-    id: '/world-sign-in/',
-    path: '/world-sign-in/',
-    getParentRoute: () => publicAuthRoute,
-  } as any)
-  .lazy(() =>
-    import('./routes/(public)/_auth/world-sign-in/index.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const publicAuthSignUpIndexLazyRoute = publicAuthSignUpIndexLazyImport
+const publicAuthWorldSignInIndexLazyRoute =
+  publicAuthWorldSignInIndexLazyRouteImport
+    .update({
+      id: '/world-sign-in/',
+      path: '/world-sign-in/',
+      getParentRoute: () => publicAuthRoute,
+    } as any)
+    .lazy(() =>
+      import('./routes/(public)/_auth/world-sign-in/index.lazy').then(
+        (d) => d.Route,
+      ),
+    )
+const publicAuthSignUpIndexLazyRoute = publicAuthSignUpIndexLazyRouteImport
   .update({
     id: '/sign-up/',
     path: '/sign-up/',
@@ -110,8 +96,7 @@ const publicAuthSignUpIndexLazyRoute = publicAuthSignUpIndexLazyImport
   .lazy(() =>
     import('./routes/(public)/_auth/sign-up/index.lazy').then((d) => d.Route),
   )
-
-const publicAuthSignInIndexLazyRoute = publicAuthSignInIndexLazyImport
+const publicAuthSignInIndexLazyRoute = publicAuthSignInIndexLazyRouteImport
   .update({
     id: '/sign-in/',
     path: '/sign-in/',
@@ -120,189 +105,288 @@ const publicAuthSignInIndexLazyRoute = publicAuthSignInIndexLazyImport
   .lazy(() =>
     import('./routes/(public)/_auth/sign-in/index.lazy').then((d) => d.Route),
   )
-
 const PrivateWorldAppWelcomeIndexRoute =
-  PrivateWorldAppWelcomeIndexImport.update({
+  PrivateWorldAppWelcomeIndexRouteImport.update({
     id: '/world-app/welcome/',
     path: '/world-app/welcome/',
     getParentRoute: () => PrivateRoute,
   } as any)
-
 const PrivateSidebarDashboardIndexRoute =
-  PrivateSidebarDashboardIndexImport.update({
+  PrivateSidebarDashboardIndexRouteImport.update({
     id: '/dashboard/',
     path: '/dashboard/',
     getParentRoute: () => PrivateSidebarRoute,
   } as any)
-
 const PrivateSidebarAnalyticsIndexRoute =
-  PrivateSidebarAnalyticsIndexImport.update({
+  PrivateSidebarAnalyticsIndexRouteImport.update({
     id: '/analytics/',
     path: '/analytics/',
     getParentRoute: () => PrivateSidebarRoute,
   } as any)
-
 const PrivateSidebarAccountLayoutRoute =
-  PrivateSidebarAccountLayoutImport.update({
+  PrivateSidebarAccountLayoutRouteImport.update({
     id: '/_layout',
     getParentRoute: () => PrivateSidebarAccountRoute,
   } as any)
-
 const PrivateSidebarAccountLayoutSubscriptionIndexRoute =
-  PrivateSidebarAccountLayoutSubscriptionIndexImport.update({
+  PrivateSidebarAccountLayoutSubscriptionIndexRouteImport.update({
     id: '/subscription/',
     path: '/subscription/',
     getParentRoute: () => PrivateSidebarAccountLayoutRoute,
   } as any)
-
 const PrivateSidebarAccountLayoutPlansIndexRoute =
-  PrivateSidebarAccountLayoutPlansIndexImport.update({
+  PrivateSidebarAccountLayoutPlansIndexRouteImport.update({
     id: '/plans/',
     path: '/plans/',
     getParentRoute: () => PrivateSidebarAccountLayoutRoute,
   } as any)
-
 const PrivateSidebarAccountLayoutGeneralIndexRoute =
-  PrivateSidebarAccountLayoutGeneralIndexImport.update({
+  PrivateSidebarAccountLayoutGeneralIndexRouteImport.update({
     id: '/general/',
     path: '/general/',
     getParentRoute: () => PrivateSidebarAccountLayoutRoute,
   } as any)
 
-// Populate the FileRoutesByPath interface
+export interface FileRoutesByFullPath {
+  '/': typeof publicAuthRouteWithChildren
+  '/checkout': typeof PrivateCheckoutIndexRoute
+  '/freezed': typeof PrivateFreezedIndexRoute
+  '/account': typeof PrivateSidebarAccountLayoutRouteWithChildren
+  '/analytics': typeof PrivateSidebarAnalyticsIndexRoute
+  '/dashboard': typeof PrivateSidebarDashboardIndexRoute
+  '/world-app/welcome': typeof PrivateWorldAppWelcomeIndexRoute
+  '/sign-in': typeof publicAuthSignInIndexLazyRoute
+  '/sign-up': typeof publicAuthSignUpIndexLazyRoute
+  '/world-sign-in': typeof publicAuthWorldSignInIndexLazyRoute
+  '/account/general': typeof PrivateSidebarAccountLayoutGeneralIndexRoute
+  '/account/plans': typeof PrivateSidebarAccountLayoutPlansIndexRoute
+  '/account/subscription': typeof PrivateSidebarAccountLayoutSubscriptionIndexRoute
+}
+export interface FileRoutesByTo {
+  '/': typeof publicAuthRouteWithChildren
+  '/checkout': typeof PrivateCheckoutIndexRoute
+  '/freezed': typeof PrivateFreezedIndexRoute
+  '/account': typeof PrivateSidebarAccountLayoutRouteWithChildren
+  '/analytics': typeof PrivateSidebarAnalyticsIndexRoute
+  '/dashboard': typeof PrivateSidebarDashboardIndexRoute
+  '/world-app/welcome': typeof PrivateWorldAppWelcomeIndexRoute
+  '/sign-in': typeof publicAuthSignInIndexLazyRoute
+  '/sign-up': typeof publicAuthSignUpIndexLazyRoute
+  '/world-sign-in': typeof publicAuthWorldSignInIndexLazyRoute
+  '/account/general': typeof PrivateSidebarAccountLayoutGeneralIndexRoute
+  '/account/plans': typeof PrivateSidebarAccountLayoutPlansIndexRoute
+  '/account/subscription': typeof PrivateSidebarAccountLayoutSubscriptionIndexRoute
+}
+export interface FileRoutesById {
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/_private': typeof PrivateRouteWithChildren
+  '/(public)': typeof publicRouteWithChildren
+  '/(public)/_auth': typeof publicAuthRouteWithChildren
+  '/_private/_sidebar': typeof PrivateSidebarRouteWithChildren
+  '/_private/checkout/': typeof PrivateCheckoutIndexRoute
+  '/_private/freezed/': typeof PrivateFreezedIndexRoute
+  '/_private/_sidebar/account': typeof PrivateSidebarAccountRouteWithChildren
+  '/_private/_sidebar/account/_layout': typeof PrivateSidebarAccountLayoutRouteWithChildren
+  '/_private/_sidebar/analytics/': typeof PrivateSidebarAnalyticsIndexRoute
+  '/_private/_sidebar/dashboard/': typeof PrivateSidebarDashboardIndexRoute
+  '/_private/world-app/welcome/': typeof PrivateWorldAppWelcomeIndexRoute
+  '/(public)/_auth/sign-in/': typeof publicAuthSignInIndexLazyRoute
+  '/(public)/_auth/sign-up/': typeof publicAuthSignUpIndexLazyRoute
+  '/(public)/_auth/world-sign-in/': typeof publicAuthWorldSignInIndexLazyRoute
+  '/_private/_sidebar/account/_layout/general/': typeof PrivateSidebarAccountLayoutGeneralIndexRoute
+  '/_private/_sidebar/account/_layout/plans/': typeof PrivateSidebarAccountLayoutPlansIndexRoute
+  '/_private/_sidebar/account/_layout/subscription/': typeof PrivateSidebarAccountLayoutSubscriptionIndexRoute
+}
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/checkout'
+    | '/freezed'
+    | '/account'
+    | '/analytics'
+    | '/dashboard'
+    | '/world-app/welcome'
+    | '/sign-in'
+    | '/sign-up'
+    | '/world-sign-in'
+    | '/account/general'
+    | '/account/plans'
+    | '/account/subscription'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/checkout'
+    | '/freezed'
+    | '/account'
+    | '/analytics'
+    | '/dashboard'
+    | '/world-app/welcome'
+    | '/sign-in'
+    | '/sign-up'
+    | '/world-sign-in'
+    | '/account/general'
+    | '/account/plans'
+    | '/account/subscription'
+  id:
+    | '__root__'
+    | '/'
+    | '/_private'
+    | '/(public)'
+    | '/(public)/_auth'
+    | '/_private/_sidebar'
+    | '/_private/checkout/'
+    | '/_private/freezed/'
+    | '/_private/_sidebar/account'
+    | '/_private/_sidebar/account/_layout'
+    | '/_private/_sidebar/analytics/'
+    | '/_private/_sidebar/dashboard/'
+    | '/_private/world-app/welcome/'
+    | '/(public)/_auth/sign-in/'
+    | '/(public)/_auth/sign-up/'
+    | '/(public)/_auth/world-sign-in/'
+    | '/_private/_sidebar/account/_layout/general/'
+    | '/_private/_sidebar/account/_layout/plans/'
+    | '/_private/_sidebar/account/_layout/subscription/'
+  fileRoutesById: FileRoutesById
+}
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  PrivateRoute: typeof PrivateRouteWithChildren
+  publicRoute: typeof publicRouteWithChildren
+}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/(public)': {
+      id: '/(public)'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof publicRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_private': {
       id: '/_private'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof PrivateImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof PrivateRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/(public)': {
-      id: '/(public)'
+    '/': {
+      id: '/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof publicImport
-      parentRoute: typeof rootRoute
-    }
-    '/(public)/_auth': {
-      id: '/(public)/_auth'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof publicAuthImport
-      parentRoute: typeof publicRoute
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_private/_sidebar': {
       id: '/_private/_sidebar'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof PrivateSidebarImport
-      parentRoute: typeof PrivateImport
+      preLoaderRoute: typeof PrivateSidebarRouteImport
+      parentRoute: typeof PrivateRoute
     }
-    '/_private/checkout/': {
-      id: '/_private/checkout/'
-      path: '/checkout'
-      fullPath: '/checkout'
-      preLoaderRoute: typeof PrivateCheckoutIndexImport
-      parentRoute: typeof PrivateImport
-    }
-    '/_private/freezed/': {
-      id: '/_private/freezed/'
-      path: '/freezed'
-      fullPath: '/freezed'
-      preLoaderRoute: typeof PrivateFreezedIndexImport
-      parentRoute: typeof PrivateImport
+    '/(public)/_auth': {
+      id: '/(public)/_auth'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof publicAuthRouteImport
+      parentRoute: typeof publicRoute
     }
     '/_private/_sidebar/account': {
       id: '/_private/_sidebar/account'
       path: '/account'
       fullPath: '/account'
-      preLoaderRoute: typeof PrivateSidebarAccountImport
-      parentRoute: typeof PrivateSidebarImport
+      preLoaderRoute: typeof PrivateSidebarAccountRouteImport
+      parentRoute: typeof PrivateSidebarRoute
     }
-    '/_private/_sidebar/account/_layout': {
-      id: '/_private/_sidebar/account/_layout'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof PrivateSidebarAccountLayoutImport
-      parentRoute: typeof PrivateSidebarAccountRoute
+    '/_private/freezed/': {
+      id: '/_private/freezed/'
+      path: '/freezed'
+      fullPath: '/freezed'
+      preLoaderRoute: typeof PrivateFreezedIndexRouteImport
+      parentRoute: typeof PrivateRoute
     }
-    '/_private/_sidebar/analytics/': {
-      id: '/_private/_sidebar/analytics/'
-      path: '/analytics'
-      fullPath: '/analytics'
-      preLoaderRoute: typeof PrivateSidebarAnalyticsIndexImport
-      parentRoute: typeof PrivateSidebarImport
-    }
-    '/_private/_sidebar/dashboard/': {
-      id: '/_private/_sidebar/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof PrivateSidebarDashboardIndexImport
-      parentRoute: typeof PrivateSidebarImport
-    }
-    '/_private/world-app/welcome/': {
-      id: '/_private/world-app/welcome/'
-      path: '/world-app/welcome'
-      fullPath: '/world-app/welcome'
-      preLoaderRoute: typeof PrivateWorldAppWelcomeIndexImport
-      parentRoute: typeof PrivateImport
-    }
-    '/(public)/_auth/sign-in/': {
-      id: '/(public)/_auth/sign-in/'
-      path: '/sign-in'
-      fullPath: '/sign-in'
-      preLoaderRoute: typeof publicAuthSignInIndexLazyImport
-      parentRoute: typeof publicAuthImport
-    }
-    '/(public)/_auth/sign-up/': {
-      id: '/(public)/_auth/sign-up/'
-      path: '/sign-up'
-      fullPath: '/sign-up'
-      preLoaderRoute: typeof publicAuthSignUpIndexLazyImport
-      parentRoute: typeof publicAuthImport
+    '/_private/checkout/': {
+      id: '/_private/checkout/'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof PrivateCheckoutIndexRouteImport
+      parentRoute: typeof PrivateRoute
     }
     '/(public)/_auth/world-sign-in/': {
       id: '/(public)/_auth/world-sign-in/'
       path: '/world-sign-in'
       fullPath: '/world-sign-in'
-      preLoaderRoute: typeof publicAuthWorldSignInIndexLazyImport
-      parentRoute: typeof publicAuthImport
+      preLoaderRoute: typeof publicAuthWorldSignInIndexLazyRouteImport
+      parentRoute: typeof publicAuthRoute
     }
-    '/_private/_sidebar/account/_layout/general/': {
-      id: '/_private/_sidebar/account/_layout/general/'
-      path: '/general'
-      fullPath: '/account/general'
-      preLoaderRoute: typeof PrivateSidebarAccountLayoutGeneralIndexImport
-      parentRoute: typeof PrivateSidebarAccountLayoutImport
+    '/(public)/_auth/sign-up/': {
+      id: '/(public)/_auth/sign-up/'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof publicAuthSignUpIndexLazyRouteImport
+      parentRoute: typeof publicAuthRoute
     }
-    '/_private/_sidebar/account/_layout/plans/': {
-      id: '/_private/_sidebar/account/_layout/plans/'
-      path: '/plans'
-      fullPath: '/account/plans'
-      preLoaderRoute: typeof PrivateSidebarAccountLayoutPlansIndexImport
-      parentRoute: typeof PrivateSidebarAccountLayoutImport
+    '/(public)/_auth/sign-in/': {
+      id: '/(public)/_auth/sign-in/'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof publicAuthSignInIndexLazyRouteImport
+      parentRoute: typeof publicAuthRoute
+    }
+    '/_private/world-app/welcome/': {
+      id: '/_private/world-app/welcome/'
+      path: '/world-app/welcome'
+      fullPath: '/world-app/welcome'
+      preLoaderRoute: typeof PrivateWorldAppWelcomeIndexRouteImport
+      parentRoute: typeof PrivateRoute
+    }
+    '/_private/_sidebar/dashboard/': {
+      id: '/_private/_sidebar/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof PrivateSidebarDashboardIndexRouteImport
+      parentRoute: typeof PrivateSidebarRoute
+    }
+    '/_private/_sidebar/analytics/': {
+      id: '/_private/_sidebar/analytics/'
+      path: '/analytics'
+      fullPath: '/analytics'
+      preLoaderRoute: typeof PrivateSidebarAnalyticsIndexRouteImport
+      parentRoute: typeof PrivateSidebarRoute
+    }
+    '/_private/_sidebar/account/_layout': {
+      id: '/_private/_sidebar/account/_layout'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof PrivateSidebarAccountLayoutRouteImport
+      parentRoute: typeof PrivateSidebarAccountRoute
     }
     '/_private/_sidebar/account/_layout/subscription/': {
       id: '/_private/_sidebar/account/_layout/subscription/'
       path: '/subscription'
       fullPath: '/account/subscription'
-      preLoaderRoute: typeof PrivateSidebarAccountLayoutSubscriptionIndexImport
-      parentRoute: typeof PrivateSidebarAccountLayoutImport
+      preLoaderRoute: typeof PrivateSidebarAccountLayoutSubscriptionIndexRouteImport
+      parentRoute: typeof PrivateSidebarAccountLayoutRoute
+    }
+    '/_private/_sidebar/account/_layout/plans/': {
+      id: '/_private/_sidebar/account/_layout/plans/'
+      path: '/plans'
+      fullPath: '/account/plans'
+      preLoaderRoute: typeof PrivateSidebarAccountLayoutPlansIndexRouteImport
+      parentRoute: typeof PrivateSidebarAccountLayoutRoute
+    }
+    '/_private/_sidebar/account/_layout/general/': {
+      id: '/_private/_sidebar/account/_layout/general/'
+      path: '/general'
+      fullPath: '/account/general'
+      preLoaderRoute: typeof PrivateSidebarAccountLayoutGeneralIndexRouteImport
+      parentRoute: typeof PrivateSidebarAccountLayoutRoute
     }
   }
 }
-
-// Create and export the route tree
 
 interface PrivateSidebarAccountLayoutRouteChildren {
   PrivateSidebarAccountLayoutGeneralIndexRoute: typeof PrivateSidebarAccountLayoutGeneralIndexRoute
@@ -399,241 +483,11 @@ const publicRouteChildren: publicRouteChildren = {
 const publicRouteWithChildren =
   publicRoute._addFileChildren(publicRouteChildren)
 
-export interface FileRoutesByFullPath {
-  '/': typeof publicAuthRouteWithChildren
-  '': typeof PrivateSidebarRouteWithChildren
-  '/checkout': typeof PrivateCheckoutIndexRoute
-  '/freezed': typeof PrivateFreezedIndexRoute
-  '/account': typeof PrivateSidebarAccountLayoutRouteWithChildren
-  '/analytics': typeof PrivateSidebarAnalyticsIndexRoute
-  '/dashboard': typeof PrivateSidebarDashboardIndexRoute
-  '/world-app/welcome': typeof PrivateWorldAppWelcomeIndexRoute
-  '/sign-in': typeof publicAuthSignInIndexLazyRoute
-  '/sign-up': typeof publicAuthSignUpIndexLazyRoute
-  '/world-sign-in': typeof publicAuthWorldSignInIndexLazyRoute
-  '/account/general': typeof PrivateSidebarAccountLayoutGeneralIndexRoute
-  '/account/plans': typeof PrivateSidebarAccountLayoutPlansIndexRoute
-  '/account/subscription': typeof PrivateSidebarAccountLayoutSubscriptionIndexRoute
-}
-
-export interface FileRoutesByTo {
-  '/': typeof publicAuthRouteWithChildren
-  '': typeof PrivateSidebarRouteWithChildren
-  '/checkout': typeof PrivateCheckoutIndexRoute
-  '/freezed': typeof PrivateFreezedIndexRoute
-  '/account': typeof PrivateSidebarAccountLayoutRouteWithChildren
-  '/analytics': typeof PrivateSidebarAnalyticsIndexRoute
-  '/dashboard': typeof PrivateSidebarDashboardIndexRoute
-  '/world-app/welcome': typeof PrivateWorldAppWelcomeIndexRoute
-  '/sign-in': typeof publicAuthSignInIndexLazyRoute
-  '/sign-up': typeof publicAuthSignUpIndexLazyRoute
-  '/world-sign-in': typeof publicAuthWorldSignInIndexLazyRoute
-  '/account/general': typeof PrivateSidebarAccountLayoutGeneralIndexRoute
-  '/account/plans': typeof PrivateSidebarAccountLayoutPlansIndexRoute
-  '/account/subscription': typeof PrivateSidebarAccountLayoutSubscriptionIndexRoute
-}
-
-export interface FileRoutesById {
-  __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/_private': typeof PrivateRouteWithChildren
-  '/(public)': typeof publicRouteWithChildren
-  '/(public)/_auth': typeof publicAuthRouteWithChildren
-  '/_private/_sidebar': typeof PrivateSidebarRouteWithChildren
-  '/_private/checkout/': typeof PrivateCheckoutIndexRoute
-  '/_private/freezed/': typeof PrivateFreezedIndexRoute
-  '/_private/_sidebar/account': typeof PrivateSidebarAccountRouteWithChildren
-  '/_private/_sidebar/account/_layout': typeof PrivateSidebarAccountLayoutRouteWithChildren
-  '/_private/_sidebar/analytics/': typeof PrivateSidebarAnalyticsIndexRoute
-  '/_private/_sidebar/dashboard/': typeof PrivateSidebarDashboardIndexRoute
-  '/_private/world-app/welcome/': typeof PrivateWorldAppWelcomeIndexRoute
-  '/(public)/_auth/sign-in/': typeof publicAuthSignInIndexLazyRoute
-  '/(public)/_auth/sign-up/': typeof publicAuthSignUpIndexLazyRoute
-  '/(public)/_auth/world-sign-in/': typeof publicAuthWorldSignInIndexLazyRoute
-  '/_private/_sidebar/account/_layout/general/': typeof PrivateSidebarAccountLayoutGeneralIndexRoute
-  '/_private/_sidebar/account/_layout/plans/': typeof PrivateSidebarAccountLayoutPlansIndexRoute
-  '/_private/_sidebar/account/_layout/subscription/': typeof PrivateSidebarAccountLayoutSubscriptionIndexRoute
-}
-
-export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | ''
-    | '/checkout'
-    | '/freezed'
-    | '/account'
-    | '/analytics'
-    | '/dashboard'
-    | '/world-app/welcome'
-    | '/sign-in'
-    | '/sign-up'
-    | '/world-sign-in'
-    | '/account/general'
-    | '/account/plans'
-    | '/account/subscription'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | ''
-    | '/checkout'
-    | '/freezed'
-    | '/account'
-    | '/analytics'
-    | '/dashboard'
-    | '/world-app/welcome'
-    | '/sign-in'
-    | '/sign-up'
-    | '/world-sign-in'
-    | '/account/general'
-    | '/account/plans'
-    | '/account/subscription'
-  id:
-    | '__root__'
-    | '/'
-    | '/_private'
-    | '/(public)'
-    | '/(public)/_auth'
-    | '/_private/_sidebar'
-    | '/_private/checkout/'
-    | '/_private/freezed/'
-    | '/_private/_sidebar/account'
-    | '/_private/_sidebar/account/_layout'
-    | '/_private/_sidebar/analytics/'
-    | '/_private/_sidebar/dashboard/'
-    | '/_private/world-app/welcome/'
-    | '/(public)/_auth/sign-in/'
-    | '/(public)/_auth/sign-up/'
-    | '/(public)/_auth/world-sign-in/'
-    | '/_private/_sidebar/account/_layout/general/'
-    | '/_private/_sidebar/account/_layout/plans/'
-    | '/_private/_sidebar/account/_layout/subscription/'
-  fileRoutesById: FileRoutesById
-}
-
-export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  PrivateRoute: typeof PrivateRouteWithChildren
-  publicRoute: typeof publicRouteWithChildren
-}
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PrivateRoute: PrivateRouteWithChildren,
   publicRoute: publicRouteWithChildren,
 }
-
-export const routeTree = rootRoute
+export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-/* ROUTE_MANIFEST_START
-{
-  "routes": {
-    "__root__": {
-      "filePath": "__root.tsx",
-      "children": [
-        "/",
-        "/_private",
-        "/(public)"
-      ]
-    },
-    "/": {
-      "filePath": "index.tsx"
-    },
-    "/_private": {
-      "filePath": "_private.tsx",
-      "children": [
-        "/_private/_sidebar",
-        "/_private/checkout/",
-        "/_private/freezed/",
-        "/_private/world-app/welcome/"
-      ]
-    },
-    "/(public)": {
-      "filePath": "(public)",
-      "children": [
-        "/(public)/_auth"
-      ]
-    },
-    "/(public)/_auth": {
-      "filePath": "(public)/_auth.tsx",
-      "parent": "/(public)",
-      "children": [
-        "/(public)/_auth/sign-in/",
-        "/(public)/_auth/sign-up/",
-        "/(public)/_auth/world-sign-in/"
-      ]
-    },
-    "/_private/_sidebar": {
-      "filePath": "_private/_sidebar.tsx",
-      "parent": "/_private",
-      "children": [
-        "/_private/_sidebar/account",
-        "/_private/_sidebar/analytics/",
-        "/_private/_sidebar/dashboard/"
-      ]
-    },
-    "/_private/checkout/": {
-      "filePath": "_private/checkout/index.tsx",
-      "parent": "/_private"
-    },
-    "/_private/freezed/": {
-      "filePath": "_private/freezed/index.tsx",
-      "parent": "/_private"
-    },
-    "/_private/_sidebar/account": {
-      "filePath": "_private/_sidebar/account",
-      "parent": "/_private/_sidebar",
-      "children": [
-        "/_private/_sidebar/account/_layout"
-      ]
-    },
-    "/_private/_sidebar/account/_layout": {
-      "filePath": "_private/_sidebar/account/_layout.tsx",
-      "parent": "/_private/_sidebar/account",
-      "children": [
-        "/_private/_sidebar/account/_layout/general/",
-        "/_private/_sidebar/account/_layout/plans/",
-        "/_private/_sidebar/account/_layout/subscription/"
-      ]
-    },
-    "/_private/_sidebar/analytics/": {
-      "filePath": "_private/_sidebar/analytics/index.tsx",
-      "parent": "/_private/_sidebar"
-    },
-    "/_private/_sidebar/dashboard/": {
-      "filePath": "_private/_sidebar/dashboard/index.tsx",
-      "parent": "/_private/_sidebar"
-    },
-    "/_private/world-app/welcome/": {
-      "filePath": "_private/world-app/welcome/index.tsx",
-      "parent": "/_private"
-    },
-    "/(public)/_auth/sign-in/": {
-      "filePath": "(public)/_auth/sign-in/index.lazy.tsx",
-      "parent": "/(public)/_auth"
-    },
-    "/(public)/_auth/sign-up/": {
-      "filePath": "(public)/_auth/sign-up/index.lazy.tsx",
-      "parent": "/(public)/_auth"
-    },
-    "/(public)/_auth/world-sign-in/": {
-      "filePath": "(public)/_auth/world-sign-in/index.lazy.tsx",
-      "parent": "/(public)/_auth"
-    },
-    "/_private/_sidebar/account/_layout/general/": {
-      "filePath": "_private/_sidebar/account/_layout/general/index.tsx",
-      "parent": "/_private/_sidebar/account/_layout"
-    },
-    "/_private/_sidebar/account/_layout/plans/": {
-      "filePath": "_private/_sidebar/account/_layout/plans/index.tsx",
-      "parent": "/_private/_sidebar/account/_layout"
-    },
-    "/_private/_sidebar/account/_layout/subscription/": {
-      "filePath": "_private/_sidebar/account/_layout/subscription/index.tsx",
-      "parent": "/_private/_sidebar/account/_layout"
-    }
-  }
-}
-ROUTE_MANIFEST_END */
