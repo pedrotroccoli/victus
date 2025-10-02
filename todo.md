@@ -1,5 +1,9 @@
 # Priorities
 
+- [   ] Create Timer In Delta
+
+------
+
 - [ X ] Create habit
 - [ X ] List habits
 - [ X ] Show the right date in habits list
@@ -13,3 +17,5 @@
 
 - [ X ] Delete habit
 - [ x ] Edit habit
+
+
