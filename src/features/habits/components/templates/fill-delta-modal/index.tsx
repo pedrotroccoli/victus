@@ -1,3 +1,4 @@
+import { TimerClock } from "@/components/atoms/timer-clock";
 import { secondsToHHMMSS } from "@/components/ions/time-selector";
 import { TextField } from "@/components/molecules/form";
 import { TimeField } from "@/components/molecules/form/time-field";
@@ -85,7 +86,6 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
     });
   }, [habit, deltas, form]);
 
-  if (!habit) return null;
 
   const handleSubmit: SubmitHandler<FillDeltaModalForm> = async (data: FillDeltaModalForm) => {
     if (!onSave) return;
@@ -113,6 +113,8 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
     console.log(errors);
   }
 
+  // if (!habit) return null;
+
   return (
     <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded w-[calc(100vw-2rem)] rounded-lg">
       <DialogHeader className="p-4 border-b text-left">
@@ -123,6 +125,8 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
       </DialogHeader>
       <FormProvider {...form}>
         <ul className="grid gap-4 py-4 px-6 pb-8">
+          <TimerClock />
+
           {habit?.habit_deltas?.map((delta, index) => (
             <li key={delta._id}>
               <input type="hidden" value={delta._id} className="hidden w-0 h-0" {...form.register(`deltas.${index}.habit_delta_id`)} />
