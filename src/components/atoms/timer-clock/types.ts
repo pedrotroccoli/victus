@@ -11,7 +11,7 @@ export interface ClockTime extends Time {
 }
 
 export interface TurnEndBlock {
-  type: 'turn-end';
+  type: 'turn-start' | 'turn-end';
   date: Date;
 }
 
