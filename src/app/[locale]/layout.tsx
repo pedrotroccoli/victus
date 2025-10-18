@@ -9,6 +9,7 @@ import { routing } from "@/i18n/routing";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
 import '../globals.css';
+import { WhatsappButton } from "@/components/whatsapp-button";
 
 export const metadata: Metadata = {
   title: "Jornal Victus",
@@ -41,6 +42,8 @@ export default async function RootLayout({
           <News />
 
           <Footer />
+
+          <WhatsappButton locale={locale} />
         </NextIntlClientProvider>
       </body>
     </html>
