@@ -10,11 +10,11 @@ interface ButtonProps extends ButtonPropsUI {
 
 export const Button = ({ children, iconLeft: LeftIcon, iconRight: RightIcon, loading, disabled, className, ...props }: ButtonProps) => {
   return (
-    <ButtonUI {...props} disabled={loading || disabled} className={cn("font-[Recursive] font-bold h-10 flex items-center justify-center gap-4", className)}>
-      {!loading && LeftIcon && <LeftIcon size={16} strokeWidth={1.5} className='' />}
+    <ButtonUI {...props} disabled={loading || disabled} className={cn("font-[Recursive] font-medium flex items-center justify-center gap-4", className)}>
+      {!loading && LeftIcon && <LeftIcon size={16} strokeWidth={2.5} className='' />}
       {children}
-      {!loading && RightIcon && <RightIcon size={16} strokeWidth={1.5} className='' />}
-      {loading && <LoaderCircle size={16} strokeWidth={1.5} className='animate-spin' />}
+      {!loading && RightIcon && <RightIcon size={16} strokeWidth={2.5} className='' />}
+      {loading && <LoaderCircle size={16} strokeWidth={2.5} className='animate-spin' />}
     </ButtonUI>
   )
 }
