@@ -1,6 +1,10 @@
 {
   "page": {
-    "title": "Victus Journal | Dashboard"
+    "title": "Victus Journal | Dashboard",
+    "error": {
+      "title": "Ops! Tivemos um problema",
+      "description": "Estamos trabalhando para resolver o problema. Por favor, tente novamente mais tarde."
+    }
   },
   "trial_period": {
     "title": "Atenção!",
