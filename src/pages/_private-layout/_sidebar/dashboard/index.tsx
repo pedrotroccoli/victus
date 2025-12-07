@@ -321,6 +321,40 @@ export const Home = () => {
 
   }, [me?.name])
 
+  const handlePauseHabit = async (data: { pause: boolean }) => {
+    if (!editHabit) return;
+
+    try {
+      await updateHabit({
+        _id: editHabit._id,
+        paused: data.pause
+      });
+
+      toast.success('Hábito pausado com sucesso!');
+
+      setEditHabit(null);
+    } catch (error) {
+      toast.error('Erro ao pausar hábito!');
+    }
+  }
+
+  const handleFinishHabit = async () => {
+    if (!editHabit) return;
+
+    try {
+      await updateHabit({
+        _id: editHabit._id,
+        finished: true
+      });
+
+      toast.success('Hábito finalizado com sucesso!');
+
+      setEditHabit(null);
+    } catch (error) {
+      toast.error('Erro ao finalizar hábito!');
+    }
+  }
+
   if (isLoadingMe) {
     return (
       <main>
@@ -330,6 +364,7 @@ export const Home = () => {
       </main>
     )
   }
+
 
   return (
     <>
@@ -590,6 +625,8 @@ export const Home = () => {
               open: true
             });
           }}
+          onPause={handlePauseHabit}
+          onFinish={handleFinishHabit}
         />
       </Dialog>
 
