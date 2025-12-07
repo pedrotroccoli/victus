@@ -36,6 +36,8 @@ declare global {
       rule: string;
     };
     habit_deltas?: HabitDelta[];
+    paused_at?: string;
+    finished_at?: string;
   }
 
   interface HabitCheck {

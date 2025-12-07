@@ -39,6 +39,8 @@ export interface UpdateHabitRequest {
     enabled: boolean;
     _destroy?: boolean;
   }[];
+  paused?: boolean;
+  finished?: boolean;
 }
 
 export type CreateHabitResponse = Habit;
