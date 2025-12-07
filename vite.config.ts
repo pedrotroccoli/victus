@@ -11,6 +11,7 @@ export default defineConfig({
   ],
   server: {
     port: 5275,
+    allowedHosts: process.env.NODE_ENV === 'development' ? ['dev.victusjournal.com'] : ['app.victusjournal.com'],
   },
   resolve: {
     alias: {
