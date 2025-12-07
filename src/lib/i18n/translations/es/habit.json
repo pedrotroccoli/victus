@@ -10,7 +10,8 @@
     },
     "tabs": {
       "habit": "Hábito",
-      "deltas": "Deltas"
+      "deltas": "Deltas",
+      "actions": "Acciones"
     },
     "form": {
       "fields": {

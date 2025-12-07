@@ -10,5 +10,8 @@
   "portuguese": "Portugués",
   "english": "Inglés",
   "spanish": "Español",
-  "next": "Siguiente"
+  "next": "Siguiente",
+  "pause": "Pausar",
+  "finish": "Finalizar",
+  "resume": "Despausar"
 } 
