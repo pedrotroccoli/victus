@@ -32,6 +32,8 @@ import { MiniKit } from '@worldcoin/minikit-js';
 import { useTranslation } from 'react-i18next';
 import { toast } from "sonner";
 
+import FixingBug from '@/assets/fixing.svg?react';
+
 export const Home = () => {
   const { t } = useTranslation('dashboard');
   const { t: tCommon } = useTranslation('common');
@@ -39,7 +41,7 @@ export const Home = () => {
   const startRange = subDays(new Date(), 12);
   const endRange = addDays(new Date(), 12);
 
-  const { data: me, isLoading: isLoadingMe } = useMe();
+  const { data: me, isLoading: isLoadingMe, error } = useMe();
   const { data: habits, isLoading: isLoadingHabits } = useGetHabits({
     start_date: format(startRange, 'yyyy-MM-dd') as DateFormat,
     end_date: format(endRange, 'yyyy-MM-dd') as DateFormat
@@ -343,7 +345,7 @@ export const Home = () => {
                 <CircleAlert className="h-4 w-4 fill-yellow-500" />
                 <AlertTitle>{t('trial_period.title')}</AlertTitle>
                 <AlertDescription className="mt-2 leading-[150%]">
-                  {t('trial_period.description', { date: format(me?.subscription?.service_details?.trial_ends_at, 'dd/MM/yyyy') })}
+                  {t('trial_period.description', { date: me?.subscription?.service_details?.trial_ends_at ? format(me.subscription.service_details.trial_ends_at, 'dd/MM/yyyy') : '' })}
                 </AlertDescription>
               </Alert>
               <X size={16} className="cursor-pointer absolute top-2.5 right-2.5 " onClick={handleDisableTrialAlert} />
@@ -391,6 +393,16 @@ export const Home = () => {
               {generalLoading && (
                 <div className="flex items-center justify-center h-full flex-col border-neutral-300 border rounded-md p-8 min-h-56">
                   <LoaderCircle size={32} className="animate-spin" strokeWidth={1.75} />
+                </div>
+              )}
+
+              {error && (
+                <div className="flex items-center justify-center h-full flex-col border-neutral-300 border rounded-md p-8 min-h-56">
+                  <FixingBug className="w-full h-full max-w-60" />
+
+                  <h3 className="text-lg font-[Recursive] font-medium mt-4">{t('page.error.title')}</h3>
+
+                  <p className="text-neutral-500 mt-2 text-center">{t('page.error.description')}</p>
                 </div>
               )}
 
