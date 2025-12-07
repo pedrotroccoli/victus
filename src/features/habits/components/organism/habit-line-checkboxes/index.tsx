@@ -107,7 +107,6 @@ export function HabitLineCheckboxes({
 
   return (
     <div ref={setNodeRef} style={style} {...attributes} className={cn(isDragging && "opacity-0")}>
-
       <div
         id={`line-${habit._id}`}
         className={
@@ -159,10 +158,14 @@ export function HabitLineCheckboxes({
           </div>
         </div>
 
-        <div className="flex justify-end overflow-x-auto no-scrollbar" onScroll={onScroll}
+        <div className="relative flex justify-end overflow-x-auto no-scrollbar" onScroll={onScroll}
           data-scroll-line
           data-scroll-line-id={habit._id}
         >
+{habit.paused_at && (
+                <div className="absolute top-0 left-0 w-full h-full bg-black/30 z-10 cursor-not-allowed">
+                </div>
+              )}
           <div className="flex items-center w-full">
 
             {daysInMonth.map((monthDay, index) => {
