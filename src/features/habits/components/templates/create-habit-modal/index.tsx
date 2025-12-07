@@ -1,9 +1,9 @@
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ions/button';
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { addDays } from 'date-fns';
-import { Loader2 } from 'lucide-react';
+import { Flag, Loader2, Pause, Play } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -13,11 +13,22 @@ import { CreateHabitForm, CreateHabitModalProps } from './types';
 import { createHabitValidation, generateRrule, rruleParse } from './utils';
 
 
-export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCreateDelta, newDeltas }: CreateHabitModalProps) => {
+export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCreateDelta, newDeltas, onPause, onFinish }: CreateHabitModalProps) => {
   const { t } = useTranslation('habit', { keyPrefix: 'create_habit_modal' })
+  const { t: tCommon } = useTranslation('common');
 
   const [loading, setLoading] = useState(false);
+
+
+  const [paused, setPaused] = useState(!!habit?.paused_at);
+  const [pauseLoading, setPauseLoading] = useState(false);
+  const [finishLoading, setFinishLoading] = useState(false);
+
   const [tabs, setTabs] = useState<string>('habit');
+
+  useEffect(() => {
+    setPaused(!!habit?.paused_at);
+  }, [habit?.paused_at]);
 
   const defaultValues = useMemo(() => {
     const recurrenceDetails = rruleParse(habit?.recurrence_details?.rule);
@@ -99,6 +110,37 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
     }
   }
 
+  const handlePause = async () => {
+        try {
+           if (!habit || !habit.recurrence_type) return;
+
+      setPauseLoading(true);
+
+      await onPause?.({ pause: !habit.paused_at });
+
+      setPaused(!paused);
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('CreateHabitModal error:', error);
+      }
+    } finally {
+      setPauseLoading(false);
+    }
+  }
+
+  const handleFinish = async () => {
+    try {
+      setFinishLoading(true);
+      await onFinish?.();
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('CreateHabitModal error:', error);
+      }
+    } finally {
+      setFinishLoading(false);
+    }
+  }
+
   const endDate = form.watch('infinite') ? undefined : form.watch('end_date');
 
   return (
@@ -114,6 +156,7 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
           <TabsList className='mb-4 border border-neutral-300 ml-4 mt-6'>
             <TabsTrigger value="habit" className='data-[state=active]:bg-black data-[state=active]:text-white'>{t('tabs.habit')}</TabsTrigger>
             <TabsTrigger value="deltas" className='data-[state=active]:bg-black data-[state=active]:text-white text-black'>{t('tabs.deltas')}</TabsTrigger>
+            <TabsTrigger value="actions" className='data-[state=active]:bg-black data-[state=active]:text-white text-black'>{t('tabs.actions')}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="habit">
@@ -127,7 +170,22 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
             newDeltas={newDeltas || []}
             />
           </TabsContent>
+          <TabsContent value="actions">
+          <div className="flex flex-col gap-6 px-4 pb-8">
+
+
+          <Button className="w-full" iconRight={paused ? Play : Pause} iconRightProps={{ strokeWidth: 2 }} onClick={handlePause} loading={pauseLoading}>
+            {paused ? tCommon('resume') : tCommon('pause')}
+          </Button>
+
+        <Button className="w-full" iconRight={Flag} variant="outline" onClick={handleFinish} loading={finishLoading}>
+            {tCommon('finish')}
+          </Button>
+          </div>
+
+          </TabsContent>
         </Tabs>
+        {tabs !== 'actions' && (
         <div className="flex justify-end p-2 px-6 border-t border-neutral-300">
           <Button variant="default" className="bg-black text-white rounded text-sm font-bold hover:bg-black/80 min-w-24 h-8"
             onClick={form.handleSubmit(handleSubmit, handleError)}
@@ -135,7 +193,7 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
           >
             {loading ? <Loader2 size={16} className="animate-spin" /> : !habit ? t('buttons.create') : t('buttons.edit')}
           </Button>
-        </div>
+        </div> )}
       </FormProvider>
     </DialogContent>
 
