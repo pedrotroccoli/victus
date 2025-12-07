@@ -10,15 +10,11 @@ export interface ClockTime extends Time {
   allMilisecondsBefore: number;
 }
 
-export interface TurnEndBlock {
-  type: 'turn-start' | 'turn-end';
-  date: Date;
-}
-
 export interface NormalBlock {
   type: 'started' | 'paused' | 'finished';
   startedAt: Date;
   finishedAt: Date | null;
+  turn: number;
 }
 
-export type TimeBlock = TurnEndBlock | NormalBlock;
+export type TimeBlock = NormalBlock;

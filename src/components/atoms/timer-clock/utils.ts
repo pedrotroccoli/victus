@@ -52,3 +52,53 @@ export const getSumOfTimeBlocksInMiliseconds = (receivedBlocks: TimeBlock[]) => 
     return acc + differenceInMilliseconds(block.finishedAt ?? new Date(), block.startedAt);
   }, 0);
 };
+
+interface StopProps {
+  blocksToStop: TimeBlock[];
+  interval: NodeJS.Timeout | null;
+}
+
+export const stopTimer = ({ blocksToStop, interval }: StopProps) => {
+  clearInterval(interval ?? undefined);
+
+  const last = blocksToStop.slice().pop();
+
+  const newBlocks = [
+    ...blocksToStop.slice(0, -1),
+    {
+      ...last,
+      finishedAt: new Date(),
+      type: 'finished',
+    }
+  ]
+
+  return newBlocks;
+}
+
+
+export const getSumOfBlocksInMiliseconds = (blocks: TimeBlock[]) => {
+  return blocks.reduce((acc, block) => {
+    return acc + differenceInMilliseconds(block.finishedAt ?? new Date(), block.startedAt);
+  }, 0);
+}
+
+export const startTimer = ({
+  startedAt,
+  newTurn,
+  turn,
+  blocksToStart,
+}: {
+  startedAt: Date;
+  newTurn: boolean; 
+  turn: number;
+  blocksToStart: TimeBlock[];
+}) => {
+  const currentTurn = newTurn ? turn + 1 : turn;
+
+  const newBlocks = [
+    ...blocksToStart,
+    { type: 'started', startedAt, finishedAt: null, turn: currentTurn }
+  ] as TimeBlock[];
+
+  return newBlocks;
+}
