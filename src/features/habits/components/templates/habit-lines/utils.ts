@@ -27,6 +27,41 @@ export const groupByCategory = (habits: Habit[], categories: HabitCategory[]): C
       };
     }
 
+    if (!acc['finished']) {
+      acc['finished'] = {
+        categoryId: 'finished',
+        category: {
+          _id: 'finished',
+          name: 'Finalizados',
+        } as HabitCategory,
+        list: []
+      };
+    }
+
+    if (!acc['paused']) {
+      acc['paused'] = {
+        categoryId: 'paused',
+        category: {
+          _id: 'paused',
+          name: 'Pausados',
+        } as HabitCategory,
+        list: []
+      };
+    }
+
+    if (habit.finished_at) {
+      acc['finished'].list.push(habit);
+
+      return acc;
+    }
+
+    if (habit.paused_at) {
+      acc['paused'].list.push(habit);
+
+      return acc;
+    }
+
+
     if (habit.habit_category_id) {
       acc[habit.habit_category_id].list.push(habit);
     } else {
@@ -44,12 +79,16 @@ export const groupByCategory = (habits: Habit[], categories: HabitCategory[]): C
     }
   })
 
-  withEmptyCategories.unshift(grouped['general'])
+  withEmptyCategories.unshift(grouped['general']);
+  withEmptyCategories.push(grouped['paused']);
 
   const all = withEmptyCategories.reduce((acc: CategorizedHabits, item: HabitGroup) => {
     acc[item.categoryId] = item;
     return acc;
   }, {});
+
+
+  console.log(all);
 
   return all;
 }
