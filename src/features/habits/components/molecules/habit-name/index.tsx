@@ -13,6 +13,7 @@ interface HabitNameProps {
   hide: boolean;
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
+  onClick?: () => void;
 }
 
 const typeToName = {
@@ -23,7 +24,7 @@ const typeToName = {
   yearly: 'Anual',
 }
 
-export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }: HabitNameProps) => {
+export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave, onClick }: HabitNameProps) => {
   const { t } = useTranslation('components');
 
   return (
@@ -36,6 +37,7 @@ export const HabitName = ({ item, isHovering, hide, onMouseEnter, onMouseLeave }
             hide && "blur-sm"
           )
           }
+          onClick={onClick}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
           >

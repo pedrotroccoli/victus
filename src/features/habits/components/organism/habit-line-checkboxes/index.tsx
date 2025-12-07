@@ -135,6 +135,7 @@ export function HabitLineCheckboxes({
 
             <div className="flex items-center min-w-24 w-full h-7 pl-1 data-[edit-enabled=true]:max-w-40" data-edit-enabled={enableEdit || enableDelete} >
               <HabitName
+                onClick={onEdit}
                 item={habit}
                 isHovering={checkboxHovering}
                 hide={hideHabits}
