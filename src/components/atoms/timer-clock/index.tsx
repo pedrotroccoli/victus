@@ -1,5 +1,5 @@
-import { differenceInMilliseconds, differenceInSeconds } from "date-fns";
-import { AlarmClockPlus, Pause, Play, Save, Trash2 } from "lucide-react";
+import { differenceInMilliseconds } from "date-fns";
+import { Pause, Play, Save, Trash2 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ClockTime, TimeBlock } from "./types";
 import { convertDateToClockTime, getSumOfTimeBlocksInMiliseconds, startTimer, stopTimer, transformMilisecondsToClockTime } from "./utils";
@@ -23,7 +23,7 @@ const sizeMap = {
 }
 
 
-export const TimerClock = ({ size = 'md', onSave }: TimerClockProps) => {
+export const TimerClock = ({ size = 'md' }: TimerClockProps) => {
   const [turn, setTurn] = useState<number>(0);
   const [started, setStarted] = useState<boolean>(false);
   const [blocks, setBlocks] = useLocalStorage<TimeBlock[]>('@victus-web-app-blocks', []);
@@ -42,6 +42,7 @@ export const TimerClock = ({ size = 'md', onSave }: TimerClockProps) => {
     }
   });
   const interval = useRef<NodeJS.Timeout | null>(null);
+  // @ts-ignore
   const [turns, setTurns] = useState([]);
 
   const formattedTime = useMemo(() => {
@@ -106,6 +107,7 @@ export const TimerClock = ({ size = 'md', onSave }: TimerClockProps) => {
 
       setBlocks(newBlocks);
 
+      // @ts-ignore
       setTurns(Object.entries(Object.groupBy(newBlocks, (item) => item.turn)));
 
       interval.current = null;
@@ -135,10 +137,12 @@ export const TimerClock = ({ size = 'md', onSave }: TimerClockProps) => {
   const addTurn = () => {
     const oldBlocks = stopTimer({ blocksToStop: blocks, interval: interval.current }) as TimeBlock[];
 
+    // @ts-ignore
     const turns = Object.entries(Object.groupBy(oldBlocks, (item) => item.turn))
 
     console.log(oldBlocks, turns);
 
+    // @ts-ignore
     setTurns(turns);
 
     const startedAt = new Date();
