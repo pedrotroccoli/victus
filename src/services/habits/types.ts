@@ -21,6 +21,7 @@ export interface CreateHabitRequest {
     name: string;
     type: string;
   }[];
+  rule_engine_enabled: boolean;
 }
 
 export interface UpdateHabitRequest {

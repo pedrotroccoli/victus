@@ -131,7 +131,8 @@ export const Home = () => {
         habit_deltas: deltaOpen?.newDeltas?.map(item => ({
           name: item.name,
           type: item.type
-        })) || []
+        })) || [],
+        rule_engine_enabled: false,
       });
 
 
