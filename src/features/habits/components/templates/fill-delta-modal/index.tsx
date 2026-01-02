@@ -125,7 +125,7 @@ export default function FillDeltaModal({ habit, habitCheck, onSave }: FillDeltaM
       </DialogHeader>
       <FormProvider {...form}>
         <ul className="grid gap-4 py-4 px-6 pb-8">
-          <TimerClock />
+          {/* <TimerClock /> */}
 
           {habit?.habit_deltas?.map((delta, index) => (
             <li key={delta._id}>
