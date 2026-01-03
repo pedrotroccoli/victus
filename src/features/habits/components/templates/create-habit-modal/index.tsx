@@ -7,13 +7,14 @@ import { Flag, Loader2, Pause, Play } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { AdvancedTab } from './advanced-tab';
 import { DeltaTab } from './delta-tab';
 import { HabitTab } from './habit-tab';
 import { CreateHabitForm, CreateHabitModalProps } from './types';
 import { createHabitValidation, generateRrule, rruleParse } from './utils';
 
 
-export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCreateDelta, newDeltas, onPause, onFinish }: CreateHabitModalProps) => {
+export const CreateHabitModal = ({ onSave, categories, habit, habits = [], onEditDelta, onCreateDelta, newDeltas, onPause, onFinish }: CreateHabitModalProps) => {
   const { t } = useTranslation('habit', { keyPrefix: 'create_habit_modal' })
   const { t: tCommon } = useTranslation('common');
 
@@ -42,6 +43,10 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
       frequency: 'daily' as const,
       week_days: [],
       category: null,
+      children_habit_ids: [],
+      rule_engine_enabled: false,
+      rule_engine_logic_type: 'and' as const,
+      rule_engine_habit_ids: [],
     } : {
       type: 'edit',
       name: habit.name,
@@ -58,6 +63,12 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
         state: 'active',
         delta_state: 'active',
       })) || [],
+      children_habit_ids: habit?.children_habits?.map(h => h._id) || [],
+      rule_engine_enabled: habit?.rule_engine_enabled || false,
+      rule_engine_logic_type: habit?.rule_engine_details?.logic?.type || 'and',
+      rule_engine_habit_ids: habit?.rule_engine_details?.logic?.type === 'or'
+        ? habit?.rule_engine_details?.logic?.or || []
+        : habit?.rule_engine_details?.logic?.and || [],
     } as CreateHabitForm
   }, [habit]);
 
@@ -76,6 +87,16 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
 
       const rrule = generateRrule(data);
 
+      // Build rule_engine_details if enabled
+      const ruleEngineDetails = data.rule_engine_enabled && data.rule_engine_habit_ids?.length
+        ? {
+            logic: {
+              type: data.rule_engine_logic_type || 'and',
+              [data.rule_engine_logic_type || 'and']: data.rule_engine_habit_ids,
+            },
+          }
+        : undefined;
+
       await onSave?.({
         infinite: data.infinite ? true : false,
         name: data.name,
@@ -84,6 +105,9 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
         end_date: data.end_date,
         category: data.category,
         rrule,
+        children_habit_ids: data.children_habit_ids,
+        rule_engine_enabled: data.rule_engine_enabled,
+        rule_engine_details: ruleEngineDetails,
       });
 
       form.reset(defaultValues);
@@ -100,13 +124,14 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
   const handleError: SubmitErrorHandler<CreateHabitForm> = (errors) => {
     const habitTab = ['name', 'start_date', 'end_date', 'frequency', 'week_days', 'category'].some(key => !!errors[key as keyof CreateHabitForm]);
     const deltasTab = ['deltas'].some(key => !!errors[key as keyof CreateHabitForm]);
+    const advancedTab = ['children_habit_ids', 'rule_engine_enabled', 'rule_engine_logic_type', 'rule_engine_habit_ids'].some(key => !!errors[key as keyof CreateHabitForm]);
 
     if (habitTab) {
       setTabs('habit');
-    }
-
-    if (deltasTab) {
+    } else if (deltasTab) {
       setTabs('deltas');
+    } else if (advancedTab) {
+      setTabs('advanced');
     }
   }
 
@@ -156,6 +181,7 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
           <TabsList className='mb-4 border border-neutral-300 ml-4 mt-6'>
             <TabsTrigger value="habit" className='data-[state=active]:bg-black data-[state=active]:text-white'>{t('tabs.habit')}</TabsTrigger>
             <TabsTrigger value="deltas" className='data-[state=active]:bg-black data-[state=active]:text-white text-black'>{t('tabs.deltas')}</TabsTrigger>
+            <TabsTrigger value="advanced" className='data-[state=active]:bg-black data-[state=active]:text-white text-black'>{t('tabs.advanced')}</TabsTrigger>
             <TabsTrigger value="actions" className='data-[state=active]:bg-black data-[state=active]:text-white text-black'>{t('tabs.actions')}</TabsTrigger>
           </TabsList>
 
@@ -163,12 +189,15 @@ export const CreateHabitModal = ({ onSave, categories, habit, onEditDelta, onCre
             <HabitTab categories={categories} habit={habit} endDate={endDate} />
           </TabsContent>
           <TabsContent value="deltas">
-            <DeltaTab 
-            onEditDelta={onEditDelta} 
-            onCreateDelta={onCreateDelta} 
-            deltas={habit?.habit_deltas} 
+            <DeltaTab
+            onEditDelta={onEditDelta}
+            onCreateDelta={onCreateDelta}
+            deltas={habit?.habit_deltas}
             newDeltas={newDeltas || []}
             />
+          </TabsContent>
+          <TabsContent value="advanced">
+            <AdvancedTab habits={habits} habit={habit} />
           </TabsContent>
           <TabsContent value="actions">
           <div className="flex flex-col gap-6 px-4 pb-8">
