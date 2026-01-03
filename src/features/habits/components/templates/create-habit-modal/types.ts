@@ -19,15 +19,22 @@ export interface CreateHabitModalProps {
 
 export type CreateHabitForm = z.infer<typeof createHabitValidation>;
 
+export type RuleEngineAnd = {
+  type: 'and' ;
+  and?: string[];
+};
+
+export type RuleEngineOr = {
+  type: 'or';
+  or?: string[];
+};
+}
+
 export type CreateHabitModalOnSaveProps = CreateHabitForm & {
   rrule: string;
   children_habit_ids?: string[];
   rule_engine_enabled?: boolean;
   rule_engine_details?: {
-    logic: {
-      type: 'and' | 'or';
-      and?: string[];
-      or?: string[];
-    };
+    logic: RuleEngineAnd | RuleEngineOr;
   };
 }
