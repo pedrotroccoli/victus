@@ -11,6 +11,7 @@
     "tabs": {
       "habit": "Habit",
       "deltas": "Deltas",
+      "advanced": "Advanced",
       "actions": "Actions"
     },
     "form": {
@@ -49,7 +50,35 @@
         "infinite": {
           "label": "Infinite period",
           "placeholder": "Select if the habit is infinite"
+        },
+        "children_habits": {
+          "label": "Child habits",
+          "placeholder": "Select child habits",
+          "commandPlaceholder": "Search habit",
+          "commandEmpty": "No habits found",
+          "helper": "Child habits will be deleted along with this habit"
+        },
+        "rule_engine": {
+          "enabled_label": "Enable completion rules",
+          "logic_type": {
+            "label": "Logic type",
+            "placeholder": "Select type",
+            "and": "AND (all)",
+            "or": "OR (any)"
+          },
+          "habits": {
+            "label": "Conditional habits",
+            "placeholder": "Select habits",
+            "commandPlaceholder": "Search habit",
+            "commandEmpty": "No habits found"
+          },
+          "helper_and": "This habit can only be checked when ALL selected habits are completed",
+          "helper_or": "This habit can be checked when ANY of the selected habits is completed"
         }
+      },
+      "sections": {
+        "children_habits": "Child habits",
+        "rule_engine": "Completion rules"
       }
     },
     "deltas": {

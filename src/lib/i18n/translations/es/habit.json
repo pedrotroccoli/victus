@@ -11,6 +11,7 @@
     "tabs": {
       "habit": "Hábito",
       "deltas": "Deltas",
+      "advanced": "Avanzado",
       "actions": "Acciones"
     },
     "form": {
@@ -49,7 +50,35 @@
         "infinite": {
           "label": "Período infinito",
           "placeholder": "Selecciona si el hábito es infinito"
+        },
+        "children_habits": {
+          "label": "Hábitos hijos",
+          "placeholder": "Selecciona los hábitos hijos",
+          "commandPlaceholder": "Buscar hábito",
+          "commandEmpty": "No se encontraron hábitos",
+          "helper": "Los hábitos hijos se eliminarán junto con este hábito"
+        },
+        "rule_engine": {
+          "enabled_label": "Habilitar reglas de finalización",
+          "logic_type": {
+            "label": "Tipo de lógica",
+            "placeholder": "Selecciona el tipo",
+            "and": "Y (todos)",
+            "or": "O (cualquiera)"
+          },
+          "habits": {
+            "label": "Hábitos condicionales",
+            "placeholder": "Selecciona los hábitos",
+            "commandPlaceholder": "Buscar hábito",
+            "commandEmpty": "No se encontraron hábitos"
+          },
+          "helper_and": "Este hábito solo se puede marcar cuando TODOS los hábitos seleccionados estén completados",
+          "helper_or": "Este hábito se puede marcar cuando CUALQUIERA de los hábitos seleccionados esté completado"
         }
+      },
+      "sections": {
+        "children_habits": "Hábitos hijos",
+        "rule_engine": "Reglas de finalización"
       }
     },
     "deltas": {
