@@ -6,6 +6,7 @@ export interface CreateHabitModalProps {
   onPause?: (data: { pause: boolean }) => void;
   onFinish?: () => void;
   habit?: Habit;
+  habits?: Habit[];
   categories?: HabitCategory[];
   onEditDelta?: (deltaId: string) => void;
   onCreateDelta?: () => void;
@@ -20,4 +21,13 @@ export type CreateHabitForm = z.infer<typeof createHabitValidation>;
 
 export type CreateHabitModalOnSaveProps = CreateHabitForm & {
   rrule: string;
+  children_habit_ids?: string[];
+  rule_engine_enabled?: boolean;
+  rule_engine_details?: {
+    logic: {
+      type: 'and' | 'or';
+      and?: string[];
+      or?: string[];
+    };
+  };
 }
