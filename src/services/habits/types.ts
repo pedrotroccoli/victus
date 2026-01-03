@@ -21,7 +21,15 @@ export interface CreateHabitRequest {
     name: string;
     type: string;
   }[];
-  rule_engine_enabled: boolean;
+  rule_engine_enabled?: boolean;
+  parent_habit_id?: string;
+  rule_engine_details?: {
+    logic: {
+      type: 'and' | 'or';
+      and?: string[];
+      or?: string[];
+    };
+  };
 }
 
 export interface UpdateHabitRequest {
@@ -42,6 +50,15 @@ export interface UpdateHabitRequest {
   }[];
   paused?: boolean;
   finished?: boolean;
+  rule_engine_enabled?: boolean;
+  parent_habit_id?: string;
+  rule_engine_details?: {
+    logic: {
+      type: 'and' | 'or';
+      and?: string[];
+      or?: string[];
+    };
+  };
 }
 
 export type CreateHabitResponse = Habit;

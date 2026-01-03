@@ -38,6 +38,16 @@ declare global {
     habit_deltas?: HabitDelta[];
     paused_at?: string;
     finished_at?: string;
+    parent_habit_id?: string;
+    children_habits?: Habit[];
+    rule_engine_enabled?: boolean;
+    rule_engine_details?: {
+      logic: {
+        type: 'and' | 'or';
+        and?: string[];
+        or?: string[];
+      };
+    };
   }
 
   interface HabitCheck {
