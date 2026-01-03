@@ -399,14 +399,19 @@ export const Home = () => {
                 </Button>
               </DialogTrigger>
 
-              <CreateHabitModal 
-                onSave={onCreateHabit} categories={habitCategories || []} newDeltas={deltaOpen?.newDeltas} onCreateDelta={() => setDeltaOpen({
-                open: true,
-                type: 'create',
-                habit: undefined,
-                deltaId: '',
-                newDeltas: []
-              })} />
+              <CreateHabitModal
+                onSave={onCreateHabit}
+                categories={habitCategories || []}
+                habits={habits || []}
+                newDeltas={deltaOpen?.newDeltas}
+                onCreateDelta={() => setDeltaOpen({
+                  open: true,
+                  type: 'create',
+                  habit: undefined,
+                  deltaId: '',
+                  newDeltas: []
+                })}
+              />
             </Dialog>
           </div>
 
@@ -605,10 +610,11 @@ export const Home = () => {
       </section>
 
       <Dialog open={!!editHabit} onOpenChange={() => setEditHabit(null)}>
-        <CreateHabitModal 
+        <CreateHabitModal
           newDeltas={deltaOpen?.newDeltas}
-          onSave={handleEditHabitSave} 
-          habit={editHabit || undefined} 
+          onSave={handleEditHabitSave}
+          habit={editHabit || undefined}
+          habits={habits || []}
           categories={habitCategories || []}
           onEditDelta={(deltaId) => {
             setDeltaOpen({
