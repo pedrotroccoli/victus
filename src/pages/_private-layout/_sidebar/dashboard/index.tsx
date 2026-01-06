@@ -1,12 +1,5 @@
 import { useLocalStorage } from "@uidotdev/usehooks";
-import {
-  addDays,
-  eachDayOfInterval,
-  format,
-  isAfter,
-  isBefore,
-  subDays,
-} from "date-fns";
+import { addDays, eachDayOfInterval, format, isAfter, subDays } from "date-fns";
 import {
   Book,
   BookOpen,
@@ -15,11 +8,9 @@ import {
   CirclePlus,
   LoaderCircle,
   PackagePlus,
-  Pencil,
   PencilOff,
   PencilRuler,
   PlusCircle,
-  Trash,
   X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
@@ -40,7 +31,6 @@ import {
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BoxesExplanation } from "@/features/habits/components/atoms/boxes-explanation";
@@ -59,20 +49,19 @@ import {
   HabitLineChange,
   HabitLines,
 } from "@/features/habits/components/templates/habit-lines";
-import { groupByCategory } from "@/features/habits/components/templates/habit-lines/utils";
 import { cn } from "@/lib/utils";
 import {
   useCreateHabitCategory,
   useHabitCategories,
 } from "@/services/habit-category/hooks";
 import { DateFormat } from "@/services/habits/types";
-import { isAcceptedByRRule, isInfiniteHabit } from "@/utils/habits";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import FixingBug from "@/assets/fixing.svg?react";
 import { HabitCheckboxes } from "@/features/habits/components/templates/habit-checkboxes";
+import { TrialMessage } from "@/features/account/components/atoms/trial-message";
 
 export const Home = () => {
   const { t } = useTranslation("dashboard");
@@ -108,13 +97,6 @@ export const Home = () => {
     useHabitCategories();
   const { mutateAsync: createHabitCategory } = useCreateHabitCategory();
   const { mutateAsync: deleteHabit } = useDeleteHabit();
-  const [trialAlert, setTrialAlert] = useState(() => {
-    const vjta = localStorage.getItem("@victus::vjta");
-
-    if (!vjta) return true;
-
-    return isAfter(new Date(), new Date(vjta));
-  });
 
   const generalLoading = useMemo(
     () =>
@@ -122,12 +104,8 @@ export const Home = () => {
       isLoadingHabits ||
       isLoadingHabitsCheck ||
       isLoadingHabitCategories,
-    [
-      isLoadingMe,
-      isLoadingHabits,
-      isLoadingHabitsCheck,
-      isLoadingHabitCategories,
-    ],
+    [isLoadingMe, isLoadingHabits, isLoadingHabitsCheck],
+    isLoadingHabitCategories,
   );
 
   const [hideExplanation, setHideExplanation] = useState(true);
@@ -198,6 +176,7 @@ export const Home = () => {
             type: item.type,
           })) || [],
         rule_engine_enabled: false,
+        children_habit_ids: params.children_habit_ids,
       });
 
       toast.success("Hábito criado com sucesso!");
@@ -326,11 +305,6 @@ export const Home = () => {
     setEditHabit(null);
   };
 
-  const handleDisableTrialAlert = () => {
-    localStorage.setItem("@victus::vjta", addDays(new Date(), 1).toISOString());
-    setTrialAlert(false);
-  };
-
   const handleFillDeltaModalSave = async (data: OnSaveDeltaModalProps) => {
     if (!fillDeltaModal) return;
 
@@ -448,28 +422,8 @@ export const Home = () => {
 
       <section className="max-w-screen-lg w-full mx-auto bg-sign">
         <div className="sm:px-4 pt-4 sm:pt-8">
-          {me?.subscription?.sub_status === "trial" && trialAlert && (
-            <div className="relative ">
-              <Alert className="border-yellow-600 bg-yellow-500/10 mb-12">
-                <CircleAlert className="h-4 w-4 fill-yellow-500" />
-                <AlertTitle>{t("trial_period.title")}</AlertTitle>
-                <AlertDescription className="mt-2 leading-[150%]">
-                  {t("trial_period.description", {
-                    date: me?.subscription?.service_details?.trial_ends_at
-                      ? format(
-                          me.subscription.service_details.trial_ends_at,
-                          "dd/MM/yyyy",
-                        )
-                      : "",
-                  })}
-                </AlertDescription>
-              </Alert>
-              <X
-                size={16}
-                className="cursor-pointer absolute top-2.5 right-2.5 "
-                onClick={handleDisableTrialAlert}
-              />
-            </div>
+          {me?.subscription?.sub_status === "trial" && (
+            <TrialMessage subscription={me?.subscription} />
           )}
 
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-6">
@@ -634,7 +588,6 @@ export const Home = () => {
                       {t("habits.title")}
                     </h3>
                   </div>
-
                   <div className="">
                     <div className="border-t border-neutral-300"></div>
                     <Tabs
