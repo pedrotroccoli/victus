@@ -1,17 +1,15 @@
 import { useLocalStorage } from "@uidotdev/usehooks";
-import { addDays, eachDayOfInterval, format, isAfter, subDays } from "date-fns";
+import { addDays, eachDayOfInterval, format, subDays } from "date-fns";
 import {
   Book,
   BookOpen,
   Box,
-  CircleAlert,
   CirclePlus,
   LoaderCircle,
   PackagePlus,
   PencilOff,
   PencilRuler,
   PlusCircle,
-  X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -28,7 +26,6 @@ import {
   useUpdateHabitCheck,
 } from "@/services/habits/hooks";
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertDialog } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -62,10 +59,18 @@ import { toast } from "sonner";
 import FixingBug from "@/assets/fixing.svg?react";
 import { HabitCheckboxes } from "@/features/habits/components/templates/habit-checkboxes";
 import { TrialMessage } from "@/features/account/components/atoms/trial-message";
+import { DashboardHeader } from "./components/header";
+
+export interface DeltaInfo {
+  open?: boolean;
+  habit?: Habit;
+  deltaId?: string;
+  type: "create" | "edit";
+  newDeltas?: { name: string; type: "number" | "time"; _id: string }[];
+}
 
 export const Home = () => {
   const { t } = useTranslation("dashboard");
-  const { t: tCommon } = useTranslation("common");
 
   const startRange = subDays(new Date(), 12);
   const endRange = addDays(new Date(), 12);
@@ -120,13 +125,7 @@ export const Home = () => {
 
   const [tab, setTab] = useLocalStorage("@victus::tab", "focus");
 
-  const [deltaOpen, setDeltaOpen] = useState<{
-    open?: boolean;
-    habit?: Habit;
-    deltaId?: string;
-    type: "create" | "edit";
-    newDeltas?: { name: string; type: "number" | "time"; _id: string }[];
-  } | null>(null);
+  const [deltaOpen, setDeltaOpen] = useState<DeltaInfo | null>(null);
 
   const habitsCheckedHash = useMemo(() => {
     if (!habitsCheck) return {};
@@ -156,8 +155,6 @@ export const Home = () => {
   const currentDay = useMemo(() => new Date(), []);
 
   const daysInMonth = eachDayOfInterval({ start: startRange, end: endRange });
-
-  const [createHabitOpen, setCreateHabitOpen] = useState(false);
 
   const onCreateHabit = async (params: CreateHabitModalOnSaveProps) => {
     try {
@@ -368,7 +365,7 @@ export const Home = () => {
     }
 
     return me?.name ? String(me?.name).split(" ")[0] : "";
-  }, [me?.name]);
+  }, [me]);
 
   const handlePauseHabit = async (data: { pause: boolean }) => {
     if (!editHabit) return;
@@ -426,39 +423,13 @@ export const Home = () => {
             <TrialMessage subscription={me?.subscription} />
           )}
 
-          <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-6">
-            <h1 className="font-[Recursive] text-xl font-semibold">
-              {t("greeting", { name })}
-            </h1>
-
-            <Dialog open={createHabitOpen} onOpenChange={setCreateHabitOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  className="w-full flex gap-4 bg-black rounded-md text-white sm:max-w-40"
-                  onClick={() => setCreateHabitOpen(true)}
-                >
-                  <PlusCircle size={16} />
-                  {tCommon("add")}
-                </Button>
-              </DialogTrigger>
-
-              <CreateHabitModal
-                onSave={onCreateHabit}
-                categories={habitCategories || []}
-                habits={habits || []}
-                newDeltas={deltaOpen?.newDeltas}
-                onCreateDelta={() =>
-                  setDeltaOpen({
-                    open: true,
-                    type: "create",
-                    habit: undefined,
-                    deltaId: "",
-                    newDeltas: [],
-                  })
-                }
-              />
-            </Dialog>
-          </div>
+          <DashboardHeader
+            habits={habits || []}
+            habitCategories={habitCategories || []}
+            deltaOpen={deltaOpen || undefined}
+            setDeltaOpen={setDeltaOpen}
+            onCreateHabit={onCreateHabit}
+          />
 
           <div className="mt-6 sm:mt-8 bg-white w-full">
             <div className="w-full">
