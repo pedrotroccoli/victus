@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { BoxesExplanation } from "@/features/habits/components/atoms/boxes-explanation";
 import {
@@ -23,7 +23,7 @@ export const DashboardPaperActions: React.FC<DashboardPaperActionsProps> = ({
   onClickEditEnabled,
   onClickAddCategory,
 }) => {
-  const [hideExplanation, setHideExplanation] = React.useState(false);
+  const [hideExplanation, setHideExplanation] = useState(true);
 
   return (
     <div
