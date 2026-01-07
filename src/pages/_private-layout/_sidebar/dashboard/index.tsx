@@ -60,6 +60,7 @@ import FixingBug from "@/assets/fixing.svg?react";
 import { HabitCheckboxes } from "@/features/habits/components/templates/habit-checkboxes";
 import { TrialMessage } from "@/features/account/components/atoms/trial-message";
 import { DashboardHeader } from "./components/header";
+import { DashboardPaperActions } from "./components/paper-actions";
 
 export interface DeltaInfo {
   open?: boolean;
@@ -443,7 +444,7 @@ export const Home = () => {
 
                   <Button
                     className="flex gap-4 bg-black rounded-md text-white font-[Recursive]"
-                    onClick={() => setCreateHabitOpen(true)}
+                    // onClick={() => setCreateHabitOpen(true)}
                   >
                     <PlusCircle size={16} />
                     {t("habits.create_first_habit")}
@@ -477,82 +478,12 @@ export const Home = () => {
 
               {habits && habits.length > 0 && !generalLoading && (
                 <div className="border border-neutral-300 rounded-md">
-                  <div
-                    className={cn(
-                      "flex items-center justify-between border-b border-neutral-300 p-4 pr-8 relative",
-                      hideExplanation && "border-b-0 p-0 pr-0",
-                    )}
-                  >
-                    <div className="absolute top-0 right-0 border-l border-b border-neutral-300 rounded-bl-md flex items-center divide-x divide-neutral-300">
-                      <button
-                        className={cn(
-                          "h-6 w-5 flex items-center justify-center",
-                          "hover:bg-black hover:text-white duration-200 transition-colors",
-                        )}
-                        onClick={() => setHideExplanation(!hideExplanation)}
-                      >
-                        {hideExplanation ? (
-                          <Book
-                            size={14}
-                            className="-translate-y-px translate-x-px"
-                          />
-                        ) : (
-                          <BookOpen
-                            size={14}
-                            className="-translate-y-px translate-x-px"
-                          />
-                        )}
-                      </button>
-
-                      <button
-                        className={cn(
-                          "h-6 w-6 flex items-center justify-center",
-                          "hover:bg-black hover:text-white duration-200 transition-colors",
-                        )}
-                        onClick={() => setEditEnabled(!editEnabled)}
-                      >
-                        {editEnabled ? (
-                          <PencilOff
-                            size={12}
-                            className="-translate-y-px translate-x-px"
-                          />
-                        ) : (
-                          <PencilRuler
-                            size={14}
-                            className="-translate-y-px translate-x-px"
-                          />
-                        )}
-                      </button>
-
-                      <button
-                        className={cn(
-                          "h-6 w-6 flex items-center justify-center",
-                          "hover:bg-black hover:text-white duration-200 transition-colors",
-                        )}
-                        onClick={() => setCreateCategoryOpen(true)}
-                      >
-                        <PackagePlus
-                          size={14}
-                          className="-translate-y-px translate-x-px"
-                        />
-                      </button>
-
-                      <button
-                        className={cn(
-                          "h-6 w-6 flex items-center justify-center",
-                          "hover:bg-black hover:text-white duration-200 transition-colors",
-                        )}
-                        onClick={onClickCreateHabit}
-                      >
-                        <CirclePlus
-                          size={14}
-                          className="-translate-y-px translate-x-px"
-                        />
-                      </button>
-                    </div>
-
-                    {!hideExplanation && <BoxesExplanation />}
-                  </div>
+                  <DashboardPaperActions
+                    editEnabled={editEnabled}
+                    onClickAddHabit={() => {}}
+                    onClickEditEnabled={() => setEditEnabled(!editEnabled)}
+                    onClickAddCategory={() => setCreateCategoryOpen(true)}
+                  />
 
                   <div className="p-4">
                     <h3 className="text-lg font-[Recursive] font-medium">
