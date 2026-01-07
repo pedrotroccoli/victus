@@ -23,9 +23,10 @@ export interface CreateHabitRequest {
   }[];
   rule_engine_enabled?: boolean;
   parent_habit_id?: string;
+  children_habit_ids?: string[];
   rule_engine_details?: {
     logic: {
-      type: 'and' | 'or';
+      type: "and" | "or";
       and?: string[];
       or?: string[];
     };
@@ -54,7 +55,7 @@ export interface UpdateHabitRequest {
   parent_habit_id?: string;
   rule_engine_details?: {
     logic: {
-      type: 'and' | 'or';
+      type: "and" | "or";
       and?: string[];
       or?: string[];
     };
@@ -77,7 +78,6 @@ export interface GetAllHabitsCheckRequest {
 }
 
 export type GetAllHabitsCheckResponse = HabitCheck[];
-
 
 export interface UpdateHabitCheckRequest {
   habit_id: string;

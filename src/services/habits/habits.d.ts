@@ -7,7 +7,7 @@ declare global {
     description: string | null;
     enabled: boolean;
     name: string;
-    type: 'number' | 'time';
+    type: "number" | "time";
   }
 
   interface HabitDeltaCheck {
@@ -17,6 +17,16 @@ declare global {
     deleted_at?: string;
     value: number;
     habit_delta_id: string;
+  }
+
+  interface HabitRuleLogicOr {
+    type: "or";
+    or: string[];
+  }
+
+  interface HabitRuleLogicAnd {
+    type: "and";
+    and: string[];
   }
 
   interface Habit {
@@ -31,7 +41,7 @@ declare global {
     habit_category_id: string;
     habit_category: HabitCategory;
     updated_at: string;
-    recurrence_type?: 'infinite' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+    recurrence_type?: "infinite" | "daily" | "weekly" | "monthly" | "yearly";
     recurrence_details?: {
       rule: string;
     };
@@ -41,12 +51,8 @@ declare global {
     parent_habit_id?: string;
     children_habits?: Habit[];
     rule_engine_enabled?: boolean;
-    rule_engine_details?: {
-      logic: {
-        type: 'and' | 'or';
-        and?: string[];
-        or?: string[];
-      };
+    rule_engine: {
+      logic: HabitRuleLogicOr | HabitRuleLogicAnd;
     };
   }
 
@@ -62,4 +68,4 @@ declare global {
   }
 }
 
-export { };
+export {};
