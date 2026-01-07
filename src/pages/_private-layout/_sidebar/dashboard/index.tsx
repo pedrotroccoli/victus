@@ -46,7 +46,6 @@ import {
   HabitLineChange,
   HabitLines,
 } from "@/features/habits/components/templates/habit-lines";
-import { cn } from "@/lib/utils";
 import {
   useCreateHabitCategory,
   useHabitCategories,
@@ -56,11 +55,14 @@ import { MiniKit } from "@worldcoin/minikit-js";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
-import FixingBug from "@/assets/fixing.svg?react";
 import { HabitCheckboxes } from "@/features/habits/components/templates/habit-checkboxes";
 import { TrialMessage } from "@/features/account/components/atoms/trial-message";
 import { DashboardHeader } from "./components/header";
 import { DashboardPaperActions } from "./components/paper-actions";
+
+import { DashboardNoContent } from "./components/page-no-content";
+import { DashboardPageError } from "./components/page-error";
+import { DashboardPageLoader } from "./components/page-loader";
 
 export interface DeltaInfo {
   open?: boolean;
@@ -435,45 +437,15 @@ export const Home = () => {
           <div className="mt-6 sm:mt-8 bg-white w-full">
             <div className="w-full">
               {habits && habits.length === 0 && !generalLoading && (
-                <div className="flex items-center justify-center h-full flex-col border-neutral-300 border rounded-md p-8 min-h-56">
-                  <Box size={32} strokeWidth={1.5} />
-
-                  <p className="text-lg text-black/75 font-medium mt-4 mb-8 font-[Recursive]">
-                    {t("habits.no_habits")}
-                  </p>
-
-                  <Button
-                    className="flex gap-4 bg-black rounded-md text-white font-[Recursive]"
-                    // onClick={() => setCreateHabitOpen(true)}
-                  >
-                    <PlusCircle size={16} />
-                    {t("habits.create_first_habit")}
-                  </Button>
-                </div>
+                <DashboardNoContent />
               )}
 
               {generalLoading && (
-                <div className="flex items-center justify-center h-full flex-col border-neutral-300 border rounded-md p-8 min-h-56">
-                  <LoaderCircle
-                    size={32}
-                    className="animate-spin"
-                    strokeWidth={1.75}
-                  />
-                </div>
+                <DashboardPageLoader />
               )}
 
               {error && (
-                <div className="flex items-center justify-center h-full flex-col border-neutral-300 border rounded-md p-8 min-h-56">
-                  <FixingBug className="w-full h-full max-w-60" />
-
-                  <h3 className="text-lg font-[Recursive] font-medium mt-4">
-                    {t("page.error.title")}
-                  </h3>
-
-                  <p className="text-neutral-500 mt-2 text-center">
-                    {t("page.error.description")}
-                  </p>
-                </div>
+                <DashboardPageError />
               )}
 
               {habits && habits.length > 0 && !generalLoading && (
