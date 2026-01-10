@@ -135,12 +135,12 @@ export function HabitLineCheckboxes({
         <div
           id={`line-${habit._id}`}
           className={cn(
-            "flex justify-between items-center w-full max-w-full overflow-hidden",
+            "flex justify-between items-center w-full max-w-full",
             isDragging && "shadow-lg z-50",
           )}
         >
-          <div className="w-full overflow-hidden min-w-32 max-w-32 sm:max-w-auto sm:min-w-48 ">
-            <div className="flex items-center gap-1 ">
+          <div className="w-full overflow-visible min-w-32 max-w-32 sm:max-w-auto sm:min-w-48 ">
+            <div className="flex items-center gap-1">
               {enableOrder && (
                 <button
                   {...listeners}
@@ -155,7 +155,7 @@ export function HabitLineCheckboxes({
               )}
 
               <div
-                className="flex items-center min-w-24 w-full h-7 pl-1 data-[edit-enabled=true]:max-w-40"
+                className="flex items-center min-w-24 w-full h-7 data-[edit-enabled=true]:max-w-40"
                 data-edit-enabled={enableEdit || enableDelete}
               >
                 <HabitName
