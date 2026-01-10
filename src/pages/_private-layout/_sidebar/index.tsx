@@ -1,4 +1,4 @@
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
 import { BookOpenText, ChartLine, Chat, Gear, House } from "@phosphor-icons/react"
 import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router"
@@ -9,6 +9,7 @@ import { LogoWithText } from "@/assets/logo-with-text"
 import { useMe } from "@/services/auth"
 import { signOut } from "@/services/auth/services"
 import { useCallback, useRef } from "react"
+import { List } from "@phosphor-icons/react"
 import packageJson from "../../../../package.json"
 
 import MrHabbit from "@/assets/rabbit.png"
@@ -18,6 +19,21 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { MiniKit } from "@worldcoin/minikit-js"
 import { useTranslation } from "react-i18next"
 import { toast } from "sonner"
+
+const FloatingSidebarTrigger = () => {
+  const { open, toggleSidebar } = useSidebar();
+
+  if (open) return null;
+
+  return (
+    <button
+      onClick={toggleSidebar}
+      className="fixed left-0 top-24 z-50 w-8 h-8 bg-white border border-l-0 border-neutral-300 rounded-r-md flex items-center justify-center hover:bg-neutral-50 transition-colors hidden md:flex"
+    >
+      <List size={16} weight="bold" />
+    </button>
+  );
+};
 
 export const SidebarLayout = () => {
   const { t } = useTranslation('sidebar');
@@ -76,7 +92,7 @@ export const SidebarLayout = () => {
   }
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <Sidebar className="">
         <SidebarHeader className="bg-white h-20 border-b border-neutral-300" >
           <div className="flex w-full h-full justify-between items-center px-2 ">
@@ -130,6 +146,7 @@ export const SidebarLayout = () => {
           </SidebarMenu>
         </SidebarFooter>
       </Sidebar>
+      <FloatingSidebarTrigger />
       <main className="w-full h-full bg-neutral-50 bg-[url('/dashboard-bg.png')] overflow-y-auto bg-repeat bg-cover">
         <Header account={me} handleSignOut={handleSignOut} goTo={goTo} />
         <div className="max-w-screen-xl mx-auto px-4 sm:px-8 h-[calc(100vh-5rem)]">
