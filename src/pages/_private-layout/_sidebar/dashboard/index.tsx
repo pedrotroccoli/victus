@@ -23,6 +23,7 @@ import { HabitCheckboxes } from "@/features/habits/components/templates/habit-ch
 import { TrialMessage } from "@/features/account/components/atoms/trial-message";
 import { DashboardHeader } from "./components/header";
 import { DashboardPaperActions } from "./components/paper-actions";
+import { FloatingActions } from "./components/floating-actions";
 
 import { DashboardNoContent } from "./components/page-no-content";
 import { DashboardPageError } from "./components/page-error";
@@ -177,19 +178,21 @@ export const Home = () => {
 
               {habits && habits.data.length > 0 && !generalLoading && (
                 <div className="border border-neutral-300 rounded-md">
-                  <DashboardPaperActions
-                    editEnabled={editEnabled}
-                    onClickAddHabit={() => habits.setCreateModalOpen(true)}
-                    onClickEditEnabled={() => setEditEnabled(!editEnabled)}
-                  />
+                  <div className="md:hidden">
+                    <DashboardPaperActions
+                      editEnabled={editEnabled}
+                      onClickAddHabit={() => habits.setCreateModalOpen(true)}
+                      onClickEditEnabled={() => setEditEnabled(!editEnabled)}
+                    />
 
-                  <div className="p-4">
-                    <h3 className="text-lg font-[Recursive] font-medium">
-                      {t("habits.title")}
-                    </h3>
+                    <div className="p-4">
+                      <h3 className="text-lg font-[Recursive] font-medium">
+                        {t("habits.title")}
+                      </h3>
+                    </div>
+                    <div className="border-t border-neutral-300"></div>
                   </div>
                   <div className="">
-                    <div className="border-t border-neutral-300"></div>
                     <Tabs
                       defaultValue={'focus'}
                       className="w-full p-4 pt-6"
@@ -245,6 +248,12 @@ export const Home = () => {
 
         <div className="w-full h-20 "></div>
       </section>
+
+      <FloatingActions
+        editEnabled={editEnabled}
+        onClickAddHabit={() => habits.setCreateModalOpen(true)}
+        onClickEditEnabled={() => setEditEnabled(!editEnabled)}
+      />
     </>
   );
 };

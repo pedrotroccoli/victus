@@ -16,7 +16,6 @@ interface DashboardPaperActionsProps {
   onClickAddHabit: () => void;
   onClickEditEnabled: () => void;
 }
-
 export const DashboardPaperActions: React.FC<DashboardPaperActionsProps> = ({
   editEnabled,
   onClickAddHabit,
@@ -27,12 +26,12 @@ export const DashboardPaperActions: React.FC<DashboardPaperActionsProps> = ({
 
   const addNewCategory = () => {
     categories.setModalOpen(true);
-  }
+  };
 
   return (
     <div
       className={cn(
-        "flex items-center justify-between border-b border-neutral-300 p-4 pr-8 relative",
+        "flex items-center justify-between border-b border-neutral-300 p-4 pr-8 relative md:hidden",
         hideExplanation && "border-b-0 p-0 pr-0",
       )}
     >
