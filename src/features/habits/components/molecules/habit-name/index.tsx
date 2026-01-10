@@ -47,27 +47,31 @@ export const HabitName = ({
       <Tooltip delayDuration={250}>
         <TooltipTrigger asChild>
           <div
-            className={cn(
-              "text-xs font-bold whitespace-nowrap truncate border-2 border-transparent rounded-md hover:border-black max-w-full flex items-center gap-2 w-full",
-              isHovering && "border-black",
-              hide && "blur-sm",
-            )}
-            onClick={onClick}
-            onMouseEnter={onMouseEnter}
-            onMouseLeave={onMouseLeave}
+            className="max-w-full flex items-center"
             style={{
               paddingLeft: isChild ? `${childSpan || 0}px` : `0`,
             }}
           >
-            <p
+            <div
               className={cn(
-                "max-w-[calc(100%-24px)] text-ellipsis overflow-hidden",
-                isChild && "pl-2",
+                "text-xs font-bold whitespace-nowrap truncate border-2 border-transparent rounded-md hover:border-black flex items-center gap-1 px-1",
+                isHovering && "border-black",
+                hide && "blur-sm",
               )}
+              onClick={onClick}
+              onMouseEnter={onMouseEnter}
+              onMouseLeave={onMouseLeave}
             >
-              {item.name}
-            </p>
-            {item.habit_deltas && <Triangle size={12} />}
+              <p
+                className={cn(
+                  "text-ellipsis overflow-hidden",
+                  isChild && "pl-2",
+                )}
+              >
+                {item.name}
+              </p>
+              {item.habit_deltas && <Triangle size={12} />}
+            </div>
           </div>
         </TooltipTrigger>
         <TooltipContent className="p-2">
