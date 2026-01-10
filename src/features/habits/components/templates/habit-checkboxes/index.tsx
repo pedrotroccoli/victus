@@ -33,7 +33,7 @@ export const HabitCheckboxes = ({
   return (
     <div className="grid gap-6">
       {Object.entries(groupByCategory(habits, habitCategories || []))
-        .filter(([_, category]) => category?.list?.length > 0)
+        .filter(([, category]) => editEnabled || (category?.list?.length ?? 0) > 0)
         .map(([id, category]) => {
           return (
             <div key={id}>

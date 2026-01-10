@@ -157,7 +157,7 @@ export const Home = () => {
                   <div className="">
                     <div className="border-t border-neutral-300"></div>
                     <Tabs
-                      defaultValue={tab}
+                      defaultValue={'focus'}
                       className="w-full p-4 pt-6"
                       onValueChange={setTab}
                     >

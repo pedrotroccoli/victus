@@ -331,7 +331,11 @@ export const HabitLines = ({
         onDragStart={handleDragStart}
         autoScroll={true}
       >
-        {Object.entries(habits).map(([id, categorizedHabits], index) => (
+        {Object.entries(habits)
+          .filter(([, categorizedHabits]) =>
+            editEnabled || (categorizedHabits?.list?.length ?? 0) > 0
+          )
+          .map(([id, categorizedHabits], index) => (
           <div>
             <HabitLineHeader
               isFirstRow={index === 0}
