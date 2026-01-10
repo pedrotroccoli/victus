@@ -13,6 +13,7 @@ export function HabitBox({ type = 'none', className, children, checkedPattern = 
     <button
       className={
         cn(
+          "cursor-pointer",
           "w-10 h-10 md:h-7 md:w-7 flex items-center justify-center border border-neutral-300 bg-white",
           "enabled:hover:border-black enabled:hover:border-2 ",
           "disabled:cursor-not-allowed",
