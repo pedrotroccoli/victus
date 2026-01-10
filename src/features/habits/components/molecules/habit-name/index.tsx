@@ -54,8 +54,8 @@ export const HabitName = ({
           >
             <div
               className={cn(
-                "text-xs font-bold whitespace-nowrap truncate border-2 border-transparent rounded-md hover:border-black flex items-center gap-1 px-1",
-                isHovering && "border-black",
+                "text-xs font-bold whitespace-nowrap truncate rounded-md outline outline-2 outline-transparent outline-offset-1 hover:outline-black flex items-center gap-1 px-1 ml-0.5",
+                isHovering && "outline-black",
                 hide && "blur-sm",
               )}
               onClick={onClick}
