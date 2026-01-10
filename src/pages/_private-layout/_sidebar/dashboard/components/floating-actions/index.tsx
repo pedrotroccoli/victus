@@ -52,34 +52,33 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
         const isHovered = hoveredIndex === index;
 
         return (
-          <motion.button
-            key={index}
-            className={cn(
-              "relative bg-white border border-neutral-300 rounded-full flex items-center justify-center shadow-md transition-colors",
-              isHovered ? "bg-black text-white" : "hover:bg-neutral-50"
-            )}
-            initial={{ width: 40, height: 40 }}
-            animate={{
-              width: isHovered ? 48 : 40,
-              height: isHovered ? 48 : 40,
-              x: isHovered ? -4 : 0,
-            }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            onMouseEnter={() => setHoveredIndex(index)}
-            onMouseLeave={() => setHoveredIndex(null)}
-            onClick={action.onClick}
-          >
-            <Icon size={isHovered ? 20 : 16} />
-            {isHovered && (
-              <motion.span
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="absolute right-full mr-3 whitespace-nowrap bg-black text-white text-xs px-2 py-1 rounded"
-              >
-                {action.label}
-              </motion.span>
-            )}
-          </motion.button>
+          <div key={index} className="w-10 h-10 relative flex items-center justify-center">
+            <motion.button
+              className={cn(
+                "absolute bg-white border border-neutral-300 rounded-full flex items-center justify-center shadow-md transition-colors",
+                isHovered ? "bg-black text-white" : "hover:bg-neutral-50"
+              )}
+              animate={{
+                width: isHovered ? 48 : 40,
+                height: isHovered ? 48 : 40,
+              }}
+              transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              onClick={action.onClick}
+            >
+              <Icon size={isHovered ? 20 : 16} />
+              {isHovered && (
+                <motion.span
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="absolute right-full mr-3 whitespace-nowrap bg-black text-white text-xs px-2 py-1 rounded"
+                >
+                  {action.label}
+                </motion.span>
+              )}
+            </motion.button>
+          </div>
         );
       })}
     </div>
