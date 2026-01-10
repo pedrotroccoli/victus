@@ -111,13 +111,11 @@ export const HabitLines = ({
         document.querySelectorAll("[data-scroll-line]"),
       ) as HTMLDivElement[];
 
-      const days = 12;
-
       const isMobile = window.innerWidth < 768;
 
       allElements.forEach((element) => {
         element.scroll({
-          left: (days - 1) * (isMobile ? 40 : 28),
+          left: (daysInMonth.length - 1) * (isMobile ? 40 : 28),
           behavior: "instant",
         });
       });
@@ -128,7 +126,7 @@ export const HabitLines = ({
     handleResize();
 
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [daysInMonth.length]);
 
   const handleHideHabits = (id: string) => () => {
     setHideHabits((prev) => ({ ...prev, [id]: !prev[id] }));
