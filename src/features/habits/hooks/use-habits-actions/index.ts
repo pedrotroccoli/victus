@@ -165,6 +165,7 @@ export const useHabitsActions = ({
 
       setDelta(null);
       setCreateModalOpen(false);
+      setHabitToEdit(undefined);
     } catch (error) {
       toast.error("Erro ao criar hábito!");
     }
