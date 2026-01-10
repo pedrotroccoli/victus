@@ -5,7 +5,7 @@ import {
   Crosshair,
   LayoutGrid,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 
 import { useMe } from "@/services/auth";
@@ -78,9 +78,11 @@ export const Home = () => {
     setVisibleDays(days);
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     calculateVisibleDays();
+  }, [calculateVisibleDays, generalLoading]);
 
+  useEffect(() => {
     const resizeObserver = new ResizeObserver(calculateVisibleDays);
     if (containerRef.current) {
       resizeObserver.observe(containerRef.current);
@@ -157,10 +159,6 @@ export const Home = () => {
           )}
 
           <DashboardHeader
-            habits={habits.data || []}
-            habitCategories={categories.data || []}
-            deltaOpen={undefined}
-            setDeltaOpen={() => {}}
             onCreateHabit={() => habits.setCreateModalOpen(true)}
           />
 
