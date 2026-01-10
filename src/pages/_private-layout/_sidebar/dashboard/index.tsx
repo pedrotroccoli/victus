@@ -2,6 +2,8 @@ import { useLocalStorage } from "@uidotdev/usehooks";
 import { eachDayOfInterval, subDays, addDays } from "date-fns";
 import {
   LoaderCircle,
+  Crosshair,
+  LayoutGrid,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
@@ -186,15 +188,17 @@ export const Home = () => {
                   <TabsList className="hidden md:flex items-end gap-0 p-0 !bg-transparent h-auto justify-start relative z-10 translate-y-px">
                     <TabsTrigger
                       value="focus"
-                      className="text-xs px-4 py-2 rounded-t-md rounded-b-none border border-b-0 border-neutral-300 bg-transparent shadow-none data-[state=active]:bg-white data-[state=active]:shadow-none data-[state=active]:border-neutral-300 data-[state=inactive]:bg-transparent data-[state=inactive]:opacity-80 data-[state=inactive]:border-neutral-200 transition-all"
+                      className="text-xs px-4 py-2 rounded-t-md rounded-b-none border border-b-0 border-neutral-300 bg-transparent shadow-none data-[state=active]:bg-white data-[state=active]:shadow-none data-[state=active]:border-neutral-300 data-[state=inactive]:bg-transparent data-[state=inactive]:opacity-80 data-[state=inactive]:border-neutral-200 transition-all flex items-center gap-1.5"
                     >
-                      {t("habits.tab_focus")}
+                      <Crosshair size={14} />
+                      Focus
                     </TabsTrigger>
                     <TabsTrigger
                       value="general"
-                      className="text-xs px-4 py-2 rounded-t-md rounded-b-none border border-b-0 border-neutral-300 bg-transparent shadow-none data-[state=active]:bg-white data-[state=active]:shadow-none data-[state=active]:border-neutral-300 data-[state=inactive]:bg-transparent data-[state=inactive]:opacity-80 data-[state=inactive]:border-neutral-200 transition-all"
+                      className="text-xs px-4 py-2 rounded-t-md rounded-b-none border border-b-0 border-neutral-300 bg-transparent shadow-none data-[state=active]:bg-white data-[state=active]:shadow-none data-[state=active]:border-neutral-300 data-[state=inactive]:bg-transparent data-[state=inactive]:opacity-80 data-[state=inactive]:border-neutral-200 transition-all flex items-center gap-1.5"
                     >
-                      {t("habits.tab_general")}
+                      <LayoutGrid size={14} />
+                      Overview
                     </TabsTrigger>
                   </TabsList>
 
@@ -217,16 +221,18 @@ export const Home = () => {
                     <div className="p-4">
                       <TabsList className="border border-neutral-300 p-0 h-auto">
                         <TabsTrigger
-                          value="general"
-                          className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white"
+                          value="focus"
+                          className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white flex items-center gap-1.5"
                         >
-                          {t("habits.tab_general")}
+                          <Crosshair size={12} />
+                          Focus
                         </TabsTrigger>
                         <TabsTrigger
-                          value="focus"
-                          className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white"
+                          value="general"
+                          className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white flex items-center gap-1.5"
                         >
-                          {t("habits.tab_focus")}
+                          <LayoutGrid size={12} />
+                          Overview
                         </TabsTrigger>
                       </TabsList>
                     </div>
