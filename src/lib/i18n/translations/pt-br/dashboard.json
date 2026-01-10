@@ -33,5 +33,11 @@
       "empty": "Não completado",
       "none": "Habilitado"
     }
+  },
+  "floating_actions": {
+    "disable_edit": "Desativar edição",
+    "enable_edit": "Ativar edição",
+    "new_category": "Nova categoria",
+    "new_habit": "Novo hábito"
   }
 }

@@ -6,6 +6,12 @@
       "started_at": "Iniciou em: ",
       "ended_at": "Termina em: ",
       "no_definition": "Sem definição"
+    },
+    "tooltip": {
+      "type": "Tipo",
+      "start": "Início",
+      "end": "Fim",
+      "daily": "Diário"
     }
   }
 }

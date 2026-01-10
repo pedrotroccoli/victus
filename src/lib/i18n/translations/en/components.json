@@ -6,6 +6,12 @@
       "started_at": "Started at: ",
       "ended_at": "Ended at: ",
       "no_definition": "No definition"
+    },
+    "tooltip": {
+      "type": "Type",
+      "start": "Start",
+      "end": "End",
+      "daily": "Daily"
     }
   }
 }

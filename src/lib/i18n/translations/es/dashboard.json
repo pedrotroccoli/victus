@@ -29,5 +29,11 @@
       "empty": "No completado",
       "none": "Habilitado"
     }
+  },
+  "floating_actions": {
+    "disable_edit": "Desactivar edición",
+    "enable_edit": "Activar edición",
+    "new_category": "Nueva categoría",
+    "new_habit": "Nuevo hábito"
   }
 } 
