@@ -162,7 +162,7 @@ export const Home = () => {
             onCreateHabit={() => habits.setCreateModalOpen(true)}
           />
 
-          <div id="dashboard-habits" ref={containerRef} className="mt-6 sm:mt-8 bg-white w-full">
+          <div id="dashboard-habits" ref={containerRef} className="mt-6 sm:mt-8 w-full">
             <div className="w-full">
               {habits && habits.data.length === 0 && !generalLoading && (
                 <DashboardNoContent />
@@ -177,7 +177,28 @@ export const Home = () => {
               )}
 
               {habits && habits.data.length > 0 && !generalLoading && (
-                <div className="border border-neutral-300 rounded-md">
+                <Tabs
+                  defaultValue={'focus'}
+                  className="w-full"
+                  onValueChange={setTab}
+                >
+                  {/* Tabs estilo navegador - fora do retângulo principal */}
+                  <TabsList className="hidden md:flex items-end gap-0 p-0 !bg-transparent h-auto justify-start relative z-10 translate-y-px">
+                    <TabsTrigger
+                      value="focus"
+                      className="text-xs px-4 py-2 rounded-t-md rounded-b-none border border-b-0 border-neutral-300 bg-transparent shadow-none data-[state=active]:bg-white data-[state=active]:shadow-none data-[state=active]:border-neutral-300 data-[state=inactive]:bg-transparent data-[state=inactive]:opacity-80 data-[state=inactive]:border-neutral-200 transition-all"
+                    >
+                      {t("habits.tab_focus")}
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="general"
+                      className="text-xs px-4 py-2 rounded-t-md rounded-b-none border border-b-0 border-neutral-300 bg-transparent shadow-none data-[state=active]:bg-white data-[state=active]:shadow-none data-[state=active]:border-neutral-300 data-[state=inactive]:bg-transparent data-[state=inactive]:opacity-80 data-[state=inactive]:border-neutral-200 transition-all"
+                    >
+                      {t("habits.tab_general")}
+                    </TabsTrigger>
+                  </TabsList>
+
+                <div className="border border-neutral-300 rounded-md md:rounded-tl-none bg-white">
                   <div className="md:hidden">
                     <DashboardPaperActions
                       editEnabled={editEnabled}
@@ -191,56 +212,56 @@ export const Home = () => {
                       </h3>
                     </div>
                     <div className="border-t border-neutral-300"></div>
-                  </div>
-                  <div className="">
-                    <Tabs
-                      defaultValue={'focus'}
-                      className="w-full p-4 pt-6"
-                      onValueChange={setTab}
-                    >
+
+                    {/* Tabs para mobile - dentro do retângulo */}
+                    <div className="p-4">
                       <TabsList className="border border-neutral-300 p-0 h-auto">
                         <TabsTrigger
                           value="general"
-                          className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black"
+                          className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white"
                         >
                           {t("habits.tab_general")}
                         </TabsTrigger>
                         <TabsTrigger
                           value="focus"
-                          className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white data-[state=disabled]:bg-transparent data-[state=disabled]:text-black data-[state=disabled]:border-black"
+                          className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white"
                         >
                           {t("habits.tab_focus")}
                         </TabsTrigger>
                       </TabsList>
-                      <TabsContent value="general" className="w-full pt-2">
-                        <HabitLines
-                          onEditHabit={habits.setEditModalOpen}
-                          onDeleteHabit={onDeleteHabit}
-                          categories={categories.data}
-                          habits={habits.data}
-                          orderEnabled={editEnabled}
-                          daysInMonth={daysInMonth}
-                          getHabitCheck={getHabitCheck}
-                          currentDay={currentDay}
-                          onHabitChange={onHabitChange}
-                          editEnabled={editEnabled}
-                        />
-                      </TabsContent>
-                      <TabsContent value="focus" className="pt-2">
-                        <HabitCheckboxes
-                          habits={habits.data}
-                          habitCategories={categories.data}
-                          currentDay={currentDay}
-                          habitsCheckedHash={habitsCheckedHash}
-                          onCheckHabit={checks.create}
-                          onEditHabit={habits.setEditModalOpen}
-                          onDeleteHabit={onDeleteHabit}
-                          editEnabled={editEnabled}
-                        />
-                      </TabsContent>
-                    </Tabs>
+                    </div>
+                  </div>
+
+                  <div className="p-4">
+                    <TabsContent value="general" className="w-full mt-0">
+                      <HabitLines
+                        onEditHabit={habits.setEditModalOpen}
+                        onDeleteHabit={onDeleteHabit}
+                        categories={categories.data}
+                        habits={habits.data}
+                        orderEnabled={editEnabled}
+                        daysInMonth={daysInMonth}
+                        getHabitCheck={getHabitCheck}
+                        currentDay={currentDay}
+                        onHabitChange={onHabitChange}
+                        editEnabled={editEnabled}
+                      />
+                    </TabsContent>
+                    <TabsContent value="focus" className="mt-0">
+                      <HabitCheckboxes
+                        habits={habits.data}
+                        habitCategories={categories.data}
+                        currentDay={currentDay}
+                        habitsCheckedHash={habitsCheckedHash}
+                        onCheckHabit={checks.create}
+                        onEditHabit={habits.setEditModalOpen}
+                        onDeleteHabit={onDeleteHabit}
+                        editEnabled={editEnabled}
+                      />
+                    </TabsContent>
                   </div>
                 </div>
+                </Tabs>
               )}
             </div>
           </div>
