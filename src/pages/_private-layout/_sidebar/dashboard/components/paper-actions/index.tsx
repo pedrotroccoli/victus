@@ -9,21 +9,25 @@ import {
   PencilOff,
   PencilRuler,
 } from "lucide-react";
+import { useDashboard } from "../../providers/dashboard-provider";
 
 interface DashboardPaperActionsProps {
   editEnabled: boolean;
   onClickAddHabit: () => void;
   onClickEditEnabled: () => void;
-  onClickAddCategory: () => void;
 }
 
 export const DashboardPaperActions: React.FC<DashboardPaperActionsProps> = ({
   editEnabled,
   onClickAddHabit,
   onClickEditEnabled,
-  onClickAddCategory,
 }) => {
+  const { categories } = useDashboard();
   const [hideExplanation, setHideExplanation] = useState(true);
+
+  const addNewCategory = () => {
+    categories.setModalOpen(true);
+  }
 
   return (
     <div
@@ -66,7 +70,7 @@ export const DashboardPaperActions: React.FC<DashboardPaperActionsProps> = ({
             "h-6 w-6 flex items-center justify-center",
             "hover:bg-black hover:text-white duration-200 transition-colors",
           )}
-          onClick={onClickAddCategory}
+          onClick={addNewCategory}
         >
           <PackagePlus size={14} className="-translate-y-px translate-x-px" />
         </button>
