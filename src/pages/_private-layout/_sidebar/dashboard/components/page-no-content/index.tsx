@@ -1,8 +1,10 @@
 import { Button } from "@/components/ions/button"
 import { Box, PlusCircle } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { useDashboard } from "../../providers/dashboard-provider"
 
 export const DashboardNoContent = () => {
+  const { habits } =useDashboard();
   const { t } =useTranslation("dashboard")
 
   return (
@@ -15,7 +17,7 @@ export const DashboardNoContent = () => {
 
      <Button
        className="flex gap-4 bg-black rounded-md text-white font-[Recursive]"
-       // onClick={() => setCreateHabitOpen(true)}
+       onClick={() => habits.setCreateModalOpen(true)}
      >
        <PlusCircle size={16} />
        {t("habits.create_first_habit")}
