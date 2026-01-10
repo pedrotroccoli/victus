@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { useDashboard } from "../../providers/dashboard-provider";
 import { motion } from "motion/react";
+import { useTranslation } from "react-i18next";
 
 interface FloatingActionsProps {
   editEnabled: boolean;
@@ -20,6 +21,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
   onClickAddHabit,
   onClickEditEnabled,
 }) => {
+  const { t } = useTranslation("dashboard");
   const { categories } = useDashboard();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
 
@@ -31,17 +33,17 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
     {
       icon: editEnabled ? PencilOff : PencilRuler,
       onClick: onClickEditEnabled,
-      label: editEnabled ? "Desativar edição" : "Ativar edição",
+      label: editEnabled ? t("floating_actions.disable_edit") : t("floating_actions.enable_edit"),
     },
     {
       icon: PackagePlus,
       onClick: addNewCategory,
-      label: "Nova categoria",
+      label: t("floating_actions.new_category"),
     },
     {
       icon: CirclePlus,
       onClick: onClickAddHabit,
-      label: "Novo hábito",
+      label: t("floating_actions.new_habit"),
     },
   ];
 
