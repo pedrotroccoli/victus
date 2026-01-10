@@ -7,9 +7,12 @@ import {
 } from "@/components/ui/tooltip";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { format } from "date-fns";
 import { Triangle } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { rrulestr } from "rrule";
+import { useMemo } from "react";
+import { useDate } from "@/lib/date-fns";
+import { addDays } from "date-fns";
 
 interface HabitNameProps {
   item: Habit;
@@ -22,13 +25,7 @@ interface HabitNameProps {
   childSpan?: number;
 }
 
-const typeToName = {
-  infinite: "Sem término",
-  daily: "Diário",
-  weekly: "Semanal",
-  monthly: "Mensal",
-  yearly: "Anual",
-};
+const referenceMonday = new Date(2024, 0, 1);
 
 export const HabitName = ({
   item,
@@ -41,6 +38,30 @@ export const HabitName = ({
   childSpan,
 }: HabitNameProps) => {
   const { t } = useTranslation("components");
+  const { formatDate } = useDate();
+
+  const recurrenceLabel = useMemo(() => {
+    if (!item.recurrence_details?.rule) return t("habit_name.tooltip.daily");
+
+    try {
+      const rrule = rrulestr(item.recurrence_details.rule);
+      const byweekday = rrule.options.byweekday;
+
+      if (!byweekday || byweekday.length === 0 || byweekday.length === 7) {
+        return t("habit_name.tooltip.daily");
+      }
+
+      // Convert RRule weekday numbers (0=Mon) to formatted names using date-fns locale
+      return byweekday
+        .map((day: number) => {
+          const date = addDays(referenceMonday, day);
+          return formatDate(date, "EEE");
+        })
+        .join(", ");
+    } catch {
+      return t("habit_name.tooltip.daily");
+    }
+  }, [item.recurrence_details?.rule, formatDate, t]);
 
   return (
     <TooltipProvider>
@@ -74,29 +95,17 @@ export const HabitName = ({
             </div>
           </div>
         </TooltipTrigger>
-        <TooltipContent className="p-2">
-          <div className="flex flex-col gap-1">
-            {process.env.NODE_ENV === "development" && (
-              <p className="text-xs text-black/75 font-medium">
-                Id: {item._id}
-              </p>
-            )}
-            <p className="text-sm text-bold text-black">
-              {t("habit_name.information.title")}
-            </p>
-            <span className="text-xs text-black/75 font-medium">
-              {t("habit_name.information.type")}:{" "}
-              {typeToName[item.recurrence_type as keyof typeof typeToName] ||
-                t("habit_name.information.no_definition")}
+        <TooltipContent className="bg-black text-white px-2 py-1.5 rounded">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-xs">
+              {t("habit_name.tooltip.type")}: {recurrenceLabel}
             </span>
-            <span className="text-xs text-black/75 font-medium">
-              {t("habit_name.information.started_at")}:{" "}
-              {format(item.created_at, "dd/MM/yyyy")}
+            <span className="text-xs">
+              {t("habit_name.tooltip.start")}: {formatDate(new Date(item.start_date), "P")}
             </span>
             {item.end_date && (
-              <span className="text-xs text-black/75 font-medium">
-                {t("habit_name.information.ended_at")}:{" "}
-                {format(item.end_date, "dd/MM/yyyy")}
+              <span className="text-xs">
+                {t("habit_name.tooltip.end")}: {formatDate(new Date(item.end_date), "P")}
               </span>
             )}
           </div>
