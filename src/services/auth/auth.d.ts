@@ -9,7 +9,7 @@ declare global {
       };
     }
 
-    interface Account {
+    interface Me {
       id: string;
       name: string;
       email: string;

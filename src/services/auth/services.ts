@@ -72,16 +72,16 @@ export const verifySiweAuth = async ({ payload, nonce }: VerifySiweAuthRequest) 
 
 // Me
 
-export const getMe = async (): Promise<Account> => {
+export const getMe = async (): Promise<Account.Me> => {
   const { data } = await baseApi.get(`/me`);
 
   return data;
 }
 
-export const updateMe = async (account: UpdateMeRequest): Promise<Account> => {
+export const updateMe = async (account: UpdateMeRequest): Promise<Account.Me> => {
   const { data } = await baseApi.put(`/me`, {
     account
   });
 
-  return data as Account;
+  return data as Account.Me;
 }
