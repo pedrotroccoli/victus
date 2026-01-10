@@ -37,7 +37,6 @@ export const SidebarLayout = () => {
     });
   }
 
-
   const goToDashboard = useCallback(() => {
     const missingSubscription = me?.subscription?.status !== 'active' || !me?.subscription ? true : undefined;
 

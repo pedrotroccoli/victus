@@ -8,26 +8,26 @@ import {
   KeyboardSensor,
   PointerSensor,
   useSensor,
-  useSensors
-} from '@dnd-kit/core';
-import { restrictToWindowEdges } from '@dnd-kit/modifiers';
+  useSensors,
+} from "@dnd-kit/core";
+import { restrictToWindowEdges } from "@dnd-kit/modifiers";
 import {
   arrayMove,
   SortableContext,
   sortableKeyboardCoordinates,
-  verticalListSortingStrategy
-} from '@dnd-kit/sortable';
-import { omit } from 'lodash';
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { omit } from "lodash";
 import { useEffect, useRef, useState } from "react";
-import { HabitEmptyBox } from '../../molecules/habit-empty-box';
+import { HabitEmptyBox } from "../../molecules/habit-empty-box";
 import { HabitLineCheckboxes } from "../../organism/habit-line-checkboxes";
-import { HabitLineHeader } from '../../organism/habit-line-header';
-import { groupByCategory, HabitGroup } from './utils';
+import { HabitLineHeader } from "../../organism/habit-line-header";
+import { groupByCategory, HabitGroup } from "./utils";
 
 export type HabitLineChange = {
-  type: ('check' | 'order' | 'category')[];
+  type: ("check" | "order" | "category")[];
   habit: Habit;
-}
+};
 
 interface HabitLinesProps {
   habits: Habit[];
@@ -42,49 +42,74 @@ interface HabitLinesProps {
   onEditHabit: (habit: Habit) => void;
 }
 
-export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, daysInMonth, getHabitCheck, currentDay, onHabitChange, editEnabled, onDeleteHabit, onEditHabit }: HabitLinesProps) => {
-  const currentLineId = useRef<string | undefined>('');
+export const HabitLines = ({
+  habits: initialHabits,
+  categories,
+  orderEnabled,
+  daysInMonth,
+  getHabitCheck,
+  currentDay,
+  onHabitChange,
+  editEnabled,
+  onDeleteHabit,
+  onEditHabit,
+}: HabitLinesProps) => {
+  const currentLineId = useRef<string | undefined>("");
   const [hideHabits, setHideHabits] = useState<Record<string, boolean>>({});
   const timeOut = useRef<NodeJS.Timeout | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
-  const [habits, setHabits] = useState<Record<string, HabitGroup>>(groupByCategory(initialHabits, categories));
+  const [habits, setHabits] = useState<Record<string, HabitGroup>>(
+    groupByCategory(initialHabits, categories),
+  );
 
   useEffect(() => {
     setHabits(groupByCategory(initialHabits, categories));
   }, [initialHabits, categories]);
 
   const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    const current = event.currentTarget['dataset']['scrollLineId'];
-    if (currentLineId.current && currentLineId.current.length > 0 && current !== currentLineId.current) return;
+    const current = event.currentTarget["dataset"]["scrollLineId"];
+    if (
+      currentLineId.current &&
+      currentLineId.current.length > 0 &&
+      current !== currentLineId.current
+    )
+      return;
 
-    currentLineId.current = event.currentTarget['dataset']['scrollLineId'];
+    currentLineId.current = event.currentTarget["dataset"]["scrollLineId"];
 
-    const allElements = Array.from(document.querySelectorAll('[data-scroll-line]')) as HTMLDivElement[];
+    const allElements = Array.from(
+      document.querySelectorAll("[data-scroll-line]"),
+    ) as HTMLDivElement[];
 
-    const filteredElements = allElements
-      .filter((element) => element.dataset['scrollLineId'] !== event.currentTarget['dataset']['scrollLineId']);
+    const filteredElements = allElements.filter(
+      (element) =>
+        element.dataset["scrollLineId"] !==
+        event.currentTarget["dataset"]["scrollLineId"],
+    );
 
     filteredElements.forEach((element) => {
       element.scroll({
         left: event.currentTarget.scrollLeft,
-        behavior: 'instant'
-      })
+        behavior: "instant",
+      });
     });
 
     timeOut.current = setTimeout(() => {
-      currentLineId.current = '';
+      currentLineId.current = "";
     }, 300);
-  }
+  };
 
   useEffect(() => {
     const handleResize = () => {
-      const allElements = Array.from(document.querySelectorAll('[data-scroll-line]')) as HTMLDivElement[];
+      const allElements = Array.from(
+        document.querySelectorAll("[data-scroll-line]"),
+      ) as HTMLDivElement[];
 
       const days = 12;
 
@@ -93,21 +118,21 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
       allElements.forEach((element) => {
         element.scroll({
           left: (days - 1) * (isMobile ? 40 : 28),
-          behavior: 'instant'
-        })
+          behavior: "instant",
+        });
       });
-    }
+    };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     handleResize();
 
-    return () => window.removeEventListener('resize', handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   const handleHideHabits = (id: string) => () => {
     setHideHabits((prev) => ({ ...prev, [id]: !prev[id] }));
-  }
+  };
 
   function subtractOrder(order: number) {
     return Number((Number(order) - 0.0001).toFixed(4));
@@ -121,75 +146,80 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
     const { active, over } = event;
 
     if (active.id === over?.id) {
-
       if (active.data.current?.habit.changed_category) {
-        const categoryId = active.data.current?.habit.habit_category_id || 'general';
+        const categoryId =
+          active.data.current?.habit.habit_category_id || "general";
 
         setHabits((prev) => {
           const newHabits = {
             ...prev,
             [categoryId]: {
               ...prev[categoryId],
-              list: prev[categoryId].list.map((habit) => omit(habit, 'changed_category'))
-            }
-          }
+              list: prev[categoryId].list.map((habit) =>
+                omit(habit, "changed_category"),
+              ),
+            },
+          };
 
           return newHabits;
-        })
+        });
       }
 
       onHabitChange?.({
-        type: ['order', 'category'],
+        type: ["order", "category"],
         habit: active.data.current?.habit,
       });
 
       return;
     }
 
-    if (over?.data.current?.type === 'empty-box') {
+    if (over?.data.current?.type === "empty-box") {
       const newCategoryId = over?.data.current?.category?._id;
-      const oldCategoryId = active.data.current?.habit.habit_category_id || 'general';
+      const oldCategoryId =
+        active.data.current?.habit.habit_category_id || "general";
 
       const newHabit = {
         ...active.data.current?.habit,
         habit_category_id: newCategoryId,
         habit_category: over?.data.current?.category,
-        order: 1000
-      }
+        order: 1000,
+      };
 
       setHabits((prev) => {
         const newHabits = {
           ...prev,
           [oldCategoryId]: {
             ...prev[oldCategoryId],
-            list: prev[oldCategoryId].list.filter((habit) => habit._id !== active.data.current?.habit._id)
+            list: prev[oldCategoryId].list.filter(
+              (habit) => habit._id !== active.data.current?.habit._id,
+            ),
           },
           [newCategoryId]: {
             ...prev[newCategoryId],
             category: newHabit.habit_category,
-            list: [...(prev[newCategoryId]?.list || []), newHabit]
-          }
-        }
+            list: [...(prev[newCategoryId]?.list || []), newHabit],
+          },
+        };
 
         return newHabits;
-      })
-
-      onHabitChange?.({
-        type: ['category'],
-        habit: newHabit,
       });
 
+      onHabitChange?.({
+        type: ["category"],
+        habit: newHabit,
+      });
 
       return;
     }
 
-    const categoryId = active.data.current?.habit.habit_category_id || 'general';
+    const categoryId =
+      active.data.current?.habit.habit_category_id || "general";
 
     setHabits((prev) => {
       const items = prev[categoryId].list.slice() as Habit[];
 
-      const oldIndex = items.findIndex(item => item._id === active.id);
-      const newIndex = items.findIndex(item => item._id === over?.id);
+      const oldIndex = items.findIndex((item) => item._id === active.id);
+      const newIndex = items.findIndex((item) => item._id === over?.id);
 
       const newItems = arrayMove(items, oldIndex, newIndex);
 
@@ -210,49 +240,51 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
         newOrder = 1000;
       }
 
-
       newItems[newIndex].order = newOrder;
 
       onHabitChange({
-        type: ['order', 'category'],
+        type: ["order", "category"],
         habit: newItems[newIndex],
       });
 
-      return ({
+      return {
         ...prev,
         [categoryId]: {
           ...prev[categoryId],
-          list: newItems
-        }
-      })
+          list: newItems,
+        },
+      };
     });
 
     setDraggingHabit(null);
-  }
+  };
 
   const onCheckHabit = (habit: Habit) => {
     onHabitChange({
-      type: ['check'],
+      type: ["check"],
       habit: habit,
     });
-  }
+  };
 
   const [draggingHabit, setDraggingHabit] = useState<Habit | null>(null);
 
   const handleDragStart = (event: DragStartEvent) => {
     setDraggingHabit(event.active.data.current?.habit);
-  }
+  };
 
   const handleDragOver = (event: DragOverEvent) => {
-    if (event.over?.data.current?.type === 'empty-box') {
+    if (event.over?.data.current?.type === "empty-box") {
       return;
     }
 
-    if (event.over?.data.current?.habit?.habit_category_id !== event.active?.data.current?.habit?.habit_category_id) {
+    if (
+      event.over?.data.current?.habit?.habit_category_id !==
+      event.active?.data.current?.habit?.habit_category_id
+    ) {
       const { active, over } = event;
 
-      const newCategoryId = over?.data.current?.habit['habit_category_id'];
-      const oldCategoryId = active.data.current?.habit['habit_category_id'];
+      const newCategoryId = over?.data.current?.habit["habit_category_id"];
+      const oldCategoryId = active.data.current?.habit["habit_category_id"];
 
       const activeHabit = active.data.current?.habit;
       const newHabit = {
@@ -263,30 +295,31 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
         changed_category: true,
       };
 
-
       setHabits((prev) => {
-        const oldCategory = prev[oldCategoryId || 'general'];
+        const oldCategory = prev[oldCategoryId || "general"];
 
-        const oldCategoryList = oldCategory.list.filter((habit) => habit._id !== activeHabit['_id']);
+        const oldCategoryList = oldCategory.list.filter(
+          (habit) => habit._id !== activeHabit["_id"],
+        );
 
         return {
           ...prev,
-          [oldCategoryId || 'general']: {
-            ...prev[oldCategoryId || 'general'],
-            list: oldCategoryList
+          [oldCategoryId || "general"]: {
+            ...prev[oldCategoryId || "general"],
+            list: oldCategoryList,
           },
-          [newCategoryId || 'general']: {
-            ...prev[newCategoryId || 'general'],
-            list: [...prev[newCategoryId || 'general'].list, newHabit]
-          }
-        }
-      })
+          [newCategoryId || "general"]: {
+            ...prev[newCategoryId || "general"],
+            list: [...prev[newCategoryId || "general"].list, newHabit],
+          },
+        };
+      });
     }
-  }
+  };
 
   const onHideHabit = (categoryId: string) => () => {
     setHideHabits((prev) => ({ ...prev, [categoryId]: !prev[categoryId] }));
-  }
+  };
 
   return (
     <div className="flex justify-between flex-col gap-4">
@@ -314,38 +347,43 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
                 <HabitEmptyBox category={categorizedHabits.category} />
               )}
               {categorizedHabits && categorizedHabits?.list?.length > 0 && (
-
                 <SortableContext
-                  items={categorizedHabits?.list?.sort((a: Habit, b: Habit) => (a.order || 0) - (b.order || 0)).map(item => item._id)}
+                  items={categorizedHabits?.list
+                    ?.sort(
+                      (a: Habit, b: Habit) => (a.order || 0) - (b.order || 0),
+                    )
+                    .map((item) => item._id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  {categorizedHabits?.list?.sort((a: Habit, b: Habit) => (a.order || 0) - (b.order || 0)).map((item: Habit, habitIndex: number, currentArray) => (
-                    <HabitLineCheckboxes
-                      enableEdit={editEnabled}
-                      enableDelete={editEnabled}
-                      category={categorizedHabits.category}
-                      key={item._id}
-                      onScroll={handleScroll}
-                      enableOrder={orderEnabled}
-                      habit={item}
-                      daysInMonth={daysInMonth}
-                      getHabitCheck={getHabitCheck}
-                      currentDay={currentDay}
-                      onCheckHabit={onCheckHabit}
-                      onDelete={() => onDeleteHabit?.(item)}
-                      isFirstRow={habitIndex === 0}
-                      isLastRow={habitIndex === currentArray.length - 1}
-                      hideHabits={hideHabits[id]}
-                      onHideHabit={handleHideHabits(id)}
-                      onEdit={() => onEditHabit?.(item)}
-                    />
-                  ))}
+                  {categorizedHabits?.list
+                    ?.sort(
+                      (a: Habit, b: Habit) => (a.order || 0) - (b.order || 0),
+                    )
+                    .map((item: Habit, habitIndex: number, currentArray) => (
+                      <HabitLineCheckboxes
+                        enableEdit={editEnabled}
+                        enableDelete={editEnabled}
+                        category={categorizedHabits.category}
+                        key={item._id}
+                        onScroll={handleScroll}
+                        enableOrder={orderEnabled}
+                        habit={item}
+                        daysInMonth={daysInMonth}
+                        getHabitCheck={getHabitCheck}
+                        currentDay={currentDay}
+                        onCheckHabit={onCheckHabit}
+                        onDelete={() => onDeleteHabit?.(item)}
+                        isFirstRow={habitIndex === 0}
+                        isLastRow={habitIndex === currentArray.length - 1}
+                        hideHabits={hideHabits[id]}
+                        onHideHabit={handleHideHabits(id)}
+                        onEdit={() => onEditHabit?.(item)}
+                      />
+                    ))}
                 </SortableContext>
-
               )}
             </>
           </div>
-
         ))}
         <DragOverlay modifiers={[restrictToWindowEdges]}>
           {draggingHabit && (
@@ -364,8 +402,8 @@ export const HabitLines = ({ habits: initialHabits, categories, orderEnabled, da
             />
           )}
         </DragOverlay>
-
       </DndContext>
     </div>
-  )
-}
+  );
+};
+

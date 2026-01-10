@@ -13,22 +13,21 @@ export interface CreateHabitModalProps {
   newDeltas?: {
     _id: string;
     name: string;
-    type: 'number' | 'time';
+    type: "number" | "time";
   }[];
 }
 
 export type CreateHabitForm = z.infer<typeof createHabitValidation>;
 
 export type RuleEngineAnd = {
-  type: 'and' ;
+  type: "and";
   and?: string[];
 };
 
 export type RuleEngineOr = {
-  type: 'or';
+  type: "or";
   or?: string[];
 };
-}
 
 export type CreateHabitModalOnSaveProps = CreateHabitForm & {
   rrule: string;
@@ -37,4 +36,4 @@ export type CreateHabitModalOnSaveProps = CreateHabitForm & {
   rule_engine_details?: {
     logic: RuleEngineAnd | RuleEngineOr;
   };
-}
+};

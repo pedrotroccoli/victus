@@ -13,7 +13,6 @@ import { HabitTab } from './habit-tab';
 import { CreateHabitForm, CreateHabitModalProps } from './types';
 import { createHabitValidation, generateRrule, rruleParse } from './utils';
 
-
 export const CreateHabitModal = ({ onSave, categories, habit, habits = [], onEditDelta, onCreateDelta, newDeltas, onPause, onFinish }: CreateHabitModalProps) => {
   const { t } = useTranslation('habit', { keyPrefix: 'create_habit_modal' })
   const { t: tCommon } = useTranslation('common');
@@ -65,10 +64,10 @@ export const CreateHabitModal = ({ onSave, categories, habit, habits = [], onEdi
       })) || [],
       children_habit_ids: habit?.children_habits?.map(h => h._id) || [],
       rule_engine_enabled: habit?.rule_engine_enabled || false,
-      rule_engine_logic_type: habit?.rule_engine_details?.logic?.type || 'and',
-      rule_engine_habit_ids: habit?.rule_engine_details?.logic?.type === 'or'
-        ? habit?.rule_engine_details?.logic?.or || []
-        : habit?.rule_engine_details?.logic?.and || [],
+      // rule_engine_logic_type: habit?.rule_engine_details?.logic?.type || 'and',
+      // rule_engine_habit_ids: habit?.rule_engine_details?.logic?.type === 'or'
+      //   ? habit?.rule_engine_details?.logic?.or || []
+      //   : habit?.rule_engine_details?.logic?.and || [],
     } as CreateHabitForm
   }, [habit]);
 
