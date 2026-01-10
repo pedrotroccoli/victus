@@ -16,9 +16,6 @@ import FillDeltaModal from '@/features/habits/components/templates/fill-delta-mo
 interface DashboardContext {
   generalLoading: boolean;
 
-  startRange: Date;
-  endRange: Date;
-
   categories: UseHabitsCategoryActions;
 
   habits: UseHabitActions;
@@ -40,8 +37,10 @@ export interface DeltaInfo {
   newDeltas?: { name: string; type: "number" | "time"; _id: string }[];
 }
 
-const startRange = subDays(new Date(), 12);
-const endRange = addDays(new Date(), 12);
+// Fetch mais dias para cobrir qualquer tamanho de tela
+// Máximo de dias visíveis: (760px / 28px) ≈ 27 dias
+const startRange = subDays(new Date(), 20);
+const endRange = addDays(new Date(), 10);
 
 export const DashboardProvider = ({ children }: DashboardProviderProps) => {
   const { data: me, isLoading: isLoadingMe } = useMe();
@@ -76,9 +75,6 @@ export const DashboardProvider = ({ children }: DashboardProviderProps) => {
 
   const value = useMemo((): DashboardContext => ({
     generalLoading,
-
-    startRange,
-    endRange,
 
     habits,
     categories,

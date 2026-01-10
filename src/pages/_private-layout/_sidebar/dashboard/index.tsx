@@ -1,9 +1,9 @@
 import { useLocalStorage } from "@uidotdev/usehooks";
-import {  eachDayOfInterval } from "date-fns";
+import { eachDayOfInterval, subDays, addDays } from "date-fns";
 import {
   LoaderCircle,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 
 import { useMe } from "@/services/auth";
@@ -47,14 +47,14 @@ export const Home = () => {
   const [currentDay, setCurrentDay] = useState(new Date());
   const [editEnabled, setEditEnabled] = useState(false);
   const [tab, setTab] = useLocalStorage("@victus::tab", "focus");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [visibleDays, setVisibleDays] = useState(10);
 
-  const { 
+  const {
     generalLoading,
-    habits, 
-    categories, 
-    checks, 
-    startRange, 
-    endRange 
+    habits,
+    categories,
+    checks,
   } = useDashboard();
 
   const habitsCheckedHash = useMemo(() =>
@@ -64,17 +64,51 @@ export const Home = () => {
     return habitsCheckedHash?.[habit._id]?.[formattedDay];
   };
 
-  const daysInMonth = eachDayOfInterval({ start: startRange, end: endRange });
+  const calculateVisibleDays = useCallback(() => {
+    if (!containerRef.current) return;
+
+    const containerWidth = containerRef.current.offsetWidth;
+    const availableWidth = Math.min(containerWidth - 192, 760);
+    const dayBlockSize = 28;
+    const days = Math.max(5, Math.floor(availableWidth / dayBlockSize));
+
+    setVisibleDays(days);
+  }, []);
+
+  useEffect(() => {
+    calculateVisibleDays();
+
+    const resizeObserver = new ResizeObserver(calculateVisibleDays);
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, [calculateVisibleDays]);
+
+  const daysInMonth = useMemo(() => {
+    const today = new Date();
+    // Proporção: ~60% para trás, ~40% para frente
+    const daysBack = Math.ceil(visibleDays * 0.6);
+    const daysForward = visibleDays - daysBack - 1; // -1 para incluir hoje
+
+    const start = subDays(today, daysBack);
+    const end = addDays(today, daysForward);
+
+    return eachDayOfInterval({ start, end });
+  }, [visibleDays]);
 
   useEffect(() => {
     const oneMinute = 1000 * 60;
 
     setCurrentDay(new Date());
 
-    setInterval(() => {
+    const interval = setInterval(() => {
       setCurrentDay(new Date());
     }, oneMinute);
-  }, [startRange, endRange]);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const onHabitChange = (habitChange: HabitLineChange) => {
     if (habitChange.type.includes("check")) {
@@ -127,7 +161,7 @@ export const Home = () => {
             onCreateHabit={() => habits.setCreateModalOpen(true)}
           />
 
-          <div className="mt-6 sm:mt-8 bg-white w-full">
+          <div id="dashboard-habits" ref={containerRef} className="mt-6 sm:mt-8 bg-white w-full">
             <div className="w-full">
               {habits && habits.data.length === 0 && !generalLoading && (
                 <DashboardNoContent />
