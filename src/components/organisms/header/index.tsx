@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { useMemo } from "react";
 
 export interface HeaderProps {
-  account?: Account;
+  account?: Account.Me;
   handleSignOut: () => void;
   goTo: (path: string) => void;
 }
