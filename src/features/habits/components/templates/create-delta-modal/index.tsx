@@ -42,11 +42,10 @@ export const CreateDeltaModal = ({ onSave, habit, deltaId }: CreateDeltaModalPro
     try {
       setLoading(true);
 
-      await onSave?.({
+      onSave?.({
         name: data.name,
         type: data.type,
       });
-
 
       form.reset(defaultValues);
     } catch (error) {
