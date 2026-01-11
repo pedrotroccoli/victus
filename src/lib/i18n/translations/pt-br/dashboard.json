@@ -39,5 +39,23 @@
     "enable_edit": "Ativar edição",
     "new_category": "Nova categoria",
     "new_habit": "Novo hábito"
+  },
+  "mood": {
+    "title": "Como você está se sentindo?",
+    "current": "Seu humor agora",
+    "current_hour": "às {{hour}}h",
+    "change": "Mudar",
+    "add_description": "Adicionar uma descrição",
+    "description_placeholder": "Como você está se sentindo?",
+    "already_registered": "Você já registrou seu humor nesta hora. Aguarde a próxima hora para registrar novamente.",
+    "skip": "Pular",
+    "values": {
+      "terrible": "Péssimo",
+      "bad": "Ruim",
+      "neutral": "Neutro",
+      "good": "Bom",
+      "great": "Ótimo",
+      "amazing": "Incrível"
+    }
   }
 }

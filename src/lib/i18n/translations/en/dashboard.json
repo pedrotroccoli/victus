@@ -35,5 +35,23 @@
     "enable_edit": "Enable editing",
     "new_category": "New category",
     "new_habit": "New habit"
+  },
+  "mood": {
+    "title": "How are you feeling?",
+    "current": "Your mood now",
+    "current_hour": "at {{hour}}h",
+    "change": "Change",
+    "add_description": "Add a description",
+    "description_placeholder": "How are you feeling?",
+    "already_registered": "You have already registered your mood this hour. Wait for the next hour to register again.",
+    "skip": "Skip",
+    "values": {
+      "terrible": "Terrible",
+      "bad": "Bad",
+      "neutral": "Neutral",
+      "good": "Good",
+      "great": "Great",
+      "amazing": "Amazing"
+    }
   }
 } 
