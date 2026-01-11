@@ -1,4 +1,4 @@
-import { Inter, Recursive } from "next/font/google";
+import { IBM_Plex_Sans, Recursive } from "next/font/google";
 
 export const RecursiveFont = Recursive({
   weight: ["400", "500", "600", "700"],
@@ -6,8 +6,8 @@ export const RecursiveFont = Recursive({
   variable: "--font-recursive",
 });
 
-export const InterFont = Inter({
+export const IBMPlexSans = IBM_Plex_Sans({
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-ibm-plex",
 });

@@ -33,8 +33,8 @@ export const News = () => {
 
   return (
     <section>
-      <Grid className="pt-16" type="small">
-        <h2 className="text-2xl md:text-4xl font-bold font-mono mx-auto text-center mb-16">
+      <Grid className="py-16 md:py-20">
+        <h2 className="text-2xl md:text-4xl font-bold font-display mx-auto text-center mb-16">
           {t('title')}
         </h2>
         <ul className="grid gap-8">
@@ -46,14 +46,14 @@ export const News = () => {
                     <div className="flex items-center gap-6">
                       {item.icon_url && <Image src={item.icon_url} alt={item.title} width={80} height={20} />}
                       {item.icon && <item.icon size={48} />}
-                      {item.enabled && <p className="text-victus-dark-green bg-victus-dark-green/10 border border-victus-dark-green px-4 py-0.5 rounded-full font-mono font-medium">
+                      {item.enabled && <p className="text-victus-dark-green bg-victus-dark-green/10 border border-victus-dark-green px-4 py-0.5 rounded-full font-display font-medium">
                         {t('available')}
                       </p>}
-                      {!item.enabled && <p className="text-yellow-400 bg-victus-yellow-400/10 border border-victus-yellow-400 px-4 py-0.5 rounded-full font-mono font-medium">
+                      {!item.enabled && <p className="text-yellow-400 bg-victus-yellow-400/10 border border-victus-yellow-400 px-4 py-0.5 rounded-full font-display font-medium">
                         {t('soon')}
                       </p>}
                     </div>
-                    <h3 className="text-2xl font-bold font-mono mt-6">
+                    <h3 className="text-2xl font-bold font-display mt-6">
                       {item.title}
                     </h3>
                     <p className="text-victus-text mt-4 max-w-[32rem]">

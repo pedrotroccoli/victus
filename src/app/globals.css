@@ -13,7 +13,7 @@ body {
 
 html,
 body {
-  font-family: var(--font-inter);
+  font-family: var(--font-ibm-plex), sans-serif;
   background-color: #F7F7F7;
 }
 
@@ -24,7 +24,7 @@ h4,
 h5,
 h6,
 button {
-  font-family: var(--font-recursive);
+  font-family: var(--font-recursive), sans-serif;
   line-height: 130%;
 }
 

@@ -18,28 +18,36 @@
   },
   "home": {
     "hero": {
-      "title": "Organizar tu mente es nuestro **único trabajo**.",
-      "description": "Nuestro propósito es simplificar y armonizar la vida de las personas, promoviendo **organización y minimalismo** para una mente más **ligera y productiva**.",
+      "title": "Un sistema simple para revelar tus **patrones de vida**.",
+      "description": "Entiende lo que realmente funciona para ti — **sin presión ni culpa**. Sigue tus hábitos y descubre tu ritmo naturalmente.",
       "button": "Prueba gratis por 14 días"
     }
+  },
+  "email_capture": {
+    "title": "Mantente informado",
+    "description": "Recibe insights sobre productividad y sigue nuestra jornada. Sin spam, solo contenido útil.",
+    "placeholder": "Tu mejor email",
+    "button": "Suscribirse",
+    "success": "¡Estás dentro! Revisa tu bandeja de entrada.",
+    "error": "Algo salió mal. Inténtalo de nuevo."
   },
   "advantages": {
     "items": {
       "advantage_01": {
-        "title": "Sigue la evolución de tus hábitos",
-        "description": "Con Victus Journal puedes seguir la evolución de tus hábitos día a día."
+        "title": "Ve tu progreso hacia tus metas",
+        "description": "Observa cómo tus hábitos te impulsan hacia adelante — sin culpa ni presión."
       },
       "advantage_02": {
-        "title": "Ve en un tablero dónde puedes mejorar",
-        "description": "Con Victus Journal puedes ver en un tablero dónde puedes mejorar."
+        "title": "Descubre tus patrones",
+        "description": "Entiende dónde prosperas y dónde puedes crecer, sin juicio."
       },
       "advantage_03": {
-        "title": "Ten una racha de tus hábitos",
-        "description": "Con Victus Journal puedes tener una racha de tus hábitos."
+        "title": "Tu ritmo a lo largo del tiempo",
+        "description": "Construye consistencia naturalmente. Patrones, no presión."
       },
       "advantage_04": {
-        "title": "Ten gráficos de tus hábitos",
-        "description": "Con Victus Journal puedes tener gráficos de tus hábitos."
+        "title": "Insights sobre tu camino",
+        "description": "Claridad visual de lo que funciona para ti — no solo números."
       }
     }
   },
@@ -74,10 +82,10 @@
         "after_name": "/ mes",
         "price": "R$ 15.00",
         "features": {
-          "habit_creation": "Creación de 50 hábitos",
-          "delta_creation": "Creación de Deltas",
-          "analytics": "Analítica avanzada",
-          "support": "Soporte por chat (Email)"
+          "habit_creation": "Sigue hasta 50 hábitos",
+          "delta_creation": "Metas con hitos de progreso",
+          "analytics": "Insights sobre tu camino",
+          "support": "Soporte por email"
         }
       },
       "yearly": {
@@ -86,10 +94,10 @@
         "price": "R$ 8.33",
         "oldPrice": "R$ 180.00",
         "features": {
-          "habit_creation": "Creación de hábitos ilimitados",
-          "delta_creation": "Creación de Deltas",
-          "analytics": "Analítica avanzada",
-          "support": "Soporte por chat (Email y WhatsApp)"
+          "habit_creation": "Hábitos ilimitados",
+          "delta_creation": "Metas con hitos de progreso",
+          "analytics": "Insights sobre tu camino",
+          "support": "Soporte prioritario (Email + WhatsApp)"
         }
       }
     },
@@ -100,20 +108,20 @@
   "proofs": {
     "items": {
       "proof_01": {
-        "title": "¿Cómo puedes seguir la evolución de tus hábitos?",
-        "description": "Dentro de la plataforma tienes tu diario, diariamente necesitas completar los hábitos realizados.\n\nCon el tiempo comenzarás a notar dónde fallas más y dónde eres consistente."
+        "title": "Tu progreso de un vistazo",
+        "description": "Ve cuánto has avanzado con una visión clara de tus hábitos.\n\nSin dashboards complicados — solo retroalimentación honesta sobre tu camino."
       },
       "proof_02": {
-        "title": "¿Cómo puedes seguir la evolución de tus hábitos?",
-        "description": "Dentro de la plataforma tienes tu diario, diariamente necesitas completar los hábitos realizados.\n\nCon el tiempo comenzarás a notar dónde fallas más y dónde eres consistente."
+        "title": "Organiza tu tiempo visualmente",
+        "description": "Una vista de calendario que muestra tu consistencia a lo largo de semanas y meses.\n\nIdentifica patrones y celebra el progreso sin obsesionarte con rachas perfectas."
       },
       "proof_03": {
-        "title": "¿Cómo puedes seguir la evolución de tus hábitos?",
-        "description": "Dentro de la plataforma tienes tu diario, diariamente necesitas completar los hábitos realizados.\n\nCon el tiempo comenzarás a notar dónde fallas más y dónde eres consistente."
+        "title": "Reflexiona y crece",
+        "description": "Tu diario personal para entender qué está funcionando y qué no.\n\nEl autoconocimiento es la base de cambios duraderos."
       },
       "proof_04": {
-        "title": "¿Cómo puedes seguir la evolución de tus hábitos?",
-        "description": "Dentro de la plataforma tienes tu diario, diariamente necesitas completar los hábitos realizados.\n\nCon el tiempo comenzarás a notar dónde fallas más y dónde eres consistente."
+        "title": "Insights que importan",
+        "description": "Analítica simple que te ayuda a entender tu comportamiento.\n\nSabe dónde enfocar tu energía para mejoras reales."
       }
     },
     "trial_button": "Prueba gratis por 14 días"

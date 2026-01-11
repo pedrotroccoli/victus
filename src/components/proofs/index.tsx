@@ -1,10 +1,7 @@
-import { cn } from "@/lib/utils"
-import { CaretCircleRight, ChartBar, ChartPieSlice, Fire, ProjectorScreenChart } from "@phosphor-icons/react/dist/ssr"
+import { ChartBar, ChartPieSlice, Fire, ProjectorScreenChart } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
-import Link from "next/link"
 import { Grid } from "../grid"
-import { Button } from "../ui/button"
 
 const proofs = (t: any) => [
   {
@@ -33,39 +30,36 @@ const proofs = (t: any) => [
 ]
 export const Proofs = () => {
   const t = useTranslations('proofs');
+  const proofItems = proofs(t);
 
   return (
     <section>
-      <Grid className="grid gap-16 pt-20 md:pt-40" type="small">
-        {proofs(t).map((item, index) => (
-          <div className="grid lg:grid-cols-2 gap-8" key={item.title}>
-            <div className="">
-              <div className="flex items-center justify-center w-12 h-12 border border-black bg-white rounded-full">
-                <item.icon size={24} />
+      <Grid className="py-16 md:py-20">
+        <div className="grid md:grid-cols-2 gap-8">
+          {proofItems.map((item) => (
+            <div key={item.title} className="flex flex-col">
+              {/* Imagem */}
+              <Image
+                src={item.image}
+                alt={item.title}
+                width={400}
+                height={280}
+                className="rounded-md w-full max-h-48 object-cover"
+              />
+
+              {/* Ícone + Título */}
+              <div className="flex items-center gap-3 mt-6">
+                <div className="w-10 h-10 border border-black bg-white rounded-full flex items-center justify-center shrink-0">
+                  <item.icon size={18} />
+                </div>
+                <h3 className="text-lg font-bold">{item.title}</h3>
               </div>
 
-              <h3 className="text-xl lg:text-2xl font-bold mt-6 lg:max-w-[24rem]">{item.title}</h3>
-
-              <p className="mt-4 whitespace-pre-line lg:max-w-[28rem] text-victus-text">{item.description}</p>
-
-              <Link href="/plans">
-                <Button className="mt-12 py-5 w-80 h-auto items-center justify-between gap-2 px-6 rounded-md hidden lg:flex">
-                  {t('trial_button')}
-                  <CaretCircleRight size={24} />
-                </Button>
-              </Link>
+              {/* Descrição */}
+              <p className="mt-3 text-victus-text text-sm">{item.description}</p>
             </div>
-            <div className={cn(index % 2 === 0 ? "lg:-order-1" : "", "flex items-center justify-center flex-col")}>
-              <Image src={item.image} alt={item.title} width={528} height={400} className="rounded-md max-lg:w-full" />
-              <Link href="/plans" className="w-full">
-                <Button className="mt-8 py-5 w-full h-auto flex items-center justify-between gap-2 px-6 rounded-md lg:hidden">
-                  {t('trial_button')}
-                  <CaretCircleRight size={24} />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </Grid>
     </section>
   )

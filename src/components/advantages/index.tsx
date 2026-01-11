@@ -31,7 +31,7 @@ export const Advantages = () => {
 
   return (
     <section id="advantages">
-      <Grid className="pt-20 md:pt-40">
+      <Grid className="py-16 md:py-20">
         <ul className="grid sm:grid-cols-2 lg:grid-cols-4 lg:gap-8 divide-y sm:divide-y-0 lg:divide-x divider-neutral-300 border border-neutral-300 rounded-md w-full bg-white shadow-sm">
           {advantages(t).map((advantage, index) => (
             <li key={advantage.title} className={

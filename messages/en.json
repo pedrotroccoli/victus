@@ -15,28 +15,36 @@
   },
   "home": {
     "hero": {
-      "title": "Organizing your mind is our **only job**.",
-      "description": "Our purpose is to simplify and harmonize people's lives, promoting **organization and minimalism** for a **lighter and more productive** mind.",
+      "title": "A simple system to reveal your **life patterns**.",
+      "description": "Understand what really works for you — **without pressure or guilt**. Track your habits and discover your rhythm naturally.",
       "button": "Free trial for 14 days"
     }
+  },
+  "email_capture": {
+    "title": "Stay in the loop",
+    "description": "Get insights about productivity and follow our journey. No spam, just useful content.",
+    "placeholder": "Your best email",
+    "button": "Subscribe",
+    "success": "You're in! Check your inbox.",
+    "error": "Something went wrong. Try again."
   },
   "advantages": {
     "items": {
       "advantage_01": {
-        "title": "Track your habits evolution",
-        "description": "With Victus Journal you can track your habits evolution day by day."
+        "title": "See your progress toward goals",
+        "description": "Watch how your habits move you forward — without guilt or pressure."
       },
       "advantage_02": {
-        "title": "See in a board where you can improve",
-        "description": "With Victus Journal you can see in a board where you can improve."
+        "title": "Discover your patterns",
+        "description": "Understand where you thrive and where you can grow, without judgment."
       },
       "advantage_03": {
-        "title": "Have a streak of your habits",
-        "description": "With Victus Journal you can have a streak of your habits."
+        "title": "Your rhythm over time",
+        "description": "Build consistency naturally. Patterns, not pressure."
       },
       "advantage_04": {
-        "title": "Have graphs of your habits",
-        "description": "With Victus Journal you can have graphs of your habits."
+        "title": "Insights about your journey",
+        "description": "Visual clarity on what works for you — not just numbers."
       }
     }
   },
@@ -71,10 +79,10 @@
         "after_name": "/ month",
         "price": "R$ 15.00",
         "features": {
-          "habit_creation": "Creation of 50 habits",
-          "delta_creation": "Delta Creation",
-          "analytics": "Advanced analytics",
-          "support": "Chat support (Email)"
+          "habit_creation": "Track up to 50 habits",
+          "delta_creation": "Goal tracking with milestones",
+          "analytics": "Insights about your journey",
+          "support": "Email support"
         }
       },
       "yearly": {
@@ -83,10 +91,10 @@
         "price": "R$ 8.33",
         "oldPrice": "R$ 180.00",
         "features": {
-          "habit_creation": "Creation of unlimited habits",
-          "delta_creation": "Delta Creation",
-          "analytics": "Advanced analytics",
-          "support": "Chat support (Email and WhatsApp)"
+          "habit_creation": "Unlimited habits",
+          "delta_creation": "Goal tracking with milestones",
+          "analytics": "Insights about your journey",
+          "support": "Priority support (Email + WhatsApp)"
         }
       }
     },
@@ -97,20 +105,20 @@
   "proofs": {
     "items": {
       "proof_01": {
-        "title": "How can you track your habits evolution?",
-        "description": "Within the platform, you have your journal where you need to fill in completed habits daily.\n\nOver time, you'll start to notice where you fail more and where you're consistent."
+        "title": "Your progress at a glance",
+        "description": "See how far you've come with a clear overview of your habits.\n\nNo complicated dashboards — just honest feedback about your journey."
       },
       "proof_02": {
-        "title": "How can you track your habits evolution?",
-        "description": "Within the platform, you have your journal where you need to fill in completed habits daily.\n\nOver time, you'll start to notice where you fail more and where you're consistent."
+        "title": "Organize your time visually",
+        "description": "A calendar view that shows your consistency over weeks and months.\n\nSpot patterns and celebrate progress without obsessing over perfect streaks."
       },
       "proof_03": {
-        "title": "How can you track your habits evolution?",
-        "description": "Within the platform, you have your journal where you need to fill in completed habits daily.\n\nOver time, you'll start to notice where you fail more and where you're consistent."
+        "title": "Reflect and grow",
+        "description": "Your personal journal to understand what's working and what isn't.\n\nSelf-knowledge is the foundation of lasting change."
       },
       "proof_04": {
-        "title": "How can you track your habits evolution?",
-        "description": "Within the platform, you have your journal where you need to fill in completed habits daily.\n\nOver time, you'll start to notice where you fail more and where you're consistent."
+        "title": "Insights that matter",
+        "description": "Simple analytics that help you understand your behavior.\n\nKnow where to focus your energy for real improvement."
       }
     },
     "trial_button": "Free trial for 14 days"

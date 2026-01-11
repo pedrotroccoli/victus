@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
-import { InterFont, RecursiveFont } from "../_fonts";
+import { IBMPlexSans, RecursiveFont } from "../_fonts";
 
 import { News } from "@/components/news";
 import { routing } from "@/i18n/routing";
@@ -33,7 +33,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale}>
-      <body className={`${InterFont.variable} ${RecursiveFont.variable}`}>
+      <body className={`${IBMPlexSans.variable} ${RecursiveFont.variable}`}>
         <NextIntlClientProvider>
           <Header locale={locale} />
 

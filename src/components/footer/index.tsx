@@ -57,7 +57,7 @@ export const Footer = () => {
         </div>
 
         <footer className="w-full">
-          <div className="grid-container py-20 flex justify-between w-full lg:flex-row flex-col gap-12">
+          <Grid style="black" className="py-20 flex justify-between w-full lg:flex-row flex-col gap-12">
             <div className="bg-white/10 border border-white/30 rounded-lg w-20 h-20 flex items-center justify-center">
               <Image src="/brain-logo.svg" alt="logo" width={40} height={40} className="invert" />
             </div>
@@ -65,7 +65,7 @@ export const Footer = () => {
             <ul className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-[44rem] w-full">
               {links(t).map((link) => (
                 <li key={link.title}>
-                  <h4 className="text-white font-mono font-medium w-full">{link.title}</h4>
+                  <h4 className="text-white font-display font-medium w-full">{link.title}</h4>
                   <div className="w-full h-px bg-neutral-800 my-4"></div>
                   <ul className="grid gap-4">
                     {link.links.map((link) => (
@@ -89,9 +89,9 @@ export const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </Grid>
           <div className="w-full h-16 lg:h-40 relative overflow-hidden">
-            <h1 className="text-[3rem] md:text-[5rem] lg:text-[7.5rem] font-mono font-bold absolute bottom-[-25px] md:bottom-[-40px] lg:bottom-[-60px] left-1/2 -translate-x-1/2 whitespace-nowrap text-white">
+            <h1 className="text-[3rem] md:text-[5rem] lg:text-[7.5rem] font-display font-bold absolute bottom-[-25px] md:bottom-[-40px] lg:bottom-[-60px] left-1/2 -translate-x-1/2 whitespace-nowrap text-white">
 Victus Journal
             </h1>
           </div>

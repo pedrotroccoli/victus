@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils"
 import { CaretCircleRight, CheckCircle } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
+import { Grid } from "../grid"
 import { Button } from "../ui/button"
 
 const items = (t: any) => [
@@ -40,8 +41,8 @@ export const Plans = () => {
 
   return (
     <section className="bg-[url('/bg-plans.png')] bg-cover bg-center border-y border-neutral-300">
-      <div className="grid-container py-16">
-        <h2 className="text-2xl md:text-4xl font-bold font-mono mb-16 mx-auto text-center">
+      <Grid className="py-16 md:py-20">
+        <h2 className="text-2xl md:text-4xl font-bold font-display mb-16 mx-auto text-center">
           {t('title')}
         </h2>
         <ul className="flex gap-6 items-center md:items-end justify-center flex-col md:flex-row">
@@ -49,19 +50,19 @@ export const Plans = () => {
             <li key={item.key} className={cn("max-w-[26rem] w-full", item.recommended && "shadow-green")} >
               {item.recommended && (
                 <div className="w-full bg-victus-green/40 border-l border-t border-r border-victus-green rounded-t-md flex items-center justify-center py-4 translate-y-1 z-[-1]">
-                  <h5 className="text-sm font-mono font-bold text-victus-green-dark ">
+                  <h5 className="text-sm font-display font-bold text-victus-green-dark ">
                     {t('recommended')}
                   </h5>
                 </div>
               )}
               <div className="w-full border border-neutral-300 rounded-md bg-white z-10">
                 <div className="p-6">
-                  <h4 className="text-base font-mono font-medium">
+                  <h4 className="text-base font-display font-medium">
                     {item.name}
                   </h4>
                   <div className="flex items-end gap-2 mt-4">
-                    <h1 className="text-3xl font-bold font-mono">{item.price}</h1>
-                    <h5 className="text-base font-mono">{item.after_name}</h5>
+                    <h1 className="text-3xl font-bold font-display">{item.price}</h1>
+                    <h5 className="text-base font-display">{item.after_name}</h5>
                   </div>
                   <p className="mt-4 text-sm text-black/50">* Cobrado {item.type === 'monthly' ? 'mensalmente' : 'anualmente'}</p>
                 </div>
@@ -88,8 +89,7 @@ export const Plans = () => {
             </li>
           ))}
         </ul>
-      </div>
-
-    </section >
+      </Grid>
+    </section>
   )
 }

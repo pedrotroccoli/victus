@@ -10,7 +10,7 @@ export const CTA = () => {
 
   return (
     <section>
-      <Grid className="grid-container h-full md:pt-40 md:pb-20 pt-10 pb-10">
+      <Grid className="h-full py-16 md:py-20">
         <div className="w-full bg-victus-black rounded-lg flex flex-col-reverse md:flex-row justify-between h-full border border-neutral-300 bg-[url('/noise-1.png')] bg-cover bg-center relative">
           <div className="blur-block absolute bottom-60 left-4 md:top-0 md:left-32 w-20 h-20 z-[1]"></div>
           <div className="blur-block absolute bottom-4 left-1/2 w-20 h-20 z-[1]"></div>

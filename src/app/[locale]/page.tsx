@@ -1,5 +1,6 @@
 import { Advantages } from "@/components/advantages";
 import { CTA } from "@/components/cta";
+import { EmailCapture } from "@/components/email-capture";
 import { Grid } from "@/components/grid";
 import { Plans } from "@/components/plans";
 import { Proofs } from "@/components/proofs";
@@ -10,36 +11,35 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
 import Markdown from "react-markdown";
-// https://coolors.co/palette/f8f9fa-e9ecef-dee2e6-ced4da-adb5bd-6c757d-495057-343a40-212529
 
 export default function Home() {
   const t = useTranslations('home');
-  
+
   return (
     <main className="">
       <section className="relative">
-        <Grid className="grid-container flex justify-between items-center pt-8 md:pt-16 lg:flex-row flex-col gap-12">
+        <Grid className="flex justify-between items-center pt-8 md:pt-16 lg:flex-row flex-col gap-12">
           <div className="lg:max-w-[32rem] flex flex-col items-start justify-start">
             <div className={
               cn(
-                "border border-victus-yellow-400 bg-victus-yellow-400/10 rounded-full px-5 py-1 font-mono leading-[1.3] font-medium text-victus-yellow-400",
-                "lg:text-lg"
+                "border border-black bg-white rounded-full px-4 py-1 font-display leading-[1.3] font-medium text-neutral-600",
+                "text-sm"
               )
             }>
               Victus Journal
             </div>
-            <Markdown 
+            <Markdown
               components={{
-                p: ({ children }) => <h1 className="text-4xl font-bold text-black lg:text-4xl mt-8">{children}</h1>,
+                p: ({ children }) => <h1 className="text-2xl font-bold text-black lg:text-3xl mt-8">{children}</h1>,
                 strong: ({ children }) => <span className="text-[#707070]">{children}</span>
               }}
             >
               {t('hero.title')}
             </Markdown>
 
-            <Markdown 
+            <Markdown
               components={{
-                p: ({ children }) => <p className="lg:text-lg text-victus-text mt-4">{children}</p>
+                p: ({ children }) => <p className="text-base text-victus-text mt-4">{children}</p>
               }}
             >
               {t('hero.description')}
@@ -50,7 +50,7 @@ export default function Home() {
                 <Button
                   className={
                     cn(
-                      "mt-16 relative font-mono font-bold p-0 px-0 py-0 w-full sm:w-auto h-auto",
+                      "mt-16 relative font-display font-bold p-0 px-0 py-0 w-full sm:w-auto h-auto",
                     )
                   }
                   variant="outline"
@@ -71,19 +71,22 @@ export default function Home() {
 
           <div className={
             cn(
-              "lg:max-w-[40rem] lg:max-h-[28rem] max-h-[20rem] w-full h-full bg-[url('/hero-bg.png')] bg-cover bg-center border border-neutral-300 rounded-md flex items-center justify-center",
+              "lg:max-w-[32rem] lg:max-h-[22rem] max-h-[16rem] w-full h-full border border-neutral-200 rounded-md flex items-center justify-center",
+              "bg-neutral-50 bg-[linear-gradient(to_right,#e5e5e5_1px,transparent_1px),linear-gradient(to_bottom,#e5e5e5_1px,transparent_1px)] bg-[size:24px_24px]"
             )
           }>
             <Image
               src="/tablet.png"
               alt="slide2"
-              width={600}
-              height={400}
-              className="max-w-[28rem] max-h-[24rem] md:max-w-none md:max-h-none"
+              width={480}
+              height={320}
+              className="max-w-[22rem] max-h-[18rem] md:max-w-none md:max-h-none"
             />
           </div>
         </Grid>
       </section>
+
+      <EmailCapture />
 
       <Advantages />
 
