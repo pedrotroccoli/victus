@@ -73,16 +73,23 @@ export const useHabitsActions = ({
 
   const [delta, setDelta] = useState<DeltaInfo | null>(null);
 
-  const handleEditHabitSave = useCallback( (data: CreateHabitModalOnSaveProps) => {
+  const handleEditHabitSave = useCallback( async (formData: CreateHabitModalOnSaveProps) => {
     if (!habitToEdit) return;
 
-    updateHabit({
+    const oldParentId = habitToEdit.parent_habit_id;
+    const newParentId = formData.parent_habit_id;
+
+    // Update the habit
+    await updateHabit({
       _id: habitToEdit._id,
-      name: data.name,
-      recurrence_type: data.frequency,
+      name: formData.name,
+      recurrence_type: formData.frequency,
       recurrence_details: {
-        rule: data.rrule,
+        rule: formData.rrule,
       },
+      parent_habit_id: newParentId || undefined,
+      rule_engine_enabled: formData.rule_engine_enabled,
+      rule_engine_details: formData.rule_engine_details,
       habit_deltas_attributes: [
         ...(habitToEdit?.habit_deltas?.map((item) => ({
           id: item?._id,
@@ -100,11 +107,65 @@ export const useHabitsActions = ({
       ],
     });
 
+    // Handle parent changes for rule engine
+    const parentChanged = oldParentId !== newParentId;
+
+    if (parentChanged) {
+      // Helper to get rule engine habit IDs from a habit
+      const getRuleEngineIds = (habit: Habit): string[] => {
+        const logic = habit.rule_engine?.logic;
+        if (!logic) return [];
+        return logic.type === 'or' ? logic.or : logic.and;
+      };
+
+      // Remove from old parent's rule engine
+      if (oldParentId) {
+        const oldParent = data?.find(h => h._id === oldParentId);
+        if (oldParent) {
+          const logicType = oldParent.rule_engine?.logic?.type || 'and';
+          const currentIds = getRuleEngineIds(oldParent);
+          const updatedIds = currentIds.filter((id: string) => id !== habitToEdit._id);
+
+          await updateHabit({
+            _id: oldParent._id,
+            rule_engine_enabled: updatedIds.length > 0,
+            rule_engine_details: {
+              logic: {
+                type: logicType,
+                [logicType]: updatedIds,
+              },
+            },
+          });
+        }
+      }
+
+      // Add to new parent's rule engine
+      if (newParentId) {
+        const newParent = data?.find(h => h._id === newParentId);
+        if (newParent) {
+          const logicType = newParent.rule_engine?.logic?.type || 'and';
+          const currentIds = getRuleEngineIds(newParent);
+          const updatedIds = [...currentIds, habitToEdit._id];
+
+          await updateHabit({
+            _id: newParent._id,
+            rule_engine_enabled: true,
+            rule_engine_details: {
+              logic: {
+                type: logicType,
+                [logicType]: updatedIds,
+              },
+            },
+          });
+        }
+      }
+    }
+
     toast.success("Hábito atualizado com sucesso!");
 
     setDelta(null);
     setHabitToEdit(undefined);
-  }, [habitToEdit, updateHabit, delta]);
+  }, [habitToEdit, updateHabit, delta, data]);
 
 
   // const handlePauseHabit = useCallback( async (data: { pause: boolean }) => {
@@ -143,7 +204,7 @@ export const useHabitsActions = ({
 
   const onCreateHabit = async (params: CreateHabitModalOnSaveProps) => {
     try {
-      await createHabit({
+      const createdHabits = await createHabit({
         name: params.name,
         start_date: params.start_date,
         end_date: params.end_date,
@@ -159,7 +220,35 @@ export const useHabitsActions = ({
           })) || [],
         rule_engine_enabled: false,
         children_habit_ids: params.children_habit_ids,
+        parent_habit_id: params.parent_habit_id || undefined,
       });
+
+      // If parent_habit_id is set, add this habit to parent's rule_engine_habit_ids
+      if (params.parent_habit_id && createdHabits.length > 0) {
+        const newHabitId = createdHabits[0]._id;
+        const parentHabit = data?.find(h => h._id === params.parent_habit_id);
+
+        if (parentHabit) {
+          const logic = parentHabit.rule_engine?.logic;
+          const currentRuleEngineHabitIds = logic
+            ? (logic.type === 'or' ? logic.or : logic.and)
+            : [];
+
+          const newRuleEngineHabitIds = [...currentRuleEngineHabitIds, newHabitId];
+          const logicType = logic?.type || 'and';
+
+          await updateHabit({
+            _id: parentHabit._id,
+            rule_engine_enabled: true,
+            rule_engine_details: {
+              logic: {
+                type: logicType,
+                [logicType]: newRuleEngineHabitIds,
+              },
+            },
+          });
+        }
+      }
 
       toast.success("Hábito criado com sucesso!");
 
