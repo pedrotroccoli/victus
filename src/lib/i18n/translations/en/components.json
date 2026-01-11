@@ -11,7 +11,9 @@
       "type": "Type",
       "start": "Start",
       "end": "End",
-      "daily": "Daily"
+      "daily": "Daily",
+      "hide": "Hide",
+      "show": "Show"
     }
   }
 }

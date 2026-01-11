@@ -11,7 +11,9 @@
       "type": "Tipo",
       "start": "Inicio",
       "end": "Fin",
-      "daily": "Diario"
+      "daily": "Diario",
+      "hide": "Ocultar",
+      "show": "Mostrar"
     }
   }
 }
