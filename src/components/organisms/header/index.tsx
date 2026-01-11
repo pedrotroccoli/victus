@@ -18,7 +18,7 @@ export const Header = ({ account, handleSignOut, goTo }: HeaderProps) => {
   }, [account])
 
   return (
-    <header className="w-full border-neutral-300 border-b bg-white h-20 relative">
+    <header className="w-full border-neutral-300 border-b bg-white h-16 relative">
       <div className="flex items-center justify-between max-w-screen-xl mx-auto px-4 sm:px-8 w-full h-full">
         <div className="flex items-center">
           <LogoWithText className="max-w-16" />
