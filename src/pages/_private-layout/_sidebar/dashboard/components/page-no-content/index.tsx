@@ -8,10 +8,10 @@ export const DashboardNoContent = () => {
   const { t } =useTranslation("dashboard")
 
   return (
-   <div className="flex items-center justify-center h-full flex-col border-neutral-300 border rounded-md p-8 min-h-56">
+   <div className="flex items-center justify-center h-full flex-col border-neutral-300 border rounded-md p-8 min-h-56 bg-white">
      <Box size={32} strokeWidth={1.5} />
 
-     <p className="text-lg text-black/75 font-medium mt-4 mb-8 font-[Recursive]">
+     <p className="text-lg text-black font-medium mt-4 mb-8 font-[Recursive]">
        {t("habits.no_habits")}
      </p>
 
