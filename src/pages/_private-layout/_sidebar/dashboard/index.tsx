@@ -178,9 +178,10 @@ export const Home = () => {
 
               {habits && habits.data.length > 0 && !generalLoading && (
                 <Tabs
-                  defaultValue={'focus'}
+                  defaultValue="focus"
                   className="w-full"
                   onValueChange={setTab}
+                  value={tab}
                 >
                   {/* Tabs estilo navegador - fora do retângulo principal */}
                   <TabsList className="hidden md:flex items-end gap-0 p-0 !bg-transparent h-auto justify-start relative z-10 translate-y-px">
