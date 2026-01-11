@@ -375,11 +375,13 @@ export const HabitLines = ({
                         currentDay={currentDay}
                         onCheckHabit={onCheckHabit}
                         onDelete={() => onDeleteHabit?.(item)}
+                        onDeleteHabit={onDeleteHabit}
                         isFirstRow={habitIndex === 0}
                         isLastRow={habitIndex === currentArray.length - 1}
                         hideHabits={hideHabits[id]}
                         onHideHabit={handleHideHabits(id)}
                         onEdit={() => onEditHabit?.(item)}
+                        onEditHabit={onEditHabit}
                       />
                     ))}
                 </SortableContext>

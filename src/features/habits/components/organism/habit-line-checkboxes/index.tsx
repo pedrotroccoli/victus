@@ -3,7 +3,7 @@ import { isAcceptedByRRule } from "@/utils/habits";
 import { sortableKeyboardCoordinates, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { format, isAfter, isBefore, subDays } from "date-fns";
-import { GripVertical, Pencil, Trash } from "lucide-react";
+import { ChevronRight, GripVertical, Pencil, Trash } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { HabitCheckbox } from "../../molecules/habit-checkbox";
@@ -27,6 +27,7 @@ export interface HabitLineCheckboxesProps {
   isFirstRow: boolean;
   isLastRow: boolean;
   onDelete?: () => void;
+  onDeleteHabit?: (habit: Habit) => void;
   enableOrder?: boolean;
   enableEdit?: boolean;
   enableDelete?: boolean;
@@ -34,6 +35,7 @@ export interface HabitLineCheckboxesProps {
   hideHabits: boolean;
   onHideHabit?: () => void;
   onEdit?: () => void;
+  onEditHabit?: (habit: Habit) => void;
   isChild?: boolean;
   childSpan?: number;
 }
@@ -60,7 +62,9 @@ export function HabitLineCheckboxes({
   enableEdit,
   enableDelete,
   onDelete,
+  onDeleteHabit,
   onEdit,
+  onEditHabit,
   isChild,
   childSpan,
 }: HabitLineCheckboxesProps) {
@@ -79,8 +83,23 @@ export function HabitLineCheckboxes({
     {}
   );
 
+  const [collapsedHabits, setCollapsedHabits] = useLocalStorage<Record<string, boolean>>(
+    "@victus::collapsed-habits",
+    {}
+  );
+
   const habitHidden = hiddenHabits[habit._id]?.hidden ?? false;
   const isHidden = hideHabits || habitHidden;
+
+  const hasChildren = habit?.children_habits && habit.children_habits.length > 0;
+  const isCollapsed = collapsedHabits[habit._id] ?? false;
+
+  const toggleCollapsed = useCallback(() => {
+    setCollapsedHabits((prev) => ({
+      ...prev,
+      [habit._id]: !isCollapsed,
+    }));
+  }, [habit._id, isCollapsed, setCollapsedHabits]);
 
   const toggleHabitHidden = useCallback(() => {
     setHiddenHabits((prev) => ({
@@ -156,7 +175,22 @@ export function HabitLineCheckboxes({
           )}
         >
           <div className="w-full overflow-visible min-w-32 max-w-32 sm:max-w-auto sm:min-w-48 ">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
+              {hasChildren && (
+                <button
+                  onClick={toggleCollapsed}
+                  className="h-5 text-neutral-500 flex items-center justify-center"
+                >
+                  <ChevronRight
+                    size={14}
+                    strokeWidth={3}
+                    className={cn(
+                      "transition-transform duration-200",
+                      !isCollapsed && "rotate-90"
+                    )}
+                  />
+                </button>
+              )}
               {enableOrder && (
                 <button
                   {...listeners}
@@ -184,6 +218,7 @@ export function HabitLineCheckboxes({
                   onToggleHide={toggleHabitHidden}
                   isChild={isChild}
                   childSpan={childSpan}
+                  hasChildren={hasChildren}
                 />
 
                 <div className="flex items-center gap-px ml-auto sm:ml-1">
@@ -261,20 +296,24 @@ export function HabitLineCheckboxes({
         </div>
       </div>
 
-      <div className="relative">
-        <div className="absolute top-0 left-1.5 w-[1px] h-full bg-black"></div>
+      {hasChildren && !isCollapsed && (
+        <div className="relative">
+          {/* Top circle - centered with first child habit */}
+          <div className="absolute top-2.5 left-[3px] w-2 h-2 rounded-full bg-white border border-black"></div>
+          {/* Vertical line */}
+          <div className="absolute top-[18px] left-[6px] w-[1px] h-[calc(100%-36px)] bg-black"></div>
+          {/* Bottom circle - centered with last child habit */}
+          <div className="absolute bottom-2.5 left-[3px] w-2 h-2 rounded-full bg-white border border-black"></div>
 
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragOver={() => {}}
-          onDragEnd={() => {}}
-          onDragStart={() => {}}
-          autoScroll={true}
-        >
-          {habit?.children_habits &&
-            habit?.children_habits?.length > 0 &&
-            habit.children_habits.map((childHabit) => (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragOver={() => {}}
+            onDragEnd={() => {}}
+            onDragStart={() => {}}
+            autoScroll={true}
+          >
+            {habit.children_habits!.map((childHabit) => (
               <HabitLineCheckboxes
                 key={childHabit._id}
                 habit={childHabit}
@@ -284,20 +323,23 @@ export function HabitLineCheckboxes({
                 currentDay={currentDay}
                 getHabitCheck={getHabitCheck}
                 onCheckHabit={onCheckHabit}
-                onDelete={onDelete}
+                onDelete={() => onDeleteHabit?.(childHabit)}
+                onDeleteHabit={onDeleteHabit}
                 enableOrder={enableOrder}
                 enableEdit={enableEdit}
                 enableDelete={enableDelete}
                 onScroll={onScroll}
                 hideHabits={hideHabits}
                 onHideHabit={() => {}}
-                onEdit={onEdit}
+                onEdit={() => onEditHabit?.(childHabit)}
+                onEditHabit={onEditHabit}
                 isChild
                 childSpan={childSpan ? childSpan + 1 : 1}
               />
             ))}
-        </DndContext>
-      </div>
+          </DndContext>
+        </div>
+      )}
     </>
   );
 }

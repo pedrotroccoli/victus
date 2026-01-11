@@ -24,6 +24,7 @@ interface HabitNameProps {
   onToggleHide?: () => void;
   isChild?: boolean;
   childSpan?: number;
+  hasChildren?: boolean;
 }
 
 const referenceMonday = new Date(2024, 0, 1);
@@ -38,6 +39,7 @@ export const HabitName = ({
   onClick,
   onToggleHide,
   childSpan,
+  hasChildren,
 }: HabitNameProps) => {
   const { t } = useTranslation("components");
   const { formatDate } = useDate();
@@ -77,7 +79,9 @@ export const HabitName = ({
           >
             <div
               className={cn(
-                "text-xs font-bold whitespace-nowrap truncate rounded-md outline outline-2 outline-transparent outline-offset-1 hover:outline-black flex items-center gap-1 px-1 ml-0.5",
+                "text-xs font-bold whitespace-nowrap truncate rounded-md outline outline-2 outline-transparent outline-offset-1 hover:outline-black flex items-center gap-1",
+                !hasChildren && "px-1 ml-0.5",
+                isChild && "ml-4",
                 isHovering && "outline-black",
                 hide && "blur-sm",
               )}
@@ -85,12 +89,7 @@ export const HabitName = ({
               onMouseEnter={onMouseEnter}
               onMouseLeave={onMouseLeave}
             >
-              <p
-                className={cn(
-                  "text-ellipsis overflow-hidden",
-                  isChild && "pl-2",
-                )}
-              >
+              <p className="text-ellipsis overflow-hidden">
                 {item.name}
               </p>
               {item.habit_deltas && <Triangle size={12} />}
