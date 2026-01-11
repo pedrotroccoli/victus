@@ -190,14 +190,14 @@ export const Home = () => {
                       className="text-xs px-4 py-2 rounded-t-md rounded-b-none border border-b-0 border-neutral-300 bg-transparent shadow-none data-[state=active]:bg-white data-[state=active]:shadow-none data-[state=active]:border-neutral-300 data-[state=inactive]:bg-transparent data-[state=inactive]:opacity-80 data-[state=inactive]:border-neutral-200 transition-all flex items-center gap-1.5"
                     >
                       <Crosshair size={14} />
-                      Focus
+                      {t("habits.tabs.focus")}
                     </TabsTrigger>
                     <TabsTrigger
                       value="general"
                       className="text-xs px-4 py-2 rounded-t-md rounded-b-none border border-b-0 border-neutral-300 bg-transparent shadow-none data-[state=active]:bg-white data-[state=active]:shadow-none data-[state=active]:border-neutral-300 data-[state=inactive]:bg-transparent data-[state=inactive]:opacity-80 data-[state=inactive]:border-neutral-200 transition-all flex items-center gap-1.5"
                     >
                       <LayoutGrid size={14} />
-                      Overview
+                      {t("habits.tabs.general")}
                     </TabsTrigger>
                   </TabsList>
 
@@ -224,14 +224,14 @@ export const Home = () => {
                           className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white flex items-center gap-1.5"
                         >
                           <Crosshair size={12} />
-                          Focus
+                          {t("habits.tabs.focus")}
                         </TabsTrigger>
                         <TabsTrigger
                           value="general"
                           className="text-xs py-1.5 data-[state=active]:bg-black data-[state=active]:text-white flex items-center gap-1.5"
                         >
                           <LayoutGrid size={12} />
-                          Overview
+                          {t("habits.tabs.general")}
                         </TabsTrigger>
                       </TabsList>
                     </div>
