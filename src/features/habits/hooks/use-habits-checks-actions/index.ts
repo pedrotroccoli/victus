@@ -58,19 +58,16 @@ export const useHabitsCheckingActions = ({
 
     if (item?.checked) {
       toast.success(`${habit.name} marcado com sucesso! :D`);
+
+      // Open delta modal if habit has deltas and was just checked
+      if (habit.habit_deltas?.length) {
+        setFillDeltaModalOpen({
+          check: item,
+          habit: habit
+        });
+      }
     } else {
       toast.info(`${habit.name} desmarcado com sucesso! :(`);
-    }
-
-    if (
-      habit.habit_deltas?.length &&
-      check &&
-      (check ? !check.checked : true)
-    ) {
-      setFillDeltaModalOpen({
-        check: check,
-        habit: habit
-      });
     }
   };
 
