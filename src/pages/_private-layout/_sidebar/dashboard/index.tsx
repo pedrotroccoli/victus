@@ -12,6 +12,7 @@ import { useMe } from "@/services/auth";
 import {
   useUpdateHabit,
 } from "@/services/habits/hooks";
+import { useMoodActions } from "@/features/mood/hooks/use-mood-actions";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -30,6 +31,7 @@ import { FloatingActions } from "./components/floating-actions";
 import { DashboardNoContent } from "./components/page-no-content";
 import { DashboardPageError } from "./components/page-error";
 import { DashboardPageLoader } from "./components/page-loader";
+import { MoodSection } from "./components/mood-section";
 import { useDashboard } from "./providers/dashboard-provider";
 import { generateHabitsHash } from "./utils";
 
@@ -46,9 +48,11 @@ export const Home = () => {
 
   const { data: me, isLoading: isLoadingMe, error } = useMe();
   const { mutateAsync: updateHabit } = useUpdateHabit();
+  const { currentHourMood } = useMoodActions();
 
   const [currentDay, setCurrentDay] = useState(new Date());
   const [editEnabled, setEditEnabled] = useState(false);
+  const [moodSectionOpen, setMoodSectionOpen] = useState(true);
   const [tab, setTab] = useLocalStorage("@victus::tab", "focus");
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleDays, setVisibleDays] = useState(10);
@@ -160,9 +164,18 @@ export const Home = () => {
 
           <DashboardHeader
             onCreateHabit={() => habits.setCreateModalOpen(true)}
+            currentMood={currentHourMood?.value}
+            moodSectionOpen={moodSectionOpen}
+            onToggleMoodSection={() => setMoodSectionOpen(!moodSectionOpen)}
           />
 
-          <div id="dashboard-habits" ref={containerRef} className="mt-6 sm:mt-8 w-full">
+          {(!currentHourMood || moodSectionOpen) && (
+            <div className="mt-6 sm:mt-8 sm:px-0 px-4">
+              <MoodSection onClose={() => setMoodSectionOpen(false)} />
+            </div>
+          )}
+
+          <div id="dashboard-habits" ref={containerRef} className="w-full mt-6">
             <div className="w-full">
               {habits && habits.data.length === 0 && !generalLoading && (
                 <DashboardNoContent />
