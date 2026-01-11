@@ -58,6 +58,14 @@
           "commandEmpty": "No se encontraron hábitos",
           "helper": "Los hábitos hijos se eliminarán junto con este hábito"
         },
+        "parent_habit": {
+          "label": "Hábito padre",
+          "placeholder": "Selecciona el hábito padre",
+          "commandPlaceholder": "Buscar hábito",
+          "commandEmpty": "No se encontraron hábitos",
+          "no_parent": "Sin hábito padre",
+          "helper": "Este hábito aparecerá como hijo del hábito seleccionado"
+        },
         "rule_engine": {
           "enabled_label": "Habilitar reglas de finalización",
           "logic_type": {
@@ -78,6 +86,7 @@
       },
       "sections": {
         "children_habits": "Hábitos hijos",
+        "parent_habit": "Hábito padre",
         "rule_engine": "Reglas de finalización"
       }
     },

@@ -58,6 +58,14 @@
           "commandEmpty": "No habits found",
           "helper": "Child habits will be deleted along with this habit"
         },
+        "parent_habit": {
+          "label": "Parent habit",
+          "placeholder": "Select parent habit",
+          "commandPlaceholder": "Search habit",
+          "commandEmpty": "No habits found",
+          "no_parent": "No parent",
+          "helper": "This habit will appear as a child of the selected parent"
+        },
         "rule_engine": {
           "enabled_label": "Enable completion rules",
           "logic_type": {
@@ -78,6 +86,7 @@
       },
       "sections": {
         "children_habits": "Child habits",
+        "parent_habit": "Parent habit",
         "rule_engine": "Completion rules"
       }
     },

@@ -60,6 +60,14 @@
           "commandEmpty": "Nenhum hábito encontrado",
           "helper": "Os hábitos filhos serão excluídos junto com este hábito"
         },
+        "parent_habit": {
+          "label": "Hábito pai",
+          "placeholder": "Selecione o hábito pai",
+          "commandPlaceholder": "Pesquisar hábito",
+          "commandEmpty": "Nenhum hábito encontrado",
+          "no_parent": "Sem hábito pai",
+          "helper": "Este hábito aparecerá como filho do hábito selecionado"
+        },
         "rule_engine": {
           "enabled_label": "Habilitar regras de conclusão",
           "logic_type": {
@@ -80,6 +88,7 @@
       },
       "sections": {
         "children_habits": "Hábitos filhos",
+        "parent_habit": "Hábito pai",
         "rule_engine": "Regras de conclusão"
       }
     },
