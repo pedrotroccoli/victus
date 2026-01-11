@@ -5,6 +5,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { format, isAfter, isBefore, subDays } from "date-fns";
 import { GripVertical, Pencil, Trash } from "lucide-react";
 import React, { useCallback, useState } from "react";
+import { useLocalStorage } from "@uidotdev/usehooks";
 import { HabitCheckbox } from "../../molecules/habit-checkbox";
 import { HabitName } from "../../molecules/habit-name";
 import {
@@ -72,6 +73,21 @@ export function HabitLineCheckboxes({
 
   const [nameHovering, setNameHovering] = useState(false);
   const [checkboxHovering, setCheckboxHovering] = useState(false);
+
+  const [hiddenHabits, setHiddenHabits] = useLocalStorage<Record<string, { hidden: boolean }>>(
+    "@victus::hidden-habits",
+    {}
+  );
+
+  const habitHidden = hiddenHabits[habit._id]?.hidden ?? false;
+  const isHidden = hideHabits || habitHidden;
+
+  const toggleHabitHidden = useCallback(() => {
+    setHiddenHabits((prev) => ({
+      ...prev,
+      [habit._id]: { hidden: !habitHidden },
+    }));
+  }, [habit._id, habitHidden, setHiddenHabits]);
 
   const handleCheckHabit = useCallback(
     (habit: Habit, day: string) => () => {
@@ -162,9 +178,10 @@ export function HabitLineCheckboxes({
                   onClick={onEdit}
                   item={habit}
                   isHovering={checkboxHovering}
-                  hide={hideHabits}
+                  hide={isHidden}
                   onMouseEnter={() => setNameHovering(true)}
                   onMouseLeave={() => setNameHovering(false)}
+                  onToggleHide={toggleHabitHidden}
                   isChild={isChild}
                   childSpan={childSpan}
                 />

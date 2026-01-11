@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/tooltip";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Triangle } from "lucide-react";
+import { Eye, EyeOff, Triangle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { rrulestr } from "rrule";
 import { useMemo } from "react";
@@ -21,6 +21,7 @@ interface HabitNameProps {
   onMouseEnter?: () => void;
   onMouseLeave?: () => void;
   onClick?: () => void;
+  onToggleHide?: () => void;
   isChild?: boolean;
   childSpan?: number;
 }
@@ -35,6 +36,7 @@ export const HabitName = ({
   onMouseEnter,
   onMouseLeave,
   onClick,
+  onToggleHide,
   childSpan,
 }: HabitNameProps) => {
   const { t } = useTranslation("components");
@@ -107,6 +109,18 @@ export const HabitName = ({
               <span className="text-xs">
                 {t("habit_name.tooltip.end")}: {formatDate(new Date(item.end_date), "P")}
               </span>
+            )}
+            {onToggleHide && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleHide();
+                }}
+                className="flex items-center gap-1.5 text-xs mt-1 pt-1 border-t border-white/20 hover:text-white/80 transition-colors"
+              >
+                {hide ? <Eye size={12} /> : <EyeOff size={12} />}
+                {hide ? t("habit_name.tooltip.show") : t("habit_name.tooltip.hide")}
+              </button>
             )}
           </div>
         </TooltipContent>
