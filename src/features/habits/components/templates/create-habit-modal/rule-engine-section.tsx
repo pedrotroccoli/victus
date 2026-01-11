@@ -8,20 +8,47 @@ import { CreateHabitForm } from "./types";
 
 interface RuleEngineSectionProps {
   childrenHabits?: Habit[];
+  allHabits?: Habit[];
 }
 
-export function RuleEngineSection({ childrenHabits }: RuleEngineSectionProps) {
+// Helper to find a habit by ID in a nested structure
+const findHabitById = (habits: Habit[], id: string): Habit | undefined => {
+  for (const habit of habits) {
+    if (habit._id === id) return habit;
+    if (habit.children_habits?.length) {
+      const found = findHabitById(habit.children_habits, id);
+      if (found) return found;
+    }
+  }
+  return undefined;
+};
+
+export function RuleEngineSection({ childrenHabits, allHabits = [] }: RuleEngineSectionProps) {
   const { t } = useTranslation('habit', { keyPrefix: 'create_habit_modal' });
   const form = useFormContext<CreateHabitForm>();
 
   const ruleEngineEnabled = form.watch('rule_engine_enabled');
+  const selectedHabitIds = form.watch('rule_engine_habit_ids') || [];
 
   const habitOptions = useMemo(() => {
-    return (childrenHabits || []).map((habit) => ({
+    // Start with children habits as the base options
+    const childrenOptions = (childrenHabits || []).map((habit) => ({
       label: habit.name,
       value: habit._id,
     }));
-  }, [childrenHabits]);
+
+    // Add any selected habits that aren't in children (for backwards compatibility)
+    const childrenIds = new Set(childrenOptions.map(o => o.value));
+    const additionalOptions = selectedHabitIds
+      .filter(id => !childrenIds.has(id))
+      .map(id => {
+        const habit = findHabitById(allHabits, id);
+        return habit ? { label: habit.name, value: habit._id } : null;
+      })
+      .filter((opt): opt is { label: string; value: string } => opt !== null);
+
+    return [...childrenOptions, ...additionalOptions];
+  }, [childrenHabits, selectedHabitIds, allHabits]);
 
   return (
     <div className="space-y-4">

@@ -36,7 +36,7 @@ export function AdvancedTab({ habits: propHabits, habit }: AdvancedTabProps) {
 
           <div>
             <h3 className="text-sm font-semibold mb-3">{t('form.sections.rule_engine')}</h3>
-            <RuleEngineSection childrenHabits={habit?.children_habits} />
+            <RuleEngineSection childrenHabits={habit?.children_habits} allHabits={habits} />
           </div>
         </>
       )}

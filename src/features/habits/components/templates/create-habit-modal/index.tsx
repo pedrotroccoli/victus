@@ -66,10 +66,14 @@ export const CreateHabitModal = ({ onSave, categories, habit, habits = [], onEdi
       children_habit_ids: habit?.children_habits?.map(h => h._id) || [],
       parent_habit_id: habit?.parent_habit_id || null,
       rule_engine_enabled: habit?.rule_engine_enabled || false,
-      // rule_engine_logic_type: habit?.rule_engine_details?.logic?.type || 'and',
-      // rule_engine_habit_ids: habit?.rule_engine_details?.logic?.type === 'or'
-      //   ? habit?.rule_engine_details?.logic?.or || []
-      //   : habit?.rule_engine_details?.logic?.and || [],
+      rule_engine_logic_type: habit?.rule_engine_details?.logic?.type || 'and',
+      rule_engine_habit_ids: (() => {
+        const logic = habit?.rule_engine_details?.logic;
+        if (!logic) return [];
+        if (logic.type === 'or') return (logic as HabitRuleLogicOr).or || [];
+        if (logic.type === 'and') return (logic as HabitRuleLogicAnd).and || [];
+        return [];
+      })(),
     } as CreateHabitForm
   }, [habit]);
 
