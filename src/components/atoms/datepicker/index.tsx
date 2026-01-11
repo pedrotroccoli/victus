@@ -3,6 +3,7 @@
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { Calendar as CalendarIcon } from "lucide-react"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Calendar, CalendarProps } from "@/components/ui/calendar"
@@ -16,13 +17,20 @@ import { cn } from "@/lib/utils"
 
 export type DatePickerProps = {
   disabledMessage?: string;
-} & CalendarProps;
+  onSelect?: (date: Date | undefined) => void;
+} & Omit<CalendarProps, 'onSelect'>;
 
-export function DatePicker({ className, selected, disabledMessage, ...props }: DatePickerProps) {
+export function DatePicker({ className, selected, disabledMessage, onSelect, ...props }: DatePickerProps) {
+  const [open, setOpen] = useState(false);
   const date = selected;
 
+  const handleSelect = (selectedDate: Date | undefined) => {
+    onSelect?.(selectedDate);
+    setOpen(false);
+  };
+
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
@@ -52,6 +60,8 @@ export function DatePicker({ className, selected, disabledMessage, ...props }: D
         <Calendar
           mode="single"
           locale={ptBR}
+          // @ts-expect-error Calendar types conflict with single mode
+          onSelect={handleSelect}
           {...props}
         />
       </PopoverContent>
