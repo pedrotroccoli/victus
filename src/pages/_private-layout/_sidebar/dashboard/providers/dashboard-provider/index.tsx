@@ -45,17 +45,18 @@ const endRange = addDays(new Date(), 10);
 export const DashboardProvider = ({ children }: DashboardProviderProps) => {
   const { data: me, isLoading: isLoadingMe } = useMe();
 
-  const checks = useHabitsCheckingActions({
-    startRange,
-    endRange,
-    enabled: !!me,
-  });
-
   const habits = useHabitsActions({
     startRange,
     endRange,
     enabled: !!me,
   })
+
+  const checks = useHabitsCheckingActions({
+    startRange,
+    endRange,
+    enabled: !!me,
+    habits: habits.data,
+  });
 
   const categories = useHabitsCategoryActions();
 
