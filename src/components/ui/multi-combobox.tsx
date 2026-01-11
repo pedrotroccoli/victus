@@ -74,12 +74,13 @@ export function MultiCombobox({
             ) : (
               value.map((v) => {
                 const option = options.find((opt) => opt.value === v)
+                if (!option) return null; // Skip values without matching options
                 return (
                   <span
                     key={v}
                     className="inline-flex items-center gap-1 bg-neutral-100 text-neutral-800 px-2 py-0.5 rounded text-sm"
                   >
-                    {option?.label}
+                    {option.label}
                     <X
                       className="h-3 w-3 cursor-pointer hover:text-neutral-600"
                       onClick={(e) => handleRemove(e, v)}
