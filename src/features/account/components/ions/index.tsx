@@ -4,7 +4,7 @@ import Flag from "react-world-flags";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Check } from "lucide-react";
+import { Check, Globe, LayoutDashboard, LogOut } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 interface AccountAvatarProps {
@@ -25,7 +25,7 @@ export const AccountAvatar = ({ shortname, signOut, goTo }: AccountAvatarProps) 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar className="cursor-pointer border hover:border-black duration-200 transition-colors">
+        <Avatar className="cursor-pointer border hover:border-black duration-200 transition-colors size-8">
           <AvatarImage src={undefined} />
           <AvatarFallback>
             {shortname}
@@ -34,26 +34,28 @@ export const AccountAvatar = ({ shortname, signOut, goTo }: AccountAvatarProps) 
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem asChild className="h-auto">
-          <Button variant="ghost" className="w-full justify-start py-1 cursor-pointer" onClick={() => goTo('/dashboard')}>
+          <Button variant="ghost" className="w-full justify-start py-1 cursor-pointer gap-2" onClick={() => goTo('/dashboard')}>
+            <LayoutDashboard size={14} />
             Dashboard
           </Button>
         </DropdownMenuItem>
-          <DropdownMenuSub >
-            <DropdownMenuSubTrigger>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="cursor-pointer">
+              <Globe size={14} className="mr-2" />
               <span>{t('language')}</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
-              <DropdownMenuItem onClick={changeLanguage('pt-BR')}>
+              <DropdownMenuItem className="cursor-pointer" onClick={changeLanguage('pt-BR')}>
                 <Flag code="BR" size={16} width={16} />
                 <span>{t('portuguese')}</span>
                 {currentLanguage === 'pt-BR' && <Check size={16} />}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={changeLanguage('en')}>
+              <DropdownMenuItem className="cursor-pointer" onClick={changeLanguage('en')}>
                 <Flag code="US" size={16} width={16} />
                 <span>{t('english')}</span>
                 {currentLanguage === 'en' && <Check size={16} />}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={changeLanguage('es')}>
+              <DropdownMenuItem className="cursor-pointer" onClick={changeLanguage('es')}>
                 <Flag code="ES" size={16} width={16} />
                 <span>{t('spanish')}</span>
                 {currentLanguage === 'es' && <Check size={16} />}
@@ -61,7 +63,8 @@ export const AccountAvatar = ({ shortname, signOut, goTo }: AccountAvatarProps) 
             </DropdownMenuSubContent>
           </DropdownMenuSub>
         <DropdownMenuItem asChild className="h-auto">
-          <Button variant="ghost" className="w-full justify-start py-1 cursor-pointer" onClick={signOut}>
+          <Button variant="ghost" className="w-full justify-start py-1 cursor-pointer gap-2" onClick={signOut}>
+            <LogOut size={14} />
             {t('logout')}
           </Button>
         </DropdownMenuItem>
