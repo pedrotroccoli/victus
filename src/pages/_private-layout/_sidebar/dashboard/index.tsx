@@ -52,8 +52,20 @@ export const Home = () => {
 
   const [currentDay, setCurrentDay] = useState(new Date());
   const [editEnabled, setEditEnabled] = useState(false);
-  const [moodSectionOpen, setMoodSectionOpen] = useState(true);
   const [tab, setTab] = useLocalStorage("@victus::tab", "focus");
+
+  // Mood section toggle with hour-based TTL
+  const [moodSectionStorage, setMoodSectionStorage] = useLocalStorage<{ open: boolean; hour: number } | null>(
+    "@victus::mood-section",
+    null
+  );
+
+  const currentHour = new Date().getHours();
+  const moodSectionOpen = !moodSectionStorage || moodSectionStorage.hour !== currentHour ? true : moodSectionStorage.open;
+
+  const setMoodSectionOpen = (open: boolean) => {
+    setMoodSectionStorage({ open, hour: currentHour });
+  };
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleDays, setVisibleDays] = useState(10);
 
@@ -169,7 +181,7 @@ export const Home = () => {
             onToggleMoodSection={() => setMoodSectionOpen(!moodSectionOpen)}
           />
 
-          {(!currentHourMood || moodSectionOpen) && (
+          {moodSectionOpen && (
             <div className="mt-6 sm:mt-8 sm:px-0 px-4">
               <MoodSection onClose={() => setMoodSectionOpen(false)} />
             </div>
