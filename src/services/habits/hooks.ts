@@ -63,13 +63,47 @@ export const useCheckHabit = (options?: Partial<UseMutationOptions<CheckHabitRes
 
   return useMutation({
     ...options,
-    mutationFn: async (params) => {
-      const response = await checkHabit(params);
+    mutationFn: checkHabit,
+    onMutate: async (params) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['habits-check'] });
 
+      // Snapshot previous value
+      const previousChecks = queryClient.getQueryData<CheckHabitResponse[]>(['habits-check']);
+
+      // Optimistically update cache
+      const optimisticCheck: CheckHabitResponse = {
+        _id: params.check_id || `temp-${Date.now()}`,
+        account_id: '',
+        habit_id: params.habit_id,
+        checked: params.checked ?? true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      };
+
+      queryClient.setQueryData<CheckHabitResponse[]>(['habits-check'], (old = []) => {
+        if (!params.check_id) {
+          // New check - add to list
+          return [...old, optimisticCheck];
+        }
+        // Update existing check
+        return old.map(item =>
+          item._id === params.check_id ? { ...item, checked: params.checked ?? !item.checked } : item
+        );
+      });
+
+      return { previousChecks };
+    },
+    onError: (_err, _params, context) => {
+      // Rollback on error
+      if (context?.previousChecks) {
+        queryClient.setQueryData(['habits-check'], context.previousChecks);
+      }
+    },
+    onSuccess: (response, params) => {
+      // Update cache with real response
       applyCacheToCheckHabit(queryClient, params, response);
-
-      return response;
-    }
+    },
   })
 }
 
