@@ -43,6 +43,7 @@ export const CreateHabitModal = ({ onSave, categories, habit, habits = [], onEdi
       week_days: [],
       category: null,
       children_habit_ids: [],
+      parent_habit_id: null,
       rule_engine_enabled: false,
       rule_engine_logic_type: 'and' as const,
       rule_engine_habit_ids: [],
@@ -63,6 +64,7 @@ export const CreateHabitModal = ({ onSave, categories, habit, habits = [], onEdi
         delta_state: 'active',
       })) || [],
       children_habit_ids: habit?.children_habits?.map(h => h._id) || [],
+      parent_habit_id: habit?.parent_habit_id || null,
       rule_engine_enabled: habit?.rule_engine_enabled || false,
       // rule_engine_logic_type: habit?.rule_engine_details?.logic?.type || 'and',
       // rule_engine_habit_ids: habit?.rule_engine_details?.logic?.type === 'or'
@@ -105,6 +107,7 @@ export const CreateHabitModal = ({ onSave, categories, habit, habits = [], onEdi
         category: data.category,
         rrule,
         children_habit_ids: data.children_habit_ids,
+        parent_habit_id: data.parent_habit_id,
         rule_engine_enabled: data.rule_engine_enabled,
         rule_engine_details: ruleEngineDetails,
       });
@@ -123,7 +126,7 @@ export const CreateHabitModal = ({ onSave, categories, habit, habits = [], onEdi
   const handleError: SubmitErrorHandler<CreateHabitForm> = (errors) => {
     const habitTab = ['name', 'start_date', 'end_date', 'frequency', 'week_days', 'category'].some(key => !!errors[key as keyof CreateHabitForm]);
     const deltasTab = ['deltas'].some(key => !!errors[key as keyof CreateHabitForm]);
-    const advancedTab = ['children_habit_ids', 'rule_engine_enabled', 'rule_engine_logic_type', 'rule_engine_habit_ids'].some(key => !!errors[key as keyof CreateHabitForm]);
+    const advancedTab = ['children_habit_ids', 'parent_habit_id', 'rule_engine_enabled', 'rule_engine_logic_type', 'rule_engine_habit_ids'].some(key => !!errors[key as keyof CreateHabitForm]);
 
     if (habitTab) {
       setTabs('habit');

@@ -21,6 +21,7 @@ export const createHabitValidation = z.object({
   week_days: z.array(z.enum(daysOfWeek)).optional(),
   category: z.string().nullable(),
   children_habit_ids: z.array(z.string()).optional(),
+  parent_habit_id: z.string().nullable().optional(),
   rule_engine_enabled: z.boolean().optional(),
   rule_engine_logic_type: z.enum(['and', 'or']).optional(),
   rule_engine_habit_ids: z.array(z.string()).optional(),

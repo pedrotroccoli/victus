@@ -32,6 +32,7 @@ export type RuleEngineOr = {
 export type CreateHabitModalOnSaveProps = CreateHabitForm & {
   rrule: string;
   children_habit_ids?: string[];
+  parent_habit_id?: string | null;
   rule_engine_enabled?: boolean;
   rule_engine_details?: {
     logic: RuleEngineAnd | RuleEngineOr;

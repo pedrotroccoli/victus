@@ -7,24 +7,21 @@ import { useTranslation } from "react-i18next";
 import { CreateHabitForm } from "./types";
 
 interface RuleEngineSectionProps {
-  habits: Habit[];
-  currentHabitId?: string;
+  childrenHabits?: Habit[];
 }
 
-export function RuleEngineSection({ habits, currentHabitId }: RuleEngineSectionProps) {
+export function RuleEngineSection({ childrenHabits }: RuleEngineSectionProps) {
   const { t } = useTranslation('habit', { keyPrefix: 'create_habit_modal' });
   const form = useFormContext<CreateHabitForm>();
 
   const ruleEngineEnabled = form.watch('rule_engine_enabled');
 
   const habitOptions = useMemo(() => {
-    return habits
-      .filter((habit) => habit._id !== currentHabitId)
-      .map((habit) => ({
-        label: habit.name,
-        value: habit._id,
-      }));
-  }, [habits, currentHabitId]);
+    return (childrenHabits || []).map((habit) => ({
+      label: habit.name,
+      value: habit._id,
+    }));
+  }, [childrenHabits]);
 
   return (
     <div className="space-y-4">
