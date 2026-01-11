@@ -113,16 +113,16 @@ export const useHabitsActions = ({
     if (parentChanged) {
       // Helper to get rule engine habit IDs from a habit
       const getRuleEngineIds = (habit: Habit): string[] => {
-        const logic = habit.rule_engine?.logic;
+        const logic = habit.rule_engine_details?.logic;
         if (!logic) return [];
-        return logic.type === 'or' ? logic.or : logic.and;
+        return logic.type === 'or' ? (logic as HabitRuleLogicOr).or : (logic as HabitRuleLogicAnd).and;
       };
 
       // Remove from old parent's rule engine
       if (oldParentId) {
         const oldParent = data?.find(h => h._id === oldParentId);
         if (oldParent) {
-          const logicType = oldParent.rule_engine?.logic?.type || 'and';
+          const logicType = oldParent.rule_engine_details?.logic?.type || 'and';
           const currentIds = getRuleEngineIds(oldParent);
           const updatedIds = currentIds.filter((id: string) => id !== habitToEdit._id);
 
@@ -143,7 +143,7 @@ export const useHabitsActions = ({
       if (newParentId) {
         const newParent = data?.find(h => h._id === newParentId);
         if (newParent) {
-          const logicType = newParent.rule_engine?.logic?.type || 'and';
+          const logicType = newParent.rule_engine_details?.logic?.type || 'and';
           const currentIds = getRuleEngineIds(newParent);
           const updatedIds = [...currentIds, habitToEdit._id];
 
@@ -229,9 +229,9 @@ export const useHabitsActions = ({
         const parentHabit = data?.find(h => h._id === params.parent_habit_id);
 
         if (parentHabit) {
-          const logic = parentHabit.rule_engine?.logic;
+          const logic = parentHabit.rule_engine_details?.logic;
           const currentRuleEngineHabitIds = logic
-            ? (logic.type === 'or' ? logic.or : logic.and)
+            ? (logic.type === 'or' ? (logic as HabitRuleLogicOr).or : (logic as HabitRuleLogicAnd).and)
             : [];
 
           const newRuleEngineHabitIds = [...currentRuleEngineHabitIds, newHabitId];
