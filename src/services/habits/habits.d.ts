@@ -51,7 +51,7 @@ declare global {
     parent_habit_id?: string;
     children_habits?: Habit[];
     rule_engine_enabled?: boolean;
-    rule_engine: {
+    rule_engine_details?: {
       logic: HabitRuleLogicOr | HabitRuleLogicAnd;
     };
   }
