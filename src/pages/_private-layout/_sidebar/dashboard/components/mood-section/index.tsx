@@ -3,6 +3,7 @@ import { MoodSelector } from "@/features/mood/components/templates/mood-selector
 import { MoodDescriptionModal } from "@/features/mood/components/templates/mood-description-modal";
 import { useMoodActions } from "@/features/mood/hooks/use-mood-actions";
 import { LoaderCircle, X } from "lucide-react";
+import { MoodValue } from "@/services/mood/types";
 
 interface MoodSectionProps {
   onClose?: () => void;
@@ -21,6 +22,11 @@ export const MoodSection = ({ onClose }: MoodSectionProps) => {
     addDescription,
     isUpdating,
   } = useMoodActions();
+
+  const handleSelectMood = (value: MoodValue) => {
+    selectMood(value);
+    onClose?.();
+  };
 
   if (loading) {
     return (
@@ -52,7 +58,7 @@ export const MoodSection = ({ onClose }: MoodSectionProps) => {
 
           <MoodSelector
             selectedMood={currentHourMood?.value}
-            onSelectMood={selectMood}
+            onSelectMood={handleSelectMood}
           />
         </div>
       </div>
