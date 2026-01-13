@@ -3,9 +3,10 @@ import { Controller, useFormContext } from "react-hook-form";
 
 interface ComboBoxFieldProps extends Omit<ComboBoxProps, 'onChange' | 'value'> {
   name: string;
+  disabled?: boolean;
 }
 
-export const ComboBoxField = ({ name, ...props }: ComboBoxFieldProps) => {
+export const ComboBoxField = ({ name, disabled, ...props }: ComboBoxFieldProps) => {
   const { control } = useFormContext();
 
   return (
@@ -13,7 +14,7 @@ export const ComboBoxField = ({ name, ...props }: ComboBoxFieldProps) => {
       control={control}
       name={name}
       render={({ field: { onChange, value } }) => (
-        <ComboBox {...props} onChange={onChange} value={value} />
+        <ComboBox {...props} onChange={onChange} value={value} disabled={disabled} />
       )}
     />
   )

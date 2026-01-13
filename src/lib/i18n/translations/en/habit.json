@@ -32,7 +32,8 @@
           "label": "Category",
           "placeholder": "Select category",
           "commandPlaceholder": "Search category",
-          "commandEmpty": "No categories found"
+          "commandEmpty": "No categories found",
+          "disabled_tooltip": "Category is inherited from parent habit"
         },
         "week_days": {
           "label": "Week days",
@@ -50,6 +51,9 @@
         "infinite": {
           "label": "Infinite period",
           "placeholder": "Select if the habit is infinite"
+        },
+        "child_habit": {
+          "label": "Define a parent habit"
         },
         "children_habits": {
           "label": "Child habits",
@@ -87,7 +91,8 @@
       "sections": {
         "children_habits": "Child habits",
         "parent_habit": "Parent habit",
-        "rule_engine": "Completion rules"
+        "rule_engine": "Completion rules",
+        "advanced_empty": "No advanced settings available. Completion rules will appear when this habit has child habits."
       }
     },
     "deltas": {

@@ -26,19 +26,21 @@ export interface ComboboxProps {
   placeholder: string;
   commandPlaceholder: string;
   commandEmpty: string;
+  disabled?: boolean;
 }
 
-export function Combobox({ options, value, onChange, placeholder, commandEmpty, commandPlaceholder }: ComboboxProps) {
+export function Combobox({ options, value, onChange, placeholder, commandEmpty, commandPlaceholder, disabled }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={disabled ? false : open} onOpenChange={disabled ? undefined : setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className={cn("w-full justify-between", disabled && "opacity-50 cursor-not-allowed")}
+          disabled={disabled}
         >
           {(value !== undefined && value !== null)
             ? options.find((option) => option.value === value)?.label

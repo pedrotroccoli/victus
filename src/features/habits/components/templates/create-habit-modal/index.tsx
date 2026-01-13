@@ -1,8 +1,9 @@
 import { Button } from '@/components/ions/button';
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useGetHabits } from '@/services/habits/hooks';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { addDays } from 'date-fns';
+import { addDays, addYears, subYears } from 'date-fns';
 import { Flag, Loader2, Pause, Play } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
@@ -13,9 +14,20 @@ import { HabitTab } from './habit-tab';
 import { CreateHabitForm, CreateHabitModalProps } from './types';
 import { createHabitValidation, generateRrule, rruleParse } from './utils';
 
-export const CreateHabitModal = ({ onSave, categories, habit, habits = [], onEditDelta, onCreateDelta, newDeltas, onPause, onFinish }: CreateHabitModalProps) => {
+export const CreateHabitModal = ({ onSave, categories, habit, habits: propHabits = [], onEditDelta, onCreateDelta, newDeltas, onPause, onFinish }: CreateHabitModalProps) => {
   const { t } = useTranslation('habit', { keyPrefix: 'create_habit_modal' })
   const { t: tCommon } = useTranslation('common');
+
+  // Fetch all habits with a wide date range to ensure we get everything
+  const { data: fetchedHabits } = useGetHabits({
+    start_date: subYears(new Date(), 10).toISOString().split('T')[0] as `${number}-${number}-${number}`,
+    end_date: addYears(new Date(), 10).toISOString().split('T')[0] as `${number}-${number}-${number}`,
+  }, {});
+
+  // Use fetched habits if available, otherwise fall back to prop habits
+  const habits = useMemo(() => {
+    return fetchedHabits || propHabits || [];
+  }, [fetchedHabits, propHabits]);
 
   const [loading, setLoading] = useState(false);
 
@@ -192,7 +204,7 @@ export const CreateHabitModal = ({ onSave, categories, habit, habits = [], onEdi
           </TabsList>
 
           <TabsContent value="habit">
-            <HabitTab categories={categories} habit={habit} endDate={endDate} />
+            <HabitTab categories={categories} habits={habits} habit={habit} endDate={endDate} />
           </TabsContent>
           <TabsContent value="deltas">
             <DeltaTab

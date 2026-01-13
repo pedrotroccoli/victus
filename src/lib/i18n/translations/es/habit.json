@@ -32,7 +32,8 @@
           "label": "Categoría",
           "placeholder": "Selecciona la categoría",
           "commandPlaceholder": "Buscar categoría",
-          "commandEmpty": "No se encontraron categorías"
+          "commandEmpty": "No se encontraron categorías",
+          "disabled_tooltip": "La categoría se hereda del hábito padre"
         },
         "week_days": {
           "label": "Días de la semana",
@@ -50,6 +51,9 @@
         "infinite": {
           "label": "Período infinito",
           "placeholder": "Selecciona si el hábito es infinito"
+        },
+        "child_habit": {
+          "label": "Definir un hábito padre"
         },
         "children_habits": {
           "label": "Hábitos hijos",
@@ -87,7 +91,8 @@
       "sections": {
         "children_habits": "Hábitos hijos",
         "parent_habit": "Hábito padre",
-        "rule_engine": "Reglas de finalización"
+        "rule_engine": "Reglas de finalización",
+        "advanced_empty": "No hay configuraciones avanzadas disponibles. Las reglas de finalización aparecerán cuando este hábito tenga hábitos hijos."
       }
     },
     "deltas": {
