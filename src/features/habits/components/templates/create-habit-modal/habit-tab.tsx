@@ -7,7 +7,7 @@ import { DatePickerField } from "@/components/molecules/form/DatePickerField";
 import { SelectField } from "@/components/molecules/form/SelectField";
 import { ToggleGroupField } from "@/components/molecules/form/ToggleGroupField";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { format, isBefore, sub } from "date-fns";
+import { format, isAfter, isBefore, sub } from "date-fns";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -42,12 +42,31 @@ export function HabitTab({ categories, habits = [], habit, endDate }: HabitTabPr
     setIsChildHabit(!!parentHabitId && parentHabitId !== null);
   }, [parentHabitId]);
 
+  // Get selected parent habit
+  const selectedParentHabit = useMemo(() => {
+    if (!isChildHabit || !parentHabitId) return null;
+    return habits.find(h => h._id === parentHabitId) || null;
+  }, [isChildHabit, parentHabitId, habits]);
+
   // When parent habit changes, update category to match parent's category
+  // and adjust end_date if it exceeds parent's end_date
   useEffect(() => {
     if (isChildHabit && parentHabitId && parentHabitId !== null) {
       const parentHabit = habits.find(h => h._id === parentHabitId);
       if (parentHabit) {
         form.setValue('category', parentHabit.habit_category?._id || null);
+
+        // If parent has an end_date and child's end_date exceeds it, adjust child's end_date
+        const currentEndDate = form.getValues('end_date');
+        if (parentHabit.end_date && currentEndDate && isAfter(currentEndDate, parentHabit.end_date)) {
+          form.setValue('end_date', new Date(parentHabit.end_date));
+        }
+
+        // If parent has an end_date and child is set to infinite, unset infinite
+        if (parentHabit.end_date && form.getValues('infinite')) {
+          form.setValue('infinite', false);
+          form.setValue('end_date', new Date(parentHabit.end_date));
+        }
       }
     }
   }, [parentHabitId, isChildHabit, habits, form]);
@@ -227,13 +246,27 @@ export function HabitTab({ categories, habits = [], habit, endDate }: HabitTabPr
               return true;
             }
 
+            // If parent has end_date, child cannot have end_date after parent's end_date
+            if (selectedParentHabit?.end_date && isAfter(date, selectedParentHabit.end_date)) {
+              return true;
+            }
+
             return false;
           }}
             disabledMessage={habit ? habit.end_date ? format(habit.end_date, 'dd/MM/yyyy') : t('form.fields.end_date.disabled_message') : form.watch('infinite') ? t('form.fields.end_date.disabled_message') : undefined}
           />
           <div className="flex items-center gap-2 mt-2">
-            <CheckboxField className="rounded" name="infinite" disabled={!!habit} />
+            <CheckboxField
+              className="rounded"
+              name="infinite"
+              disabled={!!habit || (selectedParentHabit?.end_date ? true : false)}
+            />
             <p className="text-sm font-medium">{t('form.fields.infinite.label')}</p>
+            {selectedParentHabit?.end_date && (
+              <span className="text-xs text-neutral-500">
+                ({t('form.fields.end_date.parent_limit')})
+              </span>
+            )}
           </div>
         </div>
       </div>
