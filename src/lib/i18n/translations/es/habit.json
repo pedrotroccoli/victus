@@ -177,12 +177,16 @@
   },
   "create_category_modal": {
     "title": "Crear categoría",
-    "description": "Establece el nombre de la categoría",
+    "description": "Establece el nombre y el icono de la categoría",
     "form": {
       "fields": {
         "name": {
           "label": "Nombre de la categoría",
           "placeholder": "Ej: Salud o Educación"
+        },
+        "icon": {
+          "label": "Icono",
+          "placeholder": "Selecciona un icono"
         }
       }
     }

@@ -1,3 +1,4 @@
+import { IconDisplay } from "@/components/atoms/icon-picker";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Eye, EyeOff } from "lucide-react";
@@ -18,6 +19,9 @@ export const HabitLineHeader = ({ isFirstRow, category, hideHabits, onHideHabit,
     <div className="flex items-end justify-between relative">
       <div className={cn("w-full h-10 md:h-7 flex items-center gap-2 mb-3 group", isFirstRow && "w-full min-w-32 max-w-32 sm:max-w-auto sm:min-w-48 sm:w-auto")}>
         <div className="w-[2px] rounded-md h-full bg-black"></div>
+        {category?.icon && (
+          <IconDisplay name={category.icon} size={16} className="flex-shrink-0" />
+        )}
         <h6 className="text-sm font-medium font-[Recursive] truncate">{category?.name}</h6>
 
         <button className="group-hover:opacity-100 opacity-0 transition-opacity duration-200 w-5 h-5 rounded-full flex items-center justify-center border border-neutral-500"

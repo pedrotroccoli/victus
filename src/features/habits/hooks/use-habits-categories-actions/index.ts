@@ -32,6 +32,7 @@ export const useHabitsCategoryActions = (): UseHabitsCategoryActions => {
       await createHabitCategory({
         name: data.name,
         order: highestOrder,
+        icon: data.icon,
       });
 
       setModalOpen(false);
