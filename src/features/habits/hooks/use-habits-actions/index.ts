@@ -204,11 +204,39 @@ export const useHabitsActions = ({
 
   const onCreateHabit = async (params: CreateHabitModalOnSaveProps) => {
     try {
+      // Calculate order based on context (parent's children or category)
+      let order = 1000;
+
+      if (params.parent_habit_id) {
+        // If has parent, get highest order among parent's children
+        const parentHabit = data?.find(h => h._id === params.parent_habit_id);
+        if (parentHabit?.children_habits && parentHabit.children_habits.length > 0) {
+          const maxChildOrder = Math.max(...parentHabit.children_habits.map(h => h.order || 0));
+          order = maxChildOrder + 1000;
+        }
+      } else {
+        // Get highest order among habits in the same category (or no category for "general")
+        const categoryId = params.category || null;
+        const habitsInCategory = data?.filter(h =>
+          !h.parent_habit_id &&
+          (categoryId ? h.habit_category_id === categoryId : !h.habit_category_id)
+        ) || [];
+
+        if (habitsInCategory.length > 0) {
+          const maxOrder = Math.max(...habitsInCategory.map(h => h.order || 0));
+          order = maxOrder + 1000;
+        }
+      }
+
+      // Ensure order is always a valid number (default to 1000)
+      const finalOrder = (order && !isNaN(order)) ? order : 1000;
+
       const createdHabits = await createHabit({
         name: params.name,
         start_date: params.start_date,
         end_date: params.end_date,
         infinite: !!params.infinite,
+        order: finalOrder,
         recurrence_details: {
           rule: params.rrule,
         },

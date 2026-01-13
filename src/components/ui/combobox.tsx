@@ -57,7 +57,7 @@ export function Combobox({ options, value, onChange, placeholder, commandEmpty, 
               {options.map((option) => (
                 <CommandItem
                   key={option.value}
-                  value={option.value as string}
+                  value={option.label}
                   onSelect={() => {
                       onChange(option.value)
                   }}

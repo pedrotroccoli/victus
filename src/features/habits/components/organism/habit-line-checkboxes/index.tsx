@@ -1,6 +1,12 @@
 import { cn } from "@/lib/utils";
 import { isAcceptedByRRule } from "@/utils/habits";
-import { sortableKeyboardCoordinates, useSortable } from "@dnd-kit/sortable";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { format, isAfter, isBefore, subDays } from "date-fns";
 import { ChevronRight, GripVertical, Pencil, Trash } from "lucide-react";
@@ -11,11 +17,16 @@ import { HabitName } from "../../molecules/habit-name";
 import {
   closestCenter,
   DndContext,
+  DragEndEvent,
+  DragOverlay,
+  DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
+import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
+import { HabitLineChange } from "../../templates/habit-lines";
 
 export interface HabitLineCheckboxesProps {
   habit: Habit;
@@ -38,6 +49,7 @@ export interface HabitLineCheckboxesProps {
   onEditHabit?: (habit: Habit) => void;
   isChild?: boolean;
   childSpan?: number;
+  onHabitChange?: (habitChange: HabitLineChange) => void;
 }
 
 interface HabitRange {
@@ -67,6 +79,7 @@ export function HabitLineCheckboxes({
   onEditHabit,
   isChild,
   childSpan,
+  onHabitChange,
 }: HabitLineCheckboxesProps) {
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -107,6 +120,70 @@ export function HabitLineCheckboxes({
       [habit._id]: { hidden: !habitHidden },
     }));
   }, [habit._id, habitHidden, setHiddenHabits]);
+
+  // State for managing child habits order
+  const [childHabits, setChildHabits] = useState<Habit[]>(
+    () => [...(habit.children_habits || [])].sort((a, b) => (a.order || 0) - (b.order || 0))
+  );
+
+  // Update child habits when prop changes
+  React.useEffect(() => {
+    setChildHabits(
+      [...(habit.children_habits || [])].sort((a, b) => (a.order || 0) - (b.order || 0))
+    );
+  }, [habit.children_habits]);
+
+  // Helper functions for fractional ordering
+  const subtractOrder = (order: number) => Number((Number(order) - 0.0001).toFixed(4));
+  const addOrder = (order: number) => Number((Number(order) + 0.0001).toFixed(4));
+
+  // State for tracking which child is being dragged
+  const [draggingChild, setDraggingChild] = useState<Habit | null>(null);
+
+  // Handle drag start for child habits
+  const handleChildDragStart = useCallback((event: DragStartEvent) => {
+    const draggedHabit = childHabits.find((h) => h._id === event.active.id);
+    setDraggingChild(draggedHabit || null);
+  }, [childHabits]);
+
+  // Handle drag end for child habits reordering
+  const handleChildDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+
+    setDraggingChild(null);
+
+    if (!over || active.id === over.id) return;
+
+    setChildHabits((items) => {
+      const oldIndex = items.findIndex((item) => item._id === active.id);
+      const newIndex = items.findIndex((item) => item._id === over.id);
+
+      const newItems = arrayMove(items, oldIndex, newIndex);
+
+      // Calculate new order
+      let newOrder = 0;
+      const nextElement = newItems[newIndex + 1];
+      const previousElement = newItems[newIndex - 1];
+
+      if (nextElement) {
+        newOrder = subtractOrder(nextElement.order);
+      } else if (previousElement) {
+        newOrder = addOrder(previousElement.order);
+      } else {
+        newOrder = 1000;
+      }
+
+      newItems[newIndex] = { ...newItems[newIndex], order: newOrder };
+
+      // Notify parent about the change
+      onHabitChange?.({
+        type: ["order"],
+        habit: newItems[newIndex],
+      });
+
+      return newItems;
+    });
+  }, [onHabitChange]);
 
   const handleCheckHabit = useCallback(
     (habit: Habit, day: string) => () => {
@@ -175,7 +252,24 @@ export function HabitLineCheckboxes({
           )}
         >
           <div className="w-full overflow-visible min-w-32 max-w-32 sm:max-w-auto sm:min-w-48 ">
-            <div className="flex items-center gap-0.5">
+            <div
+              className="flex items-center gap-0.5"
+              style={{
+                paddingLeft: isChild ? `${(childSpan || 0) + 16}px` : '0',
+              }}
+            >
+              {enableOrder && (
+                <button
+                  {...listeners}
+                  ref={setActivatorNodeRef}
+                  className={cn(
+                    "w-4 h-5 text-neutral-400 flex items-center justify-center transition-colors duration-200 flex-shrink-0",
+                    "hover:text-black cursor-grab active:cursor-grabbing",
+                  )}
+                >
+                  <GripVertical size={12} />
+                </button>
+              )}
               {hasChildren && (
                 <button
                   onClick={toggleCollapsed}
@@ -191,18 +285,6 @@ export function HabitLineCheckboxes({
                   />
                 </button>
               )}
-              {enableOrder && (
-                <button
-                  {...listeners}
-                  ref={setActivatorNodeRef}
-                  className={cn(
-                    "w-3 h-5 text-neutral-400 rounded-full flex items-center justify-center border-neutral-500 transition-colors duration-200",
-                    "hover:border hover:text-black ",
-                  )}
-                >
-                  <GripVertical size={12} />
-                </button>
-              )}
 
               <div
                 className="flex items-center min-w-24 w-full h-7 data-[edit-enabled=true]:max-w-40"
@@ -216,8 +298,8 @@ export function HabitLineCheckboxes({
                   onMouseEnter={() => setNameHovering(true)}
                   onMouseLeave={() => setNameHovering(false)}
                   onToggleHide={toggleHabitHidden}
-                  isChild={isChild}
-                  childSpan={childSpan}
+                  isChild={false}
+                  childSpan={0}
                   hasChildren={hasChildren}
                 />
 
@@ -308,35 +390,58 @@ export function HabitLineCheckboxes({
           <DndContext
             sensors={sensors}
             collisionDetection={closestCenter}
-            onDragOver={() => {}}
-            onDragEnd={() => {}}
-            onDragStart={() => {}}
-            autoScroll={true}
+            onDragStart={handleChildDragStart}
+            onDragEnd={handleChildDragEnd}
+            modifiers={[restrictToVerticalAxis]}
           >
-            {habit.children_habits!.map((childHabit) => (
-              <HabitLineCheckboxes
-                key={childHabit._id}
-                habit={childHabit}
-                isFirstRow={false}
-                isLastRow={isLastRow}
-                daysInMonth={daysInMonth}
-                currentDay={currentDay}
-                getHabitCheck={getHabitCheck}
-                onCheckHabit={onCheckHabit}
-                onDelete={() => onDeleteHabit?.(childHabit)}
-                onDeleteHabit={onDeleteHabit}
-                enableOrder={enableOrder}
-                enableEdit={enableEdit}
-                enableDelete={enableDelete}
-                onScroll={onScroll}
-                hideHabits={hideHabits}
-                onHideHabit={() => {}}
-                onEdit={() => onEditHabit?.(childHabit)}
-                onEditHabit={onEditHabit}
-                isChild
-                childSpan={childSpan ? childSpan + 1 : 1}
-              />
-            ))}
+            <SortableContext
+              items={childHabits.map((h) => h._id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {childHabits.map((childHabit) => (
+                <HabitLineCheckboxes
+                  key={childHabit._id}
+                  habit={childHabit}
+                  isFirstRow={false}
+                  isLastRow={isLastRow}
+                  daysInMonth={daysInMonth}
+                  currentDay={currentDay}
+                  getHabitCheck={getHabitCheck}
+                  onCheckHabit={onCheckHabit}
+                  onDelete={() => onDeleteHabit?.(childHabit)}
+                  onDeleteHabit={onDeleteHabit}
+                  enableOrder={enableOrder}
+                  enableEdit={enableEdit}
+                  enableDelete={enableDelete}
+                  onScroll={onScroll}
+                  hideHabits={hideHabits}
+                  onHideHabit={() => {}}
+                  onEdit={() => onEditHabit?.(childHabit)}
+                  onEditHabit={onEditHabit}
+                  isChild
+                  childSpan={childSpan ? childSpan + 1 : 1}
+                  onHabitChange={onHabitChange}
+                />
+              ))}
+            </SortableContext>
+            <DragOverlay modifiers={[restrictToVerticalAxis]}>
+              {draggingChild && (
+                <HabitLineCheckboxes
+                  habit={draggingChild}
+                  isFirstRow={false}
+                  isLastRow={false}
+                  daysInMonth={daysInMonth}
+                  currentDay={currentDay}
+                  getHabitCheck={getHabitCheck}
+                  enableOrder={false}
+                  enableEdit={false}
+                  enableDelete={false}
+                  hideHabits={false}
+                  isChild
+                  childSpan={childSpan ? childSpan + 1 : 1}
+                />
+              )}
+            </DragOverlay>
           </DndContext>
         </div>
       )}

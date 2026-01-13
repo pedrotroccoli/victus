@@ -382,6 +382,7 @@ export const HabitLines = ({
                         onHideHabit={handleHideHabits(id)}
                         onEdit={() => onEditHabit?.(item)}
                         onEditHabit={onEditHabit}
+                        onHabitChange={onHabitChange}
                       />
                     ))}
                 </SortableContext>

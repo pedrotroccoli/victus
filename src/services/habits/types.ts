@@ -12,6 +12,7 @@ export interface CreateHabitRequest {
   start_date: Date;
   end_date: Date;
   infinite: boolean;
+  order?: number;
   recurrence_type?: string;
   habit_category_id?: string;
   recurrence_details?: {
