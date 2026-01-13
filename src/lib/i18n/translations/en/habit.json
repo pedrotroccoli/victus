@@ -185,7 +185,9 @@
   },
   "create_category_modal": {
     "title": "Create category",
+    "title_edit": "Edit category",
     "description": "Set the category name and icon",
+    "description_edit": "Edit the category name and icon",
     "form": {
       "fields": {
         "name": {

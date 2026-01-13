@@ -5,7 +5,7 @@ import { InputWithIcon } from '@/components/molecules/input-with-icon';
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { CategoryIconName } from '@/lib/icons/category-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -18,22 +18,38 @@ export type CreateCategoryForm = z.infer<typeof createCategoryValidation>;
 
 export interface CreateCategoryModalProps {
   onSave?: (data: CreateCategoryForm) => void;
+  category?: HabitCategory;
 }
 
 
-export const CreateCategoryModal = ({ onSave }: CreateCategoryModalProps) => {
+export const CreateCategoryModal = ({ onSave, category }: CreateCategoryModalProps) => {
   const { t } = useTranslation(['habit', 'common']);
   const [loading, setLoading] = useState(false);
+  const isEditMode = !!category;
 
   const defaultValues = {
-    name: '',
-    icon: undefined as string | undefined,
+    name: category?.name || '',
+    icon: category?.icon || undefined as string | undefined,
   }
 
   const form = useForm<z.infer<typeof createCategoryValidation>>({
     resolver: zodResolver(createCategoryValidation),
     defaultValues,
   });
+
+  useEffect(() => {
+    if (category) {
+      form.reset({
+        name: category.name,
+        icon: category.icon || undefined,
+      });
+    } else {
+      form.reset({
+        name: '',
+        icon: undefined,
+      });
+    }
+  }, [category, form]);
 
 
   const handleSubmit: SubmitHandler<CreateCategoryForm> = async (data) => {
@@ -42,7 +58,9 @@ export const CreateCategoryModal = ({ onSave }: CreateCategoryModalProps) => {
 
       await onSave?.(data);
 
-      form.reset(defaultValues);
+      if (!isEditMode) {
+        form.reset({ name: '', icon: undefined });
+      }
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.log('CreateCategoryModal onSave error:', error);
@@ -61,9 +79,11 @@ export const CreateCategoryModal = ({ onSave }: CreateCategoryModalProps) => {
   return (
     <DialogContent className="bg-white rounded-x p-0 gap-0 sm:rounded w-[calc(100vw-2rem)] rounded-lg">
       <DialogHeader className="p-4 border-b text-left">
-        <DialogTitle>{t('create_category_modal.title')}</DialogTitle>
+        <DialogTitle>
+          {isEditMode ? t('create_category_modal.title_edit') : t('create_category_modal.title')}
+        </DialogTitle>
         <DialogDescription className="text-black/70">
-          {t('create_category_modal.description')}
+          {isEditMode ? t('create_category_modal.description_edit') : t('create_category_modal.description')}
         </DialogDescription>
       </DialogHeader>
       <FormProvider {...form}>
@@ -85,7 +105,7 @@ export const CreateCategoryModal = ({ onSave }: CreateCategoryModalProps) => {
             disabled={loading}
             loading={loading}
           >
-            {t('common:create')}
+            {isEditMode ? t('common:save') : t('common:create')}
           </Button>
         </div>
       </FormProvider>

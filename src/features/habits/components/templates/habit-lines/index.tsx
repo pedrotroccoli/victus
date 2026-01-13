@@ -42,6 +42,7 @@ interface HabitLinesProps {
   onDeleteHabit: (habit: Habit) => void;
   onEditHabit: (habit: Habit) => void;
   onAddHabit?: (categoryId?: string) => void;
+  onEditCategory?: (category: HabitCategory) => void;
   onDeleteCategory?: (categoryId: string) => void;
 }
 
@@ -57,6 +58,7 @@ export const HabitLines = ({
   onDeleteHabit,
   onEditHabit,
   onAddHabit,
+  onEditCategory,
   onDeleteCategory,
 }: HabitLinesProps) => {
   const currentLineId = useRef<string | undefined>("");
@@ -349,12 +351,14 @@ export const HabitLines = ({
             return false;
           })
           .map(([id, categorizedHabits], index) => (
-          <div>
+          <div key={id}>
             <HabitLineHeader
               isFirstRow={index === 0}
               category={categorizedHabits.category}
               hideHabits={hideHabits[id]}
               onHideHabit={onHideHabit(id)}
+              onEditCategory={onEditCategory && categorizedHabits.category?._id && !["general", "finished", "paused"].includes(categorizedHabits.category._id) ? () => onEditCategory(categorizedHabits.category!) : undefined}
+              onDeleteCategory={onDeleteCategory && categorizedHabits.category?._id && !["general", "finished", "paused"].includes(categorizedHabits.category._id) ? () => onDeleteCategory(categorizedHabits.category!._id) : undefined}
               daysInMonth={daysInMonth}
               handleScroll={handleScroll}
               currentDay={currentDay}

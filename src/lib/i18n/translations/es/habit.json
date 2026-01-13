@@ -185,7 +185,9 @@
   },
   "create_category_modal": {
     "title": "Crear categoría",
+    "title_edit": "Editar categoría",
     "description": "Establece el nombre y el icono de la categoría",
+    "description_edit": "Edita el nombre y el icono de la categoría",
     "form": {
       "fields": {
         "name": {

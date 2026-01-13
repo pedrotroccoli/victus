@@ -278,6 +278,10 @@ export const Home = () => {
                         onHabitChange={onHabitChange}
                         editEnabled={editEnabled}
                         onAddHabit={() => habits.setCreateModalOpen(true)}
+                        onEditCategory={(category) => {
+                          categories.setEditingCategory(category);
+                          categories.setModalOpen(true);
+                        }}
                         onDeleteCategory={(id) => categories.remove(id)}
                       />
                     </TabsContent>

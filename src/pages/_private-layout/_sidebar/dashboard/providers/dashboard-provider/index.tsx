@@ -103,8 +103,16 @@ export const DashboardProvider = ({ children }: DashboardProviderProps) => {
     <DashboardContext.Provider value={value}>
       {children}
 
-      <Dialog open={categories.modalOpen} onOpenChange={categories.setModalOpen}>
-        <CreateCategoryModal onSave={categories.create} />
+      <Dialog open={categories.modalOpen} onOpenChange={(open) => {
+          categories.setModalOpen(open);
+          if (!open) {
+            categories.setEditingCategory(undefined);
+          }
+        }}>
+        <CreateCategoryModal
+          category={categories.editingCategory}
+          onSave={categories.editingCategory ? categories.update : categories.create}
+        />
       </Dialog>
 
       <Dialog open={habitModalInfo.open} onOpenChange={habitModalInfo.onOpenChange}>

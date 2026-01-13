@@ -5,3 +5,11 @@ export interface CreateHabitCategoryRequest {
 }
 
 export type CreateHabitCategoryResponse = HabitCategory;
+
+export interface UpdateHabitCategoryRequest {
+  id: string;
+  name: string;
+  icon?: string;
+}
+
+export type UpdateHabitCategoryResponse = HabitCategory;

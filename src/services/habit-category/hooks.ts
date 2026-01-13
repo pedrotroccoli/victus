@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createHabitCategory, deleteHabitCategory, getAllHabitCategories } from "./services";
-import { CreateHabitCategoryRequest } from "./types";
+import { createHabitCategory, deleteHabitCategory, getAllHabitCategories, updateHabitCategory } from "./services";
+import { CreateHabitCategoryRequest, UpdateHabitCategoryRequest } from "./types";
 
 export const useHabitCategories = () => useQuery({
   queryKey: ['habit-categories'],
@@ -15,6 +15,24 @@ export const useCreateHabitCategory = () => {
       const data = await createHabitCategory(params);
 
       queryClient.setQueryData(['habit-categories'], (prev: HabitCategory[]) => [...prev, data]);
+
+      return data;
+    }
+  });
+}
+
+export const useUpdateHabitCategory = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (params: UpdateHabitCategoryRequest) => {
+      const data = await updateHabitCategory(params);
+
+      queryClient.setQueryData(['habit-categories'], (prev: HabitCategory[]) =>
+        prev.map(category => category._id === params.id ? data : category)
+      );
+
+      queryClient.invalidateQueries({ queryKey: ['habits'] });
 
       return data;
     }

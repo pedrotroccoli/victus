@@ -1,5 +1,5 @@
 import { baseApi } from "../api";
-import { CreateHabitCategoryRequest, CreateHabitCategoryResponse } from "./types";
+import { CreateHabitCategoryRequest, CreateHabitCategoryResponse, UpdateHabitCategoryRequest, UpdateHabitCategoryResponse } from "./types";
 
 export const getAllHabitCategories = async (): Promise<HabitCategory[]> => {
   const { data } = await baseApi.get('/habits_category');
@@ -10,6 +10,12 @@ export const getAllHabitCategories = async (): Promise<HabitCategory[]> => {
 
 export const createHabitCategory = async (params: CreateHabitCategoryRequest): Promise<CreateHabitCategoryResponse> => {
   const { data } = await baseApi.post('/habits_category', params);
+
+  return data;
+};
+
+export const updateHabitCategory = async ({ id, ...params }: UpdateHabitCategoryRequest): Promise<UpdateHabitCategoryResponse> => {
+  const { data } = await baseApi.put(`/habits_category/${id}`, params);
 
   return data;
 };
