@@ -77,7 +77,7 @@
       "monthly": {
         "title": "Monthly",
         "after_name": "/ month",
-        "price": "R$ 15.00",
+        "price": "$3",
         "features": {
           "habit_creation": "Track up to 50 habits",
           "delta_creation": "Goal tracking with milestones",
@@ -88,8 +88,8 @@
       "yearly": {
         "title": "Yearly",
         "after_name": "/ year",
-        "price": "R$ 8.33",
-        "oldPrice": "R$ 180.00",
+        "price": "$19",
+        "oldPrice": "$36",
         "features": {
           "habit_creation": "Unlimited habits",
           "delta_creation": "Goal tracking with milestones",

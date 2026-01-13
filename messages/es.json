@@ -80,7 +80,7 @@
       "monthly": {
         "title": "Mensual",
         "after_name": "/ mes",
-        "price": "R$ 15.00",
+        "price": "$3",
         "features": {
           "habit_creation": "Sigue hasta 50 hábitos",
           "delta_creation": "Metas con hitos de progreso",
@@ -91,8 +91,8 @@
       "yearly": {
         "title": "Anual",
         "after_name": "/ año",
-        "price": "R$ 8.33",
-        "oldPrice": "R$ 180.00",
+        "price": "$19",
+        "oldPrice": "$36",
         "features": {
           "habit_creation": "Hábitos ilimitados",
           "delta_creation": "Metas con hitos de progreso",

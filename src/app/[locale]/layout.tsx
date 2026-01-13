@@ -6,6 +6,8 @@ import { IBMPlexSans, RecursiveFont } from "../_fonts";
 
 import { News } from "@/components/news";
 import { routing } from "@/i18n/routing";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { notFound } from "next/navigation";
 import '../globals.css';
@@ -45,6 +47,8 @@ export default async function RootLayout({
 
           <WhatsappButton locale={locale} />
         </NextIntlClientProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
