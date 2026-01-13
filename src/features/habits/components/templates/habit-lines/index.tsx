@@ -63,6 +63,7 @@ export const HabitLines = ({
 }: HabitLinesProps) => {
   const currentLineId = useRef<string | undefined>("");
   const [hideHabits, setHideHabits] = useState<Record<string, boolean>>({});
+  const [collapsedCategories, setCollapsedCategories] = useState<Record<string, boolean>>({});
   const timeOut = useRef<NodeJS.Timeout | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -137,6 +138,10 @@ export const HabitLines = ({
 
   const handleHideHabits = (id: string) => () => {
     setHideHabits((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleToggleCollapse = (id: string) => () => {
+    setCollapsedCategories((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   function subtractOrder(order: number) {
@@ -357,60 +362,64 @@ export const HabitLines = ({
               category={categorizedHabits.category}
               hideHabits={hideHabits[id]}
               onHideHabit={onHideHabit(id)}
+              collapsed={collapsedCategories[id]}
+              onToggleCollapse={handleToggleCollapse(id)}
               onEditCategory={onEditCategory && categorizedHabits.category?._id && !["general", "finished", "paused"].includes(categorizedHabits.category._id) ? () => onEditCategory(categorizedHabits.category!) : undefined}
               onDeleteCategory={onDeleteCategory && categorizedHabits.category?._id && !["general", "finished", "paused"].includes(categorizedHabits.category._id) ? () => onDeleteCategory(categorizedHabits.category!._id) : undefined}
               daysInMonth={daysInMonth}
               handleScroll={handleScroll}
               currentDay={currentDay}
             />
-            <>
-              {categorizedHabits && categorizedHabits?.list?.length === 0 && (
-                <HabitEmptyBox
-                  category={categorizedHabits.category}
-                  onAddHabit={onAddHabit ? () => onAddHabit(categorizedHabits.category?._id) : undefined}
-                  onDeleteCategory={onDeleteCategory && categorizedHabits.category?._id ? () => onDeleteCategory(categorizedHabits.category!._id) : undefined}
-                />
-              )}
-              {categorizedHabits && categorizedHabits?.list?.length > 0 && (
-                <SortableContext
-                  items={categorizedHabits?.list
-                    ?.sort(
-                      (a: Habit, b: Habit) => (a.order || 0) - (b.order || 0),
-                    )
-                    .map((item) => item._id)}
-                  strategy={verticalListSortingStrategy}
-                >
-                  {categorizedHabits?.list
-                    ?.sort(
-                      (a: Habit, b: Habit) => (a.order || 0) - (b.order || 0),
-                    )
-                    .map((item: Habit, habitIndex: number, currentArray) => (
-                      <HabitLineCheckboxes
-                        enableEdit={editEnabled}
-                        enableDelete={editEnabled}
-                        category={categorizedHabits.category}
-                        key={item._id}
-                        onScroll={handleScroll}
-                        enableOrder={orderEnabled}
-                        habit={item}
-                        daysInMonth={daysInMonth}
-                        getHabitCheck={getHabitCheck}
-                        currentDay={currentDay}
-                        onCheckHabit={onCheckHabit}
-                        onDelete={() => onDeleteHabit?.(item)}
-                        onDeleteHabit={onDeleteHabit}
-                        isFirstRow={habitIndex === 0}
-                        isLastRow={habitIndex === currentArray.length - 1}
-                        hideHabits={hideHabits[id]}
-                        onHideHabit={handleHideHabits(id)}
-                        onEdit={() => onEditHabit?.(item)}
-                        onEditHabit={onEditHabit}
-                        onHabitChange={onHabitChange}
-                      />
-                    ))}
-                </SortableContext>
-              )}
-            </>
+            {!collapsedCategories[id] && (
+              <>
+                {categorizedHabits && categorizedHabits?.list?.length === 0 && (
+                  <HabitEmptyBox
+                    category={categorizedHabits.category}
+                    onAddHabit={onAddHabit ? () => onAddHabit(categorizedHabits.category?._id) : undefined}
+                    onDeleteCategory={onDeleteCategory && categorizedHabits.category?._id ? () => onDeleteCategory(categorizedHabits.category!._id) : undefined}
+                  />
+                )}
+                {categorizedHabits && categorizedHabits?.list?.length > 0 && (
+                  <SortableContext
+                    items={categorizedHabits?.list
+                      ?.sort(
+                        (a: Habit, b: Habit) => (a.order || 0) - (b.order || 0),
+                      )
+                      .map((item) => item._id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    {categorizedHabits?.list
+                      ?.sort(
+                        (a: Habit, b: Habit) => (a.order || 0) - (b.order || 0),
+                      )
+                      .map((item: Habit, habitIndex: number, currentArray) => (
+                        <HabitLineCheckboxes
+                          enableEdit={editEnabled}
+                          enableDelete={editEnabled}
+                          category={categorizedHabits.category}
+                          key={item._id}
+                          onScroll={handleScroll}
+                          enableOrder={orderEnabled}
+                          habit={item}
+                          daysInMonth={daysInMonth}
+                          getHabitCheck={getHabitCheck}
+                          currentDay={currentDay}
+                          onCheckHabit={onCheckHabit}
+                          onDelete={() => onDeleteHabit?.(item)}
+                          onDeleteHabit={onDeleteHabit}
+                          isFirstRow={habitIndex === 0}
+                          isLastRow={habitIndex === currentArray.length - 1}
+                          hideHabits={hideHabits[id]}
+                          onHideHabit={handleHideHabits(id)}
+                          onEdit={() => onEditHabit?.(item)}
+                          onEditHabit={onEditHabit}
+                          onHabitChange={onHabitChange}
+                        />
+                      ))}
+                  </SortableContext>
+                )}
+              </>
+            )}
           </div>
         ))}
         <DragOverlay modifiers={[restrictToWindowEdges]}>

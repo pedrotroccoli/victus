@@ -4,11 +4,58 @@ import { format } from "date-fns";
 import { Eye, EyeOff, Pencil, Trash2 } from "lucide-react";
 import { HabitDay } from "../../atoms/habit-day";
 
+interface CollapsibleBarProps {
+  collapsed: boolean;
+  onClick: () => void;
+}
+
+const CollapsibleBar = ({ collapsed, onClick }: CollapsibleBarProps) => {
+  if (collapsed) {
+    // Chevron pointing down "v"
+    return (
+      <button
+        onClick={onClick}
+        className="relative w-[14px] h-[14px] flex items-center justify-center flex-shrink-0"
+        title="Expand"
+      >
+        <span className="absolute w-[2px] h-[7px] bg-black rounded-full origin-bottom left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 rotate-[35deg]" />
+        <span className="absolute w-[2px] h-[7px] bg-black rounded-full origin-bottom left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 -rotate-[35deg]" />
+      </button>
+    );
+  }
+
+  // Vertical bar with hover animation to chevron ">"
+  return (
+    <button
+      onClick={onClick}
+      className="relative w-[14px] h-[14px] flex items-center justify-center flex-shrink-0 group/bar"
+      title="Collapse"
+    >
+      <span
+        className={cn(
+          "absolute w-[2px] bg-black rounded-full transition-all duration-200",
+          "h-[7px] top-0 left-1/2 -translate-x-1/2 origin-bottom",
+          "group-hover/bar:-rotate-[35deg]"
+        )}
+      />
+      <span
+        className={cn(
+          "absolute w-[2px] bg-black rounded-full transition-all duration-200",
+          "h-[7px] bottom-0 left-1/2 -translate-x-1/2 origin-top",
+          "group-hover/bar:rotate-[35deg]"
+        )}
+      />
+    </button>
+  );
+};
+
 interface HabitLineHeaderProps {
   isFirstRow: boolean;
   category?: HabitCategory;
   hideHabits: boolean;
   onHideHabit: () => void;
+  collapsed: boolean;
+  onToggleCollapse: () => void;
   onEditCategory?: () => void;
   onDeleteCategory?: () => void;
   daysInMonth: Date[];
@@ -21,6 +68,8 @@ export const HabitLineHeader = ({
   category,
   hideHabits,
   onHideHabit,
+  collapsed,
+  onToggleCollapse,
   onEditCategory,
   onDeleteCategory,
   daysInMonth,
@@ -29,8 +78,8 @@ export const HabitLineHeader = ({
 }: HabitLineHeaderProps) => {
   return (
     <div className="flex items-end justify-between relative">
-      <div className={cn("h-10 md:h-7 flex items-center gap-2 mb-3 group", isFirstRow ? "min-w-32 max-w-48 sm:max-w-none sm:min-w-48" : "")}>
-        <div className="w-[2px] rounded-md h-full bg-black flex-shrink-0"></div>
+      <div className={cn("h-10 md:h-7 flex items-center gap-1.5 group", !collapsed && "mb-3", isFirstRow ? "min-w-32 max-w-48 sm:max-w-none sm:min-w-48" : "")}>
+        <CollapsibleBar collapsed={collapsed} onClick={onToggleCollapse} />
         {category?.icon && (
           <IconDisplay name={category.icon} size={16} className="flex-shrink-0" />
         )}
