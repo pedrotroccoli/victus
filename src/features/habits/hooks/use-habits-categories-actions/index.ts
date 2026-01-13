@@ -1,4 +1,4 @@
-import { useCreateHabitCategory, useHabitCategories } from "@/services/habit-category/hooks";
+import { useCreateHabitCategory, useDeleteHabitCategory, useHabitCategories } from "@/services/habit-category/hooks";
 import { useCallback, useState } from "react";
 import { CreateCategoryForm } from "../../components/templates/create-category-modal";
 import { toast } from "sonner";
@@ -7,6 +7,7 @@ export interface UseHabitsCategoryActions {
   modalOpen: boolean;
   setModalOpen: (open: boolean) => void;
   create: (data: CreateCategoryForm) => Promise<void>;
+  remove: (id: string) => Promise<void>;
   data: HabitCategory[];
   loading: boolean;
   error: unknown;
@@ -16,6 +17,7 @@ export const useHabitsCategoryActions = (): UseHabitsCategoryActions => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const { mutateAsync: createHabitCategory } = useCreateHabitCategory();
+  const { mutateAsync: deleteHabitCategory } = useDeleteHabitCategory();
   const { data: categories, isLoading: loading, error } =
     useHabitCategories();
 
@@ -41,10 +43,20 @@ export const useHabitsCategoryActions = (): UseHabitsCategoryActions => {
     }
   }, [createHabitCategory, categories]);
 
+  const remove = useCallback(async (id: string) => {
+    try {
+      await deleteHabitCategory(id);
+      toast.success("Categoria removida!");
+    } catch (error) {
+      toast.error("Erro ao remover categoria!");
+    }
+  }, [deleteHabitCategory]);
+
   return {
     modalOpen,
     setModalOpen,
     create,
+    remove,
     data: categories || [],
     loading,
     error

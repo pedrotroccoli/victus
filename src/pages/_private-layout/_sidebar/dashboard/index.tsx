@@ -277,6 +277,8 @@ export const Home = () => {
                         currentDay={currentDay}
                         onHabitChange={onHabitChange}
                         editEnabled={editEnabled}
+                        onAddHabit={() => habits.setCreateModalOpen(true)}
+                        onDeleteCategory={(id) => categories.remove(id)}
                       />
                     </TabsContent>
                     <TabsContent value="focus" className="mt-0">

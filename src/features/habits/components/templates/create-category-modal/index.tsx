@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
-import { IconPicker } from '@/components/atoms/icon-picker';
 import { Button } from '@/components/ions/button';
-import { TextField } from '@/components/molecules/form/TextField';
+import { InputWithIcon } from '@/components/molecules/input-with-icon';
 import { DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { CategoryIconName } from '@/lib/icons/category-icons';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -69,25 +68,16 @@ export const CreateCategoryModal = ({ onSave }: CreateCategoryModalProps) => {
       </DialogHeader>
       <FormProvider {...form}>
         <div className="grid gap-4 py-4 px-6 pb-8">
-          <div>
-            <TextField
-              name="name"
-              label={t('create_category_modal.form.fields.name.label')}
-              placeholder={t('create_category_modal.form.fields.name.placeholder')}
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-              {t('create_category_modal.form.fields.icon.label', 'Icon')}
-            </label>
-            <div className="mt-1.5">
-              <IconPicker
-                value={form.watch('icon') as CategoryIconName | undefined}
-                onChange={(value) => form.setValue('icon', value)}
-                placeholder={t('create_category_modal.form.fields.icon.placeholder', 'Select an icon')}
-              />
-            </div>
-          </div>
+          <InputWithIcon
+            label={t('create_category_modal.form.fields.name.label')}
+            value={form.watch('name')}
+            onChange={(value) => form.setValue('name', value)}
+            icon={form.watch('icon') as CategoryIconName | undefined}
+            onIconChange={(value) => form.setValue('icon', value)}
+            placeholder={t('create_category_modal.form.fields.name.placeholder')}
+            message={form.formState.errors.name?.message}
+            messageClassName="text-red-500"
+          />
         </div>
         <div className="flex justify-end p-2 px-6 border-t border-neutral-300">
           <Button variant="default" className="bg-black text-white rounded text-sm font-bold hover:bg-black/80 min-w-24 h-8"

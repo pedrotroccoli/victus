@@ -14,3 +14,7 @@ export const createHabitCategory = async (params: CreateHabitCategoryRequest): P
   return data;
 };
 
+export const deleteHabitCategory = async (id: string): Promise<void> => {
+  await baseApi.delete(`/habits_category/${id}`);
+};
+

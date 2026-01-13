@@ -17,6 +17,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import { differenceInHours } from "date-fns";
 import { omit } from "lodash";
 import { useEffect, useRef, useState } from "react";
 import { HabitEmptyBox } from "../../molecules/habit-empty-box";
@@ -40,6 +41,8 @@ interface HabitLinesProps {
   editEnabled: boolean;
   onDeleteHabit: (habit: Habit) => void;
   onEditHabit: (habit: Habit) => void;
+  onAddHabit?: (categoryId?: string) => void;
+  onDeleteCategory?: (categoryId: string) => void;
 }
 
 export const HabitLines = ({
@@ -53,6 +56,8 @@ export const HabitLines = ({
   editEnabled,
   onDeleteHabit,
   onEditHabit,
+  onAddHabit,
+  onDeleteCategory,
 }: HabitLinesProps) => {
   const currentLineId = useRef<string | undefined>("");
   const [hideHabits, setHideHabits] = useState<Record<string, boolean>>({});
@@ -330,9 +335,19 @@ export const HabitLines = ({
         autoScroll={true}
       >
         {Object.entries(habits)
-          .filter(([, categorizedHabits]) =>
-            editEnabled || (categorizedHabits?.list?.length ?? 0) > 0
-          )
+          .filter(([, categorizedHabits]) => {
+            const hasHabits = (categorizedHabits?.list?.length ?? 0) > 0;
+            if (hasHabits || editEnabled) return true;
+
+            // Show empty categories created less than 6 hours ago
+            const category = categorizedHabits?.category;
+            if (category?.created_at) {
+              const hoursSinceCreation = differenceInHours(new Date(), new Date(category.created_at));
+              return hoursSinceCreation < 6;
+            }
+
+            return false;
+          })
           .map(([id, categorizedHabits], index) => (
           <div>
             <HabitLineHeader
@@ -346,7 +361,11 @@ export const HabitLines = ({
             />
             <>
               {categorizedHabits && categorizedHabits?.list?.length === 0 && (
-                <HabitEmptyBox category={categorizedHabits.category} />
+                <HabitEmptyBox
+                  category={categorizedHabits.category}
+                  onAddHabit={onAddHabit ? () => onAddHabit(categorizedHabits.category?._id) : undefined}
+                  onDeleteCategory={onDeleteCategory && categorizedHabits.category?._id ? () => onDeleteCategory(categorizedHabits.category!._id) : undefined}
+                />
               )}
               {categorizedHabits && categorizedHabits?.list?.length > 0 && (
                 <SortableContext

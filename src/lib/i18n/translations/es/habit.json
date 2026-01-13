@@ -175,6 +175,14 @@
       }
     }
   },
+  "empty_category": {
+    "title": "Sin hábitos aún",
+    "description": "Agrega un hábito o arrastra uno aquí.",
+    "drop_title": "Suelta aquí",
+    "drop_description": "Suelta para mover el hábito a esta categoría",
+    "add_button": "Agregar hábito",
+    "delete_button": "Eliminar"
+  },
   "create_category_modal": {
     "title": "Crear categoría",
     "description": "Establece el nombre y el icono de la categoría",

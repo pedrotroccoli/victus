@@ -175,6 +175,14 @@
       }
     }
   },
+  "empty_category": {
+    "title": "No habits yet",
+    "description": "Add a habit or drag one here to get started.",
+    "drop_title": "Drop here",
+    "drop_description": "Release to move the habit to this category",
+    "add_button": "Add habit",
+    "delete_button": "Delete"
+  },
   "create_category_modal": {
     "title": "Create category",
     "description": "Set the category name and icon",
