@@ -1,62 +1,47 @@
-import { ChartBar, ChartPieSlice, Fire, ProjectorScreenChart } from "@phosphor-icons/react/dist/ssr"
+import { ChartLine, Broadcast, Heart, Eye } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
-import Image from "next/image"
 import { Grid } from "../grid"
 
-const proofs = (t: any) => [
-  {
-    icon: ChartBar,
-    title: t('items.proof_01.title'),
-    description: t('items.proof_01.description'),
-    image: "/proofs/proof-01.png"
-  },
-  {
-    icon: ProjectorScreenChart,
-    title: t('items.proof_02.title'),
-    description: t('items.proof_02.description'),
-    image: "/proofs/calendar.png"
-  }, {
-    icon: Fire,
-    title: t('items.proof_03.title'),
-    description: t('items.proof_03.description'),
-    image: "/proofs/journal.png"
-  }, {
-    icon: ChartPieSlice,
-    title: t('items.proof_04.title'),
-    description: t('items.proof_04.description'),
-    image: "/proofs/analytics.png"
-  },
-
+const cards = [
+  { icon: ChartLine, key: 'card_1' },
+  { icon: Broadcast, key: 'card_2' },
+  { icon: Heart, key: 'card_3' },
+  { icon: Eye, key: 'card_4' },
 ]
-export const Proofs = () => {
-  const t = useTranslations('proofs');
-  const proofItems = proofs(t);
+
+export const VisualFeatures = () => {
+  const t = useTranslations('visual_features');
 
   return (
-    <section>
-      <Grid className="py-16 md:py-20">
-        <div className="grid md:grid-cols-2 gap-8">
-          {proofItems.map((item) => (
-            <div key={item.title} className="flex flex-col">
-              {/* Imagem */}
-              <Image
-                src={item.image}
-                alt={item.title}
-                width={400}
-                height={280}
-                className="rounded-md w-full max-h-48 object-cover"
-              />
+    <section className="bg-neutral-50">
+      <Grid className="py-20 md:py-28">
+        {/* Title */}
+        <div className="max-w-4xl mx-auto text-center mb-12">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold font-display leading-[1.3]">
+            <span className="text-neutral-400">{t('title_line1')}</span>
+            <br />
+            <span className="text-neutral-800">{t('title_line2')}</span>
+            <br />
+            <span className="text-neutral-400">{t('title_line3')}</span>
+          </h2>
+        </div>
 
-              {/* Ícone + Título */}
-              <div className="flex items-center gap-3 mt-6">
-                <div className="w-10 h-10 border border-black bg-white rounded-full flex items-center justify-center shrink-0">
-                  <item.icon size={18} />
-                </div>
-                <h3 className="text-lg font-bold">{item.title}</h3>
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
+          {cards.map((card) => (
+            <div
+              key={card.key}
+              className="bg-white border border-neutral-200 rounded-lg p-6"
+            >
+              <div className="w-12 h-12 bg-neutral-100 border border-neutral-200 rounded-lg flex items-center justify-center mb-4 hover:bg-orange-500 hover:border-orange-500 transition-colors group/icon">
+                <card.icon size={16} className="text-black group-hover/icon:text-white transition-colors" weight="regular" />
               </div>
-
-              {/* Descrição */}
-              <p className="mt-3 text-victus-text text-sm">{item.description}</p>
+              <h3 className="font-semibold text-neutral-800 mb-1">
+                {t(`${card.key}_title`)}
+              </h3>
+              <p className="text-sm text-neutral-500">
+                {t(`${card.key}_description`)}
+              </p>
             </div>
           ))}
         </div>
@@ -64,3 +49,6 @@ export const Proofs = () => {
     </section>
   )
 }
+
+// Keep old export for backwards compatibility during transition
+export const Proofs = VisualFeatures

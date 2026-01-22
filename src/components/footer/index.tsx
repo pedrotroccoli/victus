@@ -35,11 +35,13 @@ export const links = (t: any) => [
     links: [
       {
         title: t('items.links.items.terms'),
-        href: '/termos-de-uso'
+        href: '/termos-de-uso',
+        enabled: true
       },
       {
         title: t('items.links.items.privacy'),
-        href: '/politica-de-privacidade'
+        href: '/politica-de-privacidade',
+        enabled: true
       },
     ]
   }
@@ -90,11 +92,11 @@ export const Footer = () => {
               ))}
             </ul>
           </Grid>
-          <div className="w-full h-16 lg:h-40 relative overflow-hidden">
+          <Grid style="black" className="h-16 lg:h-28 relative overflow-hidden">
             <h1 className="text-[3rem] md:text-[5rem] lg:text-[7.5rem] font-display font-bold absolute bottom-[-25px] md:bottom-[-40px] lg:bottom-[-60px] left-1/2 -translate-x-1/2 whitespace-nowrap text-white">
-Victus Journal
+              Victus Journal
             </h1>
-          </div>
+          </Grid>
           <div className="w-full h-20 border-t border-neutral-800">
             <Grid style="black" className="flex items-center justify-between h-full">
               <h5 className="text-white/70 text-xs md:text-base">MinimalBrain - 2024</h5>

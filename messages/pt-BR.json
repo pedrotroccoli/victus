@@ -7,130 +7,168 @@
     "languages": {
       "title": "Idiomas",
       "items": {
-        "pt": "Português",
+        "pt": "Portugues",
         "es": "Espanhol",
-        "en": "Inglês"
+        "en": "Ingles"
       }
     }
   },
   "home": {
     "hero": {
-      "title": "Um sistema simples para revelar seus **padrões de vida**.",
-      "description": "Entenda o que realmente funciona para você — **sem pressão ou culpa**. Acompanhe seus hábitos e descubra seu ritmo naturalmente.",
-      "button": "Teste grátis por 14 dias"
+      "title": "Victus mostra quem voce se torna ao longo do tempo.",
+      "subtitle": "Um diario de analise comportamental para consistencia.",
+      "button": "Comece a se observar"
     }
   },
-  "email_capture": {
-    "title": "Fique por dentro",
-    "description": "Receba insights sobre produtividade e acompanhe nossa jornada. Sem spam, apenas conteúdo útil.",
-    "placeholder": "Seu melhor email",
-    "button": "Inscrever",
-    "success": "Você está dentro! Confira sua caixa de entrada.",
-    "error": "Algo deu errado. Tente novamente."
+  "problem_reframe": {
+    "title_1": "A maioria das ferramentas tenta te empurrar pra frente.",
+    "title_2": "Victus te ajuda a ver onde voce ja esta.",
+    "point_1": "Motivacao e temporaria.",
+    "point_2": "Sequencias sao frageis.",
+    "point_3": "Pressao distorce comportamento.",
+    "conclusion_1": "Victus nao pressiona.",
+    "conclusion_2": "Ele registra.",
+    "insight": "Porque o que muda comportamento nao e intensidade — e clareza ao longo do tempo."
   },
-  "advantages": {
-    "items": {
-      "advantage_01": {
-        "title": "Veja seu progresso em direção aos objetivos",
-        "description": "Acompanhe como seus hábitos te movem para frente — sem culpa ou pressão."
-      },
-      "advantage_02": {
-        "title": "Descubra seus padrões",
-        "description": "Entenda onde você prospera e onde pode crescer, sem julgamento."
-      },
-      "advantage_03": {
-        "title": "Seu ritmo ao longo do tempo",
-        "description": "Construa consistência naturalmente. Padrões, não pressão."
-      },
-      "advantage_04": {
-        "title": "Insights sobre sua jornada",
-        "description": "Clareza visual do que funciona para você — não apenas números."
-      }
-    }
+  "what_it_does": {
+    "title_prefix": "Conheca o",
+    "title_emphasis": "diario de visibilidade",
+    "title_suffix": "comportamental",
+    "subtitle": "Victus transforma acoes diarias em padroes de longo prazo que voce pode ver.",
+    "item_1_title": "Consistencia",
+    "item_1": "Revela quando seus habitos comecam a decair",
+    "item_2_title": "Recuperacao",
+    "item_2": "Mostra como voce se recupera apos pausas",
+    "item_3_title": "Estabilidade",
+    "item_3": "Destaca comportamentos estaveis vs frageis",
+    "item_4_title": "Visibilidade",
+    "item_4": "Substitui motivacao por evidencias claras",
+    "footer_1": "Sem gamificacao.",
+    "footer_2": "Sem performance.",
+    "footer_3": "Apenas evidencias."
   },
-  "news": {
-    "title": "Novidades",
-    "available": "Disponível",
-    "soon": "Em breve",
-    "items": {
-      "desktop": {
-        "title": "Plataforma Desktop",
-        "description": "A nossa plataforma desktop já está disponível para uso."
-      },
-      "mobile": {
-        "title": "Plataforma Mobile",
-        "description": "Os nossos apps mobile já estão em construção e logo estarão prontos para uso."
-      },
-      "world": {
-        "title": "Integração com a World Foundation",
-        "description": "A integração com a World Chain está próxima e com ela vem desafios, integrações e ganhos de WLD tokens!"
-      }
-    }
+  "visual_features": {
+    "title_line1": "De Habitos",
+    "title_line2": "A Sinais Comportamentais,",
+    "title_line3": "Revelados ao Longo do Tempo.",
+    "card_1_title": "Padroes",
+    "card_1_description": "Veja comportamentos emergirem ao longo de semanas e meses",
+    "card_2_title": "Sinais",
+    "card_2_description": "Habitos como dados, nao checkboxes",
+    "card_3_title": "Sem Pressao",
+    "card_3_description": "Sem sequencias, sem culpa, sem resets",
+    "card_4_title": "Verdade",
+    "card_4_description": "Veja a realidade, decida o que fazer com ela"
+  },
+  "for_not_for": {
+    "section_label": "[01] Feito para alguns",
+    "section_tag": "Clareza + Foco",
+    "title_main": "Feito para algumas pessoas.",
+    "title_sub": "Nao para todas. E esse e o ponto.",
+    "for_title": "Victus e para",
+    "for_1": "Construtores e fundadores",
+    "for_2": "Pessoas que pensam a longo prazo",
+    "for_3": "Quem esta cansado de ciclos de motivacao",
+    "for_4": "Qualquer um que prefere dados a sentimentos",
+    "not_for_title": "Victus nao e para",
+    "not_for_1": "Truques de produtividade",
+    "not_for_2": "Sistemas baseados em sequencias",
+    "not_for_3": "Prestacao de contas externa",
+    "not_for_4": "Auto-aperfeicoamento performatico"
+  },
+  "core_insight": {
+    "title": "Uma pergunta que o Victus torna inevitavel",
+    "question": "Eu sou realmente consistente — ou apenas otimista?",
+    "answer_1": "A maioria das pessoas nunca obtem uma resposta real.",
+    "answer_2": "Victus mostra isso ao longo do tempo."
+  },
+  "how_it_works": {
+    "title": "Como funciona",
+    "description": "Um processo simples projetado para clareza a longo prazo, nao pressao diaria.",
+    "step_1_title": "Defina",
+    "step_1_description": "Escolha o que importa para voce",
+    "step_2_title": "Registre",
+    "step_2_description": "Apareca — ou nao",
+    "step_3_title": "Observe",
+    "step_3_description": "Deixe o tempo revelar o padrao",
+    "step_4_title": "Clareza",
+    "step_4_description": "Veja quem voce realmente se torna"
+  },
+  "product_principles": {
+    "title": "Por que Victus e diferente",
+    "column_victus": "Victus",
+    "column_others": "Apps de Habitos Tipicos",
+    "row_1_label": "Abordagem",
+    "row_1_victus": "Observacao sem julgamento",
+    "row_1_others": "Gamificacao e recompensas",
+    "row_2_label": "Sequencias",
+    "row_2_victus": "Sem sequencias, sem resets",
+    "row_2_others": "Pressao baseada em sequencias",
+    "row_3_label": "Privacidade",
+    "row_3_victus": "Privado por padrao",
+    "row_3_others": "Foco em compartilhamento social",
+    "row_4_label": "Horizonte temporal",
+    "row_4_victus": "Padroes de longo prazo",
+    "row_4_others": "Checkboxes diarios",
+    "row_5_label": "Proposito",
+    "row_5_victus": "Reflexao e clareza",
+    "row_5_others": "Performance e produtividade"
+  },
+  "manifesto": {
+    "title": "O Manifesto Victus",
+    "line_1": "Nos nao acreditamos em motivacao.",
+    "line_2": "Nos acreditamos em visibilidade.",
+    "line_3": "Victus existe para mostrar o que geralmente fica escondido: como voce age quando ninguem esta olhando.",
+    "line_4": "Sem recompensas.",
+    "line_5": "Sem vergonha.",
+    "line_6": "Apenas tempo e verdade."
   },
   "cta": {
-    "title": "Você está a um passo de ter controle total do seu comportamento!",
-    "description": "Dentro da plataforma você tem a oportunidade de saber onde melhorar na sua vida e atingir seus objetivos!",
-    "button": "Teste grátis por 14 dias"
+    "title": "Comece a se observar",
+    "subtitle": "Nenhuma motivacao necessaria.",
+    "button": "Comecar agora"
   },
   "plans": {
+    "title": "Precos",
+    "subtitle": "Precos simples para clareza de longo prazo.",
     "items": {
       "monthly": {
         "title": "Mensal",
-        "after_name": "/ mês",
-        "price": "R$ 15,00",
-        "features": {
-          "habit_creation": "Acompanhe até 50 hábitos",
-          "delta_creation": "Metas com marcos de progresso",
-          "analytics": "Insights sobre sua jornada",
-          "support": "Suporte por email"
-        }
+        "price": "R$15",
+        "period": "/mes",
+        "includes": "Inclui:",
+        "feature_1": "Historico ilimitado",
+        "feature_2": "Analise avancada",
+        "feature_3": "Tendencias e padroes",
+        "feature_4": "Suporte prioritario"
       },
-      "yearly": {
+      "annual": {
         "title": "Anual",
-        "after_name": "/ ano",
-        "price": "R$ 8,33",
-        "oldPrice": "R$ 180,00",
-        "features": {
-          "habit_creation": "Hábitos ilimitados",
-          "delta_creation": "Metas com marcos de progresso",
-          "analytics": "Insights sobre sua jornada",
-          "support": "Suporte prioritário (Email + WhatsApp)"
-        }
+        "price": "R$99",
+        "period": "/ano",
+        "includes": "Tudo no Mensal, mais:",
+        "feature_1": "Historico ilimitado",
+        "feature_2": "Analise avancada",
+        "feature_3": "Tendencias e padroes",
+        "feature_4": "Suporte prioritario"
       }
     },
-    "title": "Planos e valores",
-    "trial": "Teste grátis por 14 dias",
-    "recommended": "Mais recomendado"
+    "start": "Comecar",
+    "recommended": "Melhor valor",
+    "clarity_message": "Voce nao esta pagando por funcionalidades. Voce esta pagando por clareza."
   },
-  "proofs": {
-    "items": {
-      "proof_01": {
-        "title": "Seu progresso de um olhar",
-        "description": "Veja o quanto você evoluiu com uma visão clara dos seus hábitos.\n\nSem dashboards complicados — apenas feedback honesto sobre sua jornada."
-      },
-      "proof_02": {
-        "title": "Organize seu tempo visualmente",
-        "description": "Uma visão de calendário que mostra sua consistência ao longo de semanas e meses.\n\nIdentifique padrões e celebre o progresso sem se obcecar por sequências perfeitas."
-      },
-      "proof_03": {
-        "title": "Reflita e cresça",
-        "description": "Seu diário pessoal para entender o que está funcionando e o que não está.\n\nAutoconhecimento é a base de mudanças duradouras."
-      },
-      "proof_04": {
-        "title": "Insights que importam",
-        "description": "Analytics simples que ajudam você a entender seu comportamento.\n\nSaiba onde focar sua energia para melhorias reais."
-      }
-    },
-    "trial_button": "Teste grátis por 14 dias"
+  "ai_summary": {
+    "title": "Peca um resumo do Victus para a IA",
+    "copyright": "© Victus 2025. Todos os direitos reservados."
   },
   "footer": {
     "back_to_top": "Voltar ao topo",
     "work_in_progress": "Estamos trabalhando para disponibilizar este recurso em breve!",
     "items": {
       "pages": {
-        "title": "Páginas",
+        "title": "Paginas",
         "items": {
-          "mission": "Missão",
+          "mission": "Missao",
           "plans": "Planos"
         }
       },
@@ -144,9 +182,78 @@
         "title": "Links",
         "items": {
           "terms": "Termos de uso",
-          "privacy": "Política de privacidade"
+          "privacy": "Politica de privacidade"
         }
       }
     }
+  },
+  "privacy": {
+    "title": "Politica de Privacidade",
+    "last_updated": "Ultima atualizacao: Janeiro de 2025",
+    "intro": "A Victus (\"nos\", \"nosso\" ou \"Jornal Victus\") respeita sua privacidade e esta comprometida em proteger seus dados pessoais. Esta politica de privacidade explica como coletamos, usamos e protegemos suas informacoes.",
+    "section_1_title": "1. Dados que Coletamos",
+    "section_1_content": "Coletamos os seguintes dados quando voce usa o Victus:",
+    "section_1_items": {
+      "item_1": "Informacoes de conta: nome, endereco de email",
+      "item_2": "Dados de habitos: habitos que voce cria e registra",
+      "item_3": "Dados de uso: como voce interage com o aplicativo",
+      "item_4": "Informacoes do dispositivo: tipo de navegador, sistema operacional"
+    },
+    "section_2_title": "2. Como Usamos seus Dados",
+    "section_2_content": "Usamos seus dados para:",
+    "section_2_items": {
+      "item_1": "Fornecer e manter o servico de rastreamento de habitos",
+      "item_2": "Analisar padroes e gerar insights sobre seus comportamentos",
+      "item_3": "Melhorar nosso servico e experiencia do usuario",
+      "item_4": "Comunicar atualizacoes importantes sobre o servico"
+    },
+    "section_3_title": "3. Retencao de Dados",
+    "section_3_content": "Mantemos seus dados enquanto sua conta estiver ativa. Voce pode solicitar a exclusao de seus dados a qualquer momento entrando em contato conosco.",
+    "section_4_title": "4. Seus Direitos (LGPD)",
+    "section_4_content": "De acordo com a Lei Geral de Protecao de Dados (LGPD), voce tem direito a:",
+    "section_4_items": {
+      "item_1": "Acessar seus dados pessoais",
+      "item_2": "Corrigir dados incompletos ou imprecisos",
+      "item_3": "Solicitar a exclusao de seus dados",
+      "item_4": "Portabilidade dos dados para outro servico",
+      "item_5": "Revogar consentimento a qualquer momento"
+    },
+    "section_5_title": "5. Cookies e Tecnologias de Rastreamento",
+    "section_5_content": "Usamos cookies essenciais para autenticacao e funcionamento do servico. Tambem utilizamos ferramentas de analytics para entender como os usuarios interagem com nosso aplicativo.",
+    "section_6_title": "6. Seguranca dos Dados",
+    "section_6_content": "Implementamos medidas de seguranca tecnicas e organizacionais para proteger seus dados pessoais contra acesso nao autorizado, alteracao, divulgacao ou destruicao.",
+    "section_7_title": "7. Contato",
+    "section_7_content": "Para exercer seus direitos ou tirar duvidas sobre esta politica, entre em contato:",
+    "contact_email": "Email: me@pedrotroccoli.com"
+  },
+  "terms": {
+    "title": "Termos de Uso",
+    "last_updated": "Ultima atualizacao: Janeiro de 2025",
+    "intro": "Bem-vindo ao Victus. Ao acessar ou usar nosso servico, voce concorda com estes termos de uso.",
+    "section_1_title": "1. Descricao do Servico",
+    "section_1_content": "O Victus e um diario de analise comportamental que ajuda voce a rastrear habitos e observar padroes ao longo do tempo. Nosso servico e projetado para clareza e reflexao, nao para gamificacao ou pressao.",
+    "section_2_title": "2. Conta do Usuario",
+    "section_2_content": "Voce e responsavel por manter a confidencialidade de sua conta e senha. Voce concorda em nos notificar imediatamente sobre qualquer uso nao autorizado de sua conta.",
+    "section_3_title": "3. Uso Aceitavel",
+    "section_3_content": "Ao usar o Victus, voce concorda em:",
+    "section_3_items": {
+      "item_1": "Fornecer informacoes precisas ao criar sua conta",
+      "item_2": "Usar o servico apenas para fins pessoais e legais",
+      "item_3": "Nao tentar acessar contas de outros usuarios",
+      "item_4": "Nao usar o servico para atividades ilegais ou prejudiciais"
+    },
+    "section_4_title": "4. Propriedade Intelectual",
+    "section_4_content": "Todo o conteudo, design e codigo do Victus sao propriedade da Jornal Victus e estao protegidos por leis de direitos autorais. Seus dados de habitos permanecem seus.",
+    "section_5_title": "5. Limitacao de Responsabilidade",
+    "section_5_content": "O Victus e fornecido \"como esta\". Nao garantimos que o servico sera ininterrupto ou livre de erros. Nao somos responsaveis por quaisquer danos indiretos decorrentes do uso do servico.",
+    "section_6_title": "6. Modificacoes do Servico",
+    "section_6_content": "Reservamo-nos o direito de modificar ou descontinuar o servico a qualquer momento, com ou sem aviso previo.",
+    "section_7_title": "7. Rescisao",
+    "section_7_content": "Podemos suspender ou encerrar sua conta se voce violar estes termos. Voce pode encerrar sua conta a qualquer momento entrando em contato conosco.",
+    "section_8_title": "8. Lei Aplicavel",
+    "section_8_content": "Estes termos sao regidos pelas leis da Republica Federativa do Brasil. Qualquer disputa sera resolvida nos tribunais de Sao Paulo, SP.",
+    "section_9_title": "9. Contato",
+    "section_9_content": "Para duvidas sobre estes termos, entre em contato:",
+    "contact_email": "Email: me@pedrotroccoli.com"
   }
 }

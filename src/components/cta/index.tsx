@@ -1,7 +1,6 @@
 import { CaretCircleRight } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
-import Link from "next/link"
 import { Grid } from "../grid"
 import { Button } from "../ui/button"
 
@@ -20,14 +19,14 @@ export const CTA = () => {
               {t('title')}
             </h4>
             <p className="text-white/70 mt-4">
-              {t('description')}
+              {t('subtitle')}
             </p>
-            <Link href="/plans">
+            <a href="https://app.victusjournal.com/sign-up" target="_blank" rel="noopener noreferrer">
               <Button className="mt-12 py-5 w-full md:w-80 h-auto flex items-center justify-between gap-2 px-6 rounded-md bg-victus-orange hover:bg-victus-orange/80">
                 {t('button')}
                 <CaretCircleRight size={18} weight="bold" />
               </Button>
-            </Link>
+            </a>
           </div>
           <div className="w-full md:w-[26rem] bg-victus-good-white rounded-t-md md:rounded-r-md flex items-center justify-center">
             <Image src="/tired.png" alt="tablet" width={256} height={256} />

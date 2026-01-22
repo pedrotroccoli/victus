@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { Agentation } from "agentation";
 
+import { AiSummary } from "@/components/ai-summary";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { IBMPlexSans, RecursiveFont } from "../_fonts";
 
-import { News } from "@/components/news";
 import { routing } from "@/i18n/routing";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -41,7 +42,7 @@ export default async function RootLayout({
 
           {children}
 
-          <News />
+          {/* <AiSummary /> */}
 
           <Footer />
 
@@ -49,6 +50,10 @@ export default async function RootLayout({
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
+
+        {process.env.NODE_ENV === "development" && (
+          <Agentation />
+        )}
       </body>
     </html>
   );

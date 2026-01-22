@@ -15,113 +15,151 @@
   },
   "home": {
     "hero": {
-      "title": "A simple system to reveal your **life patterns**.",
-      "description": "Understand what really works for you — **without pressure or guilt**. Track your habits and discover your rhythm naturally.",
-      "button": "Free trial for 14 days"
+      "title": "Victus shows you who you become over time.",
+      "subtitle": "A behavior analytics journal for consistency.",
+      "button": "Start observing yourself"
     }
   },
-  "email_capture": {
-    "title": "Stay in the loop",
-    "description": "Get insights about productivity and follow our journey. No spam, just useful content.",
-    "placeholder": "Your best email",
-    "button": "Subscribe",
-    "success": "You're in! Check your inbox.",
-    "error": "Something went wrong. Try again."
+  "problem_reframe": {
+    "title_1": "Most tools try to push you forward.",
+    "title_2": "Victus helps you see where you already are.",
+    "point_1": "Motivation is temporary.",
+    "point_2": "Streaks are fragile.",
+    "point_3": "Pressure distorts behavior.",
+    "conclusion_1": "Victus doesn't push.",
+    "conclusion_2": "It records.",
+    "insight": "Because what changes behavior isn't intensity — it's clarity over time."
   },
-  "advantages": {
-    "items": {
-      "advantage_01": {
-        "title": "See your progress toward goals",
-        "description": "Watch how your habits move you forward — without guilt or pressure."
-      },
-      "advantage_02": {
-        "title": "Discover your patterns",
-        "description": "Understand where you thrive and where you can grow, without judgment."
-      },
-      "advantage_03": {
-        "title": "Your rhythm over time",
-        "description": "Build consistency naturally. Patterns, not pressure."
-      },
-      "advantage_04": {
-        "title": "Insights about your journey",
-        "description": "Visual clarity on what works for you — not just numbers."
-      }
-    }
+  "what_it_does": {
+    "title_prefix": "Meet the",
+    "title_emphasis": "behavior visibility",
+    "title_suffix": "journal",
+    "subtitle": "Victus turns daily actions into long-term patterns you can actually see.",
+    "item_1_title": "Consistency",
+    "item_1": "Reveals when your habits start to decay",
+    "item_2_title": "Recovery",
+    "item_2": "Shows how you bounce back after breaks",
+    "item_3_title": "Stability",
+    "item_3": "Highlights stable vs fragile behaviors",
+    "item_4_title": "Visibility",
+    "item_4": "Replaces motivation with clear evidence",
+    "footer_1": "No gamification.",
+    "footer_2": "No performance.",
+    "footer_3": "Just evidence."
   },
-  "news": {
-    "title": "News",
-    "available": "Available",
-    "soon": "Coming soon",
-    "items": {
-      "desktop": {
-        "title": "Desktop Platform",
-        "description": "Our desktop platform is now available for use."
-      },
-      "mobile": {
-        "title": "Mobile Platform",
-        "description": "Our mobile apps are under construction and will be ready for use soon."
-      },
-      "world": {
-        "title": "World Foundation Integration",
-        "description": "Integration with World Chain is coming soon, bringing challenges, integrations, and WLD token rewards!"
-      }
-    }
+  "visual_features": {
+    "title_line1": "From Habits",
+    "title_line2": "To Behavioral Signals,",
+    "title_line3": "Revealed Over Time.",
+    "card_1_title": "Patterns",
+    "card_1_description": "See behaviors emerge over weeks and months",
+    "card_2_title": "Signals",
+    "card_2_description": "Habits as data, not checkboxes",
+    "card_3_title": "No Pressure",
+    "card_3_description": "No streaks, no guilt, no resets",
+    "card_4_title": "Truth",
+    "card_4_description": "See reality, decide what to do with it"
+  },
+  "for_not_for": {
+    "section_label": "[01] Built for some",
+    "section_tag": "Clarity + Focus",
+    "title_main": "Built for some people.",
+    "title_sub": "Not everyone. And that's the point.",
+    "for_title": "Victus is for",
+    "for_1": "Builders and founders",
+    "for_2": "People who think long-term",
+    "for_3": "Those tired of motivation cycles",
+    "for_4": "Anyone who prefers data over feelings",
+    "not_for_title": "Victus is not for",
+    "not_for_1": "Productivity hacks",
+    "not_for_2": "Streak-driven systems",
+    "not_for_3": "External accountability",
+    "not_for_4": "Performative self-improvement"
+  },
+  "core_insight": {
+    "title": "One question Victus makes unavoidable",
+    "question": "Am I actually consistent — or just optimistic?",
+    "answer_1": "Most people never get a real answer.",
+    "answer_2": "Victus shows it over time."
+  },
+  "how_it_works": {
+    "title": "How it works",
+    "description": "A simple process designed for long-term clarity, not daily pressure.",
+    "step_1_title": "Define",
+    "step_1_description": "Choose what matters to you",
+    "step_2_title": "Record",
+    "step_2_description": "Show up — or don't",
+    "step_3_title": "Observe",
+    "step_3_description": "Let time reveal the pattern",
+    "step_4_title": "Clarity",
+    "step_4_description": "See who you actually become"
+  },
+  "product_principles": {
+    "title": "Why Victus is different",
+    "column_victus": "Victus",
+    "column_others": "Typical Habit Apps",
+    "row_1_label": "Approach",
+    "row_1_victus": "Observation without judgment",
+    "row_1_others": "Gamification and rewards",
+    "row_2_label": "Streaks",
+    "row_2_victus": "No streaks, no resets",
+    "row_2_others": "Streak-based pressure",
+    "row_3_label": "Privacy",
+    "row_3_victus": "Private by default",
+    "row_3_others": "Social sharing focus",
+    "row_4_label": "Time horizon",
+    "row_4_victus": "Long-term patterns",
+    "row_4_others": "Daily checkboxes",
+    "row_5_label": "Purpose",
+    "row_5_victus": "Reflection and clarity",
+    "row_5_others": "Performance and productivity"
+  },
+  "manifesto": {
+    "title": "The Victus Manifesto",
+    "line_1": "We don't believe in motivation.",
+    "line_2": "We believe in visibility.",
+    "line_3": "Victus exists to show what usually stays hidden: how you act when no one is watching.",
+    "line_4": "No rewards.",
+    "line_5": "No shame.",
+    "line_6": "Just time and truth."
   },
   "cta": {
-    "title": "You're one step away from having total control of your behavior!",
-    "description": "Within the platform, you have the opportunity to know where to improve in your life and achieve your goals!",
-    "button": "Free trial for 14 days"
+    "title": "Start observing yourself",
+    "subtitle": "No motivation required.",
+    "button": "Start now"
   },
   "plans": {
+    "title": "Pricing",
+    "subtitle": "Simple pricing for long-term clarity.",
     "items": {
       "monthly": {
         "title": "Monthly",
-        "after_name": "/ month",
         "price": "$3",
-        "features": {
-          "habit_creation": "Track up to 50 habits",
-          "delta_creation": "Goal tracking with milestones",
-          "analytics": "Insights about your journey",
-          "support": "Email support"
-        }
+        "period": "/month",
+        "includes": "Includes:",
+        "feature_1": "Unlimited history",
+        "feature_2": "Advanced analytics",
+        "feature_3": "Trends and patterns",
+        "feature_4": "Priority support"
       },
-      "yearly": {
-        "title": "Yearly",
-        "after_name": "/ year",
+      "annual": {
+        "title": "Annual",
         "price": "$19",
-        "oldPrice": "$36",
-        "features": {
-          "habit_creation": "Unlimited habits",
-          "delta_creation": "Goal tracking with milestones",
-          "analytics": "Insights about your journey",
-          "support": "Priority support (Email + WhatsApp)"
-        }
+        "period": "/year",
+        "includes": "Everything in Monthly, plus:",
+        "feature_1": "Unlimited history",
+        "feature_2": "Advanced analytics",
+        "feature_3": "Trends and patterns",
+        "feature_4": "Priority support"
       }
     },
-    "title": "Plans and pricing",
-    "trial": "Free trial for 14 days",
-    "recommended": "Most recommended"
+    "start": "Get started",
+    "recommended": "Best value",
+    "clarity_message": "You're not paying for features. You're paying for clarity."
   },
-  "proofs": {
-    "items": {
-      "proof_01": {
-        "title": "Your progress at a glance",
-        "description": "See how far you've come with a clear overview of your habits.\n\nNo complicated dashboards — just honest feedback about your journey."
-      },
-      "proof_02": {
-        "title": "Organize your time visually",
-        "description": "A calendar view that shows your consistency over weeks and months.\n\nSpot patterns and celebrate progress without obsessing over perfect streaks."
-      },
-      "proof_03": {
-        "title": "Reflect and grow",
-        "description": "Your personal journal to understand what's working and what isn't.\n\nSelf-knowledge is the foundation of lasting change."
-      },
-      "proof_04": {
-        "title": "Insights that matter",
-        "description": "Simple analytics that help you understand your behavior.\n\nKnow where to focus your energy for real improvement."
-      }
-    },
-    "trial_button": "Free trial for 14 days"
+  "ai_summary": {
+    "title": "Request an AI summary of Victus",
+    "copyright": "© Victus 2025. All rights reserved."
   },
   "footer": {
     "back_to_top": "Back to top",
@@ -148,5 +186,74 @@
         }
       }
     }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "last_updated": "Last updated: January 2025",
+    "intro": "Victus (\"we\", \"our\" or \"Jornal Victus\") respects your privacy and is committed to protecting your personal data. This privacy policy explains how we collect, use, and protect your information.",
+    "section_1_title": "1. Data We Collect",
+    "section_1_content": "We collect the following data when you use Victus:",
+    "section_1_items": {
+      "item_1": "Account information: name, email address",
+      "item_2": "Habit data: habits you create and track",
+      "item_3": "Usage data: how you interact with the application",
+      "item_4": "Device information: browser type, operating system"
+    },
+    "section_2_title": "2. How We Use Your Data",
+    "section_2_content": "We use your data to:",
+    "section_2_items": {
+      "item_1": "Provide and maintain the habit tracking service",
+      "item_2": "Analyze patterns and generate insights about your behaviors",
+      "item_3": "Improve our service and user experience",
+      "item_4": "Communicate important service updates"
+    },
+    "section_3_title": "3. Data Retention",
+    "section_3_content": "We retain your data as long as your account is active. You can request deletion of your data at any time by contacting us.",
+    "section_4_title": "4. Your Rights (LGPD)",
+    "section_4_content": "Under the Brazilian General Data Protection Law (LGPD), you have the right to:",
+    "section_4_items": {
+      "item_1": "Access your personal data",
+      "item_2": "Correct incomplete or inaccurate data",
+      "item_3": "Request deletion of your data",
+      "item_4": "Data portability to another service",
+      "item_5": "Revoke consent at any time"
+    },
+    "section_5_title": "5. Cookies and Tracking Technologies",
+    "section_5_content": "We use essential cookies for authentication and service functionality. We also use analytics tools to understand how users interact with our application.",
+    "section_6_title": "6. Data Security",
+    "section_6_content": "We implement technical and organizational security measures to protect your personal data against unauthorized access, alteration, disclosure, or destruction.",
+    "section_7_title": "7. Contact",
+    "section_7_content": "To exercise your rights or ask questions about this policy, contact us:",
+    "contact_email": "Email: me@pedrotroccoli.com"
+  },
+  "terms": {
+    "title": "Terms of Use",
+    "last_updated": "Last updated: January 2025",
+    "intro": "Welcome to Victus. By accessing or using our service, you agree to these terms of use.",
+    "section_1_title": "1. Service Description",
+    "section_1_content": "Victus is a behavioral analytics journal that helps you track habits and observe patterns over time. Our service is designed for clarity and reflection, not gamification or pressure.",
+    "section_2_title": "2. User Account",
+    "section_2_content": "You are responsible for maintaining the confidentiality of your account and password. You agree to notify us immediately of any unauthorized use of your account.",
+    "section_3_title": "3. Acceptable Use",
+    "section_3_content": "When using Victus, you agree to:",
+    "section_3_items": {
+      "item_1": "Provide accurate information when creating your account",
+      "item_2": "Use the service only for personal and legal purposes",
+      "item_3": "Not attempt to access other users' accounts",
+      "item_4": "Not use the service for illegal or harmful activities"
+    },
+    "section_4_title": "4. Intellectual Property",
+    "section_4_content": "All content, design, and code of Victus are property of Jornal Victus and are protected by copyright laws. Your habit data remains yours.",
+    "section_5_title": "5. Limitation of Liability",
+    "section_5_content": "Victus is provided \"as is\". We do not guarantee that the service will be uninterrupted or error-free. We are not liable for any indirect damages arising from use of the service.",
+    "section_6_title": "6. Service Modifications",
+    "section_6_content": "We reserve the right to modify or discontinue the service at any time, with or without notice.",
+    "section_7_title": "7. Termination",
+    "section_7_content": "We may suspend or terminate your account if you violate these terms. You may terminate your account at any time by contacting us.",
+    "section_8_title": "8. Governing Law",
+    "section_8_content": "These terms are governed by the laws of the Federative Republic of Brazil. Any disputes will be resolved in the courts of Sao Paulo, SP.",
+    "section_9_title": "9. Contact",
+    "section_9_content": "For questions about these terms, contact us:",
+    "contact_email": "Email: me@pedrotroccoli.com"
   }
 }

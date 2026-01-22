@@ -12,12 +12,12 @@ export const Grid = ({ children, className, style = 'white' }: GridProps) => {
   return (
     <div className="w-full h-full z-[3] relative">
       <div className="absolute top-0 left-0 w-full h-full z-[1]">
-        <div className="relative w-full h-full max-w-6xl mx-auto px-4 md:px-6">
+        <div className="relative w-full h-full max-w-5xl mx-auto px-4 md:px-6">
           <div className={cn("w-px h-full border-r border-dashed absolute top-0 left-0", borderColor)}></div>
           <div className={cn("w-px h-full border-r border-dashed absolute top-0 right-0", borderColor)}></div>
         </div>
       </div>
-      <div className={cn("z-[4] relative max-w-6xl mx-auto px-4 md:px-6", className)}>
+      <div className={cn("z-[4] relative max-w-5xl mx-auto px-4 md:px-6", className)}>
         {children}
       </div>
     </div>

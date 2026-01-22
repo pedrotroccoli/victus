@@ -1,94 +1,96 @@
-import { cn } from "@/lib/utils"
-import { CaretCircleRight, CheckCircle } from "@phosphor-icons/react/dist/ssr"
+import { Check, CaretCircleRight } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
 import { Grid } from "../grid"
 import { Button } from "../ui/button"
 
-const items = (t: any) => [
-  {
-    type: 'monthly',
-    name: t('items.monthly.title'),
-    after_name: t('items.monthly.after_name'),
-    price: t('items.monthly.price'),
-    key: 'victus_journal_monthly',
-    features: [
-      t('items.monthly.features.habit_creation'),
-      t('items.monthly.features.delta_creation'),
-      t('items.monthly.features.analytics'),
-      t('items.monthly.features.support'),
-    ],
-  },
-  {
-    type: 'yearly',
-    recommended: true,
-    name: t('items.yearly.title'),
-    after_name: t('items.yearly.after_name'),
-    price: t('items.yearly.price'),
-    oldPrice: t('items.yearly.oldPrice'),
-    key: 'victus_journal_yearly',
-    features: [
-      t('items.yearly.features.habit_creation'),
-      t('items.yearly.features.delta_creation'),
-      t('items.yearly.features.analytics'),
-      t('items.yearly.features.support'),
-    ],
-  },
-]
-
+const monthlyFeatures = ['feature_1', 'feature_2', 'feature_3', 'feature_4'] as const;
+const annualFeatures = ['feature_1', 'feature_2', 'feature_3', 'feature_4'] as const;
 
 export const Plans = () => {
   const t = useTranslations('plans');
 
   return (
-    <section className="bg-[url('/bg-plans.png')] bg-cover bg-center border-y border-neutral-300">
+    <section className="border-y border-neutral-200">
       <Grid className="py-16 md:py-20">
-        <h2 className="text-2xl md:text-4xl font-bold font-display mb-16 mx-auto text-center">
-          {t('title')}
-        </h2>
-        <ul className="flex gap-6 items-center md:items-end justify-center flex-col md:flex-row">
-          {items(t).map((item) => (
-            <li key={item.key} className={cn("max-w-[26rem] w-full", item.recommended && "shadow-green")} >
-              {item.recommended && (
-                <div className="w-full bg-victus-green/40 border-l border-t border-r border-victus-green rounded-t-md flex items-center justify-center py-4 translate-y-1 z-[-1]">
-                  <h5 className="text-sm font-display font-bold text-victus-green-dark ">
-                    {t('recommended')}
-                  </h5>
-                </div>
-              )}
-              <div className="w-full border border-neutral-300 rounded-md bg-white z-10">
-                <div className="p-6">
-                  <h4 className="text-base font-display font-medium">
-                    {item.name}
-                  </h4>
-                  <div className="flex items-end gap-2 mt-4">
-                    <h1 className="text-3xl font-bold font-display">{item.price}</h1>
-                    <h5 className="text-base font-display">{item.after_name}</h5>
-                  </div>
-                  <p className="mt-4 text-sm text-black/50">* Cobrado {item.type === 'monthly' ? 'mensalmente' : 'anualmente'}</p>
-                </div>
-                <div className="w-full border-t border-neutral-300"></div>
-                <ul className="p-6 grid gap-2">
-                  {item.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2">
-                      <CheckCircle size={24} />
-                      <p className="text-victus-text">
-                        {feature}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-                <div className="px-6 pb-6">
-                  <a href={`https://app.victusjournal.com/sign-up?key=${item.key}`} target="_blank" rel="noopener noreferrer">
-                    <Button className="w-full flex items-center justify-between px-6 gap-2 py-3 h-auto rounded-lg">
-                      {t('trial')}
-                      <CaretCircleRight size={18} weight="bold" />
-                    </Button>
-                  </a>
-                </div>
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-semibold font-display">
+            {t('title')}
+          </h2>
+          <p className="mt-2 text-neutral-400 text-base">
+            {t('subtitle')}
+          </p>
+
+          {/* Pricing Grid */}
+          <div className="grid md:grid-cols-2 mt-12 border border-neutral-200 rounded-lg overflow-hidden">
+            {/* Monthly Plan */}
+            <div className="p-8 border-b md:border-b-0 md:border-r border-neutral-200 bg-white">
+              <h3 className="text-xl font-semibold font-display">
+                {t('items.monthly.title')}
+              </h3>
+              <div className="flex items-baseline gap-1 mt-2">
+                <span className="text-3xl font-semibold text-neutral-400">{t('items.monthly.price')}</span>
+                <span className="text-neutral-400">{t('items.monthly.period')}</span>
               </div>
-            </li>
-          ))}
-        </ul>
+
+              <p className="mt-8 text-sm text-neutral-500">
+                {t('items.monthly.includes')}
+              </p>
+              <ul className="mt-4 space-y-3">
+                {monthlyFeatures.map((feature) => (
+                  <li key={feature} className="flex items-center gap-2 text-sm">
+                    <Check size={16} weight="bold" className="text-neutral-400" />
+                    <span>{t(`items.monthly.${feature}`)}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a href="https://app.victusjournal.com/sign-up?key=victus_journal_monthly" target="_blank" rel="noopener noreferrer" className="block mt-8">
+                <Button variant="outline" className="w-full flex items-center justify-between px-6 gap-2 py-3 h-auto rounded-lg">
+                  {t('start')}
+                  <CaretCircleRight size={18} weight="bold" />
+                </Button>
+              </a>
+            </div>
+
+            {/* Annual Plan */}
+            <div className="p-8 relative bg-white">
+              <div className="absolute top-0 right-0 bg-victus-green/40 text-victus-green-dark text-xs font-semibold px-3 py-1 rounded-bl-lg">
+                {t('recommended')}
+              </div>
+
+              <h3 className="text-xl font-semibold font-display">
+                {t('items.annual.title')}
+              </h3>
+              <div className="flex items-baseline gap-1 mt-2">
+                <span className="text-3xl font-semibold">{t('items.annual.price')}</span>
+                <span className="text-neutral-400">{t('items.annual.period')}</span>
+              </div>
+
+              <p className="mt-8 text-sm text-neutral-500">
+                {t('items.annual.includes')}
+              </p>
+              <ul className="mt-4 space-y-3">
+                {annualFeatures.map((feature) => (
+                  <li key={feature} className="flex items-center gap-2 text-sm">
+                    <Check size={16} weight="bold" className="text-black" />
+                    <span>{t(`items.annual.${feature}`)}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a href="https://app.victusjournal.com/sign-up?key=victus_journal_yearly" target="_blank" rel="noopener noreferrer" className="block mt-8">
+                <Button className="w-full flex items-center justify-between px-6 gap-2 py-3 h-auto rounded-lg">
+                  {t('start')}
+                  <CaretCircleRight size={18} weight="bold" />
+                </Button>
+              </a>
+            </div>
+          </div>
+
+          <p className="mt-8 text-center text-victus-text italic">
+            {t('clarity_message')}
+          </p>
+        </div>
       </Grid>
     </section>
   )
