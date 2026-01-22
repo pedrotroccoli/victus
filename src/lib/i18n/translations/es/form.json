@@ -1,6 +1,7 @@
 {
   "name": {
     "label": "Nombre",
+    "placeholder": "Nombre y apellido",
     "required": "El nombre es obligatorio",
     "at_least_3_characters": "El nombre debe tener al menos 3 caracteres"
   },
@@ -12,13 +13,21 @@
   },
   "password": {
     "label": "Contraseña",
-    "placeholder": "********",
+    "placeholder": "••••••••••",
     "required": "La contraseña es obligatoria",
     "invalid": "La contraseña no es válida",
     "not_match": "Las contraseñas no coinciden"
   },
+  "password_confirmation": {
+    "label": "Confirmación de contraseña",
+    "placeholder": "••••••••••",
+    "required": "La confirmación de contraseña es obligatoria",
+    "invalid": "La confirmación de contraseña no es válida",
+    "not_match": "Las contraseñas no coinciden"
+  },
   "phone": {
     "label": "Teléfono",
+    "placeholder": "(11) 99999-9999",
     "required": "El teléfono es obligatorio",
     "invalid": "El teléfono no es válido"
   },
@@ -29,5 +38,10 @@
   "category_name": {
     "label": "Nombre de la categoría",
     "required": "El nombre de la categoría es obligatorio"
+  },
+  "time": {
+    "explicit_time": "{{hours}} horas, {{minutes}} minutos y {{seconds}} segundos",
+    "explicit_time_without_hours": "{{minutes}} minutos y {{seconds}} segundos",
+    "explicit_time_without_hour_and_minute": "{{seconds}} segundos"
   }
 } 

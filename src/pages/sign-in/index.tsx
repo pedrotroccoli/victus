@@ -44,18 +44,18 @@ export const SignInPage = () => {
         password: data.password,
       });
 
-      toast.success('Login realizado com sucesso', {
+      toast.success(t('sign_in.normal.toast.success'), {
         dismissible: true,
       });
 
       navigate({ to: '/dashboard' });
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 401) {
-        toast.error('Email ou senha inválidos', {
+        toast.error(t('sign_in.normal.toast.invalid_credentials'), {
           dismissible: true,
         });
       } else {
-        toast.error('Ocorreu um erro ao realizar o login', {
+        toast.error(t('sign_in.normal.toast.error'), {
           dismissible: true,
         });
       }

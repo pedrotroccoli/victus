@@ -1,6 +1,7 @@
 {
   "name": {
     "label": "Name",
+    "placeholder": "First and last name",
     "required": "Name is required",
     "at_least_3_characters": "Name must have at least 3 characters"
   },
@@ -12,20 +13,21 @@
   },
   "password": {
     "label": "Password",
-    "placeholder": "********",
+    "placeholder": "••••••••••",
     "required": "Password is required",
     "invalid": "Password is not valid",
     "not_match": "Passwords do not match"
   },
   "password_confirmation": {
     "label": "Password confirmation",
-    "placeholder": "********",
+    "placeholder": "••••••••••",
     "required": "Password confirmation is required",
     "invalid": "Password confirmation is not valid",
     "not_match": "Passwords do not match"
   },
   "phone": {
     "label": "Phone",
+    "placeholder": "(11) 99999-9999",
     "required": "Phone is required",
     "invalid": "Phone is not valid"
   },

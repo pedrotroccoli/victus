@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate, useSearch } from '@tanstack/react-router';
 import { BookMarked, CircleArrowRight, KeyRound, Mail, Phone, User } from 'lucide-react';
 import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Button } from '@/components/ions/button';
@@ -23,6 +24,8 @@ interface SignUpSearchParams {
 }
 
 export const SignUpPage = () => {
+  const { t } = useTranslation('auth');
+  const { t: tForm } = useTranslation('form');
   const search = useSearch({ from: '/(public)/_auth/sign-up/' }) as SignUpSearchParams;
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
@@ -53,28 +56,23 @@ export const SignUpPage = () => {
       }
     } catch (error) {
       if (error instanceof AxiosError && error.response?.status === 401) {
-        toast.error('Essa conta já existe em nosso sistema', {
+        toast.error(t('sign_up.toast.account_exists'), {
           dismissible: true,
         });
       } else {
-        toast.error(`${firstName}, ocorreu um erro`, {
-          description: 'Por favor, daqui a 10 segundos tente novamente',
+        toast.error(t('sign_up.toast.error', { name: firstName }), {
+          description: t('sign_up.toast.error_description'),
         });
       }
     }
   }
 
   const onFormError: SubmitErrorHandler<SignUpFormData> = (error) => {
-    const labelsHash = {
-      name: 'Nome',
-      email: 'Email',
-      password: 'Senha',
-      password_confirmation: 'Confirmação de senha',
-      phone: 'Telefone',
-    }
+    const fieldKey = Object.entries(error)[0][0] as keyof SignUpFormData;
+    const fieldLabel = t(`sign_up.fields.${fieldKey}`);
 
-    toast.error(`Ei, se acalme`, {
-      description: `Preencha o campo '${labelsHash[Object.entries(error)[0][0] as keyof SignUpFormData]}' corretamente`,
+    toast.error(t('sign_up.toast.fill_field'), {
+      description: t('sign_up.toast.fill_field_description', { field: fieldLabel }),
       duration: 2000
     });
   }
@@ -89,29 +87,29 @@ export const SignUpPage = () => {
           <BookMarked size={32} strokeWidth={1.5} />
 
           <h5 className="text-4xl text-black font-title font-normal">
-            Criar sua conta
+            {t('sign_up.title')}
           </h5>
         </div>
 
         <FormProvider {...form}>
           <form className='flex flex-col gap-4 mt-8' onSubmit={form.handleSubmit(onFormSubmit, onFormError)}>
-            <TextField name="name" iconLeft={<User size={16} />} label='Nome' placeholder='Nome e sobrenome' />
+            <TextField name="name" iconLeft={<User size={16} />} label={tForm('name.label')} placeholder={tForm('name.placeholder')} />
 
-            <TextField name="email" iconLeft={<Mail size={16} />} label='Email' placeholder='emaildigno@gmail.com' />
+            <TextField name="email" iconLeft={<Mail size={16} />} label={tForm('email.label')} placeholder={tForm('email.placeholder')} />
 
-            <TextField name="phone" iconLeft={<Phone size={16} />} label='Telefone' placeholder='(11) 99999-9999' parser={phoneParser} />
+            <TextField name="phone" iconLeft={<Phone size={16} />} label={tForm('phone.label')} placeholder={tForm('phone.placeholder')} parser={phoneParser} />
 
-            <PasswordField name="password" iconLeft={<KeyRound size={16} />} label='Senha' placeholder='••••••••••' />
+            <PasswordField name="password" iconLeft={<KeyRound size={16} />} label={tForm('password.label')} placeholder={tForm('password.placeholder')} />
 
-            <PasswordField name="password_confirmation" iconLeft={<KeyRound size={16} />} label='Confirmação de senha' placeholder='••••••••••' />
+            <PasswordField name="password_confirmation" iconLeft={<KeyRound size={16} />} label={tForm('password_confirmation.label')} placeholder={tForm('password_confirmation.placeholder')} />
 
             <div className=''>
               <div className='flex items-center justify-between'>
-                <p className='text-sm font-semibold mb-2 font-title'>Força da senha:</p>
+                <p className='text-sm font-semibold mb-2 font-title'>{t('sign_up.password_strength.title')}</p>
                 <span className='text-sm text-black/50 font-bold'>
-                  {passwordStrength > 0 && passwordStrength < 3 && 'Fraca'}
-                  {passwordStrength >= 3 && passwordStrength < 5 && 'Média'}
-                  {passwordStrength === 5 && 'Forte'}
+                  {passwordStrength > 0 && passwordStrength < 3 && t('sign_up.password_strength.weak')}
+                  {passwordStrength >= 3 && passwordStrength < 5 && t('sign_up.password_strength.medium')}
+                  {passwordStrength === 5 && t('sign_up.password_strength.strong')}
                 </span>
               </div>
 
@@ -119,19 +117,19 @@ export const SignUpPage = () => {
 
               <PasswordStrengthList password={form.watch('password') || ''} passwordConfirmation={form.watch('password_confirmation') || ''} className='mt-4' />
 
-              <span className='text-sm text-black/50 mt-4 block'>*A senha precisa ser "Forte"</span>
+              <span className='text-sm text-black/50 mt-4 block'>{t('sign_up.password_strength.requirement')}</span>
             </div>
 
             <Button type="submit" iconRight={CircleArrowRight} className='flex justify-between mt-4' loading={isLoading} disabled={!form.formState.isValid}>
-              Criar conta
+              {t('sign_up.submit')}
             </Button>
           </form>
         </FormProvider>
 
         <p className='text-sm text-black/50 mt-4 font-title text-center'>
-          Já tem uma conta?{' '}
+          {t('sign_up.already_have_account')}{' '}
           <Link to="/sign-in" className='text-[#2C7DA0] underline cursor-pointer hover:text-[#014F86] duration-200 transition-colors'>
-            Acessar
+            {t('sign_up.access')}
           </Link>
         </p>
       </section>

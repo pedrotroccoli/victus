@@ -22,7 +22,11 @@
     "title": "Sua performance",
     "description": "Média nos últimos 7 dias: {{average}}%",
     "performance_label": "Performance: ",
-    "completed_habits_label": "Completados: "
+    "completed_habits_label": "Completados: ",
+    "previous_period": "período anterior",
+    "average": "Média",
+    "best": "Melhor",
+    "worst": "Pior"
   },
   "habits_completed": {
     "completed_habits_label": "Completados: ",
@@ -32,6 +36,10 @@
     "number_of_habits": "{{count}} hábitos por dia",
     "number_of_habits_many": "{{count}} hábitos por dia",
     "number_of_habits_one": "{{count}} hábito por dia",
-    "number_of_habits_zero": "{{count}} hábitos por dia"
+    "number_of_habits_zero": "{{count}} hábitos por dia",
+    "previous_period": "período anterior",
+    "completed": "Completados",
+    "missed": "Faltando",
+    "total": "Total"
   }
 }
