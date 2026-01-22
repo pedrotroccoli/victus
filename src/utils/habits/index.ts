@@ -23,7 +23,7 @@ function formatWeekDay(weekday: number) {
   return sum === -1 ? 6 : sum;
 }
 
-export const isAcceptedByRRule = (habit: Habit, monthDay: string) => {
+export const isAcceptedByRRule = (habit: Habit, date: Date | string) => {
   if (!habit.recurrence_details?.rule) return true;
 
   const rrule = rrulestr(habit.recurrence_details?.rule);
@@ -31,7 +31,8 @@ export const isAcceptedByRRule = (habit: Habit, monthDay: string) => {
 
   if (!permittedWeekdays) return true;
 
-  const currentWeekday = formatWeekDay(getDay(monthDay));
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  const currentWeekday = formatWeekDay(getDay(dateObj));
 
   const isAccepted = permittedWeekdays.includes(currentWeekday);
 

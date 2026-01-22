@@ -36,6 +36,10 @@ module.exports = {
     			body: [
     				'Inter',
     				'sans-serif'
+    			],
+    			display: [
+    				'Recursive',
+    				'sans-serif'
     			]
     		},
     		colors: {

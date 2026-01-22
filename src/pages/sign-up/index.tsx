@@ -86,7 +86,7 @@ export const SignUpPage = () => {
         <div className="flex items-center justify-center gap-4 ">
           <BookMarked size={32} strokeWidth={1.5} />
 
-          <h5 className="text-4xl text-black font-title font-normal">
+          <h5 className="text-lg text-black font-display font-normal">
             {t('sign_up.title')}
           </h5>
         </div>
@@ -105,8 +105,8 @@ export const SignUpPage = () => {
 
             <div className=''>
               <div className='flex items-center justify-between'>
-                <p className='text-sm font-semibold mb-2 font-title'>{t('sign_up.password_strength.title')}</p>
-                <span className='text-sm text-black/50 font-bold'>
+                <p className='text-sm font-medium mb-2'>{t('sign_up.password_strength.title')}</p>
+                <span className='text-sm text-black/50 font-medium'>
                   {passwordStrength > 0 && passwordStrength < 3 && t('sign_up.password_strength.weak')}
                   {passwordStrength >= 3 && passwordStrength < 5 && t('sign_up.password_strength.medium')}
                   {passwordStrength === 5 && t('sign_up.password_strength.strong')}

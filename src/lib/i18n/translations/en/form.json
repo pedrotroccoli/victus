@@ -27,7 +27,7 @@
   },
   "phone": {
     "label": "Phone",
-    "placeholder": "(11) 99999-9999",
+    "placeholder": "+1 5551234567",
     "required": "Phone is required",
     "invalid": "Phone is not valid"
   },

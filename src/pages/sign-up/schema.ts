@@ -17,7 +17,7 @@ export const signUpSchema = z.object({
   }).min(8, 'password_confirmation.invalid'),
   phone: z.string({
     required_error: 'phone.required',
-  }).min(11, 'phone.invalid').refine(phoneValidator, {
+  }).min(8, 'phone.invalid').refine(phoneValidator, {
     message: 'phone.invalid',
   }),
 }).refine(data => data.password === data.password_confirmation, {

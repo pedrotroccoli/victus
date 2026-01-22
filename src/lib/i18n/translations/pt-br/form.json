@@ -27,7 +27,7 @@
   },
   "phone": {
     "label": "Telefone",
-    "placeholder": "(11) 99999-9999",
+    "placeholder": "+55 11999999999",
     "required": "O telefone é obrigatório",
     "invalid": "O telefone não é válido"
   },
