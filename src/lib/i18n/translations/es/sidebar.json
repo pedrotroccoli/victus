@@ -3,7 +3,8 @@
     "general": "General",
     "journal": "Diario",
     "analytics": "Analíticas",
-    "settings": "Configuración"
+    "settings": "Configuración",
+    "logout": "Cerrar sesión"
   },
   "account_sidebar": {
     "account": "Cuenta",

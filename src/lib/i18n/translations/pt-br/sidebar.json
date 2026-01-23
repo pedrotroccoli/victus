@@ -3,7 +3,8 @@
     "general": "Geral",
     "journal": "Jornal",
     "analytics": "Analytics",
-    "settings": "Configurações"
+    "settings": "Configurações",
+    "logout": "Sair"
   },
   "account_sidebar": {
     "account": "Conta",

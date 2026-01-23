@@ -3,7 +3,8 @@
     "general": "General",
     "journal": "Journal",
     "analytics": "Analytics",
-    "settings": "Settings"
+    "settings": "Settings",
+    "logout": "Log out"
   },
   "account_sidebar": {
     "account": "Account",
