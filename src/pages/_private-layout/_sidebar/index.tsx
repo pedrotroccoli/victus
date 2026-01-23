@@ -1,6 +1,6 @@
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger, useSidebar } from "@/components/ui/sidebar"
 import { cn } from "@/lib/utils"
-import { BookOpenText, ChartLine, Chat, Gear, House } from "@phosphor-icons/react"
+import { BookOpenText, ChartLine, Chat, Gear, House, SignOut } from "@phosphor-icons/react"
 import { Link, Outlet, useLocation, useNavigate } from "@tanstack/react-router"
 import { motion } from "motion/react"
 import { SageSupport } from "sage-support"
@@ -8,12 +8,11 @@ import { SageSupport } from "sage-support"
 import { LogoWithText } from "@/assets/logo-with-text"
 import { useMe } from "@/services/auth"
 import { signOut } from "@/services/auth/services"
-import { useCallback, useRef } from "react"
 import { List } from "@phosphor-icons/react"
 import packageJson from "../../../../package.json"
 
 import MrHabbit from "@/assets/rabbit.png"
-import { Header } from "@/components/organisms/header"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { MiniKit } from "@worldcoin/minikit-js"
@@ -41,46 +40,10 @@ export const SidebarLayout = () => {
   const { data: me } = useMe()
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const isLoggingOut = useRef(false);
 
   const handleSignOut = async () => {
-    isLoggingOut.current = true;
-
-    await signOut();
-
-    navigate({
-      to: '/',
-    });
-  }
-
-  const goToDashboard = useCallback(() => {
-    const missingSubscription = me?.subscription?.status !== 'active' || !me?.subscription ? true : undefined;
-
-    if (missingSubscription) {
-      navigate({
-        to: '/freezed',
-        search: {
-          missingSubscription: true,
-        },
-        replace: true,
-      });
-
-      return;
-    }
-
-    navigate({
-      to: '/dashboard',
-    });
-  }, [me, navigate])
-
-  const goTo = (path: string) => {
-    switch (path) {
-      case '/dashboard':
-        goToDashboard();
-        break;
-      default:
-        break;
-    }
+    await signOut()
+    navigate({ to: '/' })
   }
 
   const onClickSupport = () => {
@@ -138,19 +101,38 @@ export const SidebarLayout = () => {
             </SidebarGroupContent>
           </SidebarGroup>
         </SidebarContent>
-        <SidebarFooter className="bg-white" >
-          <SidebarMenu className="mt-4">
-            <p className="text-xs text-neutral-300 text-center">
-              v{packageJson.version}
-            </p>
-          </SidebarMenu>
+        <SidebarFooter className="bg-white border-t border-neutral-200 p-4">
+          <div className="flex items-center gap-3">
+            <Avatar className="w-10 h-10">
+              <AvatarFallback className="bg-neutral-100 text-neutral-600 text-sm font-medium">
+                {me?.name?.charAt(0)?.toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-neutral-900 truncate">
+                {me?.name}
+              </p>
+              <p className="text-xs text-neutral-500 truncate">
+                {me?.email}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={handleSignOut}
+            className="flex items-center gap-2 mt-4 px-2 py-1.5 -mx-2 rounded-md text-sm text-neutral-600 hover:text-red-600 hover:bg-red-50 transition-colors"
+          >
+            <SignOut size={16} weight="bold" />
+            {t('sidebar.logout')}
+          </button>
+          <p className="text-xs text-neutral-300 text-center mt-4">
+            v{packageJson.version}
+          </p>
         </SidebarFooter>
       </Sidebar>
       <FloatingSidebarTrigger />
-      <main className="w-full h-full bg-neutral-50 bg-[url('/dashboard-bg.png')] overflow-y-auto bg-repeat bg-cover">
-        <Header account={me} handleSignOut={handleSignOut} goTo={goTo} />
-        <div className="max-w-screen-xl mx-auto px-4 sm:px-8 h-[calc(100vh-5rem)]">
-          <div className="min-h-[calc(100vh-5rem)]">
+      <main className="w-full h-full bg-white bg-[url('/dashboard-bg.png')] overflow-y-auto bg-repeat bg-cover">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-8 h-screen">
+          <div className="min-h-screen">
             <Outlet />
             <div className="h-20 w-full" />
           </div>
