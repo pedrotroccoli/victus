@@ -1,31 +1,24 @@
-# React + TypeScript + Vite
+# Victus
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Victus is a habit analytics tool. Unlike apps that simply check off whether you did something or not, Victus shows you **where you're heading** — revealing patterns, trends, and the real impact of your daily choices.
 
-Currently, two official plugins are available:
+## The idea
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Your habits tell a story. Victus transforms your records into insights: are you improving? Declining? Which days of the week are hardest? Which habit pulls the others up?
 
-## Expanding the ESLint configuration
+It's like having a mirror that shows not just who you are today, but who you're becoming.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## What you can do
 
-- Configure the top-level `parserOptions` property like this:
+- **Log habits** - Track your daily activities in a simple way
+- **See trends** - Understand if you're progressing or regressing over time
+- **Identify patterns** - Discover connections between your habits and your performance
+- **Visualize your progress** - Charts and statistics that show your journey
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## Languages
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-# victus-web-app
+Available in English, Portuguese, and Spanish.
+
+## For developers
+
+See the `CLAUDE.md` file for technical instructions.
