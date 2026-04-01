@@ -27,7 +27,7 @@ RSpec.describe 'Subscription API', type: :request do
     end
   end
 
-  path '/api/v1/subscription/cancel' do
+  path '/api/v1/subscription/cancellation' do
     post 'Cancel subscription' do
       tags 'Subscription'
       security [bearer_auth: []]
@@ -54,8 +54,8 @@ RSpec.describe 'Subscription API', type: :request do
     end
   end
 
-  path '/api/v1/subscription/create_session' do
-    post 'Create Stripe checkout session' do
+  path '/api/v1/subscription/portal_session' do
+    post 'Create Stripe portal session' do
       tags 'Subscription'
       security [bearer_auth: []]
       consumes 'application/json'
