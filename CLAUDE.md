@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Victus is a habit tracking application composed of three projects:
+Victus is a personal assistant and all-in-one organizer composed of three projects:
 
 | Project | Description | Tech Stack | Port |
 |---------|-------------|------------|------|
-| `victus-web-app/` | Main web application (SPA) | React + Vite + TypeScript | 5275 |
+| `victus-web-app/` | Main web application (SPA) — personal assistant UI | React + Vite + TypeScript | 5275 |
 | `victus-ruby-server/` | API backend | Rails 7.2 + MongoDB | 3000 |
 | `victus-home/` | Marketing landing page | Next.js 14 | 3001 |
 
