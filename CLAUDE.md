@@ -33,6 +33,21 @@ cd victus-home
 npm run dev
 ```
 
+### Local HTTPS (Caddy)
+
+The dev profile includes a Caddy reverse proxy for `https://dev.victusjournal.com`.
+Before running it, generate local TLS certs with [mkcert](https://github.com/FiloSottile/mkcert):
+
+```bash
+mkcert -install   # one-time: installs local CA
+mkdir -p victus-web-app/certs
+mkcert -cert-file victus-web-app/certs/dev.victusjournal.com.pem \
+       -key-file victus-web-app/certs/dev.victusjournal.com-key.pem \
+       dev.victusjournal.com
+```
+
+Also add `127.0.0.1 dev.victusjournal.com` to `/etc/hosts`.
+
 ## Project Relationships
 
 - **victus-web-app** consumes the API from **victus-ruby-server** via `VITE_API_URL`

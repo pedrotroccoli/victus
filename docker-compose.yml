@@ -40,6 +40,8 @@ services:
     ports:
       - "443:443"
       - "80:80"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - ./victus-web-app/certs:/etc/caddy/certs:ro

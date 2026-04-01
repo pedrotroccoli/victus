@@ -26,11 +26,14 @@ docker compose --profile prod logs -f
 ## Desenvolvimento local
 
 ```bash
-# Subir MongoDB + Rails (na raiz do monorepo)
+# Subir MongoDB + Rails + Caddy (na raiz do monorepo)
 docker compose --profile dev up
 
 # Ou só o MongoDB
 docker compose --profile dev up mongodb
+
+# Só MongoDB + Rails (sem Caddy)
+docker compose --profile dev up mongodb web
 ```
 
 ## Configuration
