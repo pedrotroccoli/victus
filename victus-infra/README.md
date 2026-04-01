@@ -11,21 +11,31 @@ Deploy setup para `victus-ruby-server` em VPS.
 ## Deploy
 
 ```bash
-# 1. Buildar a imagem (no diretório victus-ruby-server)
-cd ../victus-ruby-server
-docker build -t victus-ruby-server:latest .
+# 1. Buildar a imagem
+docker build -t victus-ruby-server:latest ./victus-ruby-server
 
-# 2. Subir o container (neste diretório)
-cd ../victus-infra
-docker compose up -d
+# 2. Configurar .env na raiz do monorepo (ver .env.example)
+
+# 3. Subir em produção (na raiz do monorepo)
+docker compose --profile prod up -d
 
 # Ver logs
-docker compose logs -f
+docker compose --profile prod logs -f
+```
+
+## Desenvolvimento local
+
+```bash
+# Subir MongoDB + Rails (na raiz do monorepo)
+docker compose --profile dev up
+
+# Ou só o MongoDB
+docker compose --profile dev up mongodb
 ```
 
 ## Configuration
 
-Edite `.env` antes de subir:
+Edite `.env` na raiz do monorepo antes de subir:
 
 **Obrigatórios:**
 - `MONGO_URI` - Connection string MongoDB externo
@@ -36,4 +46,3 @@ Edite `.env` antes de subir:
 - `RAILS_MASTER_KEY` - Se usar credentials
 - `STRIPE_SECRET_KEY` - Stripe API key
 - `STRIPE_WEBHOOK_SECRET` - Stripe webhook secret
-# victus-infra

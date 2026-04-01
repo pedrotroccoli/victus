@@ -1,0 +1,4 @@
+dev.victusjournal.com {
+	tls /etc/caddy/certs/dev.victusjournal.com.pem /etc/caddy/certs/dev.victusjournal.com-key.pem
+	reverse_proxy http://localhost:5275
+}

@@ -17,9 +17,12 @@ Each project has its own `CLAUDE.md` with detailed commands and architecture.
 ## Quick Start
 
 ```bash
-# Backend (requires Docker for MongoDB)
-cd victus-ruby-server
-docker-compose up -d && rails s
+# Full dev stack (MongoDB + Rails + Caddy)
+docker compose --profile dev up
+
+# Or start services individually
+docker compose --profile dev up mongodb   # just MongoDB
+cd victus-ruby-server && rails s          # Rails outside Docker
 
 # Web App
 cd victus-web-app
