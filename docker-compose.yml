@@ -6,6 +6,9 @@ services:
     profiles: [dev]
     ports:
       - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - mongodb_data:/data/db
       - mongodb_config:/data/configdb
@@ -33,6 +36,20 @@ services:
     networks:
       - victus-network
 
+  frontend:
+    image: node:20-slim
+    container_name: victus-frontend
+    profiles: [dev]
+    working_dir: /app
+    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm dev --host 0.0.0.0"
+    ports:
+      - "5275:5275"
+    volumes:
+      - ./victus-web-app:/app
+      - frontend_node_modules:/app/node_modules
+    networks:
+      - victus-network
+
   caddy:
     image: caddy:2
     container_name: victus-caddy
@@ -40,8 +57,8 @@ services:
     ports:
       - "443:443"
       - "80:80"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    depends_on:
+      - frontend
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - ./victus-web-app/certs:/etc/caddy/certs:ro
@@ -56,7 +73,7 @@ services:
     container_name: traefik
     profiles: [prod]
     environment:
-      - DOCKER_API_VERSION: "1.47"
+      DOCKER_API_VERSION: "1.47"
     command:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
@@ -99,6 +116,7 @@ services:
 volumes:
   mongodb_data:
   mongodb_config:
+  frontend_node_modules:
   letsencrypt:
   caddy_data:
   caddy_config:
