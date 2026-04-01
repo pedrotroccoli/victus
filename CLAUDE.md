@@ -17,36 +17,20 @@ Each project has its own `CLAUDE.md` with detailed commands and architecture.
 ## Quick Start
 
 ```bash
-# Full dev stack (MongoDB + Rails + Caddy)
-docker compose --profile dev up
-
-# Or start services individually
-docker compose --profile dev up mongodb   # just MongoDB
-cd victus-ruby-server && rails s          # Rails outside Docker
-
-# Web App
-cd victus-web-app
-pnpm dev
-
-# Landing Page
-cd victus-home
-npm run dev
+cp .env.example .env                      # fill in secrets
+cp victus-web-app/.env.example victus-web-app/.env
+make up                                   # starts everything
 ```
 
-### Local HTTPS (Caddy)
+`make up` handles certs, hosts check, and docker compose. See `README.md` for details.
 
-The dev profile includes a Caddy reverse proxy for `https://dev.victusjournal.com`.
-Before running it, generate local TLS certs with [mkcert](https://github.com/FiloSottile/mkcert):
+### Other commands
 
 ```bash
-mkcert -install   # one-time: installs local CA
-mkdir -p victus-web-app/certs
-mkcert -cert-file victus-web-app/certs/dev.victusjournal.com.pem \
-       -key-file victus-web-app/certs/dev.victusjournal.com-key.pem \
-       dev.victusjournal.com
+make down    # stop all services
+make logs    # tail logs
+make seed    # run db:seed
 ```
-
-Also add `127.0.0.1 dev.victusjournal.com` to `/etc/hosts`.
 
 ## Project Relationships
 
