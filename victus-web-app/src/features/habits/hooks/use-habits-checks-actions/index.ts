@@ -59,7 +59,7 @@ export const useHabitsCheckingActions = ({
       updated_at: new Date().toISOString(),
     };
 
-    queryClient.setQueryData<HabitCheck[]>(['habits-check'], (old = []) => {
+    queryClient.setQueryData<HabitCheck[]>(['checks'], (old = []) => {
       // Check if there's already a check for this habit today
       const existingCheck = old.find(
         c => c.habit_id === parentId && isSameDay(new Date(c.created_at), new Date())
@@ -164,7 +164,7 @@ export const useHabitsCheckingActions = ({
           });
         } catch (error) {
           // If API call fails, revert the optimistic update
-          queryClient.invalidateQueries({ queryKey: ['habits-check'] });
+          queryClient.invalidateQueries({ queryKey: ['checks'] });
           toast.error(`Erro ao marcar ${parent.name}`);
         }
       }, PARENT_CHECK_DELAY_MS);

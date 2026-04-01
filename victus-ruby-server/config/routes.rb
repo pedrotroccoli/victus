@@ -15,19 +15,10 @@ Rails.application.routes.draw do
           get 'me', to: 'me#me'
           put 'me', to: 'me#update_me'
 
-          get 'habits/:id', to: 'habits#show'
-          get 'habits', to: 'habits#index'
-          post 'habits', to: 'habits#create'
-          put 'habits/:id', to: 'habits#update'
-          delete 'habits/:id', to: 'habits#destroy'
-
-          resources :habits
-
-          get 'habits-check', to: 'habits_check#all'
-          get 'habits-check/:habit_id', to: 'habits_check#index'
-          get 'habits-check/:habit_id/:check_id', to: 'habits_check#show'
-          post 'habits-check/:habit_id', to: 'habits_check#create'
-          put 'habits-check/:habit_id/:check_id', to: 'habits_check#update'
+          resources :habits do
+            resources :checks, controller: 'habits_check', only: [:index, :show, :create, :update]
+          end
+          get 'checks', to: 'habits_check#all'
 
           resources :habits_category, only: [:index, :create, :update, :destroy]
           resources :mood
@@ -36,9 +27,12 @@ Rails.application.routes.draw do
 
           get 'plans', to: 'plans#index'
 
-          get 'subscription', to: 'subscription#show'
-          post 'subscription/cancel', to: 'subscription#cancel'
-          post 'subscription/create_session', to: 'subscription#create_session'
+          resource :subscription, only: [:show] do
+            scope module: :subscriptions do
+              resource :cancellation, only: [:create]
+              resource :portal_session, only: [:create]
+            end
+          end
       end
 
       scope module: 'public' do

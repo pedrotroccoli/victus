@@ -96,7 +96,7 @@ class HabitsCheckController < Private::PrivateController
   end
 
   def get_habit_check
-    @habit_check = @habit.habit_checks.find(params[:check_id].to_s)
+    @habit_check = @habit.habit_checks.find(params[:id].to_s)
 
     render json: { error: 'Habit check not found' }, status: :not_found if @habit_check.nil?
   end

@@ -7,7 +7,7 @@ RSpec.describe 'Habit Checks API', type: :request do
   let(:Authorization) { "Bearer #{auth_token_for(account)}" }
   let(:habit) { create(:habit, account: account) }
 
-  path '/api/v1/habits-check' do
+  path '/api/v1/checks' do
     get 'List all habit checks for account' do
       tags 'Habit Checks'
       security [bearer_auth: []]
@@ -26,7 +26,7 @@ RSpec.describe 'Habit Checks API', type: :request do
     end
   end
 
-  path '/api/v1/habits-check/{habit_id}' do
+  path '/api/v1/habits/{habit_id}/checks' do
     parameter name: :habit_id, in: :path, type: :string, description: 'Habit ID'
 
     get 'List checks for a specific habit' do
@@ -81,9 +81,9 @@ RSpec.describe 'Habit Checks API', type: :request do
     end
   end
 
-  path '/api/v1/habits-check/{habit_id}/{check_id}' do
+  path '/api/v1/habits/{habit_id}/checks/{id}' do
     parameter name: :habit_id, in: :path, type: :string, description: 'Habit ID'
-    parameter name: :check_id, in: :path, type: :string, description: 'Check ID'
+    parameter name: :id, in: :path, type: :string, description: 'Check ID'
 
     get 'Get a specific check' do
       tags 'Habit Checks'
@@ -95,7 +95,7 @@ RSpec.describe 'Habit Checks API', type: :request do
 
         let(:habit_check) { create(:habit_check, habit: habit) }
         let(:habit_id) { habit.id.to_s }
-        let(:check_id) { habit_check.id.to_s }
+        let(:id) { habit_check.id.to_s }
 
         run_test!
       end
@@ -120,7 +120,7 @@ RSpec.describe 'Habit Checks API', type: :request do
 
         let(:habit_check) { create(:habit_check, habit: habit) }
         let(:habit_id) { habit.id.to_s }
-        let(:check_id) { habit_check.id.to_s }
+        let(:id) { habit_check.id.to_s }
         let(:check) { { notes: 'Updated note' } }
 
         run_test!
