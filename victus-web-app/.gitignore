@@ -5,3 +5,6 @@ dist-ssr
 
 # Certs
 certs/*
+
+# pnpm
+.pnpm-store/
