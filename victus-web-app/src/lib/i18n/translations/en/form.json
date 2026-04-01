@@ -1,0 +1,47 @@
+{
+  "name": {
+    "label": "Name",
+    "placeholder": "First and last name",
+    "required": "Name is required",
+    "at_least_3_characters": "Name must have at least 3 characters"
+  },
+  "email": {
+    "label": "Email",
+    "placeholder": "example@email.com",
+    "required": "Email is required",
+    "invalid": "Email is not valid"
+  },
+  "password": {
+    "label": "Password",
+    "placeholder": "••••••••••",
+    "required": "Password is required",
+    "invalid": "Password is not valid",
+    "not_match": "Passwords do not match"
+  },
+  "password_confirmation": {
+    "label": "Password confirmation",
+    "placeholder": "••••••••••",
+    "required": "Password confirmation is required",
+    "invalid": "Password confirmation is not valid",
+    "not_match": "Passwords do not match"
+  },
+  "phone": {
+    "label": "Phone",
+    "placeholder": "+1 5551234567",
+    "required": "Phone is required",
+    "invalid": "Phone is not valid"
+  },
+  "habit_name": {
+    "label": "Habit name",
+    "required": "Habit name is required"
+  },
+  "category_name": {
+    "label": "Category name",
+    "required": "Category name is required"
+  },
+  "time": {
+    "explicit_time": "{{hours}} hours, {{minutes}} minutes and {{seconds}} seconds",
+    "explicit_time_without_hours": "{{minutes}} minutes and {{seconds}} seconds",
+    "explicit_time_without_hour_and_minute": "{{seconds}} seconds"
+  }
+} 

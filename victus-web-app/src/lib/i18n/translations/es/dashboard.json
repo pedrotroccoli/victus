@@ -1,0 +1,57 @@
+{
+  "page": {
+    "title": "Victus Journal | Panel de Control"
+  },
+  "trial_period": {
+    "title": "¡Atención!",
+    "description": "Estás en período de prueba, tu acceso termina el **{{date}}**, selecciona una suscripción para continuar usando Victus Journal después del período de prueba."
+  },
+  "greeting": "¡Hola {{name}}, aquí está tu Diario!",
+  "habits": {
+    "title": "Hábitos",
+    "description": "Aquí están todos los hábitos que has creado.",
+    "create": "Crear hábito",
+    "create_first_habit": "Crear mi primer hábito",
+    "no_habits": "Ningún hábito registrado",
+    "tab_general": "Vista General",
+    "tab_focus": "Modo Enfoque",
+    "tabs": {
+      "general": "Vista General",
+      "focus": "Modo Enfoque"
+    }
+  },
+  "explanation": {
+    "title": "Información",
+    "boxes": {
+      "checked": "Completado",
+      "blocked": "Fuera de fecha",
+      "blocked-dark": "Fuera de la fecha de inicio o fin",
+      "empty": "No completado",
+      "none": "Habilitado"
+    }
+  },
+  "floating_actions": {
+    "disable_edit": "Desactivar edición",
+    "enable_edit": "Activar edición",
+    "new_category": "Nueva categoría",
+    "new_habit": "Nuevo hábito"
+  },
+  "mood": {
+    "title": "¿Cómo te sientes?",
+    "current": "Tu humor ahora",
+    "current_hour": "a las {{hour}}h",
+    "change": "Cambiar",
+    "add_description": "Agregar una descripción",
+    "description_placeholder": "¿Cómo te sientes?",
+    "already_registered": "Ya registraste tu humor esta hora. Espera a la próxima hora para registrar de nuevo.",
+    "skip": "Omitir",
+    "values": {
+      "terrible": "Pésimo",
+      "bad": "Malo",
+      "neutral": "Neutro",
+      "good": "Bueno",
+      "great": "Genial",
+      "amazing": "Increíble"
+    }
+  }
+} 

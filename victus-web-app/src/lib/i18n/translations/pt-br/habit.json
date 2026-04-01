@@ -1,0 +1,204 @@
+{
+  "create_habit_modal": {
+    "title": {
+      "create": "Criar hábito",
+      "edit": "Editar hábito"
+    },
+    "description": {
+      "create": "Defina a data de início e fim do hábito e defina seus deltas",
+      "edit": "Edite as informações do hábito ou deltas"
+    },
+    "tabs": {
+      "habit": "Hábito",
+      "deltas": "Deltas",
+      "advanced": "Avançado",
+      "actions": "Ações"
+    },
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Nome do hábito",
+          "placeholder": "Ex: Beber água"
+        },
+        "frequency": {
+          "label": "Frequência",
+          "placeholder": "Selecione a frequência",
+          "options": {
+            "daily": "Diário",
+            "weekly": "Semanal"
+          }
+        },
+        "category": {
+          "label": "Categoria",
+          "placeholder": "Selecione a categoria",
+          "commandPlaceholder": "Pesquisar categoria",
+          "commandEmpty": "Nenhuma categoria encontrada",
+          "disabled_tooltip": "A categoria é herdada do hábito pai"
+        },
+        "week_days": {
+          "label": "Dias da semana",
+          "placeholder": "Selecione os dias da semana"
+        },
+        "start_date": {
+          "label": "Data de início",
+          "placeholder": "Selecione a data de início"
+        },
+        "end_date": {
+          "label": "Data de término",
+          "placeholder": "Selecione a data de término",
+          "disabled_message": "Sem data de término",
+          "parent_limit": "Limitado pelo pai"
+        },
+        "infinite": {
+          "label": "Período infinito",
+          "placeholder": "Selecione se o hábito é infinito"
+        },
+        "child_habit": {
+          "label": "Definir um hábito pai"
+        },
+        "children_habits": {
+          "label": "Hábitos filhos",
+          "placeholder": "Selecione os hábitos filhos",
+          "commandPlaceholder": "Pesquisar hábito",
+          "commandEmpty": "Nenhum hábito encontrado",
+          "helper": "Os hábitos filhos serão excluídos junto com este hábito"
+        },
+        "parent_habit": {
+          "label": "Hábito pai",
+          "placeholder": "Selecione o hábito pai",
+          "commandPlaceholder": "Pesquisar hábito",
+          "commandEmpty": "Nenhum hábito encontrado",
+          "no_parent": "Sem hábito pai",
+          "helper": "Este hábito aparecerá como filho do hábito selecionado"
+        },
+        "rule_engine": {
+          "enabled_label": "Habilitar regras de conclusão",
+          "logic_type": {
+            "label": "Tipo de lógica",
+            "placeholder": "Selecione o tipo",
+            "and": "E (todos)",
+            "or": "OU (qualquer um)"
+          },
+          "habits": {
+            "label": "Hábitos condicionais",
+            "placeholder": "Selecione os hábitos",
+            "commandPlaceholder": "Pesquisar hábito",
+            "commandEmpty": "Nenhum hábito encontrado"
+          },
+          "helper_and": "Este hábito só pode ser marcado quando TODOS os hábitos selecionados estiverem concluídos",
+          "helper_or": "Este hábito pode ser marcado quando QUALQUER UM dos hábitos selecionados estiver concluído"
+        }
+      },
+      "sections": {
+        "children_habits": "Hábitos filhos",
+        "parent_habit": "Hábito pai",
+        "rule_engine": "Regras de conclusão",
+        "advanced_empty": "Nenhuma configuração avançada disponível. As regras de conclusão aparecerão quando este hábito tiver hábitos filhos."
+      }
+    },
+    "deltas": {
+      "title": "Gerencie seus deltas",
+      "description": "Crie e edite seus deltas para o hábito",
+      "tooltip": {
+        "title": "O que é um delta?",
+        "description": "Um delta é uma quantidade que você completou do hábito. <br /> <br />Por exemplo, se você bebeu 2 litros de água em um dia o seu delta será 2 ou 2000 se preferir em mililitros. <br /> <br />Você tem total liberdade para usar os deltas como quiser."
+      },
+      "empty": {
+        "title": "Crie seu primeiro delta",
+        "one_more": "Criar um novo delta"
+      },
+      "blocks": {
+        "name": {
+          "label": "Nome",
+          "placeholder": "Ex: Beber água"
+        },
+        "type": {
+          "label": "Tipo",
+          "options": {
+            "number": "Número",
+            "time": "Tempo"
+          }
+        },
+        "status": {
+          "label": "Status",
+          "options": {
+            "active": "Ativo",
+            "new": "Novo"
+          }
+        }
+      }
+    },
+    "buttons": {
+      "create": "Criar hábito",
+      "edit": "Salvar hábito"
+    }
+  },
+  "fill_delta_modal": {
+    "title": "Preencha o delta",
+    "description": "Preencha o delta para o hábito",
+    "form": {
+      "fields": {
+        "delta": {
+          "label": "Delta {{name}}",
+          "placeholder": "Ex: 1"
+        }
+      }
+    }
+  },
+  "delete_habit_modal": {
+    "title": "Você tem absoluta certeza?",
+    "description": "Esta ação não pode ser revertida. Isso irá deletar o hábito **{{name}}** permanentemente e remover seus dados dos nossos servidores."
+  },
+  "create_delta_modal": {
+    "title": {
+      "create": "Criar delta",
+      "edit": "Editar delta {{name}}"
+    },
+    "description": {
+      "create": "Defina o nome e o tipo do delta",
+      "edit": "Edite o nome e o tipo do delta"
+    },
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Nome do delta",
+          "placeholder": "Ex: Quantidade de água"
+        },
+        "type": {
+          "label": "Tipo",
+          "placeholder": "Selecione o tipo",
+          "options": {
+            "number": "Número",
+            "time": "Tempo"
+          }
+        }
+      }
+    }
+  },
+  "empty_category": {
+    "title": "Nenhum hábito ainda",
+    "description": "Adicione um hábito ou arraste um para cá.",
+    "drop_title": "Solte aqui",
+    "drop_description": "Solte para mover o hábito para esta categoria",
+    "add_button": "Adicionar hábito",
+    "delete_button": "Excluir"
+  },
+  "create_category_modal": {
+    "title": "Criar categoria",
+    "title_edit": "Editar categoria",
+    "description": "Defina o nome e ícone da categoria",
+    "description_edit": "Edite o nome e ícone da categoria",
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Nome da categoria",
+          "placeholder": "Ex: Saúde ou Educação"
+        },
+        "icon": {
+          "label": "Ícone",
+          "placeholder": "Selecione um ícone"
+        }
+      }
+    }
+  }
+}

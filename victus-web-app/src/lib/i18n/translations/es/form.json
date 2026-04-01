@@ -1,0 +1,47 @@
+{
+  "name": {
+    "label": "Nombre",
+    "placeholder": "Nombre y apellido",
+    "required": "El nombre es obligatorio",
+    "at_least_3_characters": "El nombre debe tener al menos 3 caracteres"
+  },
+  "email": {
+    "label": "Correo electrónico",
+    "placeholder": "ejemplo@email.com",
+    "required": "El correo electrónico es obligatorio",
+    "invalid": "El correo electrónico no es válido"
+  },
+  "password": {
+    "label": "Contraseña",
+    "placeholder": "••••••••••",
+    "required": "La contraseña es obligatoria",
+    "invalid": "La contraseña no es válida",
+    "not_match": "Las contraseñas no coinciden"
+  },
+  "password_confirmation": {
+    "label": "Confirmación de contraseña",
+    "placeholder": "••••••••••",
+    "required": "La confirmación de contraseña es obligatoria",
+    "invalid": "La confirmación de contraseña no es válida",
+    "not_match": "Las contraseñas no coinciden"
+  },
+  "phone": {
+    "label": "Teléfono",
+    "placeholder": "+34 612345678",
+    "required": "El teléfono es obligatorio",
+    "invalid": "El teléfono no es válido"
+  },
+  "habit_name": {
+    "label": "Nombre del hábito",
+    "required": "El nombre del hábito es obligatorio"
+  },
+  "category_name": {
+    "label": "Nombre de la categoría",
+    "required": "El nombre de la categoría es obligatorio"
+  },
+  "time": {
+    "explicit_time": "{{hours}} horas, {{minutes}} minutos y {{seconds}} segundos",
+    "explicit_time_without_hours": "{{minutes}} minutos y {{seconds}} segundos",
+    "explicit_time_without_hour_and_minute": "{{seconds}} segundos"
+  }
+} 

@@ -1,0 +1,19 @@
+{
+  "habit_name": {
+    "information": {
+      "title": "Información: ",
+      "type": "Tipo: ",
+      "started_at": "Comenzó en: ",
+      "ended_at": "Termina en: ",
+      "no_definition": "Sin definición"
+    },
+    "tooltip": {
+      "type": "Tipo",
+      "start": "Inicio",
+      "end": "Fin",
+      "daily": "Diario",
+      "hide": "Ocultar",
+      "show": "Mostrar"
+    }
+  }
+}

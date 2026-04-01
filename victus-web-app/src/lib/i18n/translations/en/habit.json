@@ -1,0 +1,204 @@
+{
+  "create_habit_modal": {
+    "title": {
+      "create": "Create habit",
+      "edit": "Edit habit"
+    },
+    "description": {
+      "create": "Set the start and end date of the habit and define your deltas",
+      "edit": "Edit habit information or deltas"
+    },
+    "tabs": {
+      "habit": "Habit",
+      "deltas": "Deltas",
+      "advanced": "Advanced",
+      "actions": "Actions"
+    },
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Habit name",
+          "placeholder": "Ex: Drink water"
+        },
+        "frequency": {
+          "label": "Frequency",
+          "placeholder": "Select frequency",
+          "options": {
+            "daily": "Daily",
+            "weekly": "Weekly"
+          }
+        },
+        "category": {
+          "label": "Category",
+          "placeholder": "Select category",
+          "commandPlaceholder": "Search category",
+          "commandEmpty": "No categories found",
+          "disabled_tooltip": "Category is inherited from parent habit"
+        },
+        "week_days": {
+          "label": "Week days",
+          "placeholder": "Select week days"
+        },
+        "start_date": {
+          "label": "Start date",
+          "placeholder": "Select start date"
+        },
+        "end_date": {
+          "label": "End date",
+          "placeholder": "Select end date",
+          "disabled_message": "No end date",
+          "parent_limit": "Limited by parent"
+        },
+        "infinite": {
+          "label": "Infinite period",
+          "placeholder": "Select if the habit is infinite"
+        },
+        "child_habit": {
+          "label": "Define a parent habit"
+        },
+        "children_habits": {
+          "label": "Child habits",
+          "placeholder": "Select child habits",
+          "commandPlaceholder": "Search habit",
+          "commandEmpty": "No habits found",
+          "helper": "Child habits will be deleted along with this habit"
+        },
+        "parent_habit": {
+          "label": "Parent habit",
+          "placeholder": "Select parent habit",
+          "commandPlaceholder": "Search habit",
+          "commandEmpty": "No habits found",
+          "no_parent": "No parent",
+          "helper": "This habit will appear as a child of the selected parent"
+        },
+        "rule_engine": {
+          "enabled_label": "Enable completion rules",
+          "logic_type": {
+            "label": "Logic type",
+            "placeholder": "Select type",
+            "and": "AND (all)",
+            "or": "OR (any)"
+          },
+          "habits": {
+            "label": "Conditional habits",
+            "placeholder": "Select habits",
+            "commandPlaceholder": "Search habit",
+            "commandEmpty": "No habits found"
+          },
+          "helper_and": "This habit can only be checked when ALL selected habits are completed",
+          "helper_or": "This habit can be checked when ANY of the selected habits is completed"
+        }
+      },
+      "sections": {
+        "children_habits": "Child habits",
+        "parent_habit": "Parent habit",
+        "rule_engine": "Completion rules",
+        "advanced_empty": "No advanced settings available. Completion rules will appear when this habit has child habits."
+      }
+    },
+    "deltas": {
+      "title": "Manage your deltas",
+      "description": "Create and edit your deltas for the habit",
+      "tooltip": {
+        "title": "What is a delta?",
+        "description": "A delta is a quantity that you completed for the habit. <br /> <br />For example, if you drank 2 liters of water in a day, your delta would be 2 or 2000 if you prefer in milliliters. <br /> <br />You have complete freedom to use deltas as you wish."
+      },
+      "empty": {
+        "title": "Create your first delta",
+        "one_more": "Create a new delta"
+      },
+      "blocks": {
+        "name": {
+          "label": "Name",
+          "placeholder": "Ex: Water intake"
+        },
+        "type": {
+          "label": "Type",
+          "options": {
+            "number": "Number",
+            "time": "Time"
+          }
+        },
+        "status": {
+          "label": "Status",
+          "options": {
+            "active": "Active",
+            "new": "New"
+          }
+        }
+      }
+    },
+    "buttons": {
+      "create": "Create habit",
+      "edit": "Save habit"
+    }
+  },
+  "fill_delta_modal": {
+    "title": "Fill the delta",
+    "description": "Fill the delta for the habit",
+    "form": {
+      "fields": {
+        "delta": {
+          "label": "Delta {{name}}",
+          "placeholder": "Ex: 1"
+        }
+      }
+    }
+  },
+  "delete_habit_modal": {
+    "title": "Are you absolutely sure?",
+    "description": "This action cannot be undone. This will permanently delete the habit **{{name}}** and remove its data from our servers."
+  },
+  "create_delta_modal": {
+    "title": {
+      "create": "Create delta",
+      "edit": "Edit delta {{name}}"
+    },
+    "description": {
+      "create": "Set the name and type of the delta",
+      "edit": "Edit the name and type of the delta"
+    },
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Delta name",
+          "placeholder": "Ex: Water quantity"
+        },
+        "type": {
+          "label": "Type",
+          "placeholder": "Select type",
+          "options": {
+            "number": "Number",
+            "time": "Time"
+          }
+        }
+      }
+    }
+  },
+  "empty_category": {
+    "title": "No habits yet",
+    "description": "Add a habit or drag one here to get started.",
+    "drop_title": "Drop here",
+    "drop_description": "Release to move the habit to this category",
+    "add_button": "Add habit",
+    "delete_button": "Delete"
+  },
+  "create_category_modal": {
+    "title": "Create category",
+    "title_edit": "Edit category",
+    "description": "Set the category name and icon",
+    "description_edit": "Edit the category name and icon",
+    "form": {
+      "fields": {
+        "name": {
+          "label": "Category name",
+          "placeholder": "Ex: Health or Education"
+        },
+        "icon": {
+          "label": "Icon",
+          "placeholder": "Select an icon"
+        }
+      }
+    }
+  }
+} 

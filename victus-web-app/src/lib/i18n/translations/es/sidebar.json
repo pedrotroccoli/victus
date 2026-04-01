@@ -1,0 +1,28 @@
+{
+  "sidebar": {
+    "general": "General",
+    "journal": "Diario",
+    "analytics": "Analíticas",
+    "settings": "Configuración",
+    "logout": "Cerrar sesión"
+  },
+  "account_sidebar": {
+    "account": "Cuenta",
+    "plans": "Planes",
+    "settings": "Configuraciones"
+  },
+  "float_button": {
+    "mr_habbit": {
+      "talk": "Hablar con Mr. Habbit",
+      "coming_soon": "Próximamente"
+    },
+    "support": {
+      "talk": "Hablar con soporte",
+      "toast_message": "Mensaje enviado con éxito",
+      "message": "Hola, me gustaría hablar con soporte. Mi nombre es {{name}}"
+    },
+    "sage": {
+      "talk": "Hablar con la Sage (IA)"
+    }
+  }
+} 

@@ -1,0 +1,24 @@
+{
+  "welcome": {
+    "step1": {
+      "title": "Hello, welcome to Victus Journal",
+      "description": "Your journal for habits, thoughts, and experiences. Take control of your life!"
+    },
+    "step2": {
+      "title": "Create your habits and goals",
+      "description": "Create your habits one by one, set goals, and get your **general journal** to fill out."
+    },
+    "step3": {
+      "title": "Create deltas for each habit",
+      "description": "Get detailed data about your behaviors in your analytics."
+    },
+    "step4": {
+      "title": "View your analytics",
+      "description": "With analytics, you can see your performance and progress towards your goals."
+    }
+  },
+  "world_app": {
+    "title": "Welcome to Victus World",
+    "description": "Your journal for habits, thoughts, and experiences. Take control of your life!"
+  }
+} 

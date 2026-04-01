@@ -1,0 +1,28 @@
+{
+  "sidebar": {
+    "general": "General",
+    "journal": "Journal",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "logout": "Log out"
+  },
+  "account_sidebar": {
+    "account": "Account",
+    "plans": "Plans",
+    "settings": "Settings"
+  },
+  "float_button": {
+    "mr_habbit": {
+      "talk": "Talk to Mr. Habbit",
+      "coming_soon": "Coming soon"
+    },
+    "support": {
+      "talk": "Talk to support",
+      "toast_message": "Message sent successfully",
+      "message": "Hello, I would like to talk to support. My name is {{name}}"
+    },
+    "sage": {
+      "talk": "Talk to the Sage (AI)"
+    }
+  }
+} 

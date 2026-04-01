@@ -1,0 +1,48 @@
+{
+  "plans": {
+    "features": {
+    "monthly_habit_creation": "Criação de 50 hábitos",
+    "monthly_delta_creation": "Criação de Deltas",
+    "monthly_analytics": "Analytics avançado",
+    "monthly_support": "Suporte via chat (Email e WhatsApp)",
+    "yearly_habit_creation": "Criação de infinitos hábitos",
+    "yearly_delta_creation": "Criação de Deltas",
+    "yearly_analytics": "Analytics avançado",
+    "yearly_support": "Suporte via chat (Email e WhatsApp)"
+  },
+  "free_trial": "Teste grátis por 14 dias",
+    "monthly": {
+      "title": "Mensal"
+    },
+    "yearly": {
+      "title": "Anual"
+    }
+  },
+  "subscription": {
+    "active": {
+      "title": "Assinatura ativa",
+      "description": "Você tem uma assinatura ativa. Você pode gerenciar sua assinatura no painel de controle.",
+      "button": "Gerenciar assinatura"
+    },
+    "cancelled": {
+      "title": "Assinatura cancelada",
+      "description": "Você cancelou sua assinatura. Você pode assinar um novo plano para continuar usando o Victus Journal.",
+      "button": "Assinar plano"
+    },
+    "trial": {
+      "title": "Teste grátis",
+      "description": "Você está em um período de teste. Você pode assinar um plano para continuar usando o Victus Journal.",
+      "button": "Assinar plano"
+    },
+    "missing": {
+      "title": "Assinatura não encontrada",
+      "description": "Você não possui uma assinatura. Você pode assinar um plano para continuar usando o Victus Journal.",
+      "button": "Assinar plano"
+    },
+    "freezed": {
+      "title": "Assinatura congelada",
+      "description": "Você tem uma assinatura congelada. Você pode gerenciar sua assinatura no painel de controle.",
+      "button": "Ver planos"
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "small_analytics": {
+    "today": {
+      "title": "Hoy completaste",
+      "description": "{{amount}} de {{total}} hábitos"
+    },
+    "enjoyment": {
+      "title": "Hoy estás en",
+      "description": "{{percentage}}% de disfrute"
+    },
+    "compare_with_yesterday": {
+      "title": "Comparando con ayer",
+      "description_increase": "{{compare}}% más",
+      "description_decrease": "{{compare}}% menos"
+    },
+    "average": {
+      "title": "Promedio en los últimos 7 días",
+      "description": "{{average}}% de disfrute"
+    }
+  },
+  "performance": {
+    "title": "Tu rendimiento",
+    "description": "Promedio en los últimos 7 días: {{average}}%",
+    "performance_label": "Rendimiento: ",
+    "completed_habits_label": "Hábitos completados: ",
+    "previous_period": "período anterior",
+    "average": "Promedio",
+    "best": "Mejor",
+    "worst": "Peor"
+  },
+  "habits_completed": {
+    "completed_habits_label": "Completados: ",
+    "missing_habits_label": "No completados: ",
+    "title": "Hábitos completados",
+    "description": "Promedio en los últimos 7 días: {{average}} hábitos por día",
+    "number_of_habits": "{{count}} hábitos por día",
+    "number_of_habits_many": "{{count}} hábitos por día",
+    "number_of_habits_one": "{{count}} hábito por día",
+    "number_of_habits_zero": "{{count}} hábitos por día",
+    "previous_period": "período anterior",
+    "completed": "Completados",
+    "missed": "Faltando",
+    "total": "Total"
+  }
+} 

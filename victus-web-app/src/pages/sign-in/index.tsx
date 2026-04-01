@@ -1,0 +1,120 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Link, useNavigate } from '@tanstack/react-router';
+import { BookMarked, CircleArrowRight, KeyRound, Mail } from 'lucide-react';
+import { FormProvider, SubmitErrorHandler, SubmitHandler, useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { Button } from '@/components/ions/button';
+import { PasswordField } from '@/components/molecules/form/PasswordField';
+import { TextField } from '@/components/molecules/form/TextField';
+import { cn } from '@/lib/utils';
+import { useSignIn } from '@/services/auth';
+import { getToken } from '@/services/auth/services';
+import { AxiosError } from 'axios';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+
+const signInSchema = z.object({
+  email: z.string({
+    required_error: 'form.email.required',
+  }).trim().email('form.email.invalid'),
+  password: z.string({
+    required_error: 'form.password.required',
+  }).trim().min(3, 'form.password.invalid'),
+});
+
+type SignInFormData = z.infer<typeof signInSchema>;
+
+export const SignInPage = () => {
+  const { t } = useTranslation('auth');
+  const { t: tForm } = useTranslation('form');
+
+  const form = useForm<SignInFormData>({
+    resolver: zodResolver(signInSchema),
+  });
+
+  const { mutateAsync: signIn, isPending: isLoading } = useSignIn();
+  const navigate = useNavigate();
+
+  const onFormSubmit: SubmitHandler<SignInFormData> = async (data) => {
+    try {
+      await signIn({
+        email: data.email,
+        password: data.password,
+      });
+
+      toast.success(t('sign_in.normal.toast.success'), {
+        dismissible: true,
+      });
+
+      navigate({ to: '/dashboard' });
+    } catch (error) {
+      if (error instanceof AxiosError && error.response?.status === 401) {
+        toast.error(t('sign_in.normal.toast.invalid_credentials'), {
+          dismissible: true,
+        });
+      } else {
+        toast.error(t('sign_in.normal.toast.error'), {
+          dismissible: true,
+        });
+      }
+    }
+  }
+
+  const onFormError: SubmitErrorHandler<SignInFormData> = (error) => {
+    console.log(error, 'error');
+  }
+
+  useEffect(() => {
+    const token = getToken();
+
+    if (token) {
+      navigate({ to: '/dashboard' });
+    }
+  }, [navigate]);
+
+  return (
+    <main className="w-full h-screen bg-[url('/sign-in-bg.webp')] flex items-center justify-center">
+      <div className="bg-white/5 backdrop-blur-sm w-full h-full absolute"></div>
+      <section className="max-w-[26rem] w-full z-10 relative border border-[#B3B3B3] bg-white px-6 py-10 rounded-lg">
+        <div className="flex items-center justify-center gap-4">
+          <BookMarked size={32} strokeWidth={1.5} />
+
+          <h5 className="text-3xl text-black font-[Recursive] font-medium">
+            {t('sign_in.normal.title')}
+          </h5>
+        </div>
+
+        <FormProvider {...form}>
+          <form className='flex flex-col gap-4 mt-8' onSubmit={form.handleSubmit(onFormSubmit, onFormError)}>
+            <TextField name="email" iconLeft={<Mail size={16} />} label={tForm('email.label')} placeholder={tForm('email.placeholder')} />
+
+            <div className='relative'>
+              <Link to="/sign-up" className={
+                cn(
+                  ' absolute right-0 top-0 font-title text-sm underline text-black/50 cursor-pointer hover:text-black/70 duration-200 transition-colors'
+                )
+              }>
+                {t('sign_in.normal.forgot_password')}
+              </Link>
+
+              <PasswordField name="password" iconLeft={<KeyRound size={16} />} label={tForm('password.label')} placeholder={tForm('password.placeholder')} />
+            </div>
+
+            <Button type="submit" iconRight={CircleArrowRight} className='flex justify-between mt-4' loading={isLoading} disabled={!form.formState.isValid}>
+              {t('sign_in.normal.sign_in')}
+            </Button>
+          </form>
+        </FormProvider>
+
+        <p className='text-sm text-black/50 mt-4 font-title text-center'>
+          {t('sign_in.normal.no_account')}{' '}
+          <Link to="/sign-up" className='text-[#2C7DA0] underline cursor-pointer hover:text-[#014F86] duration-200 transition-colors'>
+            {t('sign_in.normal.sign_up')}
+          </Link>
+        </p>
+      </section>
+    </main >
+  )
+}

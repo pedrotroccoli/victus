@@ -1,0 +1,45 @@
+{
+  "small_analytics": {
+    "today": {
+      "title": "Today you completed",
+      "description": "{{amount}} out of {{total}} habits"
+    },
+    "enjoyment": {
+      "title": "Today you are at",
+      "description": "{{percentage}}% enjoyment rate"
+    },
+    "compare_with_yesterday": {
+      "title": "Comparing with yesterday",
+      "description_increase": "{{compare}}% more",
+      "description_decrease": "{{compare}}% less"
+    },
+    "average": {
+      "title": "Average in the last 7 days",
+      "description": "{{average}}% enjoyment rate"
+    }
+  },
+  "performance": {
+    "title": "Your performance",
+    "description": "Average in the last 7 days: {{average}}%",
+    "performance_label": "Performance: ",
+    "completed_habits_label": "Completed: ",
+    "previous_period": "previous period",
+    "average": "Average",
+    "best": "Best",
+    "worst": "Worst"
+  },
+  "habits_completed": {
+    "completed_habits_label": "Completed: ",
+    "missing_habits_label": "Not completed: ",
+    "title": "Completed habits",
+    "description": "Average in the last 7 days: {{average}} habits per day",
+    "number_of_habits": "{{count}} habits per day",
+    "number_of_habits_many": "{{count}} habits per day",
+    "number_of_habits_one": "{{count}} habit per day",
+    "number_of_habits_zero": "{{count}} habits per day",
+    "previous_period": "previous period",
+    "completed": "Completed",
+    "missed": "Missed",
+    "total": "Total"
+  }
+} 
