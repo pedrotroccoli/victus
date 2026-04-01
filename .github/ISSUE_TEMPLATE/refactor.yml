@@ -1,0 +1,35 @@
+name: Refactor
+description: Propose a code improvement or cleanup
+labels: ["refactor"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What needs refactoring?
+      description: Describe the current state and what should change
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Why?
+      description: What problem does this refactor solve? (tech debt, performance, readability, etc.)
+    validations:
+      required: true
+  - type: dropdown
+    id: project
+    attributes:
+      label: Project
+      multiple: true
+      options:
+        - victus-web-app (frontend)
+        - victus-ruby-server (backend)
+        - victus-home (landing page)
+        - victus-infra
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Files / Areas affected
+      description: List the files or areas of the codebase
