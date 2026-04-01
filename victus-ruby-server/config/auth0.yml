@@ -1,0 +1,6 @@
+# ./config/auth0.yml
+development:
+  auth0_domain: <%= ENV['AUTH0_DOMAIN'] %>
+  auth0_client_id: <%= ENV['AUTH0_CLIENT_ID'] %>
+  auth0_client_secret: <%= ENV['AUTH0_CLIENT_SECRET'] %>
+  audience: <%= ENV['AUTH0_AUDIENCE'] %>

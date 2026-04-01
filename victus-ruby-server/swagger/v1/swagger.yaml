@@ -1,0 +1,1076 @@
+---
+openapi: 3.0.1
+info:
+  title: Victus API V1
+  version: v1
+  description: Habit tracking API with subscription management
+  contact:
+    name: Victus Team
+paths:
+  "/api/v1/stripe/webhook":
+    post:
+      summary: Handle Stripe webhook events
+      tags:
+      - Webhooks
+      description: |
+        Webhook endpoint for Stripe events. Requires valid Stripe signature.
+
+        Handled events:
+        - customer.subscription.created
+        - customer.subscription.updated
+        - customer.subscription.deleted
+        - invoice.paid
+        - invoice.payment_failed
+      parameters:
+      - name: Stripe-Signature
+        in: header
+        required: true
+        description: Stripe webhook signature for verification
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Event processed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  received:
+                    type: boolean
+        '400':
+          description: Invalid signature
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+  "/api/v1/habits_category":
+    get:
+      summary: List all categories
+      tags:
+      - Categories
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Categories list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/habit_category"
+    post:
+      summary: Create a category
+      tags:
+      - Categories
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: Category created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/habit_category"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                color:
+                  type: string
+                  description: Hex color code
+              required:
+              - name
+  "/api/v1/habits_category/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Category ID
+      required: true
+      schema:
+        type: string
+    put:
+      summary: Update a category
+      tags:
+      - Categories
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: Category updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/habit_category"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                color:
+                  type: string
+    delete:
+      summary: Delete a category
+      tags:
+      - Categories
+      security:
+      - bearer_auth: []
+      responses:
+        '204':
+          description: Category deleted
+  "/api/v1/habits-check":
+    get:
+      summary: List all habit checks for account
+      tags:
+      - Habit Checks
+      security:
+      - bearer_auth: []
+      parameters:
+      - name: start_date
+        in: query
+        format: date
+        required: false
+        description: Filter checks from this date
+        schema:
+          type: string
+      - name: end_date
+        in: query
+        format: date
+        required: false
+        description: Filter checks until this date
+        schema:
+          type: string
+      responses:
+        '200':
+          description: All checks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/habit_check"
+  "/api/v1/habits-check/{habit_id}":
+    parameters:
+    - name: habit_id
+      in: path
+      description: Habit ID
+      required: true
+      schema:
+        type: string
+    get:
+      summary: List checks for a specific habit
+      tags:
+      - Habit Checks
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Habit checks list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/habit_check"
+    post:
+      summary: Create a habit check
+      tags:
+      - Habit Checks
+      security:
+      - bearer_auth: []
+      description: Record a habit completion. Validates against RRULE schedule and
+        rule engine conditions.
+      parameters: []
+      responses:
+        '201':
+          description: Check recorded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/habit_check"
+        '422':
+          description: Invalid check (not on schedule or rule engine conditions not
+            met)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                checked_at:
+                  type: string
+                  format: date-time
+                  description: When the habit was completed
+                value:
+                  type: number
+                  description: Numeric value for quantifiable habits
+                notes:
+                  type: string
+  "/api/v1/habits-check/{habit_id}/{check_id}":
+    parameters:
+    - name: habit_id
+      in: path
+      description: Habit ID
+      required: true
+      schema:
+        type: string
+    - name: check_id
+      in: path
+      description: Check ID
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Get a specific check
+      tags:
+      - Habit Checks
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Check found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/habit_check"
+    put:
+      summary: Update a check
+      tags:
+      - Habit Checks
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: Check updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/habit_check"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                value:
+                  type: number
+                notes:
+                  type: string
+  "/api/v1/habits":
+    get:
+      summary: List all habits
+      tags:
+      - Habits
+      security:
+      - bearer_auth: []
+      parameters:
+      - name: category_id
+        in: query
+        required: false
+        description: Filter by category ID
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Habits list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/habit"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    post:
+      summary: Create a habit
+      tags:
+      - Habits
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '201':
+          description: Habit created
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/habit"
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                emoji:
+                  type: string
+                recurrence:
+                  type: string
+                  description: RRULE format (e.g., FREQ=DAILY;INTERVAL=1)
+                goal:
+                  type: integer
+                metric:
+                  type: string
+                category_id:
+                  type: string
+                rule_engine_enabled:
+                  type: boolean
+                rule_engine_details:
+                  type: object
+                  properties:
+                    operator:
+                      type: string
+                      enum:
+                      - AND
+                      - OR
+                    conditions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          habit_id:
+                            type: string
+                          completed:
+                            type: boolean
+              required:
+              - name
+              - recurrence
+  "/api/v1/habits/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Habit ID
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Get a habit
+      tags:
+      - Habits
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Habit found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/habit"
+        '404':
+          description: Habit not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    put:
+      summary: Update a habit
+      tags:
+      - Habits
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: Habit updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/habit"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                emoji:
+                  type: string
+                recurrence:
+                  type: string
+                goal:
+                  type: integer
+                metric:
+                  type: string
+                category_id:
+                  type: string
+    delete:
+      summary: Delete a habit
+      tags:
+      - Habits
+      security:
+      - bearer_auth: []
+      responses:
+        '204':
+          description: Habit deleted
+  "/api/v1/me":
+    get:
+      summary: Get current user profile
+      tags:
+      - Account
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Profile retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  account:
+                    "$ref": "#/components/schemas/account"
+                  subscription:
+                    "$ref": "#/components/schemas/subscription"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+        '402':
+          description: Subscription required
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+    put:
+      summary: Update current user profile
+      tags:
+      - Account
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: Profile updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/account"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+  "/api/v1/mood":
+    get:
+      summary: List all mood entries
+      tags:
+      - Mood
+      security:
+      - bearer_auth: []
+      parameters:
+      - name: start_date
+        in: query
+        format: date
+        required: false
+        schema:
+          type: string
+      - name: end_date
+        in: query
+        format: date
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Mood entries list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/mood"
+    post:
+      summary: Record mood
+      tags:
+      - Mood
+      security:
+      - bearer_auth: []
+      description: Record current mood. Can only be edited within a time window.
+      parameters: []
+      responses:
+        '201':
+          description: Mood recorded
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/mood"
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                score:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                  description: 1=Very Bad, 5=Very Good
+                notes:
+                  type: string
+              required:
+              - score
+  "/api/v1/mood/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Mood entry ID
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Get a mood entry
+      tags:
+      - Mood
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Mood entry found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/mood"
+    put:
+      summary: Update a mood entry
+      tags:
+      - Mood
+      security:
+      - bearer_auth: []
+      description: Update mood. Only allowed within edit window.
+      parameters: []
+      responses:
+        '200':
+          description: Mood updated
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/mood"
+        '403':
+          description: Edit window expired
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                score:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+                notes:
+                  type: string
+    delete:
+      summary: Delete a mood entry
+      tags:
+      - Mood
+      security:
+      - bearer_auth: []
+      responses:
+        '204':
+          description: Mood deleted
+  "/api/v1/subscription":
+    get:
+      summary: Get current subscription
+      tags:
+      - Subscription
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Subscription details
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/subscription"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+  "/api/v1/subscription/cancel":
+    post:
+      summary: Cancel subscription
+      tags:
+      - Subscription
+      security:
+      - bearer_auth: []
+      description: Cancel the current Stripe subscription at period end
+      responses:
+        '200':
+          description: Subscription canceled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  subscription:
+                    "$ref": "#/components/schemas/subscription"
+        '400':
+          description: No active subscription
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+  "/api/v1/subscription/create_session":
+    post:
+      summary: Create Stripe checkout session
+      tags:
+      - Subscription
+      security:
+      - bearer_auth: []
+      description: Create a Stripe checkout session for subscription upgrade
+      parameters: []
+      responses:
+        '200':
+          description: Session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session_id:
+                    type: string
+                  url:
+                    type: string
+                    format: uri
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                price_id:
+                  type: string
+                  description: Stripe price ID
+                success_url:
+                  type: string
+                  format: uri
+                cancel_url:
+                  type: string
+                  format: uri
+              required:
+              - price_id
+  "/api/v1/plans":
+    get:
+      summary: List available plans
+      tags:
+      - Plans
+      security:
+      - bearer_auth: []
+      responses:
+        '200':
+          description: Plans list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/plan"
+  "/api/v1/checkout/create":
+    post:
+      summary: Create checkout session
+      tags:
+      - Subscription
+      security:
+      - bearer_auth: []
+      parameters: []
+      responses:
+        '200':
+          description: Checkout session created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  session_id:
+                    type: string
+                  url:
+                    type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                plan_id:
+                  type: string
+              required:
+              - plan_id
+  "/api/v1/auth/sign-in":
+    post:
+      summary: Sign in with email and password
+      tags:
+      - Authentication
+      parameters: []
+      responses:
+        '200':
+          description: Signed in successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/auth_response"
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+              - email
+              - password
+  "/api/v1/auth/sign-up":
+    post:
+      summary: Create a new account
+      tags:
+      - Authentication
+      parameters: []
+      responses:
+        '201':
+          description: Account created with trial subscription
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/auth_response"
+        '422':
+          description: Validation errors
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 6
+                name:
+                  type: string
+              required:
+              - email
+              - password
+  "/api/v1/auth/start_siwe_auth":
+    get:
+      summary: Start Sign-In with Ethereum flow
+      tags:
+      - Authentication
+      description: Returns a nonce for SIWE signature verification
+      responses:
+        '200':
+          description: Nonce generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nonce:
+                    type: string
+  "/api/v1/auth/siwe_verify":
+    post:
+      summary: Verify SIWE signature
+      tags:
+      - Authentication
+      description: Verify Ethereum wallet signature and authenticate
+      parameters: []
+      responses:
+        '200':
+          description: Authenticated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/auth_response"
+        '401':
+          description: Invalid signature
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  description: SIWE message
+                signature:
+                  type: string
+                  description: Ethereum signature
+              required:
+              - message
+              - signature
+  "/api/v1/auth/google_auth":
+    post:
+      summary: Authenticate with Google
+      tags:
+      - Authentication
+      parameters: []
+      responses:
+        '200':
+          description: Authenticated successfully
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/auth_response"
+        '401':
+          description: Invalid token
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id_token:
+                  type: string
+                  description: Google ID token
+              required:
+              - id_token
+servers:
+- url: http://localhost:3000
+  description: Development server
+- url: https://api.victus.app
+  description: Production server
+components:
+  securitySchemes:
+    bearer_auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token from sign-in or sign-up
+  schemas:
+    error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+    account:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    subscription:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+          - active
+          - inactive
+          - trial
+          - canceled
+        stripe_subscription_id:
+          type: string
+        current_period_start:
+          type: string
+          format: date-time
+        current_period_end:
+          type: string
+          format: date-time
+    habit:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        emoji:
+          type: string
+        recurrence:
+          type: string
+          description: RRULE format
+        goal:
+          type: integer
+        metric:
+          type: string
+        category_id:
+          type: string
+        rule_engine_enabled:
+          type: boolean
+        rule_engine_details:
+          type: object
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+      - name
+      - recurrence
+    habit_check:
+      type: object
+      properties:
+        id:
+          type: string
+        habit_id:
+          type: string
+        checked_at:
+          type: string
+          format: date-time
+        value:
+          type: number
+        notes:
+          type: string
+    habit_category:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        color:
+          type: string
+    mood:
+      type: object
+      properties:
+        id:
+          type: string
+        score:
+          type: integer
+          minimum: 1
+          maximum: 5
+        notes:
+          type: string
+        recorded_at:
+          type: string
+          format: date-time
+    plan:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          type: number
+        currency:
+          type: string
+        interval:
+          type: string
+    auth_response:
+      type: object
+      properties:
+        token:
+          type: string
+        account:
+          "$ref": "#/components/schemas/account"
+        subscription:
+          "$ref": "#/components/schemas/subscription"
+tags:
+- name: Authentication
+  description: Sign in, sign up, and Web3 auth
+- name: Account
+  description: Current user profile
+- name: Habits
+  description: Habit CRUD operations
+- name: Habit Checks
+  description: Track habit completions
+- name: Categories
+  description: Habit categories
+- name: Mood
+  description: Mood tracking
+- name: Subscription
+  description: Stripe subscription management
+- name: Plans
+  description: Available subscription plans
