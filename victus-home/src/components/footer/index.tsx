@@ -1,0 +1,112 @@
+import { cn } from "@/lib/utils";
+import { Barricade } from "@phosphor-icons/react/dist/ssr";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+import Link from "next/link";
+import { Grid } from "../grid";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { BackToTop } from "./back-to-top";
+
+export const links = (t: any) => [
+  {
+    title: t('items.pages.title'),
+    links: [
+      {
+        title: t('items.pages.items.mission'),
+        href: '/sobre'
+      }, {
+        title: t('items.pages.items.plans'),
+        href: '/plans',
+        enabled: true
+      }
+    ]
+  },
+  {
+    title: t('items.social.title'),
+    links: [
+      {
+        title: t('items.social.items.instagram'),
+        href: 'https://www.instagram.com/victusjournal/'
+      },
+    ]
+  },
+  {
+    title: t('items.links.title'),
+    links: [
+      {
+        title: t('items.links.items.terms'),
+        href: '/termos-de-uso',
+        enabled: true
+      },
+      {
+        title: t('items.links.items.privacy'),
+        href: '/politica-de-privacidade',
+        enabled: true
+      },
+    ]
+  }
+]
+export const Footer = () => {
+  const t = useTranslations('footer');
+
+  return (
+    <>
+      <div className="bg-victus-black bg-[url('/noise-1.png')] bg-cover bg-center w-full">
+        <div className="w-full bg-[#f7f7f7] h-40 border-b border-neutral-300 rounded-b-[6rem] overflow-hidden">
+          <Grid>
+          </Grid>
+
+        </div>
+
+        <footer className="w-full">
+          <Grid style="black" className="py-20 flex justify-between w-full lg:flex-row flex-col gap-12">
+            <div className="bg-white/10 border border-white/30 rounded-lg w-20 h-20 flex items-center justify-center">
+              <Image src="/brain-logo.svg" alt="logo" width={40} height={40} className="invert" />
+            </div>
+
+            <ul className="grid sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-[44rem] w-full">
+              {links(t).map((link) => (
+                <li key={link.title}>
+                  <h4 className="text-white font-display font-medium w-full">{link.title}</h4>
+                  <div className="w-full h-px bg-neutral-800 my-4"></div>
+                  <ul className="grid gap-4">
+                    {link.links.map((link) => (
+                      <TooltipProvider key={link.title}>
+                        <Tooltip open={link?.enabled ? false : undefined} delayDuration={100}>
+                          <TooltipTrigger asChild>
+                            <li key={link.title}>
+                              <Link href={link.href} className={cn("text-white/70 flex items-center gap-2 hover:text-white", !link?.enabled && "cursor-not-allowed")}>
+                                {link.title}
+                                {!link?.enabled && <Barricade size={24} />}
+                              </Link>
+                            </li>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {t('work_in_progress')}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </Grid>
+          <Grid style="black" className="h-16 lg:h-28 relative overflow-hidden">
+            <h1 className="text-[3rem] md:text-[5rem] lg:text-[7.5rem] font-display font-bold absolute bottom-[-25px] md:bottom-[-40px] lg:bottom-[-60px] left-1/2 -translate-x-1/2 whitespace-nowrap text-white">
+              Victus Journal
+            </h1>
+          </Grid>
+          <div className="w-full h-20 border-t border-neutral-800">
+            <Grid style="black" className="flex items-center justify-between h-full">
+              <h5 className="text-white/70 text-xs md:text-base">MinimalBrain - 2024</h5>
+              <BackToTop />
+            </Grid>
+          </div>
+        </footer>
+
+
+      </div>
+    </>
+  )
+}
