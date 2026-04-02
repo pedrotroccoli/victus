@@ -3,9 +3,9 @@ CERT_FILE   := $(CERTS_DIR)/dev.victusjournal.com.pem
 KEY_FILE    := $(CERTS_DIR)/dev.victusjournal.com-key.pem
 DOMAIN      := dev.victusjournal.com
 
-.PHONY: up down logs seed certs check-hosts
+.PHONY: up down logs seed certs check-hosts env
 
-up: certs check-hosts
+up: env certs check-hosts
 	docker compose --profile dev up -d
 
 down:
@@ -16,6 +16,10 @@ logs:
 
 seed:
 	docker compose --profile dev exec web rails db:seed
+
+env:
+	@test -f .env || (cp .env.example .env && echo "Created .env from .env.example")
+	@test -f victus-web-app/.env || (cp victus-web-app/.env.example victus-web-app/.env && echo "Created victus-web-app/.env from .env.example")
 
 certs: $(CERT_FILE) $(KEY_FILE)
 
