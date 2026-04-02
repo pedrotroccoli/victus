@@ -30,6 +30,9 @@ services:
       - "3000:3000"
     env_file:
       - .env
+    environment:
+      RAILS_ENV: development
+      RAILS_LOG_TO_STDOUT: "true"
     depends_on:
       mongodb:
         condition: service_healthy
@@ -41,12 +44,15 @@ services:
     container_name: victus-frontend
     profiles: [dev]
     working_dir: /app
-    command: sh -c "corepack enable && pnpm install --frozen-lockfile && pnpm dev --host 0.0.0.0"
+    command: sh -c "corepack enable && corepack prepare pnpm@9 --activate && pnpm install --frozen-lockfile && pnpm dev --host 0.0.0.0"
     ports:
       - "5275:5275"
+    environment:
+      PNPM_STORE_DIR: /pnpm-store
     volumes:
       - ./victus-web-app:/app
       - frontend_node_modules:/app/node_modules
+      - pnpm_store:/pnpm-store
     networks:
       - victus-network
 
@@ -117,6 +123,7 @@ volumes:
   mongodb_data:
   mongodb_config:
   frontend_node_modules:
+  pnpm_store:
   letsencrypt:
   caddy_data:
   caddy_config:
