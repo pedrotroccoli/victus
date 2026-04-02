@@ -41,7 +41,7 @@ make seed    # run db:seed
 ## Authentication
 
 Auth mechanisms:
-- **Clerk**: Used by victus-web-app
+- **Google OAuth + JWT**: Primary auth in victus-web-app
 - **World App MiniKit**: Alternative auth in victus-web-app for Worldcoin integration
 - **JWT + SIWE**: Backend auth in victus-ruby-server (Sign-In with Ethereum for Web3)
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Victus is a habit tracking web application built with React, TypeScript, and Vite. It supports World App (Worldcoin) integration for authentication alongside traditional auth.
+Victus is a personal assistant and all-in-one organizer built with React, TypeScript, and Vite.
 
 ## Commands
 
@@ -23,7 +23,7 @@ pnpm preview      # Preview production build
 - **Data Fetching**: TanStack Query
 - **Styling**: Tailwind CSS + shadcn/ui components
 - **i18n**: i18next (pt-BR, en, es)
-- **Auth**: Clerk + World App MiniKit
+- **Auth**: Google OAuth + JWT + World App MiniKit
 
 ### Directory Structure
 
