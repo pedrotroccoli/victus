@@ -27,7 +27,7 @@ Rails.application.routes.draw do
 
           get 'plans', to: 'plans#index'
 
-          resource :subscription, only: [:show] do
+          resource :subscription, controller: 'subscription', only: [:show] do
             scope module: :subscriptions do
               resource :cancellation, only: [:create]
               resource :portal_session, only: [:create]
