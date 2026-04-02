@@ -1,24 +1,24 @@
-# Victus
+# Victus Web App
 
-Victus is a habit analytics tool. Unlike apps that simply check off whether you did something or not, Victus shows you **where you're heading** — revealing patterns, trends, and the real impact of your daily choices.
+Victus is a personal assistant and all-in-one organizer. This is the main web application (SPA).
 
-## The idea
+## Quick Start
 
-Your habits tell a story. Victus transforms your records into insights: are you improving? Declining? Which days of the week are hardest? Which habit pulls the others up?
+```bash
+# From the monorepo root (recommended)
+make up
 
-It's like having a mirror that shows not just who you are today, but who you're becoming.
+# Or standalone (set VITE_API_URL=http://localhost:3000 if not using Caddy)
+pnpm dev
+```
 
-## What you can do
+## Tech Stack
 
-- **Log habits** - Track your daily activities in a simple way
-- **See trends** - Understand if you're progressing or regressing over time
-- **Identify patterns** - Discover connections between your habits and your performance
-- **Visualize your progress** - Charts and statistics that show your journey
-
-## Languages
-
-Available in English, Portuguese, and Spanish.
+- React 18 + TypeScript + Vite
+- TanStack Router + TanStack Query
+- Tailwind CSS + shadcn/ui
+- i18next (en, pt-BR, es)
 
 ## For developers
 
-See the `CLAUDE.md` file for technical instructions.
+See `CLAUDE.md` for architecture details and coding patterns.

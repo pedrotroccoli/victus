@@ -1,4 +1,0 @@
-dev.victusjournal.com {
-	tls ./certs/dev.victusjournal.com.pem ./certs/dev.victusjournal.com-key.pem
-	reverse_proxy http://localhost:5275
-}

@@ -1,39 +1,53 @@
 # Victus Infra
 
-Deploy setup para `victus-ruby-server` em VPS.
+Deploy setup for `victus-ruby-server` on VPS.
 
 ## Requirements
 
 - Docker + Docker Compose
-- Imagem `victus-ruby-server:latest` buildada localmente
-- MongoDB externo (Atlas ou similar)
+- `victus-ruby-server:latest` image built locally
+- External MongoDB (Atlas or similar)
 
 ## Deploy
 
 ```bash
-# 1. Buildar a imagem (no diretório victus-ruby-server)
-cd ../victus-ruby-server
-docker build -t victus-ruby-server:latest .
+# 1. Build the image (from monorepo root)
+docker build -t victus-ruby-server:latest ./victus-ruby-server
 
-# 2. Subir o container (neste diretório)
-cd ../victus-infra
-docker compose up -d
+# 2. Configure .env at the monorepo root (see .env.example)
 
-# Ver logs
-docker compose logs -f
+# 3. Start production (from the monorepo root)
+docker compose --profile prod up -d
+
+# View logs
+docker compose --profile prod logs -f
+```
+
+## Local Development
+
+```bash
+# Full dev stack — auto-generates certs, checks /etc/hosts (from monorepo root)
+make up
+
+# Or start services individually
+docker compose --profile dev up -d mongodb       # just MongoDB
+docker compose --profile dev up -d mongodb web   # MongoDB + Rails (no Caddy)
 ```
 
 ## Configuration
 
-Edite `.env` antes de subir:
+Edit `.env` at the monorepo root before starting:
 
-**Obrigatórios:**
-- `MONGO_URI` - Connection string MongoDB externo
-- `JWT_SECRET` - Secret para JWT
-- `SECRET_KEY_BASE` - Rails secret (gerar com `rails secret`)
+**Required:**
+- `MONGO_URI` - External MongoDB connection string
+- `JWT_SECRET` - JWT signing secret
+- `SECRET_KEY_BASE` - Rails secret (generate with `rails secret`)
+- `LETSENCRYPT_EMAIL` - Email for ACME certificate registration
+- `VICTUS_SERVER_DOMAIN` - Domain for Traefik routing (e.g. `server.victusjournal.com`)
+- `RAILS_ENV=production`
+- `RAILS_LOG_TO_STDOUT=true`
 
-**Opcionais:**
-- `RAILS_MASTER_KEY` - Se usar credentials
+**Optional:**
+- `RAILS_MASTER_KEY` - If using credentials
 - `STRIPE_SECRET_KEY` - Stripe API key
 - `STRIPE_WEBHOOK_SECRET` - Stripe webhook secret
-# victus-infra

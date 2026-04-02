@@ -11,10 +11,14 @@ Victus is a Rails 7.2 API backend for a habit tracking application. It uses Mong
 ### Development
 
 ```bash
-# Start MongoDB (required)
-docker-compose up -d
+# Full dev stack from monorepo root (MongoDB + Rails + Vite + Caddy)
+make up
 
-# Start the Rails server
+# Or just MongoDB (detached, from monorepo root)
+docker compose --profile dev up -d mongodb
+
+# Start the Rails server (outside Docker)
+# Requires victus-ruby-server/.env with MONGO_URI=mongodb://admin:password@127.0.0.1:27017/...
 rails s
 
 # Rails console
