@@ -17,9 +17,9 @@ logs:
 seed:
 	docker compose --profile dev exec web rails db:seed
 
-certs: $(CERT_FILE)
+certs: $(CERT_FILE) $(KEY_FILE)
 
-$(CERT_FILE):
+$(CERT_FILE) $(KEY_FILE):
 	@command -v mkcert >/dev/null 2>&1 || { echo "Error: mkcert is not installed. Run: brew install mkcert"; exit 1; }
 	@mkcert -install 2>/dev/null || true
 	@mkdir -p $(CERTS_DIR)
