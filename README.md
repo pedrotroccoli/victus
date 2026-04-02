@@ -62,6 +62,8 @@ docker compose --profile dev up -d mongodb
 cd victus-ruby-server && rails s
 
 # Vite outside Docker
+# Note: set VITE_API_URL=http://localhost:3000 in victus-web-app/.env
+# if not using the full Caddy stack (default points to https://dev.victusjournal.com)
 cd victus-web-app && pnpm dev
 
 # Landing page

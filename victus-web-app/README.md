@@ -8,7 +8,7 @@ Victus is a personal assistant and all-in-one organizer. This is the main web ap
 # From the monorepo root (recommended)
 make up
 
-# Or standalone
+# Or standalone (set VITE_API_URL=http://localhost:3000 if not using Caddy)
 pnpm dev
 ```
 
