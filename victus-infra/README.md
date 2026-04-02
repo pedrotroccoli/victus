@@ -11,7 +11,7 @@ Deploy setup for `victus-ruby-server` on VPS.
 ## Deploy
 
 ```bash
-# 1. Build the image
+# 1. Build the image (from monorepo root)
 docker build -t victus-ruby-server:latest ./victus-ruby-server
 
 # 2. Configure .env at the monorepo root (see .env.example)

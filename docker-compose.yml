@@ -65,6 +65,7 @@ services:
       - "80:80"
     depends_on:
       - frontend
+      - web
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - ./victus-web-app/certs:/etc/caddy/certs:ro
