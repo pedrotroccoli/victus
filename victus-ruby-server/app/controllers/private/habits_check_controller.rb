@@ -90,15 +90,15 @@ class HabitsCheckController < Private::PrivateController
   private
 
   def get_habit
-    @habit = Habit.where(account_id: @current_account[:id]).where(id: params[:habit_id].to_s).first
-
-    render json: { error: 'Habit not found' }, status: :not_found if @habit.nil?
+    @habit = Habit.where(account_id: @current_account[:id]).find(params[:habit_id].to_s)
+  rescue Mongoid::Errors::DocumentNotFound
+    render json: { error: 'Habit not found' }, status: :not_found
   end
 
   def get_habit_check
-    @habit_check = @habit.habit_checks.where(id: params[:id].to_s).first
-
-    render json: { error: 'Habit check not found' }, status: :not_found if @habit_check.nil?
+    @habit_check = @habit.habit_checks.find(params[:id].to_s)
+  rescue Mongoid::Errors::DocumentNotFound
+    render json: { error: 'Habit check not found' }, status: :not_found
   end
 
   def update_params
