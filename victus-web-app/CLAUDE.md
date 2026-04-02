@@ -23,7 +23,7 @@ pnpm preview      # Preview production build
 - **Data Fetching**: TanStack Query
 - **Styling**: Tailwind CSS + shadcn/ui components
 - **i18n**: i18next (pt-BR, en, es)
-- **Auth**: Google OAuth + JWT + World App MiniKit
+- **Auth**: Email/password + JWT, World App MiniKit/SIWE
 
 ### Directory Structure
 
