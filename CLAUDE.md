@@ -17,17 +17,19 @@ Each project has its own `CLAUDE.md` with detailed commands and architecture.
 ## Quick Start
 
 ```bash
-# Backend (requires Docker for MongoDB)
-cd victus-ruby-server
-docker-compose up -d && rails s
+cp .env.example .env                      # fill in secrets
+cp victus-web-app/.env.example victus-web-app/.env
+make up                                   # starts everything
+```
 
-# Web App
-cd victus-web-app
-pnpm dev
+`make up` handles certs, hosts check, and docker compose. See `README.md` for details.
 
-# Landing Page
-cd victus-home
-npm run dev
+### Other commands
+
+```bash
+make down    # stop all services
+make logs    # tail logs
+make seed    # run db:seed
 ```
 
 ## Project Relationships
@@ -39,9 +41,9 @@ npm run dev
 ## Authentication
 
 Auth mechanisms:
-- **Clerk**: Used by victus-web-app
-- **World App MiniKit**: Alternative auth in victus-web-app for Worldcoin integration
-- **JWT + SIWE**: Backend auth in victus-ruby-server (Sign-In with Ethereum for Web3)
+- **Email/password + JWT**: Primary auth in victus-web-app
+- **World App MiniKit + SIWE**: Alternative auth in victus-web-app for Worldcoin integration
+- **Google OAuth**: Token validation and JWT issuance in victus-ruby-server (backend-only, no frontend UI yet)
 
 ## Package Managers
 

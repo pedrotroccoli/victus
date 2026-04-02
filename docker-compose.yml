@@ -1,0 +1,134 @@
+services:
+  # ── Dev profile ──────────────────────────────────────────────
+  mongodb:
+    image: mongo:7.0
+    container_name: victus-mongodb
+    profiles: [dev]
+    ports:
+      - "127.0.0.1:27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-password}
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    healthcheck:
+      test: mongosh -u $${MONGO_INITDB_ROOT_USERNAME:-admin} -p $${MONGO_INITDB_ROOT_PASSWORD:-password} --authenticationDatabase admin --quiet --eval 'db.runCommand("ping").ok'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - victus-network
+
+  web:
+    build:
+      context: ./victus-ruby-server
+      dockerfile: Dockerfile.dev
+    container_name: victus-api
+    profiles: [dev]
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      RAILS_ENV: development
+      RAILS_LOG_TO_STDOUT: "true"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    networks:
+      - victus-network
+
+  frontend:
+    image: node:20-slim
+    container_name: victus-frontend
+    profiles: [dev]
+    working_dir: /app
+    command: sh -c "corepack enable && corepack prepare pnpm@9 --activate && pnpm install --frozen-lockfile && pnpm dev --host 0.0.0.0"
+    ports:
+      - "5275:5275"
+    environment:
+      PNPM_STORE_DIR: /pnpm-store
+    volumes:
+      - ./victus-web-app:/app
+      - frontend_node_modules:/app/node_modules
+      - pnpm_store:/pnpm-store
+    networks:
+      - victus-network
+
+  caddy:
+    image: caddy:2
+    container_name: victus-caddy
+    profiles: [dev]
+    ports:
+      - "443:443"
+      - "80:80"
+    depends_on:
+      - frontend
+      - web
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./victus-web-app/certs:/etc/caddy/certs:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - victus-network
+
+  # ── Prod profile ─────────────────────────────────────────────
+  traefik:
+    image: traefik:v3
+    container_name: traefik
+    profiles: [prod]
+    environment:
+      DOCKER_API_VERSION: "1.47"
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencrypt.acme.email=${LETSENCRYPT_EMAIL}"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    restart: unless-stopped
+    networks:
+      - victus-network
+
+  victus-server:
+    image: victus-ruby-server:latest
+    container_name: victus-api-prod
+    profiles: [prod]
+    env_file:
+      - .env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.victus-api.rule=Host(`${VICTUS_SERVER_DOMAIN}`)"
+      - "traefik.http.routers.victus-api.entrypoints=websecure"
+      - "traefik.http.routers.victus-api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.victus-api.loadbalancer.server.port=3000"
+      - "traefik.http.routers.victus-api-http.rule=Host(`${VICTUS_SERVER_DOMAIN}`)"
+      - "traefik.http.routers.victus-api-http.entrypoints=web"
+      - "traefik.http.routers.victus-api-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+    restart: unless-stopped
+    networks:
+      - victus-network
+
+volumes:
+  mongodb_data:
+  mongodb_config:
+  frontend_node_modules:
+  pnpm_store:
+  letsencrypt:
+  caddy_data:
+  caddy_config:
+
+networks:
+  victus-network:
+    driver: bridge
