@@ -26,14 +26,12 @@ docker compose --profile prod logs -f
 ## Local Development
 
 ```bash
-# Start MongoDB + Rails + Caddy (from the monorepo root)
-docker compose --profile dev up
+# Full dev stack — auto-generates certs, checks /etc/hosts (from monorepo root)
+make up
 
-# Or just MongoDB
-docker compose --profile dev up mongodb
-
-# MongoDB + Rails only (no Caddy)
-docker compose --profile dev up mongodb web
+# Or start services individually
+docker compose --profile dev up mongodb       # just MongoDB
+docker compose --profile dev up mongodb web   # MongoDB + Rails (no Caddy)
 ```
 
 ## Configuration
