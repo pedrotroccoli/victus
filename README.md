@@ -84,4 +84,4 @@ cd victus-home && npm run dev
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `VITE_API_URL` | Yes | Backend API URL (e.g. `http://localhost:3000`) |
+| `VITE_API_URL` | Yes | Backend API URL (e.g. `https://dev.victusjournal.com`) |
