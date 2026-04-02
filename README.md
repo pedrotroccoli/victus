@@ -70,6 +70,10 @@ cd victus-web-app && pnpm dev
 cd victus-home && npm run dev
 ```
 
+## Documentation
+
+- [Reverse Proxy Setup](docs/reverse-proxy.md) — Caddy (dev) vs Traefik (prod), TLS, path-based routing
+
 ## Environment Variables
 
 ### Root `.env` (shared / infra)
