@@ -1,6 +1,10 @@
 module Private
   module Subscriptions
     class CancellationsController < Private::PrivateController
+      rescue_from Stripe::InvalidRequestError, RuntimeError do |e|
+        render json: { error: e.message }, status: :unprocessable_entity
+      end
+
       def create
         subscription = @current_account.subscription
 
@@ -15,10 +19,6 @@ module Private
           message: immediate ? 'Subscription cancelled' : 'Subscription will cancel at period end',
           cancel_at: stripe_subscription.cancel_at || stripe_subscription.current_period_end
         }, status: :ok
-      rescue Stripe::InvalidRequestError => e
-        render json: { error: e.message }, status: :unprocessable_entity
-      rescue RuntimeError => e
-        render json: { error: e.message }, status: :unprocessable_entity
       end
     end
   end
