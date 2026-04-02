@@ -18,6 +18,7 @@ make up
 docker compose --profile dev up mongodb
 
 # Start the Rails server (outside Docker)
+# Requires victus-ruby-server/.env with MONGO_URI=mongodb://admin:password@127.0.0.1:27017/...
 rails s
 
 # Rails console

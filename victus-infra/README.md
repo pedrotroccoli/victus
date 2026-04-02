@@ -42,6 +42,10 @@ Edit `.env` at the monorepo root before starting:
 - `MONGO_URI` - External MongoDB connection string
 - `JWT_SECRET` - JWT signing secret
 - `SECRET_KEY_BASE` - Rails secret (generate with `rails secret`)
+- `LETSENCRYPT_EMAIL` - Email for ACME certificate registration
+- `VICTUS_SERVER_DOMAIN` - Domain for Traefik routing (e.g. `server.victusjournal.com`)
+- `RAILS_ENV=production`
+- `RAILS_LOG_TO_STDOUT=true`
 
 **Optional:**
 - `RAILS_MASTER_KEY` - If using credentials

@@ -57,6 +57,8 @@ echo '127.0.0.1 dev.victusjournal.com' | sudo tee -a /etc/hosts
 docker compose --profile dev up mongodb
 
 # Rails outside Docker (requires local Ruby 3.3)
+# Note: create victus-ruby-server/.env with MONGO_URI pointing to 127.0.0.1
+# instead of "mongodb" (the Docker service name doesn't resolve on the host)
 cd victus-ruby-server && rails s
 
 # Vite outside Docker
