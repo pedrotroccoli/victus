@@ -13,7 +13,7 @@ Personal assistant and all-in-one organizer.
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) + Docker Compose
-- [mkcert](https://github.com/FiloSottile/mkcert) (`brew install mkcert`)
+- [mkcert](https://github.com/FiloSottile/mkcert) (macOS: `brew install mkcert`, Linux/Windows: see repo README)
 
 ## Quick Start
 
@@ -53,8 +53,8 @@ echo '127.0.0.1 dev.victusjournal.com' | sudo tee -a /etc/hosts
 ## Running Services Individually
 
 ```bash
-# Just MongoDB
-docker compose --profile dev up mongodb
+# Just MongoDB (detached)
+docker compose --profile dev up -d mongodb
 
 # Rails outside Docker (requires local Ruby 3.3)
 # Note: create victus-ruby-server/.env with MONGO_URI pointing to 127.0.0.1

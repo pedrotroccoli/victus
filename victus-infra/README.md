@@ -30,8 +30,8 @@ docker compose --profile prod logs -f
 make up
 
 # Or start services individually
-docker compose --profile dev up mongodb       # just MongoDB
-docker compose --profile dev up mongodb web   # MongoDB + Rails (no Caddy)
+docker compose --profile dev up -d mongodb       # just MongoDB
+docker compose --profile dev up -d mongodb web   # MongoDB + Rails (no Caddy)
 ```
 
 ## Configuration
