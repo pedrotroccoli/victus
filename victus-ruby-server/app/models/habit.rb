@@ -1,7 +1,7 @@
 class Habit 
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Mongoid::Paranoia
+
   include Auditable
 
   belongs_to :account

@@ -1,7 +1,7 @@
 class Mood
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Mongoid::Paranoia
+
 
   VALUES = %w[terrible bad neutral good great amazing].freeze
 

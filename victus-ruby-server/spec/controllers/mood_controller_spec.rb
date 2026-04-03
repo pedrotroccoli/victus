@@ -194,13 +194,12 @@ RSpec.describe Private::MoodController, type: :controller do
       expect(json_response['message']).to eq('Humor deletado com sucesso')
     end
 
-    it 'soft deletes the mood' do
+    it 'hard deletes the mood' do
       mood_id = mood.id
 
       delete :destroy, params: { id: mood.id }
 
       expect(Mood.where(id: mood_id).count).to eq(0)
-      expect(Mood.unscoped.where(id: mood_id).count).to eq(1)
     end
 
     context 'when deletion fails' do
