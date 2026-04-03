@@ -118,9 +118,12 @@ module Public
       address = response_body['data']['address']
       account = Account.find_or_create_from_siwe(address)
 
+      return render json: { message: 'Invalid SIWE address' }, status: :unauthorized if account.nil?
+
       render json: { message: 'Signed in successfully', token: account.generate_jwt, account: account }, status: :ok
-    rescue Exception => e
-      render json: { message: 'Invalid message 1', error: e }, status: :unauthorized
+    rescue StandardError => e
+      Rails.logger.error("SIWE verification failed: #{e.class}: #{e.message}")
+      render json: { message: 'Invalid message 1' }, status: :unauthorized
     end
 
     def google_auth

@@ -53,6 +53,8 @@ class Account
   end
 
   def self.find_or_create_from_siwe(address)
+    return nil if address.blank?
+
     account = find_or_initialize_by(world_address: address)
     is_new = account.new_record?
 
