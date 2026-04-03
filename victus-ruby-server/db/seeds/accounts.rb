@@ -7,6 +7,7 @@ end
 unless account.subscription
   account.create_trial_subscription
   account.save!
+  account.subscription&.save!
 end
 
 puts "  Seeded account: #{account.email}"
