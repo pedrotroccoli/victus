@@ -33,6 +33,8 @@ services:
     environment:
       RAILS_ENV: development
       RAILS_LOG_TO_STDOUT: "true"
+    volumes:
+      - ./victus-ruby-server:/app
     depends_on:
       mongodb:
         condition: service_healthy

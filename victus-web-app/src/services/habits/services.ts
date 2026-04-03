@@ -46,14 +46,14 @@ export const updateHabit = async (params: UpdateHabitRequest): Promise<Habit> =>
 }
 export const checkHabit = async (habit: CheckHabitRequest): Promise<CheckHabitResponse> => {
   if (habit.check_id) {
-    const { data } = await baseApi.put(`/habits-check/${habit.habit_id}/${habit.check_id}`, {
+    const { data } = await baseApi.put(`/habits/${habit.habit_id}/checks/${habit.check_id}`, {
       checked: habit.checked
     });
 
     return data;
   }
 
-  const { data } = await baseApi.post(`/habits-check/${habit.habit_id}`, {
+  const { data } = await baseApi.post(`/habits/${habit.habit_id}/checks`, {
     checked: habit.checked
   });
 
@@ -61,13 +61,13 @@ export const checkHabit = async (habit: CheckHabitRequest): Promise<CheckHabitRe
 }
 
 export const updateHabitCheck = async (habitCheck: UpdateHabitCheckRequest): Promise<HabitCheck> => {
-  const { data } = await baseApi.put(`/habits-check/${habitCheck.habit_id}/${habitCheck.check_id}`, habitCheck);
+  const { data } = await baseApi.put(`/habits/${habitCheck.habit_id}/checks/${habitCheck.check_id}`, habitCheck);
 
   return data;
 }
 
 export const getAllHabitsCheck = async (params: GetAllHabitsCheckRequest): Promise<GetAllHabitsCheckResponse> => {
-  const { data } = await baseApi.get('/habits-check', {
+  const { data } = await baseApi.get('/checks', {
     params
   });
 

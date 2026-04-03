@@ -5,11 +5,17 @@ RUN apt-get update -qq && apt-get install -y --no-install-recommends \
   git \
   curl \
   ca-certificates \
+  autoconf \
+  automake \
+  libtool \
+  pkg-config \
+  libsecp256k1-dev \
   && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 COPY Gemfile Gemfile.lock ./
+ENV BUNDLE_BUILD__RBSECP256K1=--with-system-libraries
 RUN bundle install
 
 COPY . .

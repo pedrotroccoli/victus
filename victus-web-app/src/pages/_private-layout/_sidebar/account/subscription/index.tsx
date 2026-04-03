@@ -1,7 +1,7 @@
 import { Button } from "@/components/ions/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAccountInformations } from "@/services/auth/use-account-informations";
-import { useCreateSubscriptionSession } from "@/services/subscription/hooks";
+import { useCreatePortalSession } from "@/services/subscription/hooks";
 import { MaskSad, Prohibit, Snowflake, TestTube } from "@phosphor-icons/react";
 import { Smiley } from "@phosphor-icons/react/dist/ssr";
 import { useNavigate, useSearch } from "@tanstack/react-router";
@@ -19,7 +19,7 @@ export default function Subscription() {
   const { data: me, informations } = useAccountInformations();
   const params = useSearch({ from: '/_private/_sidebar/account/_layout/subscription/' }) as SubscriptionParams;
   const navigate = useNavigate();
-  const { mutateAsync: createSubscriptionSession, isPending } = useCreateSubscriptionSession();
+  const { mutateAsync: createPortalSession, isPending } = useCreatePortalSession();
   const { t } = useTranslation('subscription');
 
   const firstName = useMemo(() => {
@@ -51,7 +51,7 @@ export default function Subscription() {
   }
 
   const openSubscriptionSession = async () => {
-    const { session_url } = await createSubscriptionSession();
+    const { session_url } = await createPortalSession();
 
     window.open(session_url, '_blank');
   }

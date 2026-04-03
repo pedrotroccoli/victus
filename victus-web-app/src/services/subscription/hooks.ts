@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { createSubscriptionSession } from "./services";
+import { createPortalSession } from "./services";
 
-export const useCreateSubscriptionSession = () => {
+export const useCreatePortalSession = () => {
   return useMutation({
-    mutationFn: createSubscriptionSession
+    mutationFn: createPortalSession
   });
 };
