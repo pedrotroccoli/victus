@@ -7,7 +7,7 @@ Conventions for MongoDB document schemas in the Victus project.
 - **snake_case** for all field names (`recurrence_type`, `rule_engine_details`)
 - **`_at` suffix** for timestamp fields (`finished_at`, `paused_at`, `created_at`)
 - **`_id` suffix** for foreign keys (`account_id`, `parent_habit_id`)
-- **Plural** for array fields (`connected_providers`, `children_habits`)
+- **Plural** for collections and arrays (`connected_providers`)
 
 ## Standard Fields
 

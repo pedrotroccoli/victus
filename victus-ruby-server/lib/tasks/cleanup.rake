@@ -1,11 +1,11 @@
 namespace :cleanup do
   desc "Hard-delete all documents that were previously soft-deleted (have deleted_at set)"
   task purge_soft_deleted: :environment do
+    client = Mongoid::Clients.default
     collections = %w[habits habit_checks subscriptions moods]
 
     collections.each do |collection_name|
-      collection = Mongoid.default_client[collection_name]
-      result = collection.delete_many(deleted_at: { "$exists" => true, "$ne" => nil })
+      result = client[collection_name].delete_many(deleted_at: { "$exists" => true, "$ne" => nil })
       puts "#{collection_name}: removed #{result.deleted_count} soft-deleted documents"
     end
 
@@ -16,8 +16,7 @@ namespace :cleanup do
     ]
 
     embedded_purges.each do |purge|
-      collection = Mongoid.default_client[purge[:parent_collection]]
-      result = collection.update_many(
+      result = client[purge[:parent_collection]].update_many(
         { "#{purge[:embedded_field]}.deleted_at" => { "$exists" => true, "$ne" => nil } },
         { "$pull" => { purge[:embedded_field] => { deleted_at: { "$exists" => true, "$ne" => nil } } } }
       )
