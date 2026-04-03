@@ -34,7 +34,7 @@ class Subscription
       self.sub_status = 'pending_cancellation'
     end
 
-    self.cancel_reason = reason
+    self.cancel_reason = reason.presence || 'User requested cancellation'
     save!
 
     stripe_subscription
