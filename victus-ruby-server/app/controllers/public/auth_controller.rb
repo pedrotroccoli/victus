@@ -11,7 +11,7 @@ module Public
           account.save
         end
 
-        token = JWT.encode({ account_id: account.id }, ENV['JWT_SECRET'], 'HS256')
+        token = JWT.encode({ account_id: account.id, exp: 24.hours.from_now.to_i }, ENV['JWT_SECRET'], 'HS256')
 
         render json: { message: 'Signed in successfully', token: token }, status: :ok
       else
@@ -63,7 +63,7 @@ module Public
 
       if account.save
         account.subscription.save
-        token = JWT.encode({ account_id: account.id }, ENV['JWT_SECRET'], 'HS256')
+        token = JWT.encode({ account_id: account.id, exp: 24.hours.from_now.to_i }, ENV['JWT_SECRET'], 'HS256')
 
         EmailJob.perform_later(account.id)
 
@@ -123,7 +123,7 @@ module Public
       account = Account.find_or_create_by(world_address: response_body['data']['address'])
 
       if !account.new_record?
-        token = JWT.encode({ account_id: account.id }, ENV['JWT_SECRET'], 'HS256')
+        token = JWT.encode({ account_id: account.id, exp: 24.hours.from_now.to_i }, ENV['JWT_SECRET'], 'HS256')
 
         if !account.connected_providers.include?('worldapp')
           account.connected_providers << 'worldapp'
@@ -158,14 +158,14 @@ module Public
         }
       )
       if account.save
-        token = JWT.encode({ account_id: account.id }, ENV['JWT_SECRET'], 'HS256')
+        token = JWT.encode({ account_id: account.id, exp: 24.hours.from_now.to_i }, ENV['JWT_SECRET'], 'HS256')
 
         render json: { message: 'Signed in successfully', token: token }, status: :ok
       else
         render json: { message: 'Something went wrong' }, status: :unauthorized
       end
-      
-    rescue Exception => e
+
+    rescue StandardError => e
       render json: { message: 'Invalid message 1', error: e }, status: :unauthorized
     end
 
@@ -216,7 +216,7 @@ module Public
       if account.save
         account.subscription&.save if is_new_account
 
-        token = JWT.encode({ account_id: account.id }, ENV['JWT_SECRET'], 'HS256')
+        token = JWT.encode({ account_id: account.id, exp: 24.hours.from_now.to_i }, ENV['JWT_SECRET'], 'HS256')
 
         render json: { message: 'Signed in successfully', token: token }, status: :ok
       else
