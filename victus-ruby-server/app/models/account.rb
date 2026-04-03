@@ -35,7 +35,7 @@ class Account
 
     if account.nil? && email.present?
       account = find_by(email: email)
-      account&.update(google_id: google_id)
+      account&.update!(google_id: google_id)
     end
 
     is_new = account.nil?

@@ -118,7 +118,7 @@ module Public
       address = response_body['data']['address']
       account = Account.find_or_create_from_siwe(address)
 
-      render json: { message: 'Signed in successfully', token: account.generate_jwt }, status: :ok
+      render json: { message: 'Signed in successfully', token: account.generate_jwt, account: account }, status: :ok
     rescue Exception => e
       render json: { message: 'Invalid message 1', error: e }, status: :unauthorized
     end
@@ -142,6 +142,8 @@ module Public
       render json: { message: 'Signed in successfully', token: account.generate_jwt }, status: :ok
     rescue GoogleIDToken::ValidationError => e
       render json: { message: 'Invalid Google token', error: e.message }, status: :unauthorized
+    rescue Mongoid::Errors::MongoidError => e
+      render json: { message: 'Unable to sign in with Google', error: e.message }, status: :unprocessable_entity
     end
   end
 end
