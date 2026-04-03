@@ -45,8 +45,15 @@ RSpec.describe 'Subscription API', type: :request do
         end
       end
 
-      response '400', 'No active subscription' do
+      response '402', 'No active subscription' do
         let(:account) { create(:account) }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
+      response '422', 'Missing Stripe subscription ID' do
+        before { account.subscription.update(service_details: {}) }
         schema '$ref' => '#/components/schemas/error'
 
         run_test!
@@ -60,29 +67,23 @@ RSpec.describe 'Subscription API', type: :request do
       security [bearer_auth: []]
       consumes 'application/json'
       produces 'application/json'
-      description 'Create a Stripe checkout session for subscription upgrade'
+      description 'Create a Stripe billing portal session for subscription management'
 
-      parameter name: :session_params, in: :body, schema: {
-        type: :object,
-        properties: {
-          price_id: { type: :string, description: 'Stripe price ID' },
-          success_url: { type: :string, format: :uri },
-          cancel_url: { type: :string, format: :uri }
-        },
-        required: %w[price_id]
-      }
-
-      response '200', 'Session created' do
+      response '200', 'Portal session created' do
         schema type: :object, properties: {
-          session_id: { type: :string },
-          url: { type: :string, format: :uri }
+          session_url: { type: :string, format: :uri }
         }
-
-        let(:session_params) { { price_id: 'price_xxx', success_url: 'https://app.com/success' } }
 
         run_test! do
           pending 'Requires Stripe mock'
         end
+      end
+
+      response '422', 'Missing customer ID' do
+        before { account.subscription.update(service_details: {}) }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
       end
     end
   end
