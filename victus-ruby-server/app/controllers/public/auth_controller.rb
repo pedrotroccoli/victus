@@ -167,7 +167,7 @@ module Public
 
     rescue StandardError => e
       Rails.logger.error("siwe_verify failed: #{e.class}: #{e.message}")
-      render json: { message: 'Invalid message 1', error: e.message }, status: :unauthorized
+      render json: { message: 'Invalid message 1' }, status: :unauthorized
     end
 
     def google_auth

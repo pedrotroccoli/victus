@@ -36,7 +36,7 @@ class HabitsCategoryController < Private::PrivateController
   end
 
   def not_found
-    render json: nil, status: :not_found
+    render json: { error: 'Not found' }, status: :not_found
   end
 
   def habits_category_params
