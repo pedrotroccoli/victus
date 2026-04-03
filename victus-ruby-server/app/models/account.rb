@@ -5,6 +5,7 @@ class Account
 
   has_many :habits, class_name: 'Habit'
   has_many :habit_checks
+  has_many :habit_categories
   has_many :moods
   has_one :subscription
 

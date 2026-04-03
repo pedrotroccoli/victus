@@ -1,5 +1,7 @@
 module Private
 class HabitsCategoryController < Private::PrivateController
+  before_action :set_category, only: [:update, :destroy]
+
   def index
     @habits_categories = HabitCategory.where(account_id: @current_account[:id]).order(order: :asc)
 
@@ -16,18 +18,20 @@ class HabitsCategoryController < Private::PrivateController
   end
 
   def update
-    @habits_category = HabitCategory.find(params[:id])
     @habits_category.update(habits_category_params)
 
     render json: @habits_category, status: :ok
   end
 
   def destroy
-    @habits_category = HabitCategory.find(params[:id])
     @habits_category.destroy
   end
 
   private
+
+  def set_category
+    @habits_category = @current_account.habit_categories.find(params[:id])
+  end
 
   def habits_category_params
     params.require(:habits_category).permit(:name, :order, :icon)
