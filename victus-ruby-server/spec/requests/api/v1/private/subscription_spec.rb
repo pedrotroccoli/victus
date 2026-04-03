@@ -37,7 +37,7 @@ RSpec.describe 'Subscription API', type: :request do
       response '200', 'Subscription canceled' do
         schema type: :object, properties: {
           message: { type: :string },
-          subscription: { '$ref' => '#/components/schemas/subscription' }
+          cancel_at: { type: :integer, nullable: true }
         }
 
         run_test! do
