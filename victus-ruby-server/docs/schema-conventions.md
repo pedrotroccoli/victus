@@ -17,7 +17,7 @@ All documents include `Mongoid::Timestamps`, which provides:
 
 ## Deletes
 
-Hard deletes only. Use `Auditable` concern for history/audit trail (see `AuditLog` model).
+Hard deletes only. History/audit trail is recorded only for models that explicitly include the `Auditable` concern (see `AuditLog` model for audited create/update/destroy events).
 
 ## Embedded vs Referenced
 
