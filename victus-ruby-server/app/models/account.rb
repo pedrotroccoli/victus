@@ -31,6 +31,8 @@ class Account
   end
 
   def self.find_or_create_from_google(google_id:, email:, name:)
+    return nil if google_id.blank?
+
     account = find_by(google_id: google_id)
 
     if account.nil? && email.present?
@@ -78,7 +80,13 @@ class Account
   # ── Instance Methods ────────────────────────────────────────────
 
   def generate_jwt
-    JWT.encode({ account_id: id }, ENV['JWT_SECRET'], 'HS256')
+    payload = {
+      account_id: id,
+      iat: Time.current.to_i,
+      exp: 24.hours.from_now.to_i
+    }
+
+    JWT.encode(payload, ENV['JWT_SECRET'], 'HS256')
   end
 
   def subscription_active?

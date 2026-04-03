@@ -120,10 +120,10 @@ module Public
 
       return render json: { message: 'Invalid SIWE address' }, status: :unauthorized if account.nil?
 
-      render json: { message: 'Signed in successfully', token: account.generate_jwt, account: account }, status: :ok
+      render json: { message: 'Signed in successfully', token: account.generate_jwt, account: AccountSerializer.new(account) }, status: :ok
     rescue StandardError => e
       Rails.logger.error("SIWE verification failed: #{e.class}: #{e.message}")
-      render json: { message: 'Invalid message 1' }, status: :unauthorized
+      render json: { message: 'Invalid message' }, status: :unauthorized
     end
 
     def google_auth
@@ -142,11 +142,14 @@ module Public
         name: payload['name']
       )
 
+      return render json: { message: 'Invalid Google credentials' }, status: :unauthorized if account.nil?
+
       render json: { message: 'Signed in successfully', token: account.generate_jwt }, status: :ok
     rescue GoogleIDToken::ValidationError => e
       render json: { message: 'Invalid Google token', error: e.message }, status: :unauthorized
     rescue Mongoid::Errors::MongoidError => e
-      render json: { message: 'Unable to sign in with Google', error: e.message }, status: :unprocessable_entity
+      Rails.logger.error("Google auth failed: #{e.class}: #{e.message}")
+      render json: { message: 'Unable to sign in with Google' }, status: :unprocessable_entity
     end
   end
 end
