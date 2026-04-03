@@ -9,9 +9,7 @@ class ApplicationController < ActionController::Base
     decoded = JWT.decode(header, ENV['JWT_SECRET'], true, { algorithm: 'HS256' })
 
     @current_account = Account.find(decoded[0]['account_id'].to_s) if decoded
-
-    raise ActiveRecord::RecordNotFound if @current_account.nil?
-  rescue ActiveRecord::RecordNotFound, JWT::DecodeError
+  rescue Mongoid::Errors::DocumentNotFound, Mongoid::Errors::InvalidFind, BSON::Error, JWT::DecodeError
     render json: { error: 'Unauthorized' }, status: :unauthorized
   end
 
