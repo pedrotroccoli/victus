@@ -66,6 +66,7 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :resend
   config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_url_options = begin
+    require "uri"
     url = URI.parse(ENV.fetch("APP_URL", "https://victusjournal.com"))
     { host: url.host, protocol: url.scheme }
   end
