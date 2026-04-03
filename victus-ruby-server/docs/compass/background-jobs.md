@@ -38,14 +38,12 @@ end
 
 ```ruby
 class Account
-  def send_welcome_email         # sync — actual work
-    AccountMailer.with(account: self).welcome_email.deliver_now
-  end
+  after_create_commit :send_welcome_email_later
 
   private
 
-  def send_welcome_email_later   # async — enqueue
-    EmailJob.perform_later(self, :welcome)
+  def send_welcome_email_later
+    EmailJob.perform_later(id.to_s)
   end
 end
 ```

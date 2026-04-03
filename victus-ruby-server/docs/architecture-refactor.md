@@ -301,7 +301,7 @@ Estes são utilities legítimos, não service objects. Podem ficar em `app/servi
 **Solução**: Migrado para Resend + Action Mailer. Error handling implementado:
 ```ruby
 class EmailJob < ApplicationJob
-  retry_on Net::OpenTimeout, Net::ReadTimeout, wait: :polynomially_longer, attempts: 3
+  retry_on Net::OpenTimeout, Net::ReadTimeout, Resend::Error, wait: :polynomially_longer, attempts: 3
   discard_on ActiveJob::DeserializationError
 
   def perform(account_id)
