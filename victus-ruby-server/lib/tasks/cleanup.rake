@@ -5,7 +5,7 @@ namespace :cleanup do
 
     collections.each do |collection_name|
       collection = Mongoid.default_client[collection_name]
-      result = collection.delete_many(deleted_at: { "$ne" => nil })
+      result = collection.delete_many(deleted_at: { "$exists" => true, "$ne" => nil })
       puts "#{collection_name}: removed #{result.deleted_count} soft-deleted documents"
     end
   end
