@@ -20,13 +20,16 @@ class HabitsCategoryController < Private::PrivateController
   end
 
   def update
-    @habits_category.update(habits_category_params)
-
-    render json: @habits_category, status: :ok
+    if @habits_category.update(habits_category_params)
+      render json: @habits_category, status: :ok
+    else
+      render json: { errors: @habits_category.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def destroy
     @habits_category.destroy
+    head :no_content
   end
 
   private
