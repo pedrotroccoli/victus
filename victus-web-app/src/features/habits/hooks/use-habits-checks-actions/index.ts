@@ -59,7 +59,7 @@ export const useHabitsCheckingActions = ({
       updated_at: new Date().toISOString(),
     };
 
-    queryClient.setQueryData<HabitCheck[]>(['checks'], (old = []) => {
+    queryClient.setQueriesData<HabitCheck[]>({ queryKey: ['checks'] }, (old = []) => {
       // Check if there's already a check for this habit today
       const existingCheck = old.find(
         c => c.habit_id === parentId && isSameDay(new Date(c.created_at), new Date())
