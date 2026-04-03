@@ -1,4 +1,4 @@
-import { QueryClient, useMutation, UseMutationOptions, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
+import { useMutation, UseMutationOptions, useQuery, useQueryClient, UseQueryOptions } from "@tanstack/react-query";
 import { checkHabit, createHabit, deleteHabit, getAllHabitsCheck, getHabits, updateHabit, updateHabitCheck } from "./services";
 import { CheckHabitRequest, CheckHabitResponse, CreateHabitRequest, CreateHabitResponse, GetAllHabitsCheckRequest, GetAllHabitsCheckResponse, GetHabitsRequest, GetHabitsResponse, UpdateHabitCheckRequest, UpdateHabitRequest } from "./types";
 
@@ -36,16 +36,6 @@ export const useCreateHabit = (options?: Partial<UseMutationOptions<CreateHabitR
   })
 }
 
-const applyCacheToCheckHabit = (queryClient: QueryClient, params: CheckHabitRequest, response: CheckHabitResponse) => {
-  queryClient.setQueriesData<CheckHabitResponse[]>({ queryKey: ['checks'] }, (old = []) => {
-    if (!params?.check_id) {
-      return [...old, response];
-    }
-
-    return old.map(item => item.habit_id === params.habit_id ? response : item);
-  });
-}
-
 export const useCheckHabit = (options?: Partial<UseMutationOptions<CheckHabitResponse, Error, CheckHabitRequest>>) => {
   const queryClient = useQueryClient();
 
@@ -53,13 +43,10 @@ export const useCheckHabit = (options?: Partial<UseMutationOptions<CheckHabitRes
     ...options,
     mutationFn: checkHabit,
     onMutate: async (params) => {
-      // Cancel outgoing refetches
       await queryClient.cancelQueries({ queryKey: ['checks'] });
 
-      // Snapshot previous values for all matching queries
       const previousChecks = queryClient.getQueriesData<CheckHabitResponse[]>({ queryKey: ['checks'] });
 
-      // Optimistically update cache
       const optimisticCheck: CheckHabitResponse = {
         _id: params.check_id || `temp-${Date.now()}`,
         account_id: '',
@@ -81,16 +68,14 @@ export const useCheckHabit = (options?: Partial<UseMutationOptions<CheckHabitRes
       return { previousChecks };
     },
     onError: (_err, _params, context) => {
-      // Rollback on error
       if (context?.previousChecks) {
         context.previousChecks.forEach(([queryKey, data]) => {
           queryClient.setQueryData(queryKey, data);
         });
       }
     },
-    onSuccess: (response, params) => {
-      // Update cache with real response
-      applyCacheToCheckHabit(queryClient, params, response);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['checks'] });
     },
   })
 }
@@ -115,13 +100,10 @@ export const useUpdateHabitCheck = (options?: Partial<UseMutationOptions<HabitCh
 
   return useMutation({
     ...options,
-    mutationFn: async (params) => {
-      const response = await updateHabitCheck(params);
-
-      queryClient.setQueriesData<HabitCheck[]>({ queryKey: ['checks'] }, (prev = []) => prev.map(habitCheck => habitCheck._id === params.check_id ? response : habitCheck));
-
-      return response;
-    }
+    mutationFn: updateHabitCheck,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['checks'] });
+    },
   })
 }
 
