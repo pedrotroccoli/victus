@@ -1,4 +1,4 @@
-unless Rails.env.production?
+if Rails.env.development?
   seed_dir = Rails.root.join('db', 'seeds')
 
   %w[accounts habit_categories habits].each do |seed|
