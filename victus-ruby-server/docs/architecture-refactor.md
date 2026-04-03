@@ -296,7 +296,7 @@ Estes são utilities legítimos, não service objects. Podem ficar em `app/servi
 
 ### 6.1 `EmailJob` — Sem error handling
 
-**Problema**: Nenhum `retry_on` ou `discard_on`. Se MailerSend falhar, o job vai pro dead queue sem contexto.
+**Problema**: Nenhum `retry_on` ou `discard_on`. Se a entrega de email falhar, o job vai pro dead queue sem contexto.
 
 **Solução**: Migrado para Resend + Action Mailer. Error handling implementado:
 ```ruby
