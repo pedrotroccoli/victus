@@ -20,7 +20,7 @@ class Subscription
 
   def cancel!(immediate:, reason: 'User requested cancellation')
     subscription_id = service_details&.dig('subscription_id')
-    raise 'No active Stripe subscription' if subscription_id.nil?
+    raise 'No active Stripe subscription' if subscription_id.blank?
 
     stripe_subscription = StripeService.new.cancel_subscription(
       subscription_id,
@@ -29,7 +29,7 @@ class Subscription
 
     if immediate
       self.status = 'cancelled'
-      self.cancel_date = Time.now
+      self.cancel_date = Time.current
     else
       self.sub_status = 'pending_cancellation'
     end
@@ -42,7 +42,7 @@ class Subscription
 
   def portal_session_url(return_url:)
     customer_id = service_details&.dig('customer_id')
-    raise 'No customer ID found' if customer_id.nil?
+    raise 'No customer ID found' if customer_id.blank?
 
     session = StripeService.new.create_subscription_session({
       customer: customer_id.to_s,
