@@ -1,7 +1,7 @@
 module Private
   module Subscriptions
     class CancellationsController < Private::PrivateController
-      rescue_from Stripe::InvalidRequestError, RuntimeError do |e|
+      rescue_from Stripe::InvalidRequestError do |e|
         render json: { error: e.message }, status: :unprocessable_entity
       end
 
@@ -10,6 +10,10 @@ module Private
 
         if subscription.nil?
           return render json: { error: 'No subscription found' }, status: :not_found
+        end
+
+        if subscription.service_details&.dig('subscription_id').blank?
+          return render json: { error: 'No active Stripe subscription' }, status: :unprocessable_entity
         end
 
         immediate = params[:immediate] == true || params[:immediate] == 'true'
