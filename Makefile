@@ -3,7 +3,7 @@ CERT_FILE   := $(CERTS_DIR)/dev.victusjournal.com.pem
 KEY_FILE    := $(CERTS_DIR)/dev.victusjournal.com-key.pem
 DOMAIN      := dev.victusjournal.com
 
-.PHONY: up down logs seed migrate rollback migrate-status certs check-hosts env
+.PHONY: up down logs seed certs check-hosts env
 
 up: env certs check-hosts
 	docker compose --profile dev up -d
@@ -16,15 +16,6 @@ logs:
 
 seed:
 	docker compose --profile dev exec web rails db:seed
-
-migrate:
-	docker compose --profile dev exec web rails db:migrate
-
-rollback:
-	docker compose --profile dev exec web rails db:rollback
-
-migrate-status:
-	docker compose --profile dev exec web rails db:migrate:status
 
 env:
 	@test -f .env || (cp .env.example .env && echo "Created .env from .env.example")

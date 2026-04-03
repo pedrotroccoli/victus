@@ -40,9 +40,6 @@ ENV BUNDLE_WITHOUT="development test" \
 COPY --from=builder /usr/local/bundle /usr/local/bundle
 COPY . .
 
-RUN chmod +x bin/docker-entrypoint.sh
-
 EXPOSE 3000
 
-ENTRYPOINT ["bin/docker-entrypoint.sh"]
 CMD ["bundle", "exec", "rails", "s", "-b", "0.0.0.0", "-p", "3000"]
