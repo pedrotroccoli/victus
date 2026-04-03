@@ -1,8 +1,19 @@
 class EmailJob < ApplicationJob
   queue_as :default
 
+  retry_on Net::OpenTimeout, Net::ReadTimeout, wait: :polynomially_longer, attempts: 3
+  discard_on ActiveJob::DeserializationError
+
+  rescue_from Resend::Error do |error|
+    if error.message.match?(/invalid|not found|unverified/i)
+      Rails.logger.warn("Permanent email failure, discarding: #{error.message}")
+    else
+      raise
+    end
+  end
+
   def perform(account_id)
     account = Account.find(account_id)
-    EmailService.new.send_welcome_email(account)
+    AccountMailer.with(account: account).welcome_email.deliver_now
   end
 end

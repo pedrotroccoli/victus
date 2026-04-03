@@ -1,0 +1,10 @@
+<h1>Bem-vindo ao Victus, <%= @account.name %></h1>
+<p>
+  Você foi cadastrado com sucesso no Victus
+</p>
+<p>
+  Para acessar a plataforma é só clicar nesse link: <%= link_to 'login', "#{ENV.fetch('APP_URL', 'https://victusjournal.com').chomp('/')}/login" %>.
+</p>
+<p>
+  Obrigado por se cadastrar!
+</p>
