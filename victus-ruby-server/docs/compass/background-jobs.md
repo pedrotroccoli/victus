@@ -43,7 +43,7 @@ class Account
   private
 
   def send_welcome_email_later
-    EmailJob.perform_later(id.to_s)
+    EmailJob.perform_later(id)
   end
 end
 ```
