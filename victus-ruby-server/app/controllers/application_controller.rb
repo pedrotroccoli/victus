@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   end
 
   def check_subscription
-    if @current_account&.subscription&.status != 'active'
+    unless @current_account&.subscription_active?
       render json: { error: 'Without a valid subscription' }, status: :payment_required
     end
   end
