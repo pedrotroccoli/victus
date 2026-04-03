@@ -40,12 +40,17 @@ bundle exec rspec spec/models/habit_check_spec.rb:42
 
 ### Database
 
-MongoDB is the only database. No migrations - Mongoid uses schemaless documents.
+MongoDB is the only database. No migrations — Mongoid uses schemaless documents. Schema evolves in model field definitions; data fixes use one-off rake tasks in `lib/tasks/`.
 
 ```bash
+# Seed development data (from monorepo root)
+make seed
+
 # Purge test database (done automatically before each spec)
 Mongoid.purge!
 ```
+
+See [docs/schema-conventions.md](docs/schema-conventions.md) for field naming and document conventions.
 
 ## Architecture
 

@@ -344,9 +344,6 @@ RSpec.describe HabitCheck, type: :model do
       expect(HabitCheck.included_modules).to include(Mongoid::Timestamps)
     end
 
-    it 'includes Mongoid::Paranoia' do
-      expect(HabitCheck.included_modules).to include(Mongoid::Paranoia)
-    end
   end
 end
 

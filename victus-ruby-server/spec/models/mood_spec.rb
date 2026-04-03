@@ -157,15 +157,14 @@ RSpec.describe Mood, type: :model do
     end
   end
 
-  describe 'soft delete (Paranoia)' do
-    it 'soft deletes instead of hard delete' do
+  describe 'hard delete' do
+    it 'permanently removes the record' do
       mood = create(:mood, account: account)
       mood_id = mood.id
 
       mood.destroy
 
       expect(Mood.where(id: mood_id).count).to eq(0)
-      expect(Mood.unscoped.where(id: mood_id).count).to eq(1)
     end
   end
 end

@@ -1,7 +1,7 @@
 class HabitDelta
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Mongoid::Paranoia
+
 
   embedded_in :habit
 

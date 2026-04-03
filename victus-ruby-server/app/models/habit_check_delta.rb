@@ -1,7 +1,7 @@
 class HabitCheckDelta
   include Mongoid::Document
   include Mongoid::Timestamps
-  include Mongoid::Paranoia
+
 
   embedded_in :habit_check
 
