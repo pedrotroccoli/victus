@@ -1,6 +1,11 @@
 namespace :cleanup do
   desc "Hard-delete all documents that were previously soft-deleted (have deleted_at set)"
   task purge_soft_deleted: :environment do
+    unless ENV["CONFIRM"] == "1"
+      abort "This task permanently deletes data. Re-run with CONFIRM=1 to proceed.\n" \
+            "Example: CONFIRM=1 bundle exec rake cleanup:purge_soft_deleted"
+    end
+
     client = Mongoid::Clients.default
     collections = %w[habits habit_checks subscriptions moods]
 
