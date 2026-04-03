@@ -15,12 +15,9 @@ All documents include `Mongoid::Timestamps`, which provides:
 - `created_at` (Time)
 - `updated_at` (Time)
 
-## Soft Deletes
+## Deletes
 
-Models using `Mongoid::Paranoia` get a `deleted_at` field. Use `.unscoped` to query deleted records.
-
-**Models with soft delete:** Habit, HabitCheck, HabitCategory, HabitDelta, HabitCheckDelta, Subscription, Mood
-**Models without soft delete:** Account, AuditLog
+Hard deletes only. Use `Auditable` concern for history/audit trail (see `AuditLog` model).
 
 ## Embedded vs Referenced
 
@@ -38,33 +35,12 @@ Use `type: Hash` for flexible sub-documents that don't warrant a separate model:
 
 ## Indexes
 
-Add indexes via data migrations, not in model definitions. Document new indexes in the migration description.
+Define indexes in model files. Run `rake db:mongoid:create_indexes` to apply.
 
-## Data Migrations
+## Schema Evolution
 
-- Use `mongoid_rails_migrations` for all schema/data changes
-- Each migration must include a `validate!` class method that asserts postconditions
-- Use `Mongoid::IrreversibleMigration` for non-reversible changes
-- One concern per migration — keep migrations focused
-- Run via `make migrate` from monorepo root
+MongoDB is schemaless — no migrations needed. Schema evolves in model field definitions:
 
-### Migration Template
-
-```ruby
-class DescriptiveName < Mongoid::Migration
-  def self.up
-    # data transformation logic
-    validate!
-  end
-
-  def self.down
-    raise Mongoid::IrreversibleMigration
-    # or: reverse transformation logic
-  end
-
-  def self.validate!
-    bad = Model.where(field: nil).count
-    raise "Validation failed: #{bad} documents missing field" if bad > 0
-  end
-end
-```
+- **Add field**: add `field` declaration with a `default` value; old documents return the default
+- **Remove field**: remove the `field` declaration; old data in documents is ignored
+- **Data fixes**: use one-off rake tasks in `lib/tasks/` for cleaning existing data

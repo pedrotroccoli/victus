@@ -40,26 +40,17 @@ bundle exec rspec spec/models/habit_check_spec.rb:42
 
 ### Database
 
-MongoDB is the only database. Data migrations are managed via `mongoid_rails_migrations`.
+MongoDB is the only database. No migrations — Mongoid uses schemaless documents. Schema evolves in model field definitions; data fixes use one-off rake tasks in `lib/tasks/`.
 
 ```bash
-# Run migrations (from monorepo root)
-make migrate
-
-# Rollback last migration
-make rollback
-
-# Check migration status
-make migrate-status
-
-# Seed development data
+# Seed development data (from monorepo root)
 make seed
 
 # Purge test database (done automatically before each spec)
 Mongoid.purge!
 ```
 
-Migrations live in `db/migrate/`. See [docs/schema-conventions.md](docs/schema-conventions.md) for field naming and migration conventions.
+See [docs/schema-conventions.md](docs/schema-conventions.md) for field naming and document conventions.
 
 ## Architecture
 
