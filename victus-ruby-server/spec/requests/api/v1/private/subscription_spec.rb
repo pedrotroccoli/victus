@@ -45,6 +45,13 @@ RSpec.describe 'Subscription API', type: :request do
         end
       end
 
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
       response '402', 'No active subscription' do
         let(:account) { create(:account) }
         schema '$ref' => '#/components/schemas/error'
@@ -77,6 +84,20 @@ RSpec.describe 'Subscription API', type: :request do
         run_test! do
           pending 'Requires Stripe mock'
         end
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
+      response '402', 'No active subscription' do
+        let(:account) { create(:account) }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
       end
 
       response '422', 'Missing customer ID' do
