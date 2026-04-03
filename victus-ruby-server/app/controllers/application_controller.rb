@@ -10,8 +10,8 @@ class ApplicationController < ActionController::Base
 
     @current_account = Account.find(decoded[0]['account_id'].to_s) if decoded
 
-    raise ActiveRecord::RecordNotFound if @current_account.nil?
-  rescue ActiveRecord::RecordNotFound, JWT::DecodeError
+    raise Mongoid::Errors::DocumentNotFound.new(Account, decoded[0]['account_id']) if @current_account.nil?
+  rescue Mongoid::Errors::DocumentNotFound, JWT::DecodeError
     render json: { error: 'Unauthorized' }, status: :unauthorized
   end
 
