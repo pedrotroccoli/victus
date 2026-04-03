@@ -29,7 +29,8 @@ retry_on Faraday::TimeoutError, wait: :polynomially_longer
 discard_on ActiveJob::DeserializationError
 
 rescue_from Resend::Error do |error|
-  Rails.logger.warn("Permanent email failure: #{error.message}")
+  Rails.logger.warn("Email failure: #{error.message}")
+  raise unless error.message.include?("invalid") # re-raise transient errors for retry
 end
 ```
 
