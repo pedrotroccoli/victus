@@ -4,10 +4,6 @@ module Private
       def create
         subscription = @current_account.subscription
 
-        if subscription.nil?
-          return render json: { error: 'No subscription found' }, status: :not_found
-        end
-
         if subscription.service_details&.dig('customer_id').blank?
           return render json: { error: 'No customer ID found' }, status: :unprocessable_entity
         end

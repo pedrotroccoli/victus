@@ -8,10 +8,6 @@ module Private
       def create
         subscription = @current_account.subscription
 
-        if subscription.nil?
-          return render json: { error: 'No subscription found' }, status: :not_found
-        end
-
         if subscription.service_details&.dig('subscription_id').blank?
           return render json: { error: 'No active Stripe subscription' }, status: :unprocessable_entity
         end
