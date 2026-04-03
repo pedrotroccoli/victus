@@ -84,7 +84,7 @@ Private controllers include `ActiveAndAuthorized` concern which enforces:
 
 ### Background Jobs
 
-Sidekiq for async processing. EmailJob sends emails via MailerSend.
+Sidekiq for async processing. EmailJob sends emails via Resend + Action Mailer.
 
 ## Environment Variables
 

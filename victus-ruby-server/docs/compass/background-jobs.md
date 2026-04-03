@@ -28,12 +28,8 @@ retry_on Faraday::TimeoutError, wait: :polynomially_longer
 ```ruby
 discard_on ActiveJob::DeserializationError
 
-rescue_from MailerSend::ApiError do |error|
-  if error.status == 422  # invalid email, permanent failure
-    Rails.logger.warn("Permanent email failure: #{error.message}")
-  else
-    raise  # re-raise for retry
-  end
+rescue_from Resend::Error do |error|
+  Rails.logger.warn("Permanent email failure: #{error.message}")
 end
 ```
 
@@ -42,7 +38,7 @@ end
 ```ruby
 class Account
   def send_welcome_email         # sync — actual work
-    MailerSendService.deliver(self, :welcome)
+    AccountMailer.with(account: self).welcome_email.deliver_now
   end
 
   private

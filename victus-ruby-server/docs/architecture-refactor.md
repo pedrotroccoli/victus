@@ -298,15 +298,15 @@ Estes são utilities legítimos, não service objects. Podem ficar em `app/servi
 
 **Problema**: Nenhum `retry_on` ou `discard_on`. Se MailerSend falhar, o job vai pro dead queue sem contexto.
 
-**Solução**:
+**Solução**: Migrado para Resend + Action Mailer. Error handling implementado:
 ```ruby
 class EmailJob < ApplicationJob
-  retry_on Faraday::TimeoutError, wait: :polynomially_longer, attempts: 3
+  retry_on Net::OpenTimeout, Net::ReadTimeout, wait: :polynomially_longer, attempts: 3
   discard_on ActiveJob::DeserializationError
 
   def perform(account_id)
     account = Account.find(account_id)
-    account.send_welcome_email  # lógica no model
+    AccountMailer.with(account: account).welcome_email.deliver_now
   end
 end
 ```
