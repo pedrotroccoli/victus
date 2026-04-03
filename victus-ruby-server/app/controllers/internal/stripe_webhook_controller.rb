@@ -1,5 +1,3 @@
-WEBHOOK_SECRET = ENV['STRIPE_WEBHOOK_SECRET']
-
 module Internal
 class StripeWebhookController < ApplicationController
   before_action :verify_signature
@@ -142,8 +140,9 @@ class StripeWebhookController < ApplicationController
       end
 
       begin 
+        webhook_secret = ENV.fetch('STRIPE_WEBHOOK_SECRET')
         @event = Stripe::Webhook.construct_event(
-          payload, sig_header, WEBHOOK_SECRET
+          payload, sig_header, webhook_secret
         )
       rescue JSON::ParserError => e
         render json: { error: 'Invalid payload' }, status: 400
