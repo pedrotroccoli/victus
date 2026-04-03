@@ -1,4 +1,4 @@
-class Habit 
+class Habit
   include Mongoid::Document
   include Mongoid::Timestamps
 
