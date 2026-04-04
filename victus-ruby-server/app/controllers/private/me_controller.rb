@@ -11,9 +11,11 @@ module Private
         return render json: { code: 'PASSWORD_MISMATCH' }, status: :unprocessable_entity
       end
 
-      @current_account.update(account_params)
-
-      render json: @current_account, serializer: AccountSerializer, status: :ok
+      if @current_account.update(account_params)
+        render json: @current_account, serializer: AccountSerializer, status: :ok
+      else
+        render json: { errors: @current_account.errors.full_messages }, status: :unprocessable_entity
+      end
     end
 
     private

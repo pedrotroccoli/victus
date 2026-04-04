@@ -46,9 +46,11 @@ class HabitsCheckController < Private::PrivateController
       end
     end
 
-    @habit_check.update(update_params.reject { |key, value| key == 'habit_check_deltas_attributes' })
-
-    render json: @habit_check, status: :ok
+    if @habit_check.update(update_params.reject { |key, value| key == 'habit_check_deltas_attributes' })
+      render json: @habit_check, status: :ok
+    else
+      render json: { errors: @habit_check.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def create

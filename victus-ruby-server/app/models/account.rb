@@ -87,7 +87,7 @@ class Account
       exp: 24.hours.from_now.to_i
     }
 
-    JWT.encode(payload, ENV.fetch('JWT_SECRET'), 'HS256')
+    JWT.encode(payload, ENV.fetch('JWT_SECRET') { raise KeyError, 'Missing JWT_SECRET' unless Rails.env.test?; 'test_jwt_secret' }, 'HS256')
   end
 
   def subscription_active?

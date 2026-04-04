@@ -1,6 +1,6 @@
-REQUIRED_ENV_VARS = %w[JWT_SECRET STRIPE_WEBHOOK_SECRET].freeze
+required_env_vars = %w[JWT_SECRET STRIPE_WEBHOOK_SECRET].freeze
 
-missing = REQUIRED_ENV_VARS.select { |var| ENV[var].blank? }
+missing = required_env_vars.select { |var| ENV[var].blank? }
 
 if missing.any? && !Rails.env.test?
   raise "Missing required environment variables: #{missing.join(', ')}"
