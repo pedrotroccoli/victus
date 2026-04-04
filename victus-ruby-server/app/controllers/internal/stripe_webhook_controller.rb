@@ -140,7 +140,7 @@ class StripeWebhookController < ApplicationController
       end
 
       begin 
-        webhook_secret = ENV.fetch('STRIPE_WEBHOOK_SECRET')
+        webhook_secret = ENV.fetch('STRIPE_WEBHOOK_SECRET') { raise KeyError, 'Missing STRIPE_WEBHOOK_SECRET' unless Rails.env.test?; 'test_stripe_webhook_secret' }
         @event = Stripe::Webhook.construct_event(
           payload, sig_header, webhook_secret
         )
