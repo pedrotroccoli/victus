@@ -177,7 +177,9 @@ class Account
   def create_stripe_checkout(lookup_key:)
     price = Stripe::Price.list(lookup_keys: [lookup_key], expand: ['data.product'])
     raise InvalidLookupKey, 'Invalid lookup key' if price.data.empty?
-    raise InactiveProduct, 'Product is not active' unless price.data.first.product.active
+
+    selected_price = price.data.first
+    raise InactiveProduct, 'Product is not active' unless selected_price.active && selected_price.product&.active
 
     if subscription.present? && subscription.status == 'active'
       raise AlreadySubscribed, 'Account already has an active subscription'
@@ -195,19 +197,32 @@ class Account
         service_type: 'stripe',
         service_details: { customer_id: customer.id }
       )
+      subscription.save!
 
       customer_id = customer.id
     else
       customer_id = subscription.service_details['customer_id']
+
+      if customer_id.blank?
+        customer = Stripe::Customer.create(
+          email: email,
+          name: name,
+          metadata: { account_id: id }
+        )
+        subscription.service_details = subscription.service_details.merge('customer_id' => customer.id)
+        subscription.service_type = 'stripe'
+        subscription.save!
+        customer_id = customer.id
+      end
     end
 
-    raise AlreadySubscribed, 'Account already has a subscription' if subscription.status == 'success'
+    raise AlreadySubscribed, 'Account already has a subscription' if subscription.sub_status == 'success'
 
     build_checkout_session(
       customer_id: customer_id,
       account_id: id,
       lookup_key: lookup_key,
-      price_id: price.data.first.id
+      price_id: selected_price.id
     )
   end
 
