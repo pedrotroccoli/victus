@@ -31,6 +31,72 @@ class Account
     account
   end
 
+  def self.sign_up_with_email(account_params, lookup_key: nil)
+    account = new(account_params)
+    checkout_url = nil
+
+    if lookup_key.present?
+      stripe_service = StripeService.new
+      customer = stripe_service.create_customer(email: account_params[:email])
+
+      account.subscription = Subscription.create(
+        service_type: 'stripe',
+        status: 'freezed',
+        sub_status: 'pending_payment_information',
+        service_details: { customer_id: customer.id }
+      )
+
+      checkout_session = stripe_service.create_checkout(
+        customer_id: customer.id,
+        account_id: account.id,
+        lookup_key: lookup_key
+      )
+
+      checkout_url = checkout_session.url
+    else
+      account.create_trial_subscription
+    end
+
+    if account.save
+      account.subscription.save
+      EmailJob.perform_later(account.id)
+      { account: account, checkout_url: checkout_url }
+    end
+  end
+
+  def self.authenticate_with_google(id_token:)
+    return nil if id_token.blank?
+
+    validator = GoogleIDToken::Validator.new
+    payload = validator.check(id_token, ENV['GOOGLE_CLIENT_ID'])
+    return nil if payload.nil?
+
+    find_or_create_from_google(
+      google_id: payload['sub'],
+      email: payload['email'],
+      name: payload['name']
+    )
+  end
+
+  def self.authenticate_with_siwe(payload:, nonce:)
+    return nil if payload.blank? || nonce.blank?
+
+    lambda_client = Aws::Lambda::Client.new(region: 'us-east-1')
+
+    lambda_response = lambda_client.invoke(
+      function_name: 'victus-siwe-dev-world-siwe-verify',
+      invocation_type: 'RequestResponse',
+      payload: { payload: payload, nonce: nonce }.to_json
+    )
+
+    response_body = JSON.parse(lambda_response.payload.read)
+
+    return nil if lambda_response.status_code != 200
+    return nil if response_body['valid'] == false
+
+    find_or_create_from_siwe(response_body['data']['address'])
+  end
+
   def self.find_or_create_from_google(google_id:, email:, name:)
     return nil if google_id.blank?
 
