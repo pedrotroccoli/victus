@@ -80,7 +80,7 @@ RSpec.describe 'Public Auth API', type: :request do
         run_test!
       end
 
-      response '401', 'Validation errors' do
+      response '401', 'Account already exists or invalid credentials' do
         schema '$ref' => '#/components/schemas/error'
 
         let(:existing_account) { create(:account) }

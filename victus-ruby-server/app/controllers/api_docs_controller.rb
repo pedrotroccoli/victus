@@ -2,6 +2,7 @@
 
 class ApiDocsController < ActionController::Base
   def index
+    return head :not_found unless Rails.env.development?
     render inline: <<~HTML, content_type: 'text/html'
       <!doctype html>
       <html>

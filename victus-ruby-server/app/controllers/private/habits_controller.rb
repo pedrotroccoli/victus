@@ -1,7 +1,5 @@
 module Private
 class HabitsController < Private::PrivateController
-  rescue_from Mongoid::Errors::DocumentNotFound, Mongoid::Errors::InvalidFind, BSON::Error, with: :not_found
-
   before_action :set_habit, only: [:show, :update, :destroy]
 
   def show
@@ -107,8 +105,5 @@ class HabitsController < Private::PrivateController
     )
   end
 
-  def not_found
-    render json: { error: 'Not found' }, status: :not_found
-  end
 end
 end

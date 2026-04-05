@@ -1098,7 +1098,7 @@ paths:
                     type: string
                     nullable: true
         '401':
-          description: Validation errors
+          description: Account already exists or invalid credentials
           content:
             application/json:
               schema:
