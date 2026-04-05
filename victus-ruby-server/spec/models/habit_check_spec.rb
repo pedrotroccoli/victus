@@ -323,6 +323,100 @@ RSpec.describe HabitCheck, type: :model do
     end
   end
 
+  describe '#sync_deltas' do
+    let(:habit_with_deltas) do
+      h = create(:habit, account: account)
+      h.habit_deltas.create(type: 'number', name: 'Delta 1')
+      h.habit_deltas.create(type: 'number', name: 'Delta 2')
+      h
+    end
+    let(:habit_check) { create(:habit_check, habit: habit_with_deltas, account: account, checked: true) }
+    let(:delta_ids) { habit_with_deltas.habit_deltas.map(&:id).map(&:to_s) }
+
+    context 'when deltas_attributes is nil' do
+      it 'does nothing' do
+        expect { habit_check.sync_deltas(nil) }.not_to change { habit_check.habit_check_deltas.count }
+      end
+    end
+
+    context 'when deltas_attributes is empty' do
+      it 'does nothing' do
+        expect { habit_check.sync_deltas([]) }.not_to change { habit_check.habit_check_deltas.count }
+      end
+    end
+
+    context 'when creating new deltas' do
+      it 'creates deltas that do not yet exist' do
+        attrs = [{ habit_delta_id: delta_ids.first, value: '10' }]
+
+        expect { habit_check.sync_deltas(attrs) }.to change { habit_check.habit_check_deltas.count }.by(1)
+        expect(habit_check.habit_check_deltas.last.value).to eq('10')
+      end
+    end
+
+    context 'when updating existing deltas' do
+      it 'updates the value of an existing delta' do
+        habit_check.habit_check_deltas.create(habit_delta_id: delta_ids.first, value: '5')
+
+        attrs = [{ habit_delta_id: delta_ids.first, value: '20' }]
+        habit_check.sync_deltas(attrs)
+
+        habit_check.reload
+        expect(habit_check.habit_check_deltas.find_by(habit_delta_id: delta_ids.first).value).to eq('20')
+      end
+    end
+
+    context 'when destroying deltas' do
+      it 'destroys a delta when _destroy is true' do
+        habit_check.habit_check_deltas.create(habit_delta_id: delta_ids.first, value: '5')
+
+        attrs = [{ habit_delta_id: delta_ids.first, _destroy: true }]
+
+        expect { habit_check.sync_deltas(attrs) }.to change { habit_check.habit_check_deltas.count }.by(-1)
+      end
+    end
+
+    context 'with mixed operations' do
+      it 'creates, updates, and destroys in a single call' do
+        habit_check.habit_check_deltas.create(habit_delta_id: delta_ids[0], value: '5')
+        habit_check.habit_check_deltas.create(habit_delta_id: delta_ids[1], value: '10')
+
+        attrs = [
+          { habit_delta_id: delta_ids[0], value: '99' },
+          { habit_delta_id: delta_ids[1], _destroy: true }
+        ]
+
+        habit_check.sync_deltas(attrs)
+        habit_check.reload
+
+        expect(habit_check.habit_check_deltas.count).to eq(1)
+        expect(habit_check.habit_check_deltas.first.value).to eq('99')
+      end
+    end
+
+    context 'when destroying a non-existent delta' do
+      it 'no-ops instead of creating' do
+        attrs = [{ habit_delta_id: delta_ids.first, _destroy: true }]
+
+        expect { habit_check.sync_deltas(attrs) }.not_to change { habit_check.habit_check_deltas.count }
+      end
+    end
+
+    context 'when creating with invalid attributes' do
+      it 'raises on missing value' do
+        attrs = [{ habit_delta_id: delta_ids.first, value: nil }]
+
+        expect { habit_check.sync_deltas(attrs) }.to raise_error(Mongoid::Errors::Validations)
+      end
+
+      it 'raises on invalid habit_delta_id' do
+        attrs = [{ habit_delta_id: 'nonexistent', value: '10' }]
+
+        expect { habit_check.sync_deltas(attrs) }.to raise_error(Mongoid::Errors::Validations)
+      end
+    end
+  end
+
   describe 'default values' do
     it 'has checked default to false' do
       habit_check = HabitCheck.new(habit: habit, account: account)

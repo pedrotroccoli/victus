@@ -53,14 +53,14 @@ RSpec.describe 'Habit Checks API', type: :request do
       parameter name: :check_data, in: :body, schema: {
         type: :object,
         properties: {
-          checked: { type: :boolean, description: 'Whether the habit is checked' },
+          checked: { type: :boolean, description: 'Whether the habit was completed' },
           deltas: {
             type: :array,
             items: {
               type: :object,
               properties: {
                 habit_delta_id: { type: :string },
-                value: { type: :number }
+                value: { type: :string }
               }
             }
           }
