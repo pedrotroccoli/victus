@@ -11,7 +11,7 @@ RSpec.configure do |config|
       info: {
         title: 'Victus API V1',
         version: 'v1',
-        description: 'Habit tracking API with subscription management',
+        description: 'Personal assistant and all-in-one organizer API',
         contact: {
           name: 'Victus Team'
         }
