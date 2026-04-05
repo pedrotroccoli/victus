@@ -105,6 +105,15 @@ RSpec.describe 'Habit Checks API', type: :request do
 
         run_test!
       end
+
+      response '404', 'Check not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:habit_id) { habit.id.to_s }
+        let(:id) { BSON::ObjectId.new.to_s }
+
+        run_test!
+      end
     end
 
     put 'Update a check' do

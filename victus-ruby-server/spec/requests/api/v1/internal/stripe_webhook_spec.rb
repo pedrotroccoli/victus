@@ -34,7 +34,7 @@ RSpec.describe 'Stripe Webhook API', type: :request do
         end
       end
 
-      response '400', 'Invalid signature' do
+      response '400', 'Invalid payload or signature' do
         schema '$ref' => '#/components/schemas/error'
 
         let(:'Stripe-Signature') { 'invalid_signature' }

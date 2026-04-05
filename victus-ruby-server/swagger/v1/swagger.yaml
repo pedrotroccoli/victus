@@ -36,7 +36,7 @@ paths:
               schema:
                 type: object
         '400':
-          description: Invalid signature
+          description: Invalid payload or signature
           content:
             application/json:
               schema:
@@ -76,6 +76,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+              - habits_category
               properties:
                 habits_category:
                   type: object
@@ -110,11 +112,24 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit_category"
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
       requestBody:
         content:
           application/json:
             schema:
               type: object
+              required:
+              - habits_category
               properties:
                 habits_category:
                   type: object
@@ -255,6 +270,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit_check"
+        '404':
+          description: Check not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
     put:
       summary: Update a check
       tags:
@@ -349,6 +370,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+              - habit
               properties:
                 habit:
                   type: object
@@ -379,6 +402,8 @@ paths:
                         rule:
                           type: string
                           description: RRULE format (e.g., FREQ=DAILY)
+                      required:
+                      - rule
                     delta_enabled:
                       type: boolean
                     rule_engine_enabled:
@@ -417,6 +442,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit"
+        '404':
+          description: Habit not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
     put:
       summary: Update a habit
       tags:
@@ -431,11 +462,24 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit"
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
       requestBody:
         content:
           application/json:
             schema:
               type: object
+              required:
+              - habit
               properties:
                 habit:
                   type: object
@@ -537,11 +581,22 @@ paths:
                       type: string
                   subscription:
                     "$ref": "#/components/schemas/subscription"
+        '422':
+          description: Password mismatch
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
       requestBody:
         content:
           application/json:
             schema:
               type: object
+              required:
+              - account
               properties:
                 account:
                   type: object
@@ -614,6 +669,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+              - mood
               properties:
                 mood:
                   type: object
@@ -653,6 +710,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/mood"
+        '404':
+          description: Mood not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
     put:
       summary: Update a mood entry
       tags:
@@ -685,6 +748,8 @@ paths:
           application/json:
             schema:
               type: object
+              required:
+              - mood
               properties:
                 mood:
                   type: object

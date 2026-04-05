@@ -29,6 +29,7 @@ RSpec.describe 'Habit Categories API', type: :request do
 
       parameter name: :category_data, in: :body, schema: {
         type: :object,
+        required: %w[habits_category],
         properties: {
           habits_category: {
             type: :object,
@@ -63,6 +64,7 @@ RSpec.describe 'Habit Categories API', type: :request do
 
       parameter name: :category_data, in: :body, schema: {
         type: :object,
+        required: %w[habits_category],
         properties: {
           habits_category: {
             type: :object,
@@ -81,6 +83,19 @@ RSpec.describe 'Habit Categories API', type: :request do
         let(:category_record) { create(:habit_category, account: account) }
         let(:id) { category_record.id.to_s }
         let(:category_data) { { habits_category: { name: 'Updated Category' } } }
+
+        run_test!
+      end
+
+      response '422', 'Validation error' do
+        schema type: :object, properties: {
+          errors: { type: :array, items: { type: :string } }
+        }
+
+        let(:category_record) { create(:habit_category, account: account) }
+        let(:other_category) { create(:habit_category, account: account, name: 'Taken') }
+        let(:id) { category_record.id.to_s }
+        let(:category_data) { { habits_category: { name: other_category.name } } }
 
         run_test!
       end

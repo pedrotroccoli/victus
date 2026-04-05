@@ -42,6 +42,7 @@ RSpec.describe 'Me API', type: :request do
 
       parameter name: :profile_data, in: :body, schema: {
         type: :object,
+        required: %w[account],
         properties: {
           account: {
             type: :object,
@@ -66,6 +67,16 @@ RSpec.describe 'Me API', type: :request do
         }
 
         let(:profile_data) { { account: { name: 'Updated Name' } } }
+
+        run_test!
+      end
+
+      response '422', 'Password mismatch' do
+        schema type: :object, properties: {
+          code: { type: :string }
+        }
+
+        let(:profile_data) { { password: 'new123', password_confirmation: 'mismatch', account: { name: 'Test' } } }
 
         run_test!
       end

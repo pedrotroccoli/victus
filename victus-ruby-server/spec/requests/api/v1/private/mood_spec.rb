@@ -31,6 +31,7 @@ RSpec.describe 'Mood API', type: :request do
 
       parameter name: :mood_data, in: :body, schema: {
         type: :object,
+        required: %w[mood],
         properties: {
           mood: {
             type: :object,
@@ -79,6 +80,14 @@ RSpec.describe 'Mood API', type: :request do
 
         run_test!
       end
+
+      response '404', 'Mood not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
+
+        run_test!
+      end
     end
 
     put 'Update a mood entry' do
@@ -90,6 +99,7 @@ RSpec.describe 'Mood API', type: :request do
 
       parameter name: :mood_data, in: :body, schema: {
         type: :object,
+        required: %w[mood],
         properties: {
           mood: {
             type: :object,

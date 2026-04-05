@@ -39,6 +39,7 @@ RSpec.describe 'Habits API', type: :request do
 
       parameter name: :habit, in: :body, schema: {
         type: :object,
+        required: %w[habit],
         properties: {
           habit: {
             type: :object,
@@ -51,7 +52,8 @@ RSpec.describe 'Habits API', type: :request do
               recurrence_type: { type: :string, enum: %w[daily weekly monthly yearly infinite] },
               recurrence_details: {
                 type: :object,
-                properties: { rule: { type: :string, description: 'RRULE format (e.g., FREQ=DAILY)' } }
+                properties: { rule: { type: :string, description: 'RRULE format (e.g., FREQ=DAILY)' } },
+                required: %w[rule]
               },
               delta_enabled: { type: :boolean },
               rule_engine_enabled: { type: :boolean },
@@ -120,6 +122,14 @@ RSpec.describe 'Habits API', type: :request do
 
         run_test!
       end
+
+      response '404', 'Habit not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
+
+        run_test!
+      end
     end
 
     put 'Update a habit' do
@@ -130,6 +140,7 @@ RSpec.describe 'Habits API', type: :request do
 
       parameter name: :habit, in: :body, schema: {
         type: :object,
+        required: %w[habit],
         properties: {
           habit: {
             type: :object,
@@ -154,6 +165,18 @@ RSpec.describe 'Habits API', type: :request do
         let(:habit_record) { create(:habit, account: account) }
         let(:id) { habit_record.id.to_s }
         let(:habit) { { habit: { name: 'Updated Habit' } } }
+
+        run_test!
+      end
+
+      response '422', 'Validation error' do
+        schema type: :object, properties: {
+          errors: { type: :array, items: { type: :string } }
+        }
+
+        let(:habit_record) { create(:habit, account: account) }
+        let(:id) { habit_record.id.to_s }
+        let(:habit) { { habit: { name: '' } } }
 
         run_test!
       end
