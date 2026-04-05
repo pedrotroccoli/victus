@@ -70,10 +70,6 @@ class CheckoutController < Private::PrivateController
       customer_id = @current_account.subscription.service_details['customer_id']
     end
 
-    if @current_account.subscription&.active? && @current_account.subscription&.success?
-      return render json: { error: 'Account already has a subscription' }, status: :unprocessable_entity
-    end
-
     session = Stripe::Checkout::Session.create({
       customer: customer_id,
       mode: 'subscription',
