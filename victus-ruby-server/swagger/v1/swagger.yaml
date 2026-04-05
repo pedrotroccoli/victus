@@ -29,15 +29,12 @@ paths:
         schema:
           type: string
       responses:
-        '200':
+        '201':
           description: Event processed
           content:
             application/json:
               schema:
                 type: object
-                properties:
-                  received:
-                    type: boolean
         '400':
           description: Invalid signature
           content:
@@ -208,7 +205,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/habit_check"
         '422':
-          description: Invalid habit ID
+          description: Habit not found
           content:
             application/json:
               schema:
@@ -1144,7 +1141,6 @@ components:
           - infinite
         recurrence_details:
           type: object
-          nullable: true
           properties:
             rule:
               type: string
@@ -1161,7 +1157,6 @@ components:
         start_date:
           type: string
           format: date-time
-          nullable: true
         end_date:
           type: string
           format: date-time

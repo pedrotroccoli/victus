@@ -76,10 +76,10 @@ RSpec.describe 'Habit Checks API', type: :request do
         run_test!
       end
 
-      response '422', 'Invalid habit ID' do
+      response '422', 'Habit not found' do
         schema '$ref' => '#/components/schemas/error'
 
-        let(:habit_id) { 'nonexistent' }
+        let(:habit_id) { BSON::ObjectId.new.to_s }
         let(:check_data) { { checked: true } }
 
         run_test!

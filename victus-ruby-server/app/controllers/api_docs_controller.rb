@@ -2,7 +2,7 @@
 
 class ApiDocsController < ActionController::Base
   def index
-    render html: <<~HTML.html_safe
+    render inline: <<~HTML, content_type: 'text/html'
       <!doctype html>
       <html>
         <head>

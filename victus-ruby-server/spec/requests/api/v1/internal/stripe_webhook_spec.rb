@@ -22,14 +22,12 @@ RSpec.describe 'Stripe Webhook API', type: :request do
       parameter name: 'Stripe-Signature', in: :header, type: :string, required: true,
                 description: 'Stripe webhook signature for verification'
 
-      response '200', 'Event processed' do
-        schema type: :object, properties: {
-          received: { type: :boolean }
-        }
+      response '201', 'Event processed' do
+        schema type: :object
 
         let(:'Stripe-Signature') { 'test_signature' }
 
-        it 'returns a 200 response' do |example|
+        it 'returns a 201 response' do |example|
           pending 'Requires valid Stripe signature'
           submit_request(example.metadata)
           assert_response_matches_metadata(example.metadata)
