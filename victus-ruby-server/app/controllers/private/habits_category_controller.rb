@@ -1,6 +1,6 @@
 module Private
 class HabitsCategoryController < Private::PrivateController
-  rescue_from Mongoid::Errors::DocumentNotFound, Mongoid::Errors::InvalidFind, BSON::ObjectId::Invalid, with: :not_found
+  rescue_from Mongoid::Errors::DocumentNotFound, Mongoid::Errors::InvalidFind, BSON::Error, with: :not_found
 
   before_action :set_category, only: [:update, :destroy]
 
