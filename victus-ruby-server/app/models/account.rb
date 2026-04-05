@@ -177,7 +177,7 @@ class Account
   end
 
   def subscription_active?
-    subscription&.status == 'active'
+    subscription&.active? || false
   end
 
   def ensure_provider(provider)

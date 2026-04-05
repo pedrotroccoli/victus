@@ -10,6 +10,11 @@ class Subscription
   # 'success', 'payment_failed', 'trial'
   field :sub_status, type: String
 
+  def active?    = status == 'active'
+  def trialing?  = sub_status == 'trial'
+  def cancelled? = status == 'cancelled'
+  def pending_cancellation? = sub_status == 'pending_cancellation'
+
   # 'stripe'
   field :service_type, type: String
   field :service_details, type: Hash
