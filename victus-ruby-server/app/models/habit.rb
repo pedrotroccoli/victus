@@ -11,6 +11,17 @@ class Habit
   belongs_to :parent_habit, class_name: 'Habit', optional: true
   has_many :children_habits, class_name: 'Habit', foreign_key: :parent_habit_id, dependent: :destroy
 
+  # Scopes
+  scope :active,    -> { where(finished_at: nil, paused_at: nil) }
+  scope :paused,    -> { where(:paused_at.ne => nil) }
+  scope :finished,  -> { where(:finished_at.ne => nil) }
+  scope :ordered,   -> { order_by(order: :asc) }
+  scope :preloaded, -> { includes(:habit_category) }
+  scope :in_range,  ->(start_date, end_date) {
+    where(:start_date.lte => end_date)
+      .any_of({ :end_date.gte => start_date }, { end_date: nil })
+  }
+
   field :rule_engine_enabled, type: Boolean, default: false 
   field :rule_engine_details, type: Hash
 
