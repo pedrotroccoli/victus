@@ -189,6 +189,8 @@ class Account
       raise AlreadySubscribed, 'Account already has an active subscription'
     end
 
+    customer = nil
+
     if subscription.nil?
       customer = Stripe::Customer.create(
         email: email,
@@ -205,7 +207,7 @@ class Account
 
       customer_id = customer.id
     else
-      customer_id = subscription.service_details['customer_id']
+      customer_id = subscription.service_details&.dig('customer_id')
 
       if customer_id.blank?
         customer = Stripe::Customer.create(
@@ -213,7 +215,7 @@ class Account
           name: name,
           metadata: { account_id: id }
         )
-        subscription.service_details = subscription.service_details.merge('customer_id' => customer.id)
+        subscription.service_details = (subscription.service_details || {}).merge('customer_id' => customer.id)
         subscription.service_type = 'stripe'
         subscription.save!
         customer_id = customer.id
@@ -228,6 +230,14 @@ class Account
       lookup_key: lookup_key,
       price_id: selected_price.id
     )
+  rescue CheckoutError
+    raise
+  rescue StandardError
+    if customer
+      subscription&.destroy
+      Stripe::Customer.delete(customer.id) rescue nil
+    end
+    raise
   end
 
   # ── Instance Methods ────────────────────────────────────────────

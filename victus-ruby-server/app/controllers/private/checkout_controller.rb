@@ -12,6 +12,8 @@ class CheckoutController < Private::PrivateController
     render json: { error: e.message }, status: :unprocessable_entity
   rescue Stripe::CardError => e
     render json: { error: e.message }, status: :payment_required
+  rescue Stripe::StripeError => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 end
 end
