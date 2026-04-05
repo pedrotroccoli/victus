@@ -14,9 +14,11 @@ class HabitsCategoryController < Private::PrivateController
     @habits_category = HabitCategory.new(habits_category_params)
     @habits_category.account_id = @current_account[:id]
 
-    @habits_category.save!
-
-    render json: @habits_category, status: :created
+    if @habits_category.save
+      render json: @habits_category, status: :created
+    else
+      render json: { errors: @habits_category.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def update

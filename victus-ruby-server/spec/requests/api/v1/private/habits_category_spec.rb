@@ -94,6 +94,15 @@ RSpec.describe 'Habit Categories API', type: :request do
         run_test!
       end
 
+      response '404', 'Category not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:category_data) { { habits_category: { name: 'Test' } } }
+
+        run_test!
+      end
+
       response '422', 'Validation error' do
         schema type: :object, properties: {
           errors: { type: :array, items: { type: :string } }

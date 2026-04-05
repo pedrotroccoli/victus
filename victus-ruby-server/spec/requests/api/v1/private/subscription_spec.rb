@@ -165,8 +165,7 @@ RSpec.describe 'Subscription API', type: :request do
       response '200', 'Checkout session created' do
         schema type: :object, properties: {
           message: { type: :string },
-          url: { type: :string },
-          test: { type: :object }
+          url: { type: :string }
         }
 
         let(:checkout_data) { { lookup_key: 'dev_victus_journal_monthly' } }
@@ -176,6 +175,14 @@ RSpec.describe 'Subscription API', type: :request do
           submit_request(example.metadata)
           assert_response_matches_metadata(example.metadata)
         end
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:checkout_data) { {} }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
       end
 
       response '422', 'Missing lookup key' do

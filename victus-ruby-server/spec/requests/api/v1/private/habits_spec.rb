@@ -169,6 +169,15 @@ RSpec.describe 'Habits API', type: :request do
         run_test!
       end
 
+      response '404', 'Habit not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:habit) { { habit: { name: 'Test' } } }
+
+        run_test!
+      end
+
       response '422', 'Validation error' do
         schema type: :object, properties: {
           errors: { type: :array, items: { type: :string } }

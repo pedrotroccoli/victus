@@ -128,6 +128,15 @@ RSpec.describe 'Mood API', type: :request do
         run_test!
       end
 
+      response '404', 'Mood not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:mood_data) { { mood: { value: 'great' } } }
+
+        run_test!
+      end
+
       response '422', 'Edit window expired' do
         schema type: :object, properties: {
           errors: { type: :array, items: { type: :string } }

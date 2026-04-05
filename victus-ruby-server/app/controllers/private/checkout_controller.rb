@@ -87,7 +87,7 @@ class CheckoutController < Private::PrivateController
       allow_promotion_codes: true
     })
 
-    render json: { message: 'Subscription created', url: session.url, test: session }
+    render json: { message: 'Subscription created', url: session.url }
   rescue Stripe::CardError => e
     render json: { error: e.message }, status: :payment_required
   end
