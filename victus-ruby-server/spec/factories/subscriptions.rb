@@ -21,7 +21,18 @@ FactoryBot.define do
 
     trait :cancelled do
       status { "cancelled" }
+      sub_status { nil }
       cancel_date { Time.current }
+    end
+
+    trait :trial do
+      status { "active" }
+      sub_status { "trial" }
+    end
+
+    trait :pending_cancellation do
+      status { "active" }
+      sub_status { "pending_cancellation" }
     end
   end
 end

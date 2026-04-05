@@ -22,7 +22,7 @@ class CheckoutController < Private::PrivateController
       return render json: { error: 'Product is not active' }, status: :unprocessable_entity
     end
 
-    if @current_account.subscription.present? && @current_account.subscription.status == 'active'
+    if @current_account.subscription&.active?
       return render json: { error: 'Account already has an active subscription' }, status: :unprocessable_entity
     end
 
@@ -68,10 +68,6 @@ class CheckoutController < Private::PrivateController
       customer_id = customer.id
     else 
       customer_id = @current_account.subscription.service_details['customer_id']
-    end
-
-    if @current_account.subscription.present? && @current_account.subscription.status == 'success'
-      return render json: { error: 'Account already has a subscription' }, status: :unprocessable_entity
     end
 
     session = Stripe::Checkout::Session.create({
