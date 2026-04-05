@@ -9,13 +9,16 @@ class StripeService
 
   def create_checkout(customer_id:, account_id:, lookup_key:)
     price = Stripe::Price.list(lookup_keys: [lookup_key], expand: ['data.product'])
+    raise ArgumentError, "No Stripe price found for lookup_key=#{lookup_key}" if price.data.empty?
+
+    app_url = ENV.fetch('APP_URL')
 
     Stripe::Checkout::Session.create(
       customer: customer_id,
       mode: 'subscription',
       line_items: [{ price: price.data.first.id, quantity: 1 }],
-      success_url: "#{ENV['APP_URL']}/?checkout_success=true",
-      cancel_url: "#{ENV['APP_URL']}/?checkout_cancel=true",
+      success_url: "#{app_url}/?checkout_success=true",
+      cancel_url: "#{app_url}/?checkout_cancel=true",
       metadata: { account_id: account_id, lookup_key: lookup_key },
       allow_promotion_codes: true
     )

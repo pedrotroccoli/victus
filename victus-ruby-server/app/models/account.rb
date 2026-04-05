@@ -41,14 +41,15 @@ class Account
 
       begin
         stripe_service = StripeService.new
-        customer = stripe_service.create_customer(email: attrs[:email])
+        customer = stripe_service.create_customer(email: account.email)
 
-        account.subscription = Subscription.create(
+        account.build_subscription(
           service_type: 'stripe',
           status: 'freezed',
           sub_status: 'pending_payment_information',
           service_details: { customer_id: customer.id }
         )
+        account.subscription.save!
 
         checkout_session = stripe_service.create_checkout(
           customer_id: customer.id,
