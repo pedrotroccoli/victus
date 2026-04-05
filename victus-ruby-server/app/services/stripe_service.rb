@@ -11,12 +11,15 @@ class StripeService
     price = Stripe::Price.list(lookup_keys: [lookup_key], expand: ['data.product'])
     return nil if price.data.empty?
 
+    selected_price = price.data.first
+    return nil unless selected_price.active && selected_price.product&.active
+
     app_url = ENV.fetch('APP_URL')
 
     Stripe::Checkout::Session.create(
       customer: customer_id,
       mode: 'subscription',
-      line_items: [{ price: price.data.first.id, quantity: 1 }],
+      line_items: [{ price: selected_price.id, quantity: 1 }],
       success_url: "#{app_url}/?checkout_success=true",
       cancel_url: "#{app_url}/?checkout_cancel=true",
       metadata: { account_id: account_id, lookup_key: lookup_key },
