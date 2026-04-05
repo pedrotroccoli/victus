@@ -36,32 +36,41 @@ class Account
     checkout_url = nil
 
     if lookup_key.present?
-      stripe_service = StripeService.new
-      customer = stripe_service.create_customer(email: attrs[:email])
+      account.create_trial_subscription
+      return unless account.save
 
-      account.subscription = Subscription.create(
-        service_type: 'stripe',
-        status: 'freezed',
-        sub_status: 'pending_payment_information',
-        service_details: { customer_id: customer.id }
-      )
+      begin
+        stripe_service = StripeService.new
+        customer = stripe_service.create_customer(email: attrs[:email])
 
-      checkout_session = stripe_service.create_checkout(
-        customer_id: customer.id,
-        account_id: account.id,
-        lookup_key: lookup_key
-      )
+        account.subscription = Subscription.create(
+          service_type: 'stripe',
+          status: 'freezed',
+          sub_status: 'pending_payment_information',
+          service_details: { customer_id: customer.id }
+        )
 
-      checkout_url = checkout_session.url
+        checkout_session = stripe_service.create_checkout(
+          customer_id: customer.id,
+          account_id: account.id,
+          lookup_key: lookup_key
+        )
+
+        checkout_url = checkout_session.url
+      rescue StandardError
+        account.subscription&.destroy
+        account.destroy
+        raise
+      end
     else
       account.create_trial_subscription
+      return unless account.save
+
+      account.subscription.save
     end
 
-    if account.save
-      account.subscription.save
-      EmailJob.perform_later(account.id)
-      { account: account, checkout_url: checkout_url }
-    end
+    EmailJob.perform_later(account.id)
+    { account: account, checkout_url: checkout_url }
   end
 
   def self.authenticate_with_google(id_token:)
