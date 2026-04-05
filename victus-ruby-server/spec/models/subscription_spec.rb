@@ -30,6 +30,18 @@ RSpec.describe Subscription, type: :model do
     end
   end
 
+  describe '#success?' do
+    it 'returns true when sub_status is success' do
+      subscription = build(:subscription, sub_status: 'success')
+      expect(subscription).to be_success
+    end
+
+    it 'returns false when sub_status is trial' do
+      subscription = build(:subscription, :trial)
+      expect(subscription).not_to be_success
+    end
+  end
+
   describe '#cancelled?' do
     it 'returns true when status is cancelled' do
       subscription = build(:subscription, :cancelled)

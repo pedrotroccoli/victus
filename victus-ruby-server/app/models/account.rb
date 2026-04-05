@@ -177,7 +177,7 @@ class Account
   end
 
   def subscription_active?
-    subscription&.active? || false
+    !!subscription&.active?
   end
 
   def ensure_provider(provider)
