@@ -7,6 +7,20 @@ class StripeService
     )
   end
 
+  def create_checkout(customer_id:, account_id:, lookup_key:)
+    price = Stripe::Price.list(lookup_keys: [lookup_key], expand: ['data.product'])
+
+    Stripe::Checkout::Session.create(
+      customer: customer_id,
+      mode: 'subscription',
+      line_items: [{ price: price.data.first.id, quantity: 1 }],
+      success_url: "#{ENV['APP_URL']}/?checkout_success=true",
+      cancel_url: "#{ENV['APP_URL']}/?checkout_cancel=true",
+      metadata: { account_id: account_id, lookup_key: lookup_key },
+      allow_promotion_codes: true
+    )
+  end
+
   def create_billing_portal_session(customer_id:, return_url:)
     Stripe::BillingPortal::Session.create(
       customer: customer_id,

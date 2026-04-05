@@ -15,12 +15,12 @@ module ActiveAndAuthorized
 
     @current_account = Account.find(decoded[0]['account_id'].to_s) if decoded
   rescue Mongoid::Errors::DocumentNotFound, Mongoid::Errors::InvalidFind, BSON::Error, JWT::MissingRequiredClaim, JWT::DecodeError
-    render json: { error: 'Unauthorized' }, status: :unauthorized
+    render json: { error: 'Unauthorized' }, status: :unauthorized and return
   end
 
   def check_subscription
     unless @current_account&.subscription_active?
-      render json: { error: 'Without a valid subscription' }, status: :payment_required
+      render json: { error: 'Without a valid subscription' }, status: :payment_required and return
     end
   end
 end
