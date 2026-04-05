@@ -7,14 +7,7 @@ module Private
         return render json: { error: 'No subscription found' }, status: :not_found
       end
 
-      stripe_service = StripeService.new
-      stripe_subscription = nil
-
-      if subscription.service_details&.dig('subscription_id')
-        stripe_subscription = stripe_service.get_subscription(
-          subscription.service_details['subscription_id']
-        )
-      end
+      stripe_subscription = subscription.stripe_details
 
       render json: {
         status: subscription.status,

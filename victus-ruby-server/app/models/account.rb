@@ -40,8 +40,7 @@ class Account
 
       customer = nil
       begin
-        stripe_service = StripeService.new
-        customer = stripe_service.create_customer(email: account.email)
+        customer = Stripe::Customer.create(email: account.email)
 
         account.build_subscription(
           service_type: 'stripe',
@@ -51,18 +50,22 @@ class Account
         )
         account.subscription.save!
 
-        checkout_session = stripe_service.create_checkout(
-          customer_id: customer.id,
-          account_id: account.id,
-          lookup_key: lookup_key
-        )
+        price = Stripe::Price.list(lookup_keys: [lookup_key], expand: ['data.product'])
+        selected_price = price.data.first
 
-        unless checkout_session
+        unless selected_price && selected_price.active && selected_price.product&.active
           account.subscription&.destroy
           Stripe::Customer.delete(customer.id)
           account.destroy
           return nil
         end
+
+        checkout_session = account.send(:build_checkout_session,
+          customer_id: customer.id,
+          account_id: account.id,
+          lookup_key: lookup_key,
+          price_id: selected_price.id
+        )
 
         checkout_url = checkout_session.url
       rescue StandardError
@@ -164,6 +167,50 @@ class Account
     account
   end
 
+  # ── Checkout ───────────────────────────────────────────────────
+
+  class CheckoutError < StandardError; end
+  class InvalidLookupKey < CheckoutError; end
+  class InactiveProduct < CheckoutError; end
+  class AlreadySubscribed < CheckoutError; end
+
+  def create_stripe_checkout(lookup_key:)
+    price = Stripe::Price.list(lookup_keys: [lookup_key], expand: ['data.product'])
+    raise InvalidLookupKey, 'Invalid lookup key' if price.data.empty?
+    raise InactiveProduct, 'Product is not active' unless price.data.first.product.active
+
+    if subscription.present? && subscription.status == 'active'
+      raise AlreadySubscribed, 'Account already has an active subscription'
+    end
+
+    if subscription.nil?
+      customer = Stripe::Customer.create(
+        email: email,
+        name: name,
+        metadata: { account_id: id }
+      )
+
+      self.subscription = Subscription.new(
+        status: 'pending',
+        service_type: 'stripe',
+        service_details: { customer_id: customer.id }
+      )
+
+      customer_id = customer.id
+    else
+      customer_id = subscription.service_details['customer_id']
+    end
+
+    raise AlreadySubscribed, 'Account already has a subscription' if subscription.status == 'success'
+
+    build_checkout_session(
+      customer_id: customer_id,
+      account_id: id,
+      lookup_key: lookup_key,
+      price_id: price.data.first.id
+    )
+  end
+
   # ── Instance Methods ────────────────────────────────────────────
 
   def generate_jwt
@@ -191,6 +238,22 @@ class Account
       status: 'pending',
       sub_status: 'pending_payment_information',
       service_details: { trial_ends_at: 14.days.from_now }
+    )
+  end
+
+  private
+
+  def build_checkout_session(customer_id:, account_id:, lookup_key:, price_id:)
+    app_url = ENV.fetch('APP_URL')
+
+    Stripe::Checkout::Session.create(
+      customer: customer_id,
+      mode: 'subscription',
+      line_items: [{ price: price_id, quantity: 1 }],
+      success_url: "#{app_url}/?checkout_success=true",
+      cancel_url: "#{app_url}/?checkout_cancel=true",
+      metadata: { account_id: account_id, lookup_key: lookup_key },
+      allow_promotion_codes: true
     )
   end
 end
