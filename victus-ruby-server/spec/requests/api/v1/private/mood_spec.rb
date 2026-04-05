@@ -137,6 +137,7 @@ RSpec.describe 'Mood API', type: :request do
     delete 'Delete a mood entry' do
       tags 'Mood'
       security [bearer_auth: []]
+      produces 'application/json'
 
       response '200', 'Mood deleted' do
         schema type: :object, properties: {

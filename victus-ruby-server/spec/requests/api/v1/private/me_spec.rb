@@ -48,11 +48,11 @@ RSpec.describe 'Me API', type: :request do
             type: :object,
             properties: {
               name: { type: :string },
-              phone: { type: :string },
-              password: { type: :string },
-              password_confirmation: { type: :string }
+              phone: { type: :string }
             }
-          }
+          },
+          password: { type: :string },
+          password_confirmation: { type: :string }
         }
       }
 

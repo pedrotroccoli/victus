@@ -185,6 +185,7 @@ RSpec.describe 'Habits API', type: :request do
     delete 'Delete a habit' do
       tags 'Habits'
       security [bearer_auth: []]
+      produces 'application/json'
 
       response '200', 'Habit deleted' do
         schema type: :object, properties: {

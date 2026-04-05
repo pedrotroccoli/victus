@@ -132,7 +132,7 @@ RSpec.describe 'Habit Checks API', type: :request do
               type: :object,
               properties: {
                 habit_delta_id: { type: :string },
-                value: { type: :number },
+                value: { type: :string },
                 _destroy: { type: :boolean }
               }
             }

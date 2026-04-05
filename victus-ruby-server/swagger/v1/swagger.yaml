@@ -306,7 +306,7 @@ paths:
                       habit_delta_id:
                         type: string
                       value:
-                        type: number
+                        type: string
                       _destroy:
                         type: boolean
   "/api/v1/habits":
@@ -514,6 +514,13 @@ paths:
       responses:
         '200':
           description: Habit deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
   "/api/v1/me":
     get:
       summary: Get current user profile
@@ -605,10 +612,10 @@ paths:
                       type: string
                     phone:
                       type: string
-                    password:
-                      type: string
-                    password_confirmation:
-                      type: string
+                password:
+                  type: string
+                password_confirmation:
+                  type: string
   "/api/v1/mood":
     get:
       summary: List all mood entries
@@ -774,6 +781,13 @@ paths:
       responses:
         '200':
           description: Mood deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
   "/api/v1/subscription":
     get:
       summary: Get current subscription
