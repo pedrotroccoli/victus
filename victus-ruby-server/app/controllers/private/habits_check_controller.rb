@@ -30,8 +30,8 @@ class HabitsCheckController < Private::PrivateController
     @habit_check.update!(update_params.except(:habit_check_deltas_attributes))
 
     render json: @habit_check, status: :ok
-  rescue Mongoid::Errors::Validations => e
-    render json: { error: e.message }, status: :unprocessable_entity
+  rescue Mongoid::Errors::Validations
+    render json: { errors: @habit_check.errors.full_messages }, status: :unprocessable_entity
   end
 
   def create
