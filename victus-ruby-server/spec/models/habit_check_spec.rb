@@ -393,6 +393,28 @@ RSpec.describe HabitCheck, type: :model do
         expect(habit_check.habit_check_deltas.first.value).to eq('99')
       end
     end
+
+    context 'when destroying a non-existent delta' do
+      it 'no-ops instead of creating' do
+        attrs = [{ habit_delta_id: delta_ids.first, _destroy: true }]
+
+        expect { habit_check.sync_deltas(attrs) }.not_to change { habit_check.habit_check_deltas.count }
+      end
+    end
+
+    context 'when creating with invalid attributes' do
+      it 'raises on missing value' do
+        attrs = [{ habit_delta_id: delta_ids.first, value: nil }]
+
+        expect { habit_check.sync_deltas(attrs) }.to raise_error(Mongoid::Errors::Validations)
+      end
+
+      it 'raises on invalid habit_delta_id' do
+        attrs = [{ habit_delta_id: 'nonexistent', value: '10' }]
+
+        expect { habit_check.sync_deltas(attrs) }.to raise_error(Mongoid::Errors::Validations)
+      end
+    end
   end
 
   describe 'default values' do

@@ -29,9 +29,9 @@ class HabitCheck
       delta = existing_hash[attrs[:habit_delta_id]]
 
       if delta
-        attrs[:_destroy] ? delta.destroy : delta.update(value: attrs[:value])
-      else
-        HabitCheckDelta.create(value: attrs[:value], habit_delta_id: attrs[:habit_delta_id], habit_check: self)
+        attrs[:_destroy] ? delta.destroy! : delta.update!(value: attrs[:value])
+      elsif !attrs[:_destroy]
+        HabitCheckDelta.create!(value: attrs[:value], habit_delta_id: attrs[:habit_delta_id], habit_check: self)
       end
     end
   end
