@@ -57,6 +57,12 @@ class Account
           lookup_key: lookup_key
         )
 
+        unless checkout_session
+          account.subscription&.destroy
+          account.destroy
+          return nil
+        end
+
         checkout_url = checkout_session.url
       rescue StandardError
         account.subscription&.destroy

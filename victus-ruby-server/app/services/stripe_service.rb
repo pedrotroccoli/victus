@@ -9,7 +9,7 @@ class StripeService
 
   def create_checkout(customer_id:, account_id:, lookup_key:)
     price = Stripe::Price.list(lookup_keys: [lookup_key], expand: ['data.product'])
-    raise ArgumentError, "No Stripe price found for lookup_key=#{lookup_key}" if price.data.empty?
+    return nil if price.data.empty?
 
     app_url = ENV.fetch('APP_URL')
 
