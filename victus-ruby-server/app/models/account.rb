@@ -46,7 +46,7 @@ class Account
           service_type: 'stripe',
           status: 'freezed',
           sub_status: 'pending_payment_information',
-          service_details: { customer_id: customer.id }
+          service_details: { 'customer_id' => customer.id }
         )
         account.subscription.save!
 
@@ -60,15 +60,11 @@ class Account
           return nil
         end
 
-        app_url = ENV.fetch('APP_URL')
-        checkout_session = Stripe::Checkout::Session.create(
-          customer: customer.id,
-          mode: 'subscription',
-          line_items: [{ price: selected_price.id, quantity: 1 }],
-          success_url: "#{app_url}/?checkout_success=true",
-          cancel_url: "#{app_url}/?checkout_cancel=true",
-          metadata: { account_id: account.id, lookup_key: lookup_key },
-          allow_promotion_codes: true
+        checkout_session = account.build_checkout_session(
+          customer_id: customer.id,
+          account_id: account.id,
+          lookup_key: lookup_key,
+          price_id: selected_price.id
         )
 
         checkout_url = checkout_session.url
@@ -195,6 +191,7 @@ class Account
 
     customer = nil
     new_subscription = false
+    previous_service_type = subscription&.service_type
 
     if subscription.nil?
       customer = Stripe::Customer.create(
@@ -206,7 +203,7 @@ class Account
       self.subscription = Subscription.new(
         status: 'pending',
         service_type: 'stripe',
-        service_details: { customer_id: customer.id }
+        service_details: { 'customer_id' => customer.id }
       )
       subscription.save!
       new_subscription = true
@@ -239,8 +236,11 @@ class Account
       if new_subscription
         subscription&.destroy
       else
-        subscription.service_details&.delete('customer_id')
-        subscription.save
+        rolled_back = (subscription.service_details || {}).except('customer_id')
+        subscription.update!(
+          service_type: previous_service_type,
+          service_details: rolled_back
+        )
       end
       Stripe::Customer.delete(customer.id) rescue nil
     end
@@ -273,11 +273,11 @@ class Account
     self.subscription = Subscription.new(
       status: 'pending',
       sub_status: 'pending_payment_information',
-      service_details: { trial_ends_at: 14.days.from_now }
+      service_details: { 'trial_ends_at' => 14.days.from_now }
     )
   end
 
-  private
+  protected
 
   def build_checkout_session(customer_id:, account_id:, lookup_key:, price_id:)
     app_url = ENV.fetch('APP_URL')
