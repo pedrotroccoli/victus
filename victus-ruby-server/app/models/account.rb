@@ -31,6 +31,92 @@ class Account
     account
   end
 
+  def self.sign_up_with_email(attrs, lookup_key: nil)
+    account = new(attrs.to_h)
+    checkout_url = nil
+
+    if lookup_key.present?
+      return unless account.save
+
+      customer = nil
+      begin
+        stripe_service = StripeService.new
+        customer = stripe_service.create_customer(email: account.email)
+
+        account.build_subscription(
+          service_type: 'stripe',
+          status: 'freezed',
+          sub_status: 'pending_payment_information',
+          service_details: { customer_id: customer.id }
+        )
+        account.subscription.save!
+
+        checkout_session = stripe_service.create_checkout(
+          customer_id: customer.id,
+          account_id: account.id,
+          lookup_key: lookup_key
+        )
+
+        unless checkout_session
+          account.subscription&.destroy
+          Stripe::Customer.delete(customer.id)
+          account.destroy
+          return nil
+        end
+
+        checkout_url = checkout_session.url
+      rescue StandardError
+        account.subscription&.destroy
+        Stripe::Customer.delete(customer.id) if customer
+        account.destroy
+        raise
+      end
+    else
+      account.create_trial_subscription
+      return unless account.save
+
+      account.subscription.save!
+    end
+
+    EmailJob.perform_later(account.id)
+    { account: account, checkout_url: checkout_url }
+  end
+
+  def self.authenticate_with_google(id_token:)
+    return nil if id_token.blank?
+
+    validator = GoogleIDToken::Validator.new
+    payload = validator.check(id_token, ENV['GOOGLE_CLIENT_ID'])
+    return nil if payload.nil?
+
+    find_or_create_from_google(
+      google_id: payload['sub'],
+      email: payload['email'],
+      name: payload['name']
+    )
+  end
+
+  def self.authenticate_with_siwe(payload:, nonce:)
+    return nil if payload.blank? || nonce.blank?
+
+    lambda_client = Aws::Lambda::Client.new(region: 'us-east-1')
+
+    lambda_response = lambda_client.invoke(
+      function_name: 'victus-siwe-dev-world-siwe-verify',
+      invocation_type: 'RequestResponse',
+      payload: { payload: payload, nonce: nonce }.to_json
+    )
+
+    return nil if lambda_response.status_code != 200
+
+    response_body = JSON.parse(lambda_response.payload.read)
+    return nil if response_body['valid'] == false
+
+    find_or_create_from_siwe(response_body['data']['address'])
+  rescue JSON::ParserError
+    nil
+  end
+
   def self.find_or_create_from_google(google_id:, email:, name:)
     return nil if google_id.blank?
 
