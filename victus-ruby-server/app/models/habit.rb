@@ -13,8 +13,8 @@ class Habit
 
   # Scopes
   scope :active,    -> { where(finished_at: nil, paused_at: nil) }
-  scope :paused,    -> { where(:paused_at.ne => nil) }
-  scope :finished,  -> { where(:finished_at.ne => nil) }
+  scope :paused,    -> { where(:paused_at.exists => true, :paused_at.ne => nil) }
+  scope :finished,  -> { where(:finished_at.exists => true, :finished_at.ne => nil) }
   scope :ordered,   -> { order_by(order: :asc) }
   scope :preloaded, -> { includes(:habit_category) }
   scope :in_range,  ->(start_date, end_date) {
