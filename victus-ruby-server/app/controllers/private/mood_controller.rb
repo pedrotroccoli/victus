@@ -1,5 +1,7 @@
 module Private
   class MoodController < Private::PrivateController
+    rescue_from Mongoid::Errors::DocumentNotFound, Mongoid::Errors::InvalidFind, BSON::Error, with: :not_found
+
     before_action :set_mood, only: [:show, :update, :destroy]
 
     def index
@@ -52,6 +54,10 @@ module Private
 
     def mood_params
       params.require(:mood).permit(:value, :description)
+    end
+
+    def not_found
+      render json: { error: 'Not found' }, status: :not_found
     end
   end
 end

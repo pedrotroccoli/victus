@@ -22,7 +22,7 @@ module Public
         return render json: { message: 'Password and password confirmation do not match' }, status: :unauthorized
       end
 
-      already_exists = Account.find_by(email: accounts_params[:email])
+      already_exists = Account.where(email: accounts_params[:email]).first
 
       return render json: { message: 'Account already exists' }, status: :unauthorized if already_exists
 

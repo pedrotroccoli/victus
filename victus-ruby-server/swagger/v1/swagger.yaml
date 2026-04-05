@@ -204,7 +204,7 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit_check"
-        '422':
+        '404':
           description: Habit not found
           content:
             application/json:
