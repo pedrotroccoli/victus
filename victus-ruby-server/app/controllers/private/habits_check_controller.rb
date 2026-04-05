@@ -27,12 +27,11 @@ class HabitsCheckController < Private::PrivateController
 
   def update
     @habit_check.sync_deltas(update_params[:habit_check_deltas_attributes])
+    @habit_check.update!(update_params.except(:habit_check_deltas_attributes))
 
-    if @habit_check.update(update_params.except(:habit_check_deltas_attributes))
-      render json: @habit_check, status: :ok
-    else
-      render json: { errors: @habit_check.errors.full_messages }, status: :unprocessable_entity
-    end
+    render json: @habit_check, status: :ok
+  rescue Mongoid::Errors::Validations => e
+    render json: { error: e.message }, status: :unprocessable_entity
   end
 
   def create
