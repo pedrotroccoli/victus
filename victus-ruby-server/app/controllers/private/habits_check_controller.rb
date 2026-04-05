@@ -26,31 +26,12 @@ class HabitsCheckController < Private::PrivateController
   end
 
   def update
-    if update_params[:habit_check_deltas_attributes].present?
-      existing_deltas = @habit_check.habit_check_deltas.where(:habit_delta_id.in => update_params[:habit_check_deltas_attributes].map { |delta| delta[:habit_delta_id] })
-      existing_deltas_hash = existing_deltas.each_with_object({}) { |delta, hash| hash[delta.habit_delta_id] = delta }
+    @habit_check.sync_deltas(update_params[:habit_check_deltas_attributes])
+    @habit_check.update!(update_params.except(:habit_check_deltas_attributes))
 
-      non_existing_deltas = update_params[:habit_check_deltas_attributes].reject { |delta| existing_deltas.any? { |existing_delta| existing_delta.habit_delta_id == delta[:habit_delta_id] } }
-      non_existing_deltas_hash = non_existing_deltas.each_with_object({}) { |delta, hash| hash[delta[:habit_delta_id]] = delta }
-
-      update_params[:habit_check_deltas_attributes].map do |delta|
-        if existing_deltas_hash[delta[:habit_delta_id]].present?
-          if (delta[:_destroy])
-            existing_deltas_hash[delta[:habit_delta_id]].destroy
-          else
-            existing_deltas_hash[delta[:habit_delta_id]].update(value: delta[:value])
-          end
-        else
-          HabitCheckDelta.create(value: delta[:value], habit_delta_id: delta[:habit_delta_id], habit_check: @habit_check)
-        end
-      end
-    end
-
-    if @habit_check.update(update_params.reject { |key, value| key == 'habit_check_deltas_attributes' })
-      render json: @habit_check, status: :ok
-    else
-      render json: { errors: @habit_check.errors.full_messages }, status: :unprocessable_entity
-    end
+    render json: @habit_check, status: :ok
+  rescue Mongoid::Errors::Validations
+    render json: { errors: @habit_check.errors.full_messages }, status: :unprocessable_entity
   end
 
   def create

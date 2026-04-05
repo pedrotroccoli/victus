@@ -53,9 +53,17 @@ RSpec.describe 'Habit Checks API', type: :request do
       parameter name: :check, in: :body, schema: {
         type: :object,
         properties: {
-          checked_at: { type: :string, format: 'date-time', description: 'When the habit was completed' },
-          value: { type: :number, description: 'Numeric value for quantifiable habits' },
-          notes: { type: :string }
+          checked: { type: :boolean, description: 'Whether the habit was completed' },
+          deltas: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                habit_delta_id: { type: :string },
+                value: { type: :string }
+              }
+            }
+          }
         }
       }
 
@@ -63,7 +71,7 @@ RSpec.describe 'Habit Checks API', type: :request do
         schema '$ref' => '#/components/schemas/habit_check'
 
         let(:habit_id) { habit.id.to_s }
-        let(:check) { { checked_at: Time.current.iso8601 } }
+        let(:check) { { checked: true } }
 
         run_test!
       end
@@ -73,8 +81,9 @@ RSpec.describe 'Habit Checks API', type: :request do
           error: { type: :string }
         }
 
-        let(:habit_id) { habit.id.to_s }
-        let(:check) { { checked_at: 1.year.ago.iso8601 } }
+        let(:expired_habit) { create(:habit, account: account, recurrence_details: { rule: 'FREQ=DAILY;UNTIL=20200101T000000Z' }) }
+        let(:habit_id) { expired_habit.id.to_s }
+        let(:check) { { checked: true } }
 
         run_test!
       end

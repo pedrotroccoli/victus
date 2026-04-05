@@ -19,6 +19,23 @@ class HabitCheck
 
   validate :rule_engine_validation
 
+  def sync_deltas(deltas_attributes)
+    return if deltas_attributes.blank?
+
+    existing = habit_check_deltas.where(:habit_delta_id.in => deltas_attributes.map { |d| d[:habit_delta_id] })
+    existing_hash = existing.index_by(&:habit_delta_id)
+
+    deltas_attributes.each do |attrs|
+      delta = existing_hash[attrs[:habit_delta_id]]
+
+      if delta
+        attrs[:_destroy] ? delta.destroy! : delta.update!(value: attrs[:value])
+      elsif !attrs[:_destroy]
+        HabitCheckDelta.create!(value: attrs[:value], habit_delta_id: attrs[:habit_delta_id], habit_check: self)
+      end
+    end
+  end
+
   private
 
   def and_validation
