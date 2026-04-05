@@ -83,7 +83,7 @@ class StripeWebhookController < ApplicationController
 
       if data_object.cancel_at_period_end
         sub_status = 'pending_cancellation'
-      elsif data_object.status == 'active' && subscription.sub_status != 'trial'
+      elsif data_object.status == 'active' && !subscription.trialing?
         sub_status = 'success'
       end
 

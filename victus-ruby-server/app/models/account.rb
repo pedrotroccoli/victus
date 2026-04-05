@@ -181,11 +181,11 @@ class Account
     selected_price = price.data.first
     raise InactiveProduct, 'Product is not active' unless selected_price.active && selected_price.product&.active
 
-    if subscription.present? && subscription.status == 'active'
+    if subscription&.active?
       raise AlreadySubscribed, 'Account already has an active subscription'
     end
 
-    if subscription.present? && subscription.sub_status == 'success'
+    if subscription&.success?
       raise AlreadySubscribed, 'Account already has a subscription'
     end
 
@@ -260,7 +260,7 @@ class Account
   end
 
   def subscription_active?
-    subscription&.status == 'active'
+    !!subscription&.active?
   end
 
   def ensure_provider(provider)

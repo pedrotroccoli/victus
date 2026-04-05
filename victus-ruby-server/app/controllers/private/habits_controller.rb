@@ -12,15 +12,10 @@ class HabitsController < Private::PrivateController
     start_date = DateInternal.parse(params[:start_date], Date.today - week_days).beginning_of_day
     end_date = DateInternal.parse(params[:end_date], Date.today + week_days).end_of_day
 
-    habits_from_account = Habit.where(account_id: @current_account[:id]).includes(:habit_category)
-
-    @habits = habits_from_account
-    .where(:start_date.lte => end_date)
-    .any_of(
-      { :end_date.gte => start_date },
-      { :end_date => nil }
-    )
-    .order_by(order: :asc)
+    @habits = Habit.where(account_id: @current_account[:id])
+                   .preloaded
+                   .in_range(start_date, end_date)
+                   .ordered
 
     render json: @habits.as_json(include: :habit_category)
   end

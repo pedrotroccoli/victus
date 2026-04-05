@@ -5,10 +5,16 @@ class Subscription
 
   belongs_to :account
 
-  # 'active', 'cancelled', 'freezed'
-  field :status, type: String 
-  # 'success', 'payment_failed', 'trial'
+  # 'active', 'cancelled', 'freezed', 'pending'
+  field :status, type: String
+  # 'active', 'success', 'payment_failed', 'trial', 'pending_cancellation', 'pending_payment_information'
   field :sub_status, type: String
+
+  def active?    = status == 'active'
+  def trialing?  = sub_status == 'trial'
+  def cancelled? = status == 'cancelled'
+  def success? = sub_status == 'success'
+  def pending_cancellation? = sub_status == 'pending_cancellation'
 
   # 'stripe'
   field :service_type, type: String
