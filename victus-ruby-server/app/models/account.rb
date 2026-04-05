@@ -73,7 +73,7 @@ class Account
       account.create_trial_subscription
       return unless account.save
 
-      account.subscription.save
+      account.subscription.save!
     end
 
     EmailJob.perform_later(account.id)
