@@ -177,6 +177,14 @@ RSpec.describe 'Subscription API', type: :request do
           assert_response_matches_metadata(example.metadata)
         end
       end
+
+      response '422', 'Missing lookup key' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:checkout_data) { {} }
+
+        run_test!
+      end
     end
   end
 end

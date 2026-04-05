@@ -20,6 +20,13 @@ RSpec.describe 'Mood API', type: :request do
 
         run_test!
       end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
     end
 
     post 'Record mood' do

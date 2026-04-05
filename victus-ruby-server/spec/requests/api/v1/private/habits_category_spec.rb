@@ -19,6 +19,13 @@ RSpec.describe 'Habit Categories API', type: :request do
 
         run_test!
       end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
     end
 
     post 'Create a category' do
@@ -104,10 +111,19 @@ RSpec.describe 'Habit Categories API', type: :request do
     delete 'Delete a category' do
       tags 'Categories'
       security [bearer_auth: []]
+      produces 'application/json'
 
       response '204', 'Category deleted' do
         let(:category_record) { create(:habit_category, account: account) }
         let(:id) { category_record.id.to_s }
+
+        run_test!
+      end
+
+      response '404', 'Category not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
 
         run_test!
       end

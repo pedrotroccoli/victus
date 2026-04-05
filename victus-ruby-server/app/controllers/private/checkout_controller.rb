@@ -5,7 +5,7 @@ class CheckoutController < Private::PrivateController
   def create
     lookup_key = params[:lookup_key]
 
-    render json: { error: 'Lookup key not found' }, status: :unprocessable_entity if lookup_key.blank?
+    return render json: { error: 'Lookup key not found' }, status: :unprocessable_entity if lookup_key.blank?
 
     price = Stripe::Price.list(
       lookup_keys: [lookup_key],
