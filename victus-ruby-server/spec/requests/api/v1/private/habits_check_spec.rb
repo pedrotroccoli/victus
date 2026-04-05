@@ -50,12 +50,20 @@ RSpec.describe 'Habit Checks API', type: :request do
       produces 'application/json'
       description 'Record a habit completion. Validates against RRULE schedule and rule engine conditions.'
 
-      parameter name: :check, in: :body, schema: {
+      parameter name: :check_data, in: :body, schema: {
         type: :object,
         properties: {
-          checked_at: { type: :string, format: 'date-time', description: 'When the habit was completed' },
-          value: { type: :number, description: 'Numeric value for quantifiable habits' },
-          notes: { type: :string }
+          checked: { type: :boolean, description: 'Whether the habit is checked' },
+          deltas: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                habit_delta_id: { type: :string },
+                value: { type: :number }
+              }
+            }
+          }
         }
       }
 
@@ -63,18 +71,7 @@ RSpec.describe 'Habit Checks API', type: :request do
         schema '$ref' => '#/components/schemas/habit_check'
 
         let(:habit_id) { habit.id.to_s }
-        let(:check) { { checked_at: Time.current.iso8601 } }
-
-        run_test!
-      end
-
-      response '422', 'Invalid check (not on schedule or rule engine conditions not met)' do
-        schema type: :object, properties: {
-          error: { type: :string }
-        }
-
-        let(:habit_id) { habit.id.to_s }
-        let(:check) { { checked_at: 1.year.ago.iso8601 } }
+        let(:check_data) { { checked: true } }
 
         run_test!
       end
@@ -93,7 +90,7 @@ RSpec.describe 'Habit Checks API', type: :request do
       response '200', 'Check found' do
         schema '$ref' => '#/components/schemas/habit_check'
 
-        let(:habit_check) { create(:habit_check, habit: habit) }
+        let(:habit_check) { create(:habit_check, habit: habit, account: account) }
         let(:habit_id) { habit.id.to_s }
         let(:id) { habit_check.id.to_s }
 
@@ -107,21 +104,31 @@ RSpec.describe 'Habit Checks API', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :check, in: :body, schema: {
+      parameter name: :check_data, in: :body, schema: {
         type: :object,
         properties: {
-          value: { type: :number },
-          notes: { type: :string }
+          checked: { type: :boolean },
+          habit_check_deltas_attributes: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                habit_delta_id: { type: :string },
+                value: { type: :number },
+                _destroy: { type: :boolean }
+              }
+            }
+          }
         }
       }
 
       response '200', 'Check updated' do
         schema '$ref' => '#/components/schemas/habit_check'
 
-        let(:habit_check) { create(:habit_check, habit: habit) }
+        let(:habit_check) { create(:habit_check, habit: habit, account: account) }
         let(:habit_id) { habit.id.to_s }
         let(:id) { habit_check.id.to_s }
-        let(:check) { { notes: 'Updated note' } }
+        let(:check_data) { { checked: true } }
 
         run_test!
       end

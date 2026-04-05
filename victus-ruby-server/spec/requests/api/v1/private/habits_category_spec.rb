@@ -27,19 +27,25 @@ RSpec.describe 'Habit Categories API', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :category, in: :body, schema: {
+      parameter name: :category_data, in: :body, schema: {
         type: :object,
         properties: {
-          name: { type: :string },
-          color: { type: :string, description: 'Hex color code' }
-        },
-        required: %w[name]
+          habits_category: {
+            type: :object,
+            properties: {
+              name: { type: :string },
+              order: { type: :number },
+              icon: { type: :string }
+            },
+            required: %w[name]
+          }
+        }
       }
 
       response '201', 'Category created' do
         schema '$ref' => '#/components/schemas/habit_category'
 
-        let(:category) { { name: 'Health', color: '#FF5733' } }
+        let(:category_data) { { habits_category: { name: 'Health' } } }
 
         run_test!
       end
@@ -55,11 +61,17 @@ RSpec.describe 'Habit Categories API', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :category, in: :body, schema: {
+      parameter name: :category_data, in: :body, schema: {
         type: :object,
         properties: {
-          name: { type: :string },
-          color: { type: :string }
+          habits_category: {
+            type: :object,
+            properties: {
+              name: { type: :string },
+              order: { type: :number },
+              icon: { type: :string }
+            }
+          }
         }
       }
 
@@ -68,7 +80,7 @@ RSpec.describe 'Habit Categories API', type: :request do
 
         let(:category_record) { create(:habit_category, account: account) }
         let(:id) { category_record.id.to_s }
-        let(:category) { { name: 'Updated Category' } }
+        let(:category_data) { { habits_category: { name: 'Updated Category' } } }
 
         run_test!
       end

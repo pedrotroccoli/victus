@@ -27,17 +27,21 @@ RSpec.describe 'Stripe Webhook API', type: :request do
           received: { type: :boolean }
         }
 
-        run_test! do
+        let(:'Stripe-Signature') { 'test_signature' }
+
+        it 'returns a 200 response' do |example|
           pending 'Requires valid Stripe signature'
+          submit_request(example.metadata)
+          assert_response_matches_metadata(example.metadata)
         end
       end
 
       response '400', 'Invalid signature' do
         schema '$ref' => '#/components/schemas/error'
 
-        run_test! do
-          pending 'Requires Stripe event payload'
-        end
+        let(:'Stripe-Signature') { 'invalid_signature' }
+
+        run_test!
       end
     end
   end

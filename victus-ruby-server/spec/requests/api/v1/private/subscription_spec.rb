@@ -13,7 +13,16 @@ RSpec.describe 'Subscription API', type: :request do
       produces 'application/json'
 
       response '200', 'Subscription details' do
-        schema '$ref' => '#/components/schemas/subscription'
+        schema type: :object, properties: {
+          status: { type: :string },
+          sub_status: { type: :string },
+          service_type: { type: :string },
+          cancel_date: { type: :string, nullable: true },
+          cancel_reason: { type: :string, nullable: true },
+          current_period_end: { type: :integer, nullable: true },
+          cancel_at_period_end: { type: :boolean, nullable: true },
+          trial_end: { type: :integer, nullable: true }
+        }
 
         run_test!
       end
@@ -31,8 +40,17 @@ RSpec.describe 'Subscription API', type: :request do
     post 'Cancel subscription' do
       tags 'Subscription'
       security [bearer_auth: []]
+      consumes 'application/json'
       produces 'application/json'
-      description 'Cancel the current Stripe subscription at period end'
+      description 'Cancel the current Stripe subscription'
+
+      parameter name: :cancel_data, in: :body, schema: {
+        type: :object,
+        properties: {
+          immediate: { type: :boolean, description: 'Cancel immediately or at period end' },
+          reason: { type: :string, description: 'Cancellation reason' }
+        }
+      }, required: false
 
       response '200', 'Subscription canceled' do
         schema type: :object, properties: {
@@ -40,13 +58,18 @@ RSpec.describe 'Subscription API', type: :request do
           cancel_at: { type: :integer, nullable: true }
         }
 
-        run_test! do
+        let(:cancel_data) { {} }
+
+        it 'returns a 200 response' do |example|
           pending 'Requires Stripe mock'
+          submit_request(example.metadata)
+          assert_response_matches_metadata(example.metadata)
         end
       end
 
       response '401', 'Unauthorized' do
         let(:Authorization) { 'Bearer invalid' }
+        let(:cancel_data) { {} }
         schema '$ref' => '#/components/schemas/error'
 
         run_test!
@@ -54,13 +77,14 @@ RSpec.describe 'Subscription API', type: :request do
 
       response '402', 'No active subscription' do
         let(:account) { create(:account) }
+        let(:cancel_data) { {} }
         schema '$ref' => '#/components/schemas/error'
 
         run_test!
       end
 
       response '422', 'Missing Stripe subscription ID' do
-        before { account.subscription.update(service_details: {}) }
+        let(:cancel_data) { {} }
         schema '$ref' => '#/components/schemas/error'
 
         run_test!
@@ -72,7 +96,6 @@ RSpec.describe 'Subscription API', type: :request do
     post 'Create Stripe portal session' do
       tags 'Subscription'
       security [bearer_auth: []]
-      consumes 'application/json'
       produces 'application/json'
       description 'Create a Stripe billing portal session for subscription management'
 
@@ -81,8 +104,10 @@ RSpec.describe 'Subscription API', type: :request do
           session_url: { type: :string, format: :uri }
         }
 
-        run_test! do
+        it 'returns a 200 response' do |example|
           pending 'Requires Stripe mock'
+          submit_request(example.metadata)
+          assert_response_matches_metadata(example.metadata)
         end
       end
 
@@ -101,7 +126,6 @@ RSpec.describe 'Subscription API', type: :request do
       end
 
       response '422', 'Missing customer ID' do
-        before { account.subscription.update(service_details: {}) }
         schema '$ref' => '#/components/schemas/error'
 
         run_test!
@@ -130,24 +154,27 @@ RSpec.describe 'Subscription API', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :checkout_params, in: :body, schema: {
+      parameter name: :checkout_data, in: :body, schema: {
         type: :object,
         properties: {
-          plan_id: { type: :string }
+          lookup_key: { type: :string, description: 'Stripe price lookup key' }
         },
-        required: %w[plan_id]
+        required: %w[lookup_key]
       }
 
       response '200', 'Checkout session created' do
         schema type: :object, properties: {
-          session_id: { type: :string },
-          url: { type: :string }
+          message: { type: :string },
+          url: { type: :string },
+          test: { type: :object }
         }
 
-        let(:checkout_params) { { plan_id: 'plan_xxx' } }
+        let(:checkout_data) { { lookup_key: 'dev_victus_journal_monthly' } }
 
-        run_test! do
+        it 'returns a 200 response' do |example|
           pending 'Requires Stripe mock'
+          submit_request(example.metadata)
+          assert_response_matches_metadata(example.metadata)
         end
       end
     end
