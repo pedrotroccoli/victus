@@ -290,6 +290,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit_check"
+        '404':
+          description: Check not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
       requestBody:
         content:
           application/json:
@@ -521,6 +527,12 @@ paths:
                 properties:
                   message:
                     type: string
+        '404':
+          description: Habit not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
   "/api/v1/me":
     get:
       summary: Get current user profile
@@ -612,10 +624,10 @@ paths:
                       type: string
                     phone:
                       type: string
-                password:
-                  type: string
-                password_confirmation:
-                  type: string
+                    password:
+                      type: string
+                    password_confirmation:
+                      type: string
   "/api/v1/mood":
     get:
       summary: List all mood entries
@@ -788,6 +800,12 @@ paths:
                 properties:
                   message:
                     type: string
+        '404':
+          description: Mood not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
   "/api/v1/subscription":
     get:
       summary: Get current subscription

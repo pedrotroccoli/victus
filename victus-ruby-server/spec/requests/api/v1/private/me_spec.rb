@@ -48,11 +48,11 @@ RSpec.describe 'Me API', type: :request do
             type: :object,
             properties: {
               name: { type: :string },
-              phone: { type: :string }
+              phone: { type: :string },
+              password: { type: :string },
+              password_confirmation: { type: :string }
             }
-          },
-          password: { type: :string },
-          password_confirmation: { type: :string }
+          }
         }
       }
 
@@ -76,7 +76,7 @@ RSpec.describe 'Me API', type: :request do
           code: { type: :string }
         }
 
-        let(:profile_data) { { password: 'new123', password_confirmation: 'mismatch', account: { name: 'Test' } } }
+        let(:profile_data) { { account: { name: 'Test', password: 'new123', password_confirmation: 'mismatch' } } }
 
         run_test!
       end
