@@ -5,6 +5,7 @@ class Account
 
   has_many :habits, class_name: 'Habit'
   has_many :habit_checks
+  has_many :habit_categories
   has_many :moods
   has_one :subscription
 
@@ -86,7 +87,7 @@ class Account
       exp: 24.hours.from_now.to_i
     }
 
-    JWT.encode(payload, ENV['JWT_SECRET'], 'HS256')
+    JWT.encode(payload, ENV.fetch('JWT_SECRET') { raise KeyError, 'Missing JWT_SECRET' unless Rails.env.test?; 'test_secret' }, 'HS256')
   end
 
   def subscription_active?
