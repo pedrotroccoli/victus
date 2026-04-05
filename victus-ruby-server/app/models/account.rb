@@ -36,9 +36,9 @@ class Account
     checkout_url = nil
 
     if lookup_key.present?
-      account.create_trial_subscription
       return unless account.save
 
+      customer = nil
       begin
         stripe_service = StripeService.new
         customer = stripe_service.create_customer(email: account.email)
@@ -59,6 +59,7 @@ class Account
 
         unless checkout_session
           account.subscription&.destroy
+          Stripe::Customer.delete(customer.id)
           account.destroy
           return nil
         end
@@ -66,6 +67,7 @@ class Account
         checkout_url = checkout_session.url
       rescue StandardError
         account.subscription&.destroy
+        Stripe::Customer.delete(customer.id) if customer
         account.destroy
         raise
       end
