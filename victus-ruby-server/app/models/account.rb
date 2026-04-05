@@ -74,7 +74,7 @@ class Account
         checkout_url = checkout_session.url
       rescue StandardError
         account.subscription&.destroy
-        Stripe::Customer.delete(customer.id) if customer
+        Stripe::Customer.delete(customer.id) rescue nil if customer
         account.destroy
         raise
       end
@@ -189,7 +189,12 @@ class Account
       raise AlreadySubscribed, 'Account already has an active subscription'
     end
 
+    if subscription.present? && subscription.sub_status == 'success'
+      raise AlreadySubscribed, 'Account already has a subscription'
+    end
+
     customer = nil
+    new_subscription = false
 
     if subscription.nil?
       customer = Stripe::Customer.create(
@@ -204,6 +209,7 @@ class Account
         service_details: { customer_id: customer.id }
       )
       subscription.save!
+      new_subscription = true
 
       customer_id = customer.id
     else
@@ -222,19 +228,20 @@ class Account
       end
     end
 
-    raise AlreadySubscribed, 'Account already has a subscription' if subscription.sub_status == 'success'
-
     build_checkout_session(
       customer_id: customer_id,
       account_id: id,
       lookup_key: lookup_key,
       price_id: selected_price.id
     )
-  rescue CheckoutError
-    raise
   rescue StandardError
     if customer
-      subscription&.destroy
+      if new_subscription
+        subscription&.destroy
+      else
+        subscription.service_details&.delete('customer_id')
+        subscription.save
+      end
       Stripe::Customer.delete(customer.id) rescue nil
     end
     raise

@@ -64,7 +64,7 @@ class StripeWebhookController < ApplicationController
 
       subscription.status = status
       subscription.sub_status = sub_status
-      subscription.service_details = subscription.service_details.merge({
+      subscription.service_details = (subscription.service_details || {}).merge({
         'subscription_id' => stripe_subscription_id,
         'trial_ends_at' => trial_ends_at,
         'plan_id' => data_object.items.data.first&.price&.id
@@ -89,7 +89,7 @@ class StripeWebhookController < ApplicationController
 
       subscription.status = status
       subscription.sub_status = sub_status
-      subscription.service_details = subscription.service_details.merge({
+      subscription.service_details = (subscription.service_details || {}).merge({
         'current_period_end' => data_object.current_period_end,
         'cancel_at_period_end' => data_object.cancel_at_period_end
       })
@@ -123,7 +123,7 @@ class StripeWebhookController < ApplicationController
         subscription.sub_status = 'payment_failed'
       end
 
-      subscription.service_details = subscription.service_details.merge({
+      subscription.service_details = (subscription.service_details || {}).merge({
         'failed_payments' => failed_payments
       })
       subscription.save!
