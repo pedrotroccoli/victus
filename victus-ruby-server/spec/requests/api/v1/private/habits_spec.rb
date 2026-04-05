@@ -84,7 +84,7 @@ RSpec.describe 'Habits API', type: :request do
 
       response '422', 'Validation errors' do
         schema type: :object, properties: {
-          errors: { type: :array }
+          errors: { type: :array, items: { type: :array, items: { type: :object } } }
         }
 
         let(:habit) do
@@ -164,6 +164,10 @@ RSpec.describe 'Habits API', type: :request do
       security [bearer_auth: []]
 
       response '200', 'Habit deleted' do
+        schema type: :object, properties: {
+          message: { type: :string }
+        }
+
         let(:habit_record) { create(:habit, account: account) }
         let(:id) { habit_record.id.to_s }
 

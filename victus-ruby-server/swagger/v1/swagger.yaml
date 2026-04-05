@@ -207,6 +207,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit_check"
+        '422':
+          description: Invalid habit ID
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
       requestBody:
         content:
           application/json:
@@ -337,6 +343,10 @@ paths:
                 properties:
                   errors:
                     type: array
+                    items:
+                      type: array
+                      items:
+                        type: object
       requestBody:
         content:
           application/json:

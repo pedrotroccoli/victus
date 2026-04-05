@@ -12,7 +12,7 @@ class ApiDocsController < ActionController::Base
         </head>
         <body>
           <script id="api-reference" data-url="/api-docs/v1/swagger.yaml"></script>
-          <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference"></script>
+          <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.28.12"></script>
         </body>
       </html>
     HTML

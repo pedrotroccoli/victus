@@ -75,6 +75,15 @@ RSpec.describe 'Habit Checks API', type: :request do
 
         run_test!
       end
+
+      response '422', 'Invalid habit ID' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:habit_id) { 'nonexistent' }
+        let(:check_data) { { checked: true } }
+
+        run_test!
+      end
     end
   end
 

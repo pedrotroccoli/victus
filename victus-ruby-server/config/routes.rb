@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  if Rails.env.development? && defined?(Rswag::Api::Engine)
-    mount Rswag::Api::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/api-docs' if defined?(Rswag::Api::Engine)
+
+  if Rails.env.development?
     get 'dev/api-docs', to: 'api_docs#index'
   end
 

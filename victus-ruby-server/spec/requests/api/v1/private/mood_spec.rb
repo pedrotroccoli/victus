@@ -129,6 +129,10 @@ RSpec.describe 'Mood API', type: :request do
       security [bearer_auth: []]
 
       response '200', 'Mood deleted' do
+        schema type: :object, properties: {
+          message: { type: :string }
+        }
+
         let(:mood_record) { create(:mood, account: account) }
         let(:id) { mood_record.id.to_s }
 
