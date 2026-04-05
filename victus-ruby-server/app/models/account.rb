@@ -60,11 +60,15 @@ class Account
           return nil
         end
 
-        checkout_session = build_checkout_session(
-          customer_id: customer.id,
-          account_id: account.id,
-          lookup_key: lookup_key,
-          price_id: selected_price.id
+        app_url = ENV.fetch('APP_URL')
+        checkout_session = Stripe::Checkout::Session.create(
+          customer: customer.id,
+          mode: 'subscription',
+          line_items: [{ price: selected_price.id, quantity: 1 }],
+          success_url: "#{app_url}/?checkout_success=true",
+          cancel_url: "#{app_url}/?checkout_cancel=true",
+          metadata: { account_id: account.id, lookup_key: lookup_key },
+          allow_promotion_codes: true
         )
 
         checkout_url = checkout_session.url
@@ -218,7 +222,7 @@ class Account
 
     raise AlreadySubscribed, 'Account already has a subscription' if subscription.sub_status == 'success'
 
-    Account.build_checkout_session(
+    build_checkout_session(
       customer_id: customer_id,
       account_id: id,
       lookup_key: lookup_key,
@@ -256,7 +260,9 @@ class Account
     )
   end
 
-  def self.build_checkout_session(customer_id:, account_id:, lookup_key:, price_id:)
+  private
+
+  def build_checkout_session(customer_id:, account_id:, lookup_key:, price_id:)
     app_url = ENV.fetch('APP_URL')
 
     Stripe::Checkout::Session.create(
@@ -269,5 +275,4 @@ class Account
       allow_promotion_codes: true
     )
   end
-  private_class_method :build_checkout_session
 end
