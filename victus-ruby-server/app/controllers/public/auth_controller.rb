@@ -53,6 +53,8 @@ module Public
     end
 
     def google_auth
+      return render json: { message: 'Missing id_token' }, status: :bad_request if params[:id_token].blank?
+
       account = Account.authenticate_with_google(id_token: params[:id_token])
 
       if account

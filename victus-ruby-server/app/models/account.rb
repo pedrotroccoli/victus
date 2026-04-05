@@ -31,13 +31,13 @@ class Account
     account
   end
 
-  def self.sign_up_with_email(account_params, lookup_key: nil)
-    account = new(account_params)
+  def self.sign_up_with_email(attrs, lookup_key: nil)
+    account = new(attrs.to_h)
     checkout_url = nil
 
     if lookup_key.present?
       stripe_service = StripeService.new
-      customer = stripe_service.create_customer(email: account_params[:email])
+      customer = stripe_service.create_customer(email: attrs[:email])
 
       account.subscription = Subscription.create(
         service_type: 'stripe',
@@ -89,12 +89,14 @@ class Account
       payload: { payload: payload, nonce: nonce }.to_json
     )
 
-    response_body = JSON.parse(lambda_response.payload.read)
-
     return nil if lambda_response.status_code != 200
+
+    response_body = JSON.parse(lambda_response.payload.read)
     return nil if response_body['valid'] == false
 
     find_or_create_from_siwe(response_body['data']['address'])
+  rescue JSON::ParserError
+    nil
   end
 
   def self.find_or_create_from_google(google_id:, email:, name:)
