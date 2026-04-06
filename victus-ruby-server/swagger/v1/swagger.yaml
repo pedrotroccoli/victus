@@ -41,6 +41,22 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/error"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Stripe event payload
+              properties:
+                id:
+                  type: string
+                  description: Event ID
+                type:
+                  type: string
+                  description: Event type (e.g., customer.subscription.created)
+                data:
+                  type: object
+                  description: Event data object
   "/api/v1/habits_category":
     get:
       summary: List all categories

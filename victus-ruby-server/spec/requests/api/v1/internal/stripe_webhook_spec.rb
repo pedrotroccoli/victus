@@ -22,10 +22,21 @@ RSpec.describe 'Stripe Webhook API', type: :request do
       parameter name: 'Stripe-Signature', in: :header, type: :string, required: true,
                 description: 'Stripe webhook signature for verification'
 
+      parameter name: :payload, in: :body, schema: {
+        type: :object,
+        description: 'Stripe event payload',
+        properties: {
+          id: { type: :string, description: 'Event ID' },
+          type: { type: :string, description: 'Event type (e.g., customer.subscription.created)' },
+          data: { type: :object, description: 'Event data object' }
+        }
+      }
+
       response '201', 'Event processed' do
         schema type: :object
 
         let(:'Stripe-Signature') { 'test_signature' }
+        let(:payload) { { id: 'evt_test', type: 'customer.subscription.created', data: {} } }
 
         it 'returns a 201 response' do |example|
           pending 'Requires valid Stripe signature'
@@ -38,6 +49,7 @@ RSpec.describe 'Stripe Webhook API', type: :request do
         schema '$ref' => '#/components/schemas/error'
 
         let(:'Stripe-Signature') { 'invalid_signature' }
+        let(:payload) { { id: 'evt_test', type: 'customer.subscription.created', data: {} } }
 
         run_test!
       end
