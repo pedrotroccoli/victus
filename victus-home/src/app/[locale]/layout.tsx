@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Agentation } from "agentation";
 
-import { AiSummary } from "@/components/ai-summary";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { IBMPlexSans, RecursiveFont } from "../_fonts";
@@ -41,8 +40,6 @@ export default async function RootLayout({
           <Header locale={locale} />
 
           {children}
-
-          {/* <AiSummary /> */}
 
           <Footer />
 

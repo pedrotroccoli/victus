@@ -42,8 +42,7 @@ export const TimerClock = ({ size = 'md' }: TimerClockProps) => {
     }
   });
   const interval = useRef<NodeJS.Timeout | null>(null);
-  // @ts-ignore
-  const [turns, setTurns] = useState([]);
+  const [, setTurns] = useState<[string, TimeBlock[]][]>([]);
 
   const formattedTime = useMemo(() => {
     return `${pad2(time.hours)}:${pad2(time.minutes)}:${pad2(time.seconds)}`;
@@ -107,8 +106,13 @@ export const TimerClock = ({ size = 'md' }: TimerClockProps) => {
 
       setBlocks(newBlocks);
 
-      // @ts-ignore
-      setTurns(Object.entries(Object.groupBy(newBlocks, (item) => item.turn)));
+      const groupedBlocks = newBlocks.reduce<Record<string, TimeBlock[]>>((acc, item) => {
+        const key = String(item.turn);
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(item);
+        return acc;
+      }, {});
+      setTurns(Object.entries(groupedBlocks) as [string, TimeBlock[]][]);
 
       interval.current = null;
 
@@ -137,12 +141,16 @@ export const TimerClock = ({ size = 'md' }: TimerClockProps) => {
   const addTurn = () => {
     const oldBlocks = stopTimer({ blocksToStop: blocks, interval: interval.current }) as TimeBlock[];
 
-    // @ts-ignore
-    const turns = Object.entries(Object.groupBy(oldBlocks, (item) => item.turn))
+    const groupedBlocks = oldBlocks.reduce<Record<string, TimeBlock[]>>((acc, item) => {
+      const key = String(item.turn);
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(item);
+      return acc;
+    }, {});
+    const turns = Object.entries(groupedBlocks) as [string, TimeBlock[]][];
 
     console.log(oldBlocks, turns);
 
-    // @ts-ignore
     setTurns(turns);
 
     const startedAt = new Date();

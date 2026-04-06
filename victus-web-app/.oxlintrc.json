@@ -1,0 +1,9 @@
+{
+  "extends": ["../.oxlintrc.json"],
+  "plugins": ["react", "jsx-a11y"],
+  "settings": {
+    "react": {
+      "version": "18.3"
+    }
+  }
+}

@@ -122,10 +122,10 @@ export const useHabitsCheckingActions = ({
     if (logicType === 'or') {
       // OR: at least one habit must be checked
       return habitIds.some(isHabitCheckedToday);
-    } else {
-      // AND: all habits must be checked
-      return habitIds.every(isHabitCheckedToday);
     }
+
+    // AND: all habits must be checked
+    return habitIds.every(isHabitCheckedToday);
   };
 
   // Recursively check parent habits up the chain
@@ -162,7 +162,7 @@ export const useHabitsCheckingActions = ({
             check_id: parentCheck?._id,
             checked: true,
           });
-        } catch (error) {
+        } catch {
           // If API call fails, revert the optimistic update
           queryClient.invalidateQueries({ queryKey: ['checks'] });
           toast.error(`Erro ao marcar ${parent.name}`);

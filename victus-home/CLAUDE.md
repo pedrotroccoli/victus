@@ -9,10 +9,10 @@ Victus Home is the marketing landing page for Victus, built with Next.js 14 and 
 ## Commands
 
 ```bash
-npm run dev       # Start dev server on port 3001
-npm run build     # Production build
-npm run lint      # ESLint
-npm run start     # Start production server
+pnpm dev          # Start dev server on port 3001
+pnpm build        # Production build
+pnpm lint         # oxlint (Rust-based linter)
+pnpm start        # Start production server
 ```
 
 ## Architecture

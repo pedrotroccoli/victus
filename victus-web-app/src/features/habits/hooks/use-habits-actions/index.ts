@@ -283,7 +283,7 @@ export const useHabitsActions = ({
       setDelta(null);
       setCreateModalOpen(false);
       setHabitToEdit(undefined);
-    } catch (error) {
+    } catch {
       toast.error("Erro ao criar hábito!");
     }
   };

@@ -1,0 +1,12 @@
+{
+  "extends": ["../.oxlintrc.json"],
+  "plugins": ["react", "nextjs", "jsx-a11y"],
+  "settings": {
+    "next": {
+      "rootDir": "."
+    },
+    "react": {
+      "version": "18"
+    }
+  }
+}
