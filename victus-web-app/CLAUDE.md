@@ -11,7 +11,7 @@ Victus is a personal assistant and all-in-one organizer built with React, TypeSc
 ```bash
 pnpm dev          # Start dev server on port 5275
 pnpm build        # TypeScript compile + Vite build
-pnpm lint         # ESLint with zero warnings threshold
+pnpm lint         # oxlint (Rust-based linter)
 pnpm preview      # Preview production build
 ```
 
