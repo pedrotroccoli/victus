@@ -70,7 +70,11 @@ class Account
         checkout_url = checkout_session.url
       rescue StandardError
         account.subscription&.destroy
-        Stripe::Customer.delete(customer.id) rescue nil if customer
+        begin
+          Stripe::Customer.delete(customer.id) if customer
+        rescue Stripe::StripeError => e
+          Rails.logger.warn("Failed to delete Stripe customer #{customer.id}: #{e.message}")
+        end
         account.destroy
         raise
       end
@@ -244,7 +248,11 @@ class Account
           service_details: rolled_back
         )
       end
-      Stripe::Customer.delete(customer.id) rescue nil
+      begin
+        Stripe::Customer.delete(customer.id)
+      rescue Stripe::StripeError => e
+        Rails.logger.warn("Failed to delete Stripe customer #{customer.id}: #{e.message}")
+      end
     end
     raise
   end
