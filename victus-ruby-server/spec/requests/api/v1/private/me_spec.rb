@@ -71,6 +71,14 @@ RSpec.describe 'Me API', type: :request do
         run_test!
       end
 
+      response '402', 'No active subscription' do
+        let(:account) { create(:account) }
+        let(:profile_data) { { account: { name: 'Test' } } }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
       response '422', 'Password mismatch' do
         schema type: :object, properties: {
           code: { type: :string }

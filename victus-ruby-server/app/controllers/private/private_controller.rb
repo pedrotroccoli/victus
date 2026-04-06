@@ -1,7 +1,7 @@
 class Private::PrivateController < ApplicationController
   include ActiveAndAuthorized
 
-  rescue_from Mongoid::Errors::DocumentNotFound, Mongoid::Errors::InvalidFind, BSON::Error, with: :not_found
+  rescue_from Mongoid::Errors::DocumentNotFound, Mongoid::Errors::InvalidFind, BSON::Error::InvalidObjectId, with: :not_found
 
   def index
     render json: { message: 'Private area' }, status: :ok

@@ -74,12 +74,16 @@ class HabitsCheckController < Private::PrivateController
 
   def get_habit
     @habit = Habit.where(account_id: @current_account[:id]).find(params[:habit_id].to_s)
+  rescue Mongoid::Errors::DocumentNotFound
+    render(json: { error: 'Habit not found' }, status: :not_found) and return
   end
 
   def get_habit_check
     return if performed?
 
     @habit_check = @habit.habit_checks.find(params[:id].to_s)
+  rescue Mongoid::Errors::DocumentNotFound
+    render(json: { error: 'Habit check not found' }, status: :not_found) and return
   end
 
   def update_params
