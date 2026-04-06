@@ -106,7 +106,13 @@ export const TimerClock = ({ size = 'md' }: TimerClockProps) => {
 
       setBlocks(newBlocks);
 
-      setTurns(Object.entries(Object.groupBy(newBlocks, (item) => item.turn)) as [string, TimeBlock[]][]);
+      const groupedBlocks = newBlocks.reduce<Record<string, TimeBlock[]>>((acc, item) => {
+        const key = String(item.turn);
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(item);
+        return acc;
+      }, {});
+      setTurns(Object.entries(groupedBlocks) as [string, TimeBlock[]][]);
 
       interval.current = null;
 
@@ -135,7 +141,13 @@ export const TimerClock = ({ size = 'md' }: TimerClockProps) => {
   const addTurn = () => {
     const oldBlocks = stopTimer({ blocksToStop: blocks, interval: interval.current }) as TimeBlock[];
 
-    const turns = Object.entries(Object.groupBy(oldBlocks, (item) => item.turn)) as [string, TimeBlock[]][];
+    const groupedBlocks = oldBlocks.reduce<Record<string, TimeBlock[]>>((acc, item) => {
+      const key = String(item.turn);
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(item);
+      return acc;
+    }, {});
+    const turns = Object.entries(groupedBlocks) as [string, TimeBlock[]][];
 
     console.log(oldBlocks, turns);
 
