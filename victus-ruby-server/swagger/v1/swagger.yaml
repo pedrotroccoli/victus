@@ -388,6 +388,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '422':
           description: Validation errors
           content:
