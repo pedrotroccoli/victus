@@ -56,7 +56,7 @@ class HabitsCheckController < Private::PrivateController
         if delta.valid?
           habit_check.habit_check_deltas << delta
         else
-          return render json: { error: delta.errors.full_messages }, status: :unprocessable_entity
+          return render json: { errors: delta.errors.full_messages }, status: :unprocessable_entity
         end
       end
      end

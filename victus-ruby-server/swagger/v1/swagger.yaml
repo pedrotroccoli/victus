@@ -254,7 +254,12 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/error"
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
       requestBody:
         content:
           application/json:

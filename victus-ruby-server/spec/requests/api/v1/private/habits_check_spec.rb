@@ -93,7 +93,9 @@ RSpec.describe 'Habit Checks API', type: :request do
       end
 
       response '422', 'Validation error' do
-        schema '$ref' => '#/components/schemas/error'
+        schema type: :object, properties: {
+          errors: { type: :array, items: { type: :string } }
+        }
 
         let(:habit_id) { habit.id.to_s }
         let(:check_data) { { checked: true } }
