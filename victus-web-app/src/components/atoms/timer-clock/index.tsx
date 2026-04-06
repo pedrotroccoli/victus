@@ -42,7 +42,7 @@ export const TimerClock = ({ size = 'md' }: TimerClockProps) => {
     }
   });
   const interval = useRef<NodeJS.Timeout | null>(null);
-  const [_turns, setTurns] = useState<[string, TimeBlock[]][]>([]);
+  const [, setTurns] = useState<[string, TimeBlock[]][]>([]);
 
   const formattedTime = useMemo(() => {
     return `${pad2(time.hours)}:${pad2(time.minutes)}:${pad2(time.seconds)}`;
