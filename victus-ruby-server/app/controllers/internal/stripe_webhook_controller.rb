@@ -30,7 +30,7 @@ class StripeWebhookController < ApplicationController
     def handle_subscription_deleted(data_object)
       customer_id = data_object.customer
 
-      subscription = Subscription.find_by("service_details.customer_id" => customer_id)
+      subscription = Subscription.where("service_details.customer_id" => customer_id).first
 
       return if subscription.nil?
 
@@ -42,7 +42,7 @@ class StripeWebhookController < ApplicationController
 
     def handle_invoice_paid(data_object)
       customer_id = data_object.customer
-      subscription = Subscription.find_by("service_details.customer_id" => customer_id)
+      subscription = Subscription.where("service_details.customer_id" => customer_id).first
       
       return if subscription.nil?
       
@@ -53,7 +53,7 @@ class StripeWebhookController < ApplicationController
 
     def handle_subscription_created(data_object)
       customer_id = data_object.customer
-      subscription = Subscription.find_by("service_details.customer_id" => customer_id)
+      subscription = Subscription.where("service_details.customer_id" => customer_id).first
 
       return if subscription.nil?
 
@@ -74,7 +74,7 @@ class StripeWebhookController < ApplicationController
 
     def handle_subscription_updated(data_object)
       customer_id = data_object.customer
-      subscription = Subscription.find_by("service_details.customer_id" => customer_id)
+      subscription = Subscription.where("service_details.customer_id" => customer_id).first
 
       return if subscription.nil?
 
@@ -111,7 +111,7 @@ class StripeWebhookController < ApplicationController
 
     def handle_payment_failed(data_object)
       customer_id = data_object.customer
-      subscription = Subscription.find_by("service_details.customer_id" => customer_id)
+      subscription = Subscription.where("service_details.customer_id" => customer_id).first
 
       return if subscription.nil?
 

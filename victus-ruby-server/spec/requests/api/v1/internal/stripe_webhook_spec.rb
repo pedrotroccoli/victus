@@ -22,22 +22,36 @@ RSpec.describe 'Stripe Webhook API', type: :request do
       parameter name: 'Stripe-Signature', in: :header, type: :string, required: true,
                 description: 'Stripe webhook signature for verification'
 
-      response '200', 'Event processed' do
-        schema type: :object, properties: {
-          received: { type: :boolean }
+      parameter name: :payload, in: :body, schema: {
+        type: :object,
+        description: 'Stripe event payload',
+        properties: {
+          id: { type: :string, description: 'Event ID' },
+          type: { type: :string, description: 'Event type (e.g., customer.subscription.created)' },
+          data: { type: :object, description: 'Event data object' }
         }
+      }
 
-        run_test! do
+      response '201', 'Event processed' do
+        schema type: :object
+
+        let(:'Stripe-Signature') { 'test_signature' }
+        let(:payload) { { id: 'evt_test', type: 'customer.subscription.created', data: {} } }
+
+        it 'returns a 201 response' do |example|
           pending 'Requires valid Stripe signature'
+          submit_request(example.metadata)
+          assert_response_matches_metadata(example.metadata)
         end
       end
 
-      response '400', 'Invalid signature' do
+      response '400', 'Invalid payload or signature' do
         schema '$ref' => '#/components/schemas/error'
 
-        run_test! do
-          pending 'Requires Stripe event payload'
-        end
+        let(:'Stripe-Signature') { 'invalid_signature' }
+        let(:payload) { { id: 'evt_test', type: 'customer.subscription.created', data: {} } }
+
+        run_test!
       end
     end
   end

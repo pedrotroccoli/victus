@@ -7,7 +7,7 @@ module Private
     end
 
     def update_me
-      if params[:password].present? && params[:password] != params[:password_confirmation]
+      if account_params[:password].present? && account_params[:password] != account_params[:password_confirmation]
         return render json: { code: 'PASSWORD_MISMATCH' }, status: :unprocessable_entity
       end
 

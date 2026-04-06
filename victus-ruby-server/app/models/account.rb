@@ -25,7 +25,7 @@ class Account
   # ── Authentication ──────────────────────────────────────────────
 
   def self.authenticate_with_email(email, password)
-    account = find_by(email: email)
+    account = where(email: email).first
     return nil unless account&.authenticate(password)
 
     account
@@ -135,10 +135,10 @@ class Account
   def self.find_or_create_from_google(google_id:, email:, name:)
     return nil if google_id.blank?
 
-    account = find_by(google_id: google_id)
+    account = where(google_id: google_id).first
 
     if account.nil? && email.present?
-      account = find_by(email: email)
+      account = where(email: email).first
       account&.update!(google_id: google_id)
     end
 

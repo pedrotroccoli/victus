@@ -1,7 +1,5 @@
 module Private
 class HabitsCategoryController < Private::PrivateController
-  rescue_from Mongoid::Errors::DocumentNotFound, Mongoid::Errors::InvalidFind, BSON::ObjectId::Invalid, with: :not_found
-
   before_action :set_category, only: [:update, :destroy]
 
   def index
@@ -14,9 +12,11 @@ class HabitsCategoryController < Private::PrivateController
     @habits_category = HabitCategory.new(habits_category_params)
     @habits_category.account_id = @current_account[:id]
 
-    @habits_category.save!
-
-    render json: @habits_category, status: :created
+    if @habits_category.save
+      render json: @habits_category, status: :created
+    else
+      render json: { errors: @habits_category.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   def update
@@ -36,10 +36,6 @@ class HabitsCategoryController < Private::PrivateController
 
   def set_category
     @habits_category = @current_account.habit_categories.find(params[:id])
-  end
-
-  def not_found
-    render json: { error: 'Not found' }, status: :not_found
   end
 
   def habits_category_params

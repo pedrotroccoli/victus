@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :habit_category do
     account
-    name { "Health" }
+    sequence(:name) { |n| "Category #{n}" }
     order { 0.0 }
   end
 end

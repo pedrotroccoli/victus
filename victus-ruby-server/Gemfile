@@ -57,6 +57,5 @@ gem 'trailblazer'
 group :development, :test do
   gem 'rspec-rails'
   gem 'rswag-api'
-  gem 'rswag-ui'
   gem 'rswag-specs'
 end

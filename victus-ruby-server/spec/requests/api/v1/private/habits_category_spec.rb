@@ -19,6 +19,13 @@ RSpec.describe 'Habit Categories API', type: :request do
 
         run_test!
       end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
     end
 
     post 'Create a category' do
@@ -27,19 +34,34 @@ RSpec.describe 'Habit Categories API', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :category, in: :body, schema: {
+      parameter name: :category_data, in: :body, schema: {
         type: :object,
+        required: %w[habits_category],
         properties: {
-          name: { type: :string },
-          color: { type: :string, description: 'Hex color code' }
-        },
-        required: %w[name]
+          habits_category: {
+            type: :object,
+            properties: {
+              name: { type: :string },
+              order: { type: :number },
+              icon: { type: :string }
+            },
+            required: %w[name]
+          }
+        }
       }
 
       response '201', 'Category created' do
         schema '$ref' => '#/components/schemas/habit_category'
 
-        let(:category) { { name: 'Health', color: '#FF5733' } }
+        let(:category_data) { { habits_category: { name: 'Health' } } }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:category_data) { { habits_category: { name: 'Test' } } }
+        schema '$ref' => '#/components/schemas/error'
 
         run_test!
       end
@@ -55,11 +77,18 @@ RSpec.describe 'Habit Categories API', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :category, in: :body, schema: {
+      parameter name: :category_data, in: :body, schema: {
         type: :object,
+        required: %w[habits_category],
         properties: {
-          name: { type: :string },
-          color: { type: :string }
+          habits_category: {
+            type: :object,
+            properties: {
+              name: { type: :string },
+              order: { type: :number },
+              icon: { type: :string }
+            }
+          }
         }
       }
 
@@ -68,7 +97,38 @@ RSpec.describe 'Habit Categories API', type: :request do
 
         let(:category_record) { create(:habit_category, account: account) }
         let(:id) { category_record.id.to_s }
-        let(:category) { { name: 'Updated Category' } }
+        let(:category_data) { { habits_category: { name: 'Updated Category' } } }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:category_data) { { habits_category: { name: 'Test' } } }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
+      response '404', 'Category not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:category_data) { { habits_category: { name: 'Test' } } }
+
+        run_test!
+      end
+
+      response '422', 'Validation error' do
+        schema type: :object, properties: {
+          errors: { type: :array, items: { type: :string } }
+        }
+
+        let(:category_record) { create(:habit_category, account: account) }
+        let(:other_category) { create(:habit_category, account: account, name: 'Taken') }
+        let(:id) { category_record.id.to_s }
+        let(:category_data) { { habits_category: { name: other_category.name } } }
 
         run_test!
       end
@@ -77,10 +137,27 @@ RSpec.describe 'Habit Categories API', type: :request do
     delete 'Delete a category' do
       tags 'Categories'
       security [bearer_auth: []]
+      produces 'application/json'
 
       response '204', 'Category deleted' do
         let(:category_record) { create(:habit_category, account: account) }
         let(:id) { category_record.id.to_s }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
+      response '404', 'Category not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
 
         run_test!
       end

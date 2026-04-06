@@ -99,5 +99,6 @@ class HabitsController < Private::PrivateController
       rule_engine_details: [logic: [:type, and: [], or: []]]
     )
   end
+
 end
 end

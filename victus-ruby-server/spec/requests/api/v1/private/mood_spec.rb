@@ -20,6 +20,13 @@ RSpec.describe 'Mood API', type: :request do
 
         run_test!
       end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
     end
 
     post 'Record mood' do
@@ -27,29 +34,45 @@ RSpec.describe 'Mood API', type: :request do
       security [bearer_auth: []]
       consumes 'application/json'
       produces 'application/json'
-      description 'Record current mood. Can only be edited within a time window.'
+      description 'Record current mood. Can only be edited within the same hour block.'
 
-      parameter name: :mood, in: :body, schema: {
+      parameter name: :mood_data, in: :body, schema: {
         type: :object,
+        required: %w[mood],
         properties: {
-          score: { type: :integer, minimum: 1, maximum: 5, description: '1=Very Bad, 5=Very Good' },
-          notes: { type: :string }
-        },
-        required: %w[score]
+          mood: {
+            type: :object,
+            properties: {
+              value: { type: :string, enum: %w[terrible bad neutral good great amazing], description: 'Mood value' },
+              description: { type: :string }
+            },
+            required: %w[value]
+          }
+        }
       }
 
       response '201', 'Mood recorded' do
         schema '$ref' => '#/components/schemas/mood'
 
-        let(:mood) { { score: 4, notes: 'Feeling good' } }
+        let(:mood_data) { { mood: { value: 'good', description: 'Feeling good' } } }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:mood_data) { { mood: { value: 'good' } } }
+        schema '$ref' => '#/components/schemas/error'
 
         run_test!
       end
 
       response '422', 'Validation error' do
-        schema '$ref' => '#/components/schemas/error'
+        schema type: :object, properties: {
+          errors: { type: :array, items: { type: :string } }
+        }
 
-        let(:mood) { { score: 10 } }
+        let(:mood_data) { { mood: { value: 'invalid_value' } } }
 
         run_test!
       end
@@ -72,6 +95,22 @@ RSpec.describe 'Mood API', type: :request do
 
         run_test!
       end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
+      response '404', 'Mood not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
+
+        run_test!
+      end
     end
 
     put 'Update a mood entry' do
@@ -79,13 +118,19 @@ RSpec.describe 'Mood API', type: :request do
       security [bearer_auth: []]
       consumes 'application/json'
       produces 'application/json'
-      description 'Update mood. Only allowed within edit window.'
+      description 'Update mood. Only allowed within edit window (same hour block and date).'
 
-      parameter name: :mood, in: :body, schema: {
+      parameter name: :mood_data, in: :body, schema: {
         type: :object,
+        required: %w[mood],
         properties: {
-          score: { type: :integer, minimum: 1, maximum: 5 },
-          notes: { type: :string }
+          mood: {
+            type: :object,
+            properties: {
+              value: { type: :string, enum: %w[terrible bad neutral good great amazing] },
+              description: { type: :string }
+            }
+          }
         }
       }
 
@@ -94,17 +139,37 @@ RSpec.describe 'Mood API', type: :request do
 
         let(:mood_record) { create(:mood, account: account) }
         let(:id) { mood_record.id.to_s }
-        let(:mood) { { score: 5 } }
+        let(:mood_data) { { mood: { value: 'great' } } }
 
         run_test!
       end
 
-      response '403', 'Edit window expired' do
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:mood_data) { { mood: { value: 'great' } } }
         schema '$ref' => '#/components/schemas/error'
 
-        let(:mood_record) { create(:mood, account: account, created_at: 1.week.ago) }
+        run_test!
+      end
+
+      response '404', 'Mood not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:mood_data) { { mood: { value: 'great' } } }
+
+        run_test!
+      end
+
+      response '422', 'Edit window expired' do
+        schema type: :object, properties: {
+          errors: { type: :array, items: { type: :string } }
+        }
+
+        let(:mood_record) { create(:mood, account: account, hour_block: (Time.current.hour - 1) % 24, date: Date.yesterday) }
         let(:id) { mood_record.id.to_s }
-        let(:mood) { { score: 5 } }
+        let(:mood_data) { { mood: { value: 'great' } } }
 
         run_test!
       end
@@ -113,10 +178,31 @@ RSpec.describe 'Mood API', type: :request do
     delete 'Delete a mood entry' do
       tags 'Mood'
       security [bearer_auth: []]
+      produces 'application/json'
 
-      response '204', 'Mood deleted' do
+      response '200', 'Mood deleted' do
+        schema type: :object, properties: {
+          message: { type: :string }
+        }
+
         let(:mood_record) { create(:mood, account: account) }
         let(:id) { mood_record.id.to_s }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
+      response '404', 'Mood not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
 
         run_test!
       end

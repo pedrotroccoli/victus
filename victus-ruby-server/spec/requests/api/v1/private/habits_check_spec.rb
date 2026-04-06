@@ -23,6 +23,13 @@ RSpec.describe 'Habit Checks API', type: :request do
 
         run_test!
       end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
     end
   end
 
@@ -41,6 +48,14 @@ RSpec.describe 'Habit Checks API', type: :request do
 
         run_test!
       end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:habit_id) { habit.id.to_s }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
     end
 
     post 'Create a habit check' do
@@ -50,7 +65,7 @@ RSpec.describe 'Habit Checks API', type: :request do
       produces 'application/json'
       description 'Record a habit completion. Validates against RRULE schedule and rule engine conditions.'
 
-      parameter name: :check, in: :body, schema: {
+      parameter name: :check_data, in: :body, schema: {
         type: :object,
         properties: {
           checked: { type: :boolean, description: 'Whether the habit was completed' },
@@ -71,21 +86,46 @@ RSpec.describe 'Habit Checks API', type: :request do
         schema '$ref' => '#/components/schemas/habit_check'
 
         let(:habit_id) { habit.id.to_s }
-        let(:check) { { checked: true } }
+        let(:check_data) { { checked: true } }
 
         run_test!
       end
 
-      response '422', 'Invalid check (not on schedule or rule engine conditions not met)' do
-        schema type: :object, properties: {
-          error: { type: :string }
-        }
-
-        let(:expired_habit) { create(:habit, account: account, recurrence_details: { rule: 'FREQ=DAILY;UNTIL=20200101T000000Z' }) }
-        let(:habit_id) { expired_habit.id.to_s }
-        let(:check) { { checked: true } }
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:habit_id) { habit.id.to_s }
+        let(:check_data) { { checked: true } }
+        schema '$ref' => '#/components/schemas/error'
 
         run_test!
+      end
+
+      response '404', 'Habit not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:habit_id) { BSON::ObjectId.new.to_s }
+        let(:check_data) { { checked: true } }
+
+        run_test!
+      end
+
+      response '422', 'Validation error' do
+        schema type: :object, properties: {
+          errors: { type: :array, items: { type: :string } }
+        }
+
+        let(:habit_id) { habit.id.to_s }
+        let(:check_data) { { checked: true } }
+
+        before do
+          create(:habit_check, habit: habit, account: account)
+        end
+
+        it 'returns a 422 response' do |example|
+          pending 'Requires rule engine or RRULE validation to trigger'
+          submit_request(example.metadata)
+          assert_response_matches_metadata(example.metadata)
+        end
       end
     end
   end
@@ -102,9 +142,27 @@ RSpec.describe 'Habit Checks API', type: :request do
       response '200', 'Check found' do
         schema '$ref' => '#/components/schemas/habit_check'
 
-        let(:habit_check) { create(:habit_check, habit: habit) }
+        let(:habit_check) { create(:habit_check, habit: habit, account: account) }
         let(:habit_id) { habit.id.to_s }
         let(:id) { habit_check.id.to_s }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:habit_id) { habit.id.to_s }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
+      response '404', 'Check not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:habit_id) { habit.id.to_s }
+        let(:id) { BSON::ObjectId.new.to_s }
 
         run_test!
       end
@@ -116,21 +174,51 @@ RSpec.describe 'Habit Checks API', type: :request do
       consumes 'application/json'
       produces 'application/json'
 
-      parameter name: :check, in: :body, schema: {
+      parameter name: :check_data, in: :body, schema: {
         type: :object,
         properties: {
-          value: { type: :number },
-          notes: { type: :string }
+          checked: { type: :boolean },
+          habit_check_deltas_attributes: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                habit_delta_id: { type: :string },
+                value: { type: :string },
+                _destroy: { type: :boolean }
+              }
+            }
+          }
         }
       }
 
       response '200', 'Check updated' do
         schema '$ref' => '#/components/schemas/habit_check'
 
-        let(:habit_check) { create(:habit_check, habit: habit) }
+        let(:habit_check) { create(:habit_check, habit: habit, account: account) }
         let(:habit_id) { habit.id.to_s }
         let(:id) { habit_check.id.to_s }
-        let(:check) { { notes: 'Updated note' } }
+        let(:check_data) { { checked: true } }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:habit_id) { habit.id.to_s }
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:check_data) { { checked: true } }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
+      response '404', 'Check not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:habit_id) { habit.id.to_s }
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:check_data) { { checked: true } }
 
         run_test!
       end

@@ -39,49 +39,75 @@ RSpec.describe 'Habits API', type: :request do
 
       parameter name: :habit, in: :body, schema: {
         type: :object,
+        required: %w[habit],
         properties: {
-          name: { type: :string },
-          description: { type: :string },
-          emoji: { type: :string },
-          recurrence: { type: :string, description: 'RRULE format (e.g., FREQ=DAILY;INTERVAL=1)' },
-          goal: { type: :integer },
-          metric: { type: :string },
-          category_id: { type: :string },
-          rule_engine_enabled: { type: :boolean },
-          rule_engine_details: {
+          habit: {
             type: :object,
             properties: {
-              operator: { type: :string, enum: %w[AND OR] },
-              conditions: {
-                type: :array,
-                items: {
-                  type: :object,
-                  properties: {
-                    habit_id: { type: :string },
-                    completed: { type: :boolean }
-                  }
-                }
-              }
-            }
+              name: { type: :string },
+              description: { type: :string },
+              start_date: { type: :string, format: :date },
+              end_date: { type: :string, format: :date },
+              order: { type: :number },
+              recurrence_type: { type: :string, enum: %w[daily weekly monthly yearly infinite] },
+              recurrence_details: {
+                type: :object,
+                properties: { rule: { type: :string, description: 'RRULE format (e.g., FREQ=DAILY)' } },
+                required: %w[rule]
+              },
+              delta_enabled: { type: :boolean },
+              rule_engine_enabled: { type: :boolean },
+              rule_engine_details: { type: :object, nullable: true },
+              habit_category_id: { type: :string },
+              parent_habit_id: { type: :string }
+            },
+            required: %w[name start_date recurrence_type recurrence_details rule_engine_enabled]
           }
-        },
-        required: %w[name recurrence]
+        }
       }
 
       response '201', 'Habit created' do
         schema '$ref' => '#/components/schemas/habit'
 
-        let(:habit) { { name: 'Exercise', recurrence: 'FREQ=DAILY;INTERVAL=1' } }
+        let(:habit) do
+          {
+            habit: {
+              name: 'Exercise',
+              recurrence_type: 'daily',
+              recurrence_details: { rule: 'FREQ=DAILY' },
+              start_date: (Date.today + 1).to_s,
+              rule_engine_enabled: false
+            }
+          }
+        end
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:habit) { { habit: { name: 'Test' } } }
+        schema '$ref' => '#/components/schemas/error'
 
         run_test!
       end
 
       response '422', 'Validation errors' do
         schema type: :object, properties: {
-          errors: { type: :object }
+          errors: { type: :array, items: { type: :array, items: { type: :object } } }
         }
 
-        let(:habit) { { name: '' } }
+        let(:habit) do
+          {
+            habit: {
+              name: '',
+              recurrence_type: 'daily',
+              recurrence_details: { rule: 'FREQ=DAILY' },
+              start_date: (Date.today + 1).to_s,
+              rule_engine_enabled: false
+            }
+          }
+        end
 
         run_test!
       end
@@ -105,10 +131,18 @@ RSpec.describe 'Habits API', type: :request do
         run_test!
       end
 
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
       response '404', 'Habit not found' do
         schema '$ref' => '#/components/schemas/error'
 
-        let(:id) { 'nonexistent' }
+        let(:id) { BSON::ObjectId.new.to_s }
 
         run_test!
       end
@@ -122,14 +156,22 @@ RSpec.describe 'Habits API', type: :request do
 
       parameter name: :habit, in: :body, schema: {
         type: :object,
+        required: %w[habit],
         properties: {
-          name: { type: :string },
-          description: { type: :string },
-          emoji: { type: :string },
-          recurrence: { type: :string },
-          goal: { type: :integer },
-          metric: { type: :string },
-          category_id: { type: :string }
+          habit: {
+            type: :object,
+            properties: {
+              name: { type: :string },
+              order: { type: :number },
+              recurrence_type: { type: :string },
+              recurrence_details: { type: :object, properties: { rule: { type: :string } } },
+              habit_category_id: { type: :string },
+              delta_enabled: { type: :boolean },
+              rule_engine_enabled: { type: :boolean },
+              paused: { type: :boolean },
+              finished: { type: :boolean }
+            }
+          }
         }
       }
 
@@ -138,7 +180,37 @@ RSpec.describe 'Habits API', type: :request do
 
         let(:habit_record) { create(:habit, account: account) }
         let(:id) { habit_record.id.to_s }
-        let(:habit) { { name: 'Updated Habit' } }
+        let(:habit) { { habit: { name: 'Updated Habit' } } }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:habit) { { habit: { name: 'Test' } } }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
+      response '404', 'Habit not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:habit) { { habit: { name: 'Test' } } }
+
+        run_test!
+      end
+
+      response '422', 'Validation error' do
+        schema type: :object, properties: {
+          errors: { type: :array, items: { type: :string } }
+        }
+
+        let(:habit_record) { create(:habit, account: account) }
+        let(:id) { habit_record.id.to_s }
+        let(:habit) { { habit: { name: '' } } }
 
         run_test!
       end
@@ -147,10 +219,31 @@ RSpec.describe 'Habits API', type: :request do
     delete 'Delete a habit' do
       tags 'Habits'
       security [bearer_auth: []]
+      produces 'application/json'
 
-      response '204', 'Habit deleted' do
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
+      response '200', 'Habit deleted' do
+        schema type: :object, properties: {
+          message: { type: :string }
+        }
+
         let(:habit_record) { create(:habit, account: account) }
         let(:id) { habit_record.id.to_s }
+
+        run_test!
+      end
+
+      response '404', 'Habit not found' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:id) { BSON::ObjectId.new.to_s }
 
         run_test!
       end

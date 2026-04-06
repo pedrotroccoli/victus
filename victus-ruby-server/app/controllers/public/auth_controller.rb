@@ -22,7 +22,7 @@ module Public
         return render json: { message: 'Password and password confirmation do not match' }, status: :unauthorized
       end
 
-      return render json: { message: 'Account already exists' }, status: :unauthorized if Account.find_by(email: accounts_params[:email])
+      return render json: { message: 'Account already exists' }, status: :unauthorized if Account.where(email: accounts_params[:email]).first
 
       result = Account.sign_up_with_email(accounts_params, lookup_key: params[:lookup_key])
 

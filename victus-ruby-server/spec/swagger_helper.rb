@@ -11,7 +11,7 @@ RSpec.configure do |config|
       info: {
         title: 'Victus API V1',
         version: 'v1',
-        description: 'Habit tracking API with subscription management',
+        description: 'Personal assistant and all-in-one organizer API',
         contact: {
           name: 'Victus Team'
         }
@@ -50,81 +50,104 @@ RSpec.configure do |config|
               id: { type: :string },
               email: { type: :string, format: :email },
               name: { type: :string },
-              created_at: { type: :string, format: 'date-time' },
-              updated_at: { type: :string, format: 'date-time' }
+              phone: { type: :string, nullable: true },
+              connected_providers: { type: :array, items: { type: :string } }
             }
           },
           subscription: {
             type: :object,
+            nullable: true,
             properties: {
               id: { type: :string },
-              status: { type: :string, enum: %w[active inactive trial canceled] },
-              stripe_subscription_id: { type: :string },
-              current_period_start: { type: :string, format: 'date-time' },
-              current_period_end: { type: :string, format: 'date-time' }
+              status: { type: :string, enum: %w[active cancelled freezed pending] },
+              sub_status: { type: :string },
+              service_type: { type: :string },
+              service_details: { type: :object, nullable: true }
             }
           },
           habit: {
             type: :object,
             properties: {
-              id: { type: :string },
+              _id: { type: :string },
               name: { type: :string },
-              description: { type: :string },
-              emoji: { type: :string },
-              recurrence: { type: :string, description: 'RRULE format' },
-              goal: { type: :integer },
-              metric: { type: :string },
-              category_id: { type: :string },
+              description: { type: :string, nullable: true },
+              recurrence_type: { type: :string, enum: %w[daily weekly monthly yearly infinite] },
+              recurrence_details: { type: :object, properties: { rule: { type: :string } } },
+              order: { type: :number, nullable: true },
+              delta_enabled: { type: :boolean },
               rule_engine_enabled: { type: :boolean },
-              rule_engine_details: { type: :object },
+              rule_engine_details: { type: :object, nullable: true },
+              start_date: { type: :string, format: 'date-time' },
+              end_date: { type: :string, format: 'date-time', nullable: true },
+              finished_at: { type: :string, format: 'date-time', nullable: true },
+              paused_at: { type: :string, format: 'date-time', nullable: true },
+              last_check: { type: :string, format: 'date-time', nullable: true },
+              parent_habit_id: { type: :string, nullable: true },
+              habit_category_id: { type: :string, nullable: true },
+              account_id: { type: :string },
               created_at: { type: :string, format: 'date-time' },
               updated_at: { type: :string, format: 'date-time' }
-            },
-            required: %w[name recurrence]
+            }
           },
           habit_check: {
             type: :object,
             properties: {
-              id: { type: :string },
+              _id: { type: :string },
               habit_id: { type: :string },
-              checked_at: { type: :string, format: 'date-time' },
-              value: { type: :number },
-              notes: { type: :string }
+              account_id: { type: :string },
+              checked: { type: :boolean },
+              finished_at: { type: :string, format: 'date-time', nullable: true },
+              created_at: { type: :string, format: 'date-time' },
+              updated_at: { type: :string, format: 'date-time' }
             }
           },
           habit_category: {
             type: :object,
             properties: {
-              id: { type: :string },
+              _id: { type: :string },
               name: { type: :string },
-              color: { type: :string }
+              order: { type: :number },
+              icon: { type: :string, nullable: true },
+              account_id: { type: :string },
+              created_at: { type: :string, format: 'date-time' },
+              updated_at: { type: :string, format: 'date-time' }
             }
           },
           mood: {
             type: :object,
             properties: {
-              id: { type: :string },
-              score: { type: :integer, minimum: 1, maximum: 5 },
-              notes: { type: :string },
-              recorded_at: { type: :string, format: 'date-time' }
+              _id: { type: :string },
+              value: { type: :string, enum: %w[terrible bad neutral good great amazing] },
+              description: { type: :string, nullable: true },
+              hour_block: { type: :integer },
+              date: { type: :string, format: :date },
+              account_id: { type: :string },
+              created_at: { type: :string, format: 'date-time' },
+              updated_at: { type: :string, format: 'date-time' }
             }
           },
           plan: {
             type: :object,
             properties: {
-              id: { type: :string },
-              name: { type: :string },
-              price: { type: :number },
-              currency: { type: :string },
-              interval: { type: :string }
+              plan_key: { type: :string },
+              key: { type: :string },
+              price: { type: :string },
+              features: {
+                type: :array,
+                items: {
+                  type: :object,
+                  properties: {
+                    key: { type: :string }
+                  }
+                }
+              }
             }
           },
           auth_response: {
             type: :object,
             properties: {
-              token: { type: :string },
-              account: { '$ref' => '#/components/schemas/account' },
-              subscription: { '$ref' => '#/components/schemas/subscription' }
+              message: { type: :string },
+              token: { type: :string }
             }
           }
         }

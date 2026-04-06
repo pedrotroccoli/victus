@@ -53,5 +53,6 @@ module Private
     def mood_params
       params.require(:mood).permit(:value, :description)
     end
+
   end
 end

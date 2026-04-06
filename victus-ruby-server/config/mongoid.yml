@@ -126,7 +126,6 @@ development:
 
   # Configure Mongoid-specific options. (optional)
   options:
-    raise_not_found_error: false
     # Allow BSON::Decimal128 to be parsed and returned directly in
     # field values. When BSON 5 is present and the this option is set to false
     # (the default), BSON::Decimal128 values in the database will be returned
@@ -291,8 +290,6 @@ production:
   clients:
     default:
       uri: <%= ENV['MONGO_URI'] %>
-  options:
-    raise_not_found_error: false
 
 test:
   clients:
