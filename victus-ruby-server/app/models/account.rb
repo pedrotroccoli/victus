@@ -175,6 +175,8 @@ class Account
   class AlreadySubscribed < CheckoutError; end
 
   def create_stripe_checkout(lookup_key:)
+    raise InvalidLookupKey, 'Lookup key is required' if lookup_key.blank?
+
     price = Stripe::Price.list(lookup_keys: [lookup_key], expand: ['data.product'])
     raise InvalidLookupKey, 'Invalid lookup key' if price.data.empty?
 

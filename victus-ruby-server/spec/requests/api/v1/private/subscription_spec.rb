@@ -133,18 +133,18 @@ RSpec.describe 'Subscription API', type: :request do
       parameter name: :checkout_params, in: :body, schema: {
         type: :object,
         properties: {
-          plan_id: { type: :string }
+          lookup_key: { type: :string }
         },
-        required: %w[plan_id]
+        required: %w[lookup_key]
       }
 
       response '200', 'Checkout session created' do
         schema type: :object, properties: {
-          session_id: { type: :string },
+          message: { type: :string },
           url: { type: :string }
         }
 
-        let(:checkout_params) { { plan_id: 'plan_xxx' } }
+        let(:checkout_params) { { lookup_key: 'dev_victus_journal_monthly' } }
 
         run_test! do
           pending 'Requires Stripe mock'
