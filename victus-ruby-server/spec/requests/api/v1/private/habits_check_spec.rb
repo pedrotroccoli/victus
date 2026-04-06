@@ -91,6 +91,23 @@ RSpec.describe 'Habit Checks API', type: :request do
 
         run_test!
       end
+
+      response '422', 'Validation error' do
+        schema '$ref' => '#/components/schemas/error'
+
+        let(:habit_id) { habit.id.to_s }
+        let(:check_data) { { checked: true } }
+
+        before do
+          create(:habit_check, habit: habit, account: account)
+        end
+
+        it 'returns a 422 response' do |example|
+          pending 'Requires rule engine or RRULE validation to trigger'
+          submit_request(example.metadata)
+          assert_response_matches_metadata(example.metadata)
+        end
+      end
     end
   end
 
