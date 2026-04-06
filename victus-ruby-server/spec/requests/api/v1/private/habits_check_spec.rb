@@ -48,6 +48,14 @@ RSpec.describe 'Habit Checks API', type: :request do
 
         run_test!
       end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:habit_id) { habit.id.to_s }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
     end
 
     post 'Create a habit check' do
@@ -79,6 +87,15 @@ RSpec.describe 'Habit Checks API', type: :request do
 
         let(:habit_id) { habit.id.to_s }
         let(:check_data) { { checked: true } }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:habit_id) { habit.id.to_s }
+        let(:check_data) { { checked: true } }
+        schema '$ref' => '#/components/schemas/error'
 
         run_test!
       end
@@ -132,6 +149,15 @@ RSpec.describe 'Habit Checks API', type: :request do
         run_test!
       end
 
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:habit_id) { habit.id.to_s }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
       response '404', 'Check not found' do
         schema '$ref' => '#/components/schemas/error'
 
@@ -173,6 +199,16 @@ RSpec.describe 'Habit Checks API', type: :request do
         let(:habit_id) { habit.id.to_s }
         let(:id) { habit_check.id.to_s }
         let(:check_data) { { checked: true } }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:habit_id) { habit.id.to_s }
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:check_data) { { checked: true } }
+        schema '$ref' => '#/components/schemas/error'
 
         run_test!
       end

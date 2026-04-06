@@ -93,6 +93,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit_category"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
       requestBody:
         content:
           application/json:
@@ -134,6 +140,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit_category"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: Category not found
           content:
@@ -177,6 +189,12 @@ paths:
       responses:
         '204':
           description: Category deleted
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: Category not found
           content:
@@ -243,6 +261,12 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/habit_check"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
     post:
       summary: Create a habit check
       tags:
@@ -259,6 +283,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit_check"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: Habit not found
           content:
@@ -321,6 +351,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit_check"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: Check not found
           content:
@@ -341,6 +377,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit_check"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: Check not found
           content:
@@ -505,6 +547,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: Habit not found
           content:
@@ -525,6 +573,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/habit"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: Habit not found
           content:
@@ -581,6 +635,12 @@ paths:
       security:
       - bearer_auth: []
       responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '200':
           description: Habit deleted
           content:
@@ -663,6 +723,12 @@ paths:
                       type: string
                   subscription:
                     "$ref": "#/components/schemas/subscription"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '402':
           description: No active subscription
           content:
@@ -747,6 +813,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/mood"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '422':
           description: Validation error
           content:
@@ -804,6 +876,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/mood"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: Mood not found
           content:
@@ -826,6 +904,12 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/mood"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: Mood not found
           content:
@@ -881,6 +965,12 @@ paths:
                 properties:
                   message:
                     type: string
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
         '404':
           description: Mood not found
           content:
@@ -1034,6 +1124,12 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/plan"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/error"
   "/api/v1/checkout/create":
     post:
       summary: Create checkout session

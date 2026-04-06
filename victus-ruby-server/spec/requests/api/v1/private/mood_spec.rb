@@ -59,6 +59,14 @@ RSpec.describe 'Mood API', type: :request do
         run_test!
       end
 
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:mood_data) { { mood: { value: 'good' } } }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
       response '422', 'Validation error' do
         schema type: :object, properties: {
           errors: { type: :array, items: { type: :string } }
@@ -84,6 +92,14 @@ RSpec.describe 'Mood API', type: :request do
 
         let(:mood_record) { create(:mood, account: account) }
         let(:id) { mood_record.id.to_s }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
 
         run_test!
       end
@@ -128,6 +144,15 @@ RSpec.describe 'Mood API', type: :request do
         run_test!
       end
 
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:mood_data) { { mood: { value: 'great' } } }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
       response '404', 'Mood not found' do
         schema '$ref' => '#/components/schemas/error'
 
@@ -162,6 +187,14 @@ RSpec.describe 'Mood API', type: :request do
 
         let(:mood_record) { create(:mood, account: account) }
         let(:id) { mood_record.id.to_s }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
 
         run_test!
       end

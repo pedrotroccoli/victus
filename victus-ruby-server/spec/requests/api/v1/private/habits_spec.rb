@@ -131,6 +131,14 @@ RSpec.describe 'Habits API', type: :request do
         run_test!
       end
 
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
       response '404', 'Habit not found' do
         schema '$ref' => '#/components/schemas/error'
 
@@ -177,6 +185,15 @@ RSpec.describe 'Habits API', type: :request do
         run_test!
       end
 
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:habit) { { habit: { name: 'Test' } } }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
       response '404', 'Habit not found' do
         schema '$ref' => '#/components/schemas/error'
 
@@ -203,6 +220,14 @@ RSpec.describe 'Habits API', type: :request do
       tags 'Habits'
       security [bearer_auth: []]
       produces 'application/json'
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
 
       response '200', 'Habit deleted' do
         schema type: :object, properties: {

@@ -57,6 +57,14 @@ RSpec.describe 'Habit Categories API', type: :request do
 
         run_test!
       end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:category_data) { { habits_category: { name: 'Test' } } }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
     end
   end
 
@@ -94,6 +102,15 @@ RSpec.describe 'Habit Categories API', type: :request do
         run_test!
       end
 
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        let(:category_data) { { habits_category: { name: 'Test' } } }
+        schema '$ref' => '#/components/schemas/error'
+
+        run_test!
+      end
+
       response '404', 'Category not found' do
         schema '$ref' => '#/components/schemas/error'
 
@@ -125,6 +142,14 @@ RSpec.describe 'Habit Categories API', type: :request do
       response '204', 'Category deleted' do
         let(:category_record) { create(:habit_category, account: account) }
         let(:id) { category_record.id.to_s }
+
+        run_test!
+      end
+
+      response '401', 'Unauthorized' do
+        let(:Authorization) { 'Bearer invalid' }
+        let(:id) { BSON::ObjectId.new.to_s }
+        schema '$ref' => '#/components/schemas/error'
 
         run_test!
       end
