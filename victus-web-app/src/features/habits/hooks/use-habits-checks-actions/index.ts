@@ -123,9 +123,9 @@ export const useHabitsCheckingActions = ({
       // OR: at least one habit must be checked
       return habitIds.some(isHabitCheckedToday);
     }
-      // AND: all habits must be checked
-      return habitIds.every(isHabitCheckedToday);
-    
+
+    // AND: all habits must be checked
+    return habitIds.every(isHabitCheckedToday);
   };
 
   // Recursively check parent habits up the chain

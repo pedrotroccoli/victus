@@ -41,8 +41,6 @@ export default async function RootLayout({
 
           {children}
 
-          {/* <AiSummary /> */}
-
           <Footer />
 
           <WhatsappButton locale={locale} />
