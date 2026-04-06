@@ -43,7 +43,7 @@ export const useHabitsCategoryActions = (): UseHabitsCategoryActions => {
       });
 
       setModalOpen(false);
-    } catch (error) {
+    } catch {
       toast.error("Erro ao criar categoria!");
     }
   }, [createHabitCategory, categories]);
@@ -61,7 +61,7 @@ export const useHabitsCategoryActions = (): UseHabitsCategoryActions => {
       setEditingCategory(undefined);
       setModalOpen(false);
       toast.success("Categoria atualizada!");
-    } catch (error) {
+    } catch {
       toast.error("Erro ao atualizar categoria!");
     }
   }, [updateHabitCategory, editingCategory]);
@@ -70,7 +70,7 @@ export const useHabitsCategoryActions = (): UseHabitsCategoryActions => {
     try {
       await deleteHabitCategory(id);
       toast.success("Categoria removida!");
-    } catch (error) {
+    } catch {
       toast.error("Erro ao remover categoria!");
     }
   }, [deleteHabitCategory]);

@@ -1,10 +1,3 @@
-import { TooltipContent } from "@/components/ui/tooltip";
-
-import { TooltipTrigger } from "@/components/ui/tooltip";
-
-import { Tooltip } from "@/components/ui/tooltip";
-
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { HTMLAttributes, useMemo, useState } from "react";
 import { HabitBox, HabitBoxType } from "../../ions/habit-box";
@@ -35,7 +28,7 @@ export const HabitCheckbox = ({ today, onCheck, isFirstRow, isLastRow, isFirstCo
       setChecked(prev => !prev);
 
       onCheck();
-    } catch (error) {
+    } catch {
       setChecked(prev => !prev);
     }
   }
@@ -67,19 +60,6 @@ export const HabitCheckbox = ({ today, onCheck, isFirstRow, isLastRow, isFirstCo
       onClick={disabled ? undefined : handleCheckHabit}
       {...rest}
     >
-      {process.env.NODE_ENV === 'development' && false && (
-        <TooltipProvider>
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <div className="w-full h-full rounded-full"></div>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>isFirst: {String(isFirstRow)}</p>
-              <p>isLast: {String(isLastRow)}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      )}
     </HabitBox>
   )
 }

@@ -242,12 +242,8 @@ export const HabitLines = ({
         newOrder = subtractOrder(nextElement.order);
       } else if (previousElement) {
         newOrder = addOrder(previousElement.order);
-      } else if (!nextElement) {
-        newOrder = addOrder(currentElement.order);
-      } else if (!previousElement) {
-        newOrder = subtractOrder(currentElement.order);
       } else {
-        newOrder = 1000;
+        newOrder = addOrder(currentElement.order);
       }
 
       newItems[newIndex].order = newOrder;

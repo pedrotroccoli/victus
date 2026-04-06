@@ -42,8 +42,8 @@ export const TimerClock = ({ size = 'md' }: TimerClockProps) => {
     }
   });
   const interval = useRef<NodeJS.Timeout | null>(null);
-  // @ts-ignore
-  const [turns, setTurns] = useState([]);
+  // @ts-expect-error
+  const [_turns, setTurns] = useState([]);
 
   const formattedTime = useMemo(() => {
     return `${pad2(time.hours)}:${pad2(time.minutes)}:${pad2(time.seconds)}`;
@@ -107,7 +107,7 @@ export const TimerClock = ({ size = 'md' }: TimerClockProps) => {
 
       setBlocks(newBlocks);
 
-      // @ts-ignore
+      // @ts-expect-error
       setTurns(Object.entries(Object.groupBy(newBlocks, (item) => item.turn)));
 
       interval.current = null;
@@ -137,12 +137,12 @@ export const TimerClock = ({ size = 'md' }: TimerClockProps) => {
   const addTurn = () => {
     const oldBlocks = stopTimer({ blocksToStop: blocks, interval: interval.current }) as TimeBlock[];
 
-    // @ts-ignore
+    // @ts-expect-error
     const turns = Object.entries(Object.groupBy(oldBlocks, (item) => item.turn))
 
     console.log(oldBlocks, turns);
 
-    // @ts-ignore
+    // @ts-expect-error
     setTurns(turns);
 
     const startedAt = new Date();
