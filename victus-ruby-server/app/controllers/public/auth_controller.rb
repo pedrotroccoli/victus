@@ -1,5 +1,14 @@
 module Public
   class AuthController < ApplicationController
+    include RateLimited
+
+    rate_limit to: 10, within: 3.minutes, only: [:sign_in, :siwe_verify, :google_auth],
+              with: -> { render_rate_limited }
+    rate_limit to: 5, within: 15.minutes, only: :sign_up,
+              with: -> { render_rate_limited }, name: "sign-up"
+    rate_limit to: 20, within: 3.minutes, only: :start_siwe_auth,
+              with: -> { render_rate_limited }, name: "siwe-nonce"
+
     def sign_in
       accounts_params = params.require(:account).permit(:email, :password)
 
