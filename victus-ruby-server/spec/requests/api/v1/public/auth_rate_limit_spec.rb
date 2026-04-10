@@ -13,7 +13,7 @@ RSpec.describe 'Auth Rate Limiting', type: :request do
 
       expect(response).to have_http_status(:too_many_requests)
       expect(JSON.parse(response.body)['error']).to include('Rate limit')
-      expect(response.headers['Retry-After']).to eq('60')
+      expect(response.headers['Retry-After']).to eq('180')
     end
   end
 

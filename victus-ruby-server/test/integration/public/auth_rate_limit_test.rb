@@ -13,7 +13,7 @@ module Public
       assert_response :too_many_requests
       json_response = JSON.parse(response.body)
       assert_includes json_response["error"], "Rate limit"
-      assert_equal "60", response.headers["Retry-After"]
+      assert_equal "180", response.headers["Retry-After"]
     end
 
     # POST /api/v1/auth/sign-up
