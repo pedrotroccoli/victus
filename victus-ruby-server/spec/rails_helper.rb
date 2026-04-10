@@ -24,6 +24,7 @@ RSpec.configure do |config|
   # Clean database between tests (Mongoid doesn't use transactions)
   config.before(:each) do
     Mongoid.purge!
+    Rails.cache.clear
   end
 end
 
